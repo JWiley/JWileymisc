@@ -1,0 +1,26 @@
+Package: JWileymisc
+Type: Package
+Title: Miscellaneous utilities and functions
+Version: 0.1-0
+Date: 2016-05-05
+Author: Joshua F. Wiley <jwiley.psych@gmail.com>
+Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
+Description: A collection of miscellaneous tools and functions,
+    often just to save typing or redundancy, not implement new models.
+License: GPL (>= 3)
+Depends:
+    R (>= 3.2.0),
+    lavaan (>= 0.5-15),
+    methods,
+    ggplot2 (>= 0.9.0)
+Imports:
+    MplusAutomation (>= 0.6-2),
+    boot,
+    reshape2,
+    Hmisc,
+    multcompView,
+    devtools,
+    graphics
+Suggests:
+    scales
+RoxygenNote: 5.0.1

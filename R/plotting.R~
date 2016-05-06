@@ -1,0 +1,263 @@
+#' Plots SEMSummary object
+#'
+#' @param x An object of class SEMSummary.
+#' @param y Ignored
+#' @param \dots Additional arguments passed on to the real workhorse, \code{corplot}.
+#' @method plot SEMSummary
+#' @seealso \code{\link{corplot}}, \code{\link{SEMSummary}}
+#' @importFrom graphics plot
+#' @export
+#' @examples
+#' # default plot
+#' plot(SEMSummary(~ ., data = mtcars))
+#'
+#' # same as default
+#' plot(SEMSummary(~ ., data = mtcars), plot = "coverage")
+#'
+#' # shows p values
+#' plot(SEMSummary(~ ., data = mtcars), plot = "p")
+#'
+#' # shows correlations
+#' plot(SEMSummary(~ ., data = mtcars), plot = "cor")
+plot.SEMSummary <- function(x, y, ...) {
+  corplot(x = x$sSigma, coverage = x$coverage, pvalues = x$pvalue, ...)
+}
+
+#' Plots SEMSummary.list object
+#'
+#' @param x An object of class SEMSummary.list.
+#' @param y Ignored
+#' @param which either a numeric vector based on the positions,
+#'   or a character vector giving the names of the levels of the
+#'   list to plot.
+#' @param \dots Additional arguments passed on to the real workhorse, \code{corplot}.
+#' @method plot SEMSummary.list
+#' @seealso \code{\link{corplot}}, \code{\link{SEMSummary}}
+#' @importFrom gridExtra grid.arrange
+#' @export
+plot.SEMSummary.list <- function(x, y, which, ...) {
+
+  n <- names(x)
+  names(n) <- n
+  n <- n[n != "Levels"]
+
+  if (!missing(which)) {
+    n <- n[which]
+    if (length(n) == 1) {
+      p <- corplot(x = x[[n]]$sSigma, coverage = x[[n]]$coverage, pvalues = x[[n]]$pvalue, ...) + ggtitle(n)
+      print(p)
+      return(invisible(p))
+    }
+  }
+
+  p <- lapply(n, function(i) {
+    corplot(x = x[[i]]$sSigma, coverage = x[[i]]$coverage, pvalues = x[[i]]$pvalue, ...) +
+      ggtitle(i)
+  })
+  names(p) <- n
+
+  nr <- NULL
+  if (length(p) <= 3) {
+    nr <- 1
+  }
+
+  do.call(grid.arrange, c(p, list(nrow = nr)))
+
+  return(invisible(p))
+}
+
+#' Heatmap of a Correlation Matrix
+#'
+#' This function creates a heatmap of a correlation matrix using \pkg{ggplot2}.
+#'
+#' The actual plot is created using \code{ggplot2} and \code{geom_tile}.
+#' In addition to creating the plot, the variables are ordered based on a
+#' hierarchical clustering of the correlation matrix.  Specifically, \code{1 - x}
+#' is used as the distance matrix. If coverage is passed, will also add a bubble
+#' plot with the area proportional to the proportion of data present for any
+#' given cell.  Defaults for \code{ggplot2} are set, but it is possible to use a
+#' named list of quote()d ggplot calls to override all defaults. This is not
+#' expected for typical use.  Particularly main, points, and text as these rely
+#' on internal variable names; however, labels, the gradient color, and area
+#' scaling can be adjusted more safely.
+#'
+#' @param x A correlation matrix or some other square symmetric matrix.
+#' @param coverage An (optional) matrix with the same dimensions as
+#'   \code{x} giving the proportion of data present.  Particularly
+#'   useful when the correlation matrix is a pairwise present.
+#' @param pvalues An (optional) matrix with the same dimensions as
+#'   \code{x} giving the p values for each correlation. To show, use
+#'   \code{plot = "p"}.
+#' @param plot A character string indicating what to show on top of the heatmap. Can be
+#'   \sQuote{coverage}, in which case bubble points show coverage;
+#'   \sQuote{p}, in which case p values are shown, or
+#'   \sQuote{cor}, in which case correlations are shown.
+#'   Only has an effect if a coverage (or pvalue) matrix is passed
+#'   also. Defaults to \code{cor}.
+#' @param digits The number of digits to round to when printing the
+#'   correlations on the heatmap. Text is suppressed when a coverage
+#'   matrix is passed and \code{points = TRUE}.
+#' @param order A character string indicating how to order the resulting
+#'   plot. Defaults to \sQuote{cluster} which uses hierarchical clustering
+#'   to sensibly order the variables. The other option is \sQuote{asis}
+#'   in which case the matrix is plotted in the order it is passed.
+#' @param \dots Additional arguments currently only passed to
+#'   \code{hclust} and \code{corOK}.
+#' @param control.grobs A list of additional \code{quote()}d
+#'   options to customize the \code{ggplot2} output.
+#' @return Primarily called for the side effect of creating a plot.
+#'   However, the \code{ggplot2} plot object is returned,
+#'   so it can be saved, replotted, edited, etc.
+#' @keywords hplot
+#' @importFrom reshape2 melt
+#' @export
+#' @examples
+#' # example plotting the correlation matrix from the
+#' # mtcars dataset
+#' corplot(cor(mtcars))
+#'
+#' dat <- as.matrix(iris[, 1:4])
+#'
+#' # randomly set 25% of the data to missing
+#' set.seed(10)
+#' dat[sample(length(dat), length(dat) * .25)] <- NA
+#'
+#' # create a summary of the data (including coverage matrix)
+#' sdat <- SEMSummary(~ ., data = dat)
+#' # using the plot method for SEMSummary (which basically just calls corplot)
+#' plot(sdat)
+#'
+#' # getting p values instaed of coverage
+#' plot(sdat, plot = "p")
+#'
+#' # showing correlations instead of coverage
+#' plot(sdat, plot = "cor")
+#'
+#' # use the control.grobs argument to adjust the coverage scaling
+#' # to go from 0 to 1 rather than the range of coverage
+#' corplot(x = sdat$sSigma, coverage = sdat$coverage,
+#'   control.grobs = list(area = quote(scale_size_area(limits = c(0, 1))))
+#' )
+#'
+#' # also works with plot() on a SEMSummary
+#' plot(x = sdat, control.grobs = list(area = quote(scale_size_area(limits = c(0, 1)))))
+#'
+#' rm(dat, sdat)
+corplot <- function(x, coverage, pvalues,
+  plot = c("cor", "p", "coverage"),
+  digits = 2, order = c("cluster", "asis"), ..., control.grobs = list()) {
+
+  order <- match.arg(order)
+  plot <- match.arg(plot)
+
+  stopifnot(is.matrix(x))
+  if (!missing(coverage)) stopifnot(is.matrix(coverage))
+
+  n <- switch(order,
+    cluster = {
+      ok <- corOK(x, ...)$keep.indices
+      if (length(ok) > 0) {
+        hc <- hclust(as.dist(1 - x[ok, ok]), ...)
+        n <- colnames(x)[ok][hc$order]
+      }
+      if (!identical(length(ok), dim(x)[2L])) {
+        n <- c(n, colnames(x)[-ok])
+      }
+      n
+    },
+    asis = colnames(x)
+  )
+
+  mx <- reshape2:::melt.matrix(x, value.name = "r")
+  mx$Var1 <- factor(mx[, "Var1"], levels = n)
+  mx$Var2 <- factor(mx[, "Var2"], levels = n)
+  mx$correlation <- gsub(".+\\.", ".", format(round(mx[, "r"],
+    digits = digits), digits = digits, nsmall = digits))
+  mx$correlation[mx[, "Var1"] == mx[, "Var2"]] <- ""
+  if (!missing(coverage)) {
+    mx$coverage <- reshape2:::melt.matrix(coverage, value.name = "coverage")[, "coverage"]
+  }
+
+  if (!missing(pvalues)) {
+    mx$pvalues <- reshape2:::melt.matrix(pvalues, value.name = "p")[, "p"]
+    ## mx$p <- gsub(".+\\.", ".", format.pval(round(mx[, "pvalues"],
+    ##   digits = digits), digits = digits, nsmall = digits))
+    mx$p <- gsub(".+\\.", ".", format.pval(mx[, "pvalues"],
+      digits = digits, nsmall = digits))
+
+    mx$p[mx[, "Var1"] == mx[, "Var2"]] <- ""
+  }
+
+  defaults <- list(
+    main = quote(ggplot(mx, aes(x = Var1, y = Var2, fill = r))),
+    tiles = quote(geom_tile()),
+    labels = quote(labs(list(x = NULL, y = NULL))),
+    gradient = quote(scale_fill_gradientn(name = "Correlation",
+      guide = guide_colorbar(),
+      colours = c("blue", "white", "red"), limits = c(-1, 1),
+      breaks = c(-.99, -.5, 0, .5, .99), labels = c("-1", "-.5", "0", "+.5", "+1"))),
+    area = quote(scale_size_area()),
+    text = quote(geom_text(aes(label = correlation), size = 3, vjust = 0)))
+
+  i <- names(defaults)[!names(defaults) %in% names(control.grobs)]
+  control.grobs[i] <- defaults[i]
+
+  p <- substitute(main + tiles + labels + gradient, control.grobs)
+
+  if (identical(plot, "coverage") & !missing(coverage)) {
+    control.grobs$points = quote(geom_point(aes(size = coverage)))
+    p <- substitute(main + tiles + labels + gradient + points + area, control.grobs)
+  } else if (identical(plot, "p") & !missing(pvalues)) {
+    control.grobs$text = quote(geom_text(aes(label = p), size = 3, vjust = 0))
+    p <- substitute(main + tiles + labels + gradient + text, control.grobs)
+  } else {
+    p <- substitute(main + tiles + labels + gradient + text, control.grobs)
+  }
+
+  eval(p)
+}
+
+#' This is a simple plotting function designed to help examine
+#' multivariate normality using the Mahalanobis distance.
+#'
+#' @param dat A data frame or matrix of multivariate data to be plotted
+#' @param use A character vector indicating how the moments
+#'   (means and covariance matrix) should be estimated in the presence of
+#'   missing data.  The default is to use full information maximum likelihood
+#'   based on functions in \pkg{lavaan}.
+#' @seealso \code{\link{SEMSummary}}
+#' @keywords multivariate
+#' @export
+#' @examples
+#' mvqq(mtcars)
+#'
+mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs")) {
+  old.par <- par(no.readonly = TRUE)
+  on.exit(par(old.par))
+  par(mfrow = c(1, 2))
+
+  use <- match.arg(use)
+  if (!anyNA(dat)) use <- "complete.obs"
+
+  desc <- switch(match.arg(use),
+    fiml = {moments(dat)},
+    pairwise.complete.obs = {
+      list(mu = colMeans(dat, na.rm = TRUE),
+        sigma = cov(dat, use = "pairwise.complete.obs"))
+    },
+    complete.obs = {
+      list(mu = colMeans(na.omit(dat)),
+        sigma = cov(na.omit(dat)))
+    })
+
+  dat <- na.omit(dat)
+  D2 <- mahalanobis(dat, desc$mu, desc$sigma)
+
+  plot(density(D2, bw = 0.5), main =
+    sprintf("Squared Mahalanobis distances, n=%d, p=%d", nrow(dat), ncol(dat)))
+  rug(D2)
+  qqplot(qchisq(ppoints(nrow(dat)), df = ncol(dat)), D2, main = eval(substitute(
+    expression("Q-Q plot of Mahalanobis" * ~D^2 * " vs. quantiles of" * ~chi[df]^2),
+    list(df = ncol(dat)))))
+  abline(0, 1, col = 'gray')
+}
