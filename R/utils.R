@@ -204,7 +204,7 @@ updateInstall <- function(x) {
 
   packages <- list(
     ## various utilities (profiling, testing, connected to internet)
-    utils = c("RCurl", "httr", "httpuv", "sendmailR", "RAppArmor",
+    utils = c("RCurl", "httr", "httpuv", "sendmailR",
               "rJava", "gsubfn", "rbenchmark", "digest",
               "evaluate", "profr", "proftools", "devtools", "testthat", "roxygen2",
               "codetools", "pkgmaker", "RUnit", "checkpoint", "tidyr"),
@@ -267,7 +267,7 @@ updateInstall <- function(x) {
     survey = c("survey", "sampling"),
 
     ## tools for meta analysis
-    metaanal = c("rmeta", "meta", "copas", "coin", "metafor"),
+    metaanal = c("rmeta", "meta", "metasens", "coin", "metafor"),
 
 
     ## packages for sem or related
@@ -299,6 +299,10 @@ updateInstall <- function(x) {
 
     ## fun packages
     fun = c("sudoku", "fortunes"))
+
+  if (.Platform$OS.type == "unix") {
+    packages$utils <- c(packages$utils, "RAppArmor")
+  }
 
   if (!missing(x)) {
     packages$UserSpecified <- x
