@@ -1,8 +1,8 @@
 Package: JWileymisc
 Type: Package
 Title: Miscellaneous utilities and functions
-Version: 0.1-0
-Date: 2016-05-05
+Version: 0.1-1
+Date: 2016-05-10
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 Description: A collection of miscellaneous tools and functions,
@@ -12,7 +12,8 @@ Depends:
     R (>= 3.2.0),
     lavaan (>= 0.5-15),
     methods,
-    ggplot2 (>= 0.9.0)
+    ggplot2 (>= 0.9.0),
+    foreach
 Imports:
     MplusAutomation (>= 0.6-2),
     boot,
@@ -20,7 +21,8 @@ Imports:
     Hmisc,
     multcompView,
     devtools,
-    graphics
+    graphics,
+    mgcv
 Suggests:
     scales,
     mice
