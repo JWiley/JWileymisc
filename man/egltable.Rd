@@ -4,7 +4,8 @@
 \alias{egltable}
 \title{EGL Table function makes nice tables}
 \usage{
-egltable(vars, g, data, strict = FALSE)
+egltable(vars, g, data, strict = TRUE, parametric = TRUE,
+  simChisq = FALSE, sims = 1e+06)
 }
 \arguments{
 \item{vars}{Either an index (numeric or character) of
@@ -17,6 +18,21 @@ the variables to be described.}
 \item{strict}{Logical, whether to strictly follow the
 type of each variable, or to assume categorical if
 the number of unique values is less than or equal to 3.}
+
+\item{parametric}{Logical whether to use parametric tests in the
+case of multiple groups to test for differences.  Only applies to
+continuous variables. If \code{TRUE}, the default, uses one-way ANOVA,
+and a F test. If \code{FALSE}, uses the Kruskal-Wallis test.}
+
+\item{simChisq}{Logical whether to estimate p-values for chi-square test
+for categorical data when there are multiple groups, by simulation.
+Defaults to \code{FALSE}. Useful when there are small cells as will
+provide a more accurate test in extreme cases, similar to Fisher Exact
+Test but generalizing to large dimension of tables.}
+
+\item{sims}{Integer for the number of simulations to be used to estimate
+p-values for the chi-square tests for categorical variables when
+there are multiple groups.}
 }
 \value{
 A data frame of the table.
@@ -27,7 +43,12 @@ in the vars.  For best results, convert categorical
 variables into factors.
 }
 \examples{
-# make me!!!
+egltable(iris)
+egltable(colnames(iris)[1:4], "Species", iris)
+egltable(iris, parametric = FALSE)
+egltable(colnames(iris)[1:4], "Species", iris, parametric = FALSE)
+egltable(colnames(iris)[1:4], "Species", iris, parametric = c(TRUE, TRUE, FALSE, FALSE))
+egltable(colnames(iris)[1:4], "Species", iris, parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
 }
 \keyword{utils}
 

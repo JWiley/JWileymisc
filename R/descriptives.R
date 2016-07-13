@@ -259,17 +259,38 @@ SEMSummary.fit <- function(formula, data,
 #' @param strict Logical, whether to strictly follow the
 #'   type of each variable, or to assume categorical if
 #'   the number of unique values is less than or equal to 3.
+#' @param parametric Logical whether to use parametric tests in the
+#'   case of multiple groups to test for differences.  Only applies to
+#'   continuous variables. If \code{TRUE}, the default, uses one-way ANOVA,
+#'   and a F test. If \code{FALSE}, uses the Kruskal-Wallis test.
+#' @param simChisq Logical whether to estimate p-values for chi-square test
+#'   for categorical data when there are multiple groups, by simulation.
+#'   Defaults to \code{FALSE}. Useful when there are small cells as will
+#'   provide a more accurate test in extreme cases, similar to Fisher Exact
+#'   Test but generalizing to large dimension of tables.
+#' @param sims Integer for the number of simulations to be used to estimate
+#'   p-values for the chi-square tests for categorical variables when
+#'   there are multiple groups.
 #' @return A data frame of the table.
 #' @keywords utils
 #' @export
+#' @import data.table
 #' @examples
-#' # make me!!!
-egltable <- function(vars, g, data, strict=FALSE) {
+#' egltable(iris)
+#' egltable(colnames(iris)[1:4], "Species", iris)
+#' egltable(iris, parametric = FALSE)
+#' egltable(colnames(iris)[1:4], "Species", iris, parametric = FALSE)
+#' egltable(colnames(iris)[1:4], "Species", iris, parametric = c(TRUE, TRUE, FALSE, FALSE))
+#' egltable(colnames(iris)[1:4], "Species", iris, parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
+egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = FALSE, sims = 1e6) {
   if (!missing(data)) {
-    dat <- as.data.frame(data[, vars, drop=FALSE], stringsAsFactors=FALSE)
+    if (is.data.table(data)) {
+    } else {
+      dat <- as.data.frame(data[, vars, drop=FALSE], stringsAsFactors=FALSE)
+    }
     if (!missing(g)) {
       if (length(g) == 1) {
-        g <- data[, g]
+        g <- data[[g]]
       }
     }
   } else {
@@ -281,6 +302,14 @@ egltable <- function(vars, g, data, strict=FALSE) {
   }
 
   g <- as.factor(g)
+
+  if (identical(length(parametric), 1L)) {
+    if (isTRUE(parametric)) {
+      parametric <- rep(TRUE, length(vars))
+    } else {
+      parametric <- rep(FALSE, length(vars))
+    }
+  }
 
   vnames <- colnames(dat)
 
@@ -294,22 +323,43 @@ egltable <- function(vars, g, data, strict=FALSE) {
   catvars.index <- which(!contvars.index)
   contvars.index <- which(contvars.index)
 
+  if (length(contvars.index)) {
+    if (length(unique(parametric[contvars.index])) > 1) {
+    multi <- TRUE
+    } else {
+      multi <- FALSE
+    }
+  } else {
+    multi <- FALSE
+  }
+
+
   tmpout <- by(dat, g, function(d) {
     tmpres <- NULL
     reslab <- ""
 
     if (length(contvars.index)) {
-      tmpcont <- lapply(vnames[contvars.index], function(n) {
-        data.frame(
-          Variable = n,
-          Res = sprintf("%0.2f (%0.2f)", mean(d[, n], na.rm=TRUE), sd(d[, n], na.rm=TRUE)),
-          stringsAsFactors=FALSE)
+      tmpcont <- lapply(contvars.index, function(v) {
+        n <- vnames[v]
+        if (parametric[v]) {
+          ## use parametric tests
+          data.frame(
+            Variable = sprintf("%s%s", n, c("", ", M (SD)")[multi+1]),
+            Res = sprintf("%0.2f (%0.2f)", mean(d[[n]], na.rm=TRUE), sd(d[[n]], na.rm=TRUE)),
+            stringsAsFactors=FALSE)
+        } else {
+          data.frame(
+            Variable = sprintf("%s%s", n, c("", ", Mdn (IQR)")[multi+1]),
+            Res = sprintf("%0.2f (%0.2f)", median(d[[n]], na.rm=TRUE),
+                          abs(diff(quantile(d[[n]], c(.25, .75), na.rm = TRUE)))),
+            stringsAsFactors=FALSE)
+        }
       })
 
       names(tmpcont) <- vnames[contvars.index]
       tmpres <- c(tmpres, tmpcont)
 
-      reslab <- paste0(reslab, "M (SD)")
+      reslab <- paste0(reslab, c(ifelse(parametric[contvars.index[1]], "M (SD)", "Mdn (IQR)"), "See Rows")[multi+1])
     }
 
     if (length(catvars.index)) {
@@ -327,25 +377,70 @@ egltable <- function(vars, g, data, strict=FALSE) {
       reslab <- paste0(reslab, ifelse(nzchar(reslab), "/N (%)", "N (%)"))
     }
 
-    tmpres <- do.call(rbind, tmpres[vnames])
-
-    colnames(tmpres) <- c("Vars", reslab)
+    tmpres <- lapply(tmpres[vnames], function(d) {
+      colnames(d) <- c("Vars", reslab)
+      return(d)
+      })
 
     return(tmpres)
   }, simplify=FALSE)
 
+
   if (length(levels(g)) > 1) {
-    tmpout <- lapply(1:length(levels(g)), function(i) {
-        out <- tmpout[[i]]
-        colnames(out)[2] <- paste(levels(g)[i], colnames(out)[2], sep = " ")
-        return(out)
+    tmpout <- lapply(seq_along(vnames), function(v) {
+      out <- do.call(cbind.data.frame, lapply(1:length(levels(g)), function(i) {
+        d <- tmpout[[i]][[v]]
+        colnames(d)[2] <- paste(levels(g)[i], colnames(d)[2], sep = " ")
+        if (i == 1) {
+          return(d)
+        } else {
+          return(d[, -1, drop = FALSE])
+        }
+      }))
+
+      if (length(contvars.index)) {
+        if (v %in% contvars.index) {
+          if (parametric[v]) {
+            tests <- summary(aov(dv ~ g, data = data.frame(dv = dat[[v]], g = g)))[[1]]
+            out <- cbind.data.frame(out,
+                             Test = c(sprintf("F(%d, %d) = %0.2f, %s", tests[1, "Df"], tests[2, "Df"], tests[1, "F value"],
+                                              formatPval(tests[1, "Pr(>F)"], 3, 3)),
+                                      rep("", nrow(out) - 1)),
+                             stringsAsFactors = FALSE)
+          } else {
+            tests <- kruskal.test(dv ~ g, data = data.frame(dv = dat[[v]], g = g))
+            out <- cbind.data.frame(out,
+                             Test = c(sprintf("KW chi-square = %0.2f, df = %d, %s",
+                                            tests$statistic, tests$parameter,
+                                            formatPval(tests$p.value, 3, 3)),
+                                      rep("", nrow(out) - 1)),
+                             stringsAsFactors = FALSE)
+          }
+        }
+      }
+
+      if (length(catvars.index)) {
+        if (v %in% catvars.index) {
+          tests <- chisq.test(xtabs(~ dv + g, data = data.frame(dv = dat[[v]], g = g)),
+                              correct = FALSE,
+                              simulate.p.value = simChisq, B = sims)
+          out <- cbind.data.frame(out,
+                           Test = c(sprintf("Chi-square = %0.2f, %s, %s",
+                                          tests$statistic,
+                                          ifelse(simChisq, "simulated", sprintf("df = %d", tests$parameter)),
+                                          formatPval(tests$p.value, 3, 3)),
+                                    rep("", nrow(out) - 1)),
+                           stringsAsFactors = FALSE)
+        }
+      }
+
+      return(out)
     })
+  } else {
+    tmpout <- tmpout[[1]]
   }
 
-  vars <- tmpout[[1]][, 1]
-  out <- cbind(vars, do.call(cbind, lapply(tmpout,
-    `[.data.frame`, i = TRUE, j = 2, drop=FALSE)),
-    stringsAsFactors = FALSE)
+  out <- do.call(rbind.data.frame, c(tmpout, stringsAsFactors = FALSE))
   rownames(out) <- NULL
   colnames(out)[1] <- ""
 
