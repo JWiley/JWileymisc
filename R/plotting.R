@@ -33,7 +33,7 @@ plot.SEMSummary <- function(x, y, ...) {
 #' @param \dots Additional arguments passed on to the real workhorse, \code{corplot}.
 #' @method plot SEMSummary.list
 #' @seealso \code{\link{corplot}}, \code{\link{SEMSummary}}
-#' @importFrom gridExtra grid.arrange
+#' @importFrom cowplot plot_grid
 #' @export
 plot.SEMSummary.list <- function(x, y, which, ...) {
 
@@ -61,7 +61,7 @@ plot.SEMSummary.list <- function(x, y, which, ...) {
     nr <- 1
   }
 
-  do.call(grid.arrange, c(p, list(nrow = nr)))
+  do.call(plot_grid, c(p, list(nrow = nr)))
 
   return(invisible(p))
 }
@@ -109,7 +109,10 @@ plot.SEMSummary.list <- function(x, y, which, ...) {
 #'   However, the \code{ggplot2} plot object is returned,
 #'   so it can be saved, replotted, edited, etc.
 #' @keywords hplot
-#' @importFrom reshape2 melt
+#' @import ggplot2
+#' @importFrom stats setNames as.dist hclust
+#' @importFrom utils type.convert
+#' @importFrom plyr amv_dimnames
 #' @export
 #' @examples
 #' # example plotting the correlation matrix from the
@@ -147,6 +150,33 @@ corplot <- function(x, coverage, pvalues,
   plot = c("cor", "p", "coverage"),
   digits = 2, order = c("cluster", "asis"), ..., control.grobs = list()) {
 
+  ## copied from reshape2 as otherwise creates clashes with depending on data.table package
+  reshape2.melt.matrix <- function (data, varnames = names(dimnames(data)), ..., na.rm = FALSE,
+                           as.is = FALSE, value.name = "value")
+  {
+    var.convert <- function(x) {
+      if (!is.character(x))
+        return(x)
+      x <- type.convert(x, as.is = TRUE)
+      if (!is.character(x))
+        return(x)
+      factor(x, levels = unique(x))
+    }
+    dn <- amv_dimnames(data)
+    names(dn) <- varnames
+    if (!as.is) {
+      dn <- lapply(dn, var.convert)
+    }
+    labels <- expand.grid(dn, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+    if (na.rm) {
+      missing <- is.na(data)
+      data <- data[!missing]
+      labels <- labels[!missing, ]
+    }
+    value_df <- setNames(data.frame(as.vector(data)), value.name)
+    cbind(labels, value_df)
+  }
+
   order <- match.arg(order)
   plot <- match.arg(plot)
 
@@ -168,18 +198,18 @@ corplot <- function(x, coverage, pvalues,
     asis = colnames(x)
   )
 
-  mx <- reshape2:::melt.matrix(x, value.name = "r")
+  mx <- reshape2.melt.matrix(x, value.name = "r")
   mx$Var1 <- factor(mx[, "Var1"], levels = n)
   mx$Var2 <- factor(mx[, "Var2"], levels = n)
   mx$correlation <- gsub(".+\\.", ".", format(round(mx[, "r"],
     digits = digits), digits = digits, nsmall = digits))
   mx$correlation[mx[, "Var1"] == mx[, "Var2"]] <- ""
   if (!missing(coverage)) {
-    mx$coverage <- reshape2:::melt.matrix(coverage, value.name = "coverage")[, "coverage"]
+    mx$coverage <- reshape2.melt.matrix(coverage, value.name = "coverage")[, "coverage"]
   }
 
   if (!missing(pvalues)) {
-    mx$pvalues <- reshape2:::melt.matrix(pvalues, value.name = "p")[, "p"]
+    mx$pvalues <- reshape2.melt.matrix(pvalues, value.name = "p")[, "p"]
     ## mx$p <- gsub(".+\\.", ".", format.pval(round(mx[, "pvalues"],
     ##   digits = digits), digits = digits, nsmall = digits))
     mx$p <- gsub(".+\\.", ".", format.pval(mx[, "pvalues"],
@@ -189,7 +219,7 @@ corplot <- function(x, coverage, pvalues,
   }
 
   defaults <- list(
-    main = quote(ggplot(mx, aes(x = Var1, y = Var2, fill = r))),
+    main = quote(ggplot(mx, aes_string(x = "Var1", y = "Var2", fill = "r"))),
     tiles = quote(geom_tile()),
     labels = quote(labs(list(x = NULL, y = NULL))),
     gradient = quote(scale_fill_gradientn(name = "Correlation",
@@ -227,15 +257,13 @@ corplot <- function(x, coverage, pvalues,
 #'   based on functions in \pkg{lavaan}.
 #' @seealso \code{\link{SEMSummary}}
 #' @keywords multivariate
+#' @importFrom stats mahalanobis qchisq ppoints
+#' @importFrom cowplot theme_cowplot
 #' @export
 #' @examples
 #' mvqq(mtcars)
 #'
 mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs")) {
-  old.par <- par(no.readonly = TRUE)
-  on.exit(par(old.par))
-  par(mfrow = c(1, 2))
-
   use <- match.arg(use)
   if (!anyNA(dat)) use <- "complete.obs"
 
@@ -251,15 +279,33 @@ mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs")) 
     })
 
   dat <- na.omit(dat)
-  D2 <- mahalanobis(dat, desc$mu, desc$sigma)
 
-  plot(density(D2, bw = 0.5), main =
-    sprintf("Squared Mahalanobis distances, n=%d, p=%d", nrow(dat), ncol(dat)))
-  rug(D2)
-  qqplot(qchisq(ppoints(nrow(dat)), df = ncol(dat)), D2, main = eval(substitute(
-    expression("Q-Q plot of Mahalanobis" * ~D^2 * " vs. quantiles of" * ~chi[df]^2),
-    list(df = ncol(dat)))))
-  abline(0, 1, col = 'gray')
+  D2 <- ChiQuant <- NULL; rm(D2, ChiQuant) ## make Rcmd check happy
+  d <- data.table(D2 = mahalanobis(dat, desc$mu, desc$sigma))[order(D2)]
+  d[, ChiQuant := qchisq(ppoints(nrow(d)), df = ncol(dat))]
+
+  p.density <- ggplot(d, aes_string(x = "D2")) +
+    geom_density() +
+    geom_rug() +
+    xlab("Mahalanobis Distances") +
+    ylab("Density") +
+    ggtitle(sprintf("Mahalanobis Distances, n=%d, p=%d", nrow(dat), ncol(dat))) +
+    theme_cowplot()
+
+  p.qq <- ggplot(d, aes_string(x = "D2", y = "ChiQuant")) +
+    geom_point() +
+    geom_abline(intercept = 0, slope = 1) +
+    xlab("Mahalanobis Distances") +
+    ylab("Chi-square Quantiles") +
+    ggtitle(eval(substitute(
+      expression("Q-Q plot of Mahalanobis" * ~D^2 * " vs. quantiles of" * ~chi[df]^2),
+      list(df = ncol(dat))))) +
+    coord_equal() +
+    theme_cowplot()
+
+  print(plot_grid(p.density, p.qq, ncol = 2, align = "h"))
+
+  return(invisible(list(DensityPlot = p.density, QQPlot = p.qq)))
 }
 
 
@@ -276,6 +322,7 @@ mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs")) 
 #' @param ordered Logical, defaults to \code{FALSE}.
 #' @param \ldots Additional arguments passed on.
 #' @return A ggplot graph object.
+#' @importFrom stats TukeyHSD
 #' @importFrom Hmisc smean.cl.normal
 #' @importFrom plyr ddply
 #' @importFrom multcompView multcompLetters
@@ -318,6 +365,7 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
   ## Merge it with the labels
   labels.df <- merge(plot.levels, y.df, by.x = 'plot.labels', by.y = x, sort = FALSE)
 
+  V1 <- NULL; rm(V1) ## make Rcmd check happy
   p <- ggplot(d, aes_string(x=x, y=y)) +
     stat_summary(fun.data = function(d) mean_cl_normal(d, conf.int = ci), ...) +
     geom_text(data = labels.df,

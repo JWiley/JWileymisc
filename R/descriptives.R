@@ -13,6 +13,7 @@
 #'   \item{sigma}{The covariance matrix.}
 #' @seealso \code{\link{SEMSummary}}
 #' @keywords multivariate
+#' @importFrom lavaan lavaan
 #' @export
 #' @examples
 #' # sample data
@@ -101,6 +102,7 @@ moments <- function(data, ...) {
 #'     used to calculate degrees of freedom.}
 #' @seealso \code{\link{APAStyler}}
 #' @keywords multivariate
+#' @importFrom stats terms
 #' @export
 #' @examples
 #' ## Example using the built in iris dataset
@@ -176,6 +178,7 @@ SEMSummary <- function(formula, data,
 #'     used to calculate degrees of freedom.}
 #' @seealso \code{\link{SEMSummary}}
 #' @keywords multivariate
+#' @importFrom stats cov cov2cor pt
 SEMSummary.fit <- function(formula, data,
   use = c("fiml", "pairwise.complete.obs", "complete.obs")) {
 
@@ -254,6 +257,8 @@ SEMSummary.fit <- function(formula, data,
 #' @param vars Either an index (numeric or character) of
 #'   variables to access from the \code{data} argument,
 #'   or the data to be described itself.
+#' @param g A variable used tou group/separate the data prior
+#'   to calculating descriptive statistics.
 #' @param data optional argument of the dataset containing
 #'   the variables to be described.
 #' @param strict Logical, whether to strictly follow the
@@ -275,13 +280,17 @@ SEMSummary.fit <- function(formula, data,
 #' @keywords utils
 #' @export
 #' @import data.table
+#' @importFrom stats sd aov chisq.test kruskal.test quantile xtabs
 #' @examples
 #' egltable(iris)
 #' egltable(colnames(iris)[1:4], "Species", iris)
 #' egltable(iris, parametric = FALSE)
-#' egltable(colnames(iris)[1:4], "Species", iris, parametric = FALSE)
-#' egltable(colnames(iris)[1:4], "Species", iris, parametric = c(TRUE, TRUE, FALSE, FALSE))
-#' egltable(colnames(iris)[1:4], "Species", iris, parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
+#' egltable(colnames(iris)[1:4], "Species", iris,
+#'   parametric = FALSE)
+#' egltable(colnames(iris)[1:4], "Species", iris,
+#'   parametric = c(TRUE, TRUE, FALSE, FALSE))
+#' egltable(colnames(iris)[1:4], "Species", iris,
+#'   parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
 egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = FALSE, sims = 1e6) {
   if (!missing(data)) {
     if (is.data.table(data)) {

@@ -26,16 +26,17 @@ compareIVs(dv, type, iv, covariates = character(), data,
 A list with all the model results.
 }
 \description{
-Make me!
+Utility to estimate the unadjusted, covariate adjusted, and multivariate adjusted
+unique contributions of one or more IVs on one or more DVs
 }
 \examples{
 test1 <- compareIVs(
   dv = c("mpg", "disp"),
-  type = c("normal", "normal")
+  type = c("normal", "normal"),
   iv = c("hp", "qsec"),
   covariates = "am",
   data = mtcars, multivariate = TRUE)
+test1$OverallSummary
 rm(test1)
 }
-\keyword{internal}
 

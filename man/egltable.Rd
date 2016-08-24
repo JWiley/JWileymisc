@@ -12,6 +12,9 @@ egltable(vars, g, data, strict = TRUE, parametric = TRUE,
 variables to access from the \code{data} argument,
 or the data to be described itself.}
 
+\item{g}{A variable used tou group/separate the data prior
+to calculating descriptive statistics.}
+
 \item{data}{optional argument of the dataset containing
 the variables to be described.}
 
@@ -46,9 +49,12 @@ variables into factors.
 egltable(iris)
 egltable(colnames(iris)[1:4], "Species", iris)
 egltable(iris, parametric = FALSE)
-egltable(colnames(iris)[1:4], "Species", iris, parametric = FALSE)
-egltable(colnames(iris)[1:4], "Species", iris, parametric = c(TRUE, TRUE, FALSE, FALSE))
-egltable(colnames(iris)[1:4], "Species", iris, parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
+egltable(colnames(iris)[1:4], "Species", iris,
+  parametric = FALSE)
+egltable(colnames(iris)[1:4], "Species", iris,
+  parametric = c(TRUE, TRUE, FALSE, FALSE))
+egltable(colnames(iris)[1:4], "Species", iris,
+  parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
 }
 \keyword{utils}
 

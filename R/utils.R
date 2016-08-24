@@ -1,3 +1,30 @@
+#' Calculates an empirical p-value based on the data
+#'
+#' This function takes a vector of statistics and calculates
+#' the empirical p-value, that is, how many fall on the other
+#' side of zero.  It calculates a two-tailed p-value.
+#'
+#' @param x a data vector to operate on
+#' @param na.rm Logical whether to remove NA values. Defaults to \code{TRUE}
+#' @return a named vector with the number of values falling at
+#'   or below zero, above zero, and the empirical p-value.
+#' @author Joshua F. Wiley <josh@@elkhartgroup.com>
+#' @export
+#' @keywords utilities
+#' @examples
+#'
+#' empirical_pvalue(rnorm(100))
+empirical_pvalue <- function(x, na.rm = TRUE) {
+  x <- as.integer(x <= 0)
+  tmp <- table(factor(x, levels = 1:0, labels = c("<= 0", "> 0")))
+  m <- mean(x, na.rm = na.rm)
+  pval2 <- 2 * min(m, 1 - m)
+  out <- c(as.vector(tmp), pval2)
+  names(out) <- c(names(tmp), "p-value")
+
+  out
+}
+
 #' Change directory
 #'
 #' The function takes a path and changes the current working directory
@@ -189,15 +216,24 @@ lagk <- function(x, k = 1, by) {
 #' Update R and install my core package set
 #'
 #' @param x A character vector of any additional packages to be installed
+#' @param repo The repository to be used. Defaults to getOption("repos")
 #' @return NULL, called for its side effect.
 #' @keywords utils
+#' @importFrom utils install.packages installed.packages update.packages
 #' @importFrom devtools install_github
 #' @export
 #' @examples
 #' # updateInstall()
-updateInstall <- function(x) {
+updateInstall <- function(x, repo) {
   repos <- getOption("repos")
-  repos["CRAN"] <- "https://cloud.r-project.org/"
+
+  if (!missing(repo)) {
+    repos["CRAN"] <- repo
+  } else if (!"CRAN" %in% names(repos)) {
+    repos["CRAN"] <- "https://cloud.r-project.org/"
+  } else if (!nzchar(repos[["CRAN"]])) {
+    repos["CRAN"] <- "https://cloud.r-project.org/"
+  }
 
   ## first update existing packages
   update.packages(repos = repos, ask = FALSE)
@@ -333,7 +369,7 @@ updateInstall <- function(x) {
     message("Some packages did not successully install. ",
             "Trying to compile from source from alternate repo.")
     ## try installing from source
-    install.packages(packages[missing], repos = "https://cran.r-project.org",
+    install.packages(packages[missing], repos = repos,
       dependencies=TRUE, type="source", , quiet=TRUE)
   }
 
@@ -343,17 +379,18 @@ updateInstall <- function(x) {
       paste(packages[missing], collapse = "\n"))
   }
 
-  # Bioconductor hdf5 reader package
+  ## Bioconductor hdf5 reader package
+  biocLite <- function(x) x; rm(biocLite) ## make Rcmd check happy
   source("https://bioconductor.org/biocLite.R")
   biocLite("rhdf5")
   biocLite("Rgraphviz")
 
-  update.packages(repos = "https://cran.r-project.org", ask = FALSE)
+  update.packages(repos = repos, ask = FALSE)
 
-  install_github("michaelhallquist/MplusAutomation")
+  ## install_github("michaelhallquist/MplusAutomation")
   install_github("jwiley/postMCMCglmm")
   ## install_github("jwiley/JWileymisc")
-  install_github("jwiley/score-project/pscore")
+  ## install_github("jwiley/score-project/pscore")
   ## install_github("ElkhartGroup/varian")
   install_github("ramnathv/rCharts")
 

@@ -4,10 +4,12 @@
 \alias{updateInstall}
 \title{Update R and install my core package set}
 \usage{
-updateInstall(x)
+updateInstall(x, repo)
 }
 \arguments{
 \item{x}{A character vector of any additional packages to be installed}
+
+\item{repo}{The repository to be used. Defaults to getOption("repos")}
 }
 \value{
 NULL, called for its side effect.

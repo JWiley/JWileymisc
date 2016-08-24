@@ -4,7 +4,8 @@
 \alias{formatPval}
 \title{Function to simplify formatting p-values for easy viewing / publication}
 \usage{
-formatPval(x, d = 3, sd, includeP = TRUE, includeSign = TRUE)
+formatPval(x, d = 3, sd, includeP = FALSE, includeSign = FALSE,
+  dropLeadingZero = TRUE)
 }
 \arguments{
 \item{x}{p values to convert}
@@ -14,10 +15,13 @@ formatPval(x, d = 3, sd, includeP = TRUE, includeSign = TRUE)
 \item{sd}{number of scientific digits. Defaults to \code{d} if missing.}
 
 \item{includeP}{logical value whether to include the character \dQuote{p} itself.
-Defaults to \code{TRUE}.}
+Defaults to \code{FALSE}.}
 
 \item{includeSign}{logical value whether to include the character \dQuote{=} or \dQuote{<}.
-Defaults to \code{TRUE} and if \code{includeP = TRUE} it must be \code{TRUE}.}
+Defaults to \code{FALSE} and if \code{includeP = TRUE} it must be \code{TRUE}.}
+
+\item{dropLeadingZero}{logical value whether to drop leading zeros for p-values.
+Defaults to \code{TRUE}.}
 }
 \value{
 A character string with stars
@@ -28,8 +32,12 @@ Function to simplify formatting p-values for easy viewing / publication
 \examples{
 formatPval(c(.00052456, .000000124, .01035, .030489, .534946))
 formatPval(c(.00052456, .000000124, .01035, .030489, .534946), 3, 3, FALSE, TRUE)
-formatPval(c(.00052456, .000000124, .01035, .030489, .534946), 3, 3, FALSE, FALSE)
+formatPval(c(.00052456, .000000124, .01035, .030489, .534946), 3, 3, TRUE, TRUE)
 formatPval(c(.00052456, .000000124, .01035, .030489, .534946), 5)
+formatPval(c(1, .15346, .085463, .05673, .04837, .015353462,
+  .0089, .00164, .0006589, .0000000053326), 3, 5)
+formatPval(c(1, .15346, .085463, .05673, .04837, .015353462,
+  .0089, .00164, .0006589, .0000000053326), 3, 5, dropLeadingZero = FALSE)
 }
 \keyword{misc}
 

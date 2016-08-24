@@ -1,30 +1,33 @@
 Package: JWileymisc
 Type: Package
-Title: Miscellaneous utilities and functions
-Version: 0.1-1
-Date: 2016-05-10
+Title: Miscellaneous Utilities and Functions
+Version: 0.2.0
+Date: 2016-08-24
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 Description: A collection of miscellaneous tools and functions,
-    often just to save typing or redundancy, not implement new models.
+    such as tools to generate descriptive statistics tables,
+    format output, visualize relations among variables or check
+    distributions.
 License: GPL (>= 3)
 Depends:
     R (>= 3.2.0),
-    lavaan (>= 0.5-15),
-    methods,
+    data.table (>= 1.9.6),
     ggplot2 (>= 0.9.0),
+    cowplot,
     foreach,
-    data.table (>= 1.9.6)
+    lavaan (>= 0.5-15)
 Imports:
-    MplusAutomation (>= 0.6-2),
-    boot,
-    reshape2,
+    stats,
+    utils,
     Hmisc,
     multcompView,
     devtools,
     graphics,
-    mgcv
+    mgcv,
+    plyr,
+    mice
 Suggests:
     scales,
-    mice
+    testthat
 RoxygenNote: 5.0.1

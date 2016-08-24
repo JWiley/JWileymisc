@@ -8,9 +8,10 @@
 ##' @param data A data frame to be used for analysis.
 ##' @param \dots Additional arguments passed to \code{gam}.
 ##' @return A summary of the gam model.
+##' @importFrom stats as.formula gaussian binomial poisson
 ##' @importFrom mgcv gam summary.gam
 ##' @keywords internal
-.runIt <- function(formula, type, data, ...) {
+internalrunIt <- function(formula, type, data, ...) {
   summary(gam(formula = as.formula(formula), data = data,
               family = switch(type,
                               normal = gaussian(),
@@ -32,10 +33,10 @@
 ##' @return A character string
 ##' @keywords internal
 ##' @examples
-##' .formulaIt("mpg", "hp", "am")
-##' .formulaIt("mpg", "hp", "")
-##' .formulaIt("mpg", "", "am")
-.formulaIt <- function(dv, iv, covariates) {
+##' JWileymisc:::internalformulaIt("mpg", "hp", "am")
+##' JWileymisc:::internalformulaIt("mpg", "hp", "")
+##' JWileymisc:::internalformulaIt("mpg", "", "am")
+internalformulaIt <- function(dv, iv, covariates) {
   type <- paste0(
     c("", "iv")[(length(iv) & any(nzchar(iv))) + 1],
     c("", "cov")[(length(covariates) & any(nzchar(covariates))) + 1])
@@ -64,15 +65,16 @@
 ##' @return A list with all the model results.
 ##' @keywords internal
 ##' @import foreach
+##' @importFrom stats na.omit get_all_vars
 ##' @examples
-##' test1 <- .compareIV(
+##' test1 <- JWileymisc:::internalcompareIV(
 ##'   dv = "mpg", type = "normal",
 ##'   iv = "hp",
 ##'   covariates = "am",
 ##'   data = mtcars, multivariate = FALSE)
 ##' test1$Summary
 ##' rm(test1)
-.compareIV <- function(dv, type = c("normal", "binary", "count"),
+internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
                        iv, covariates = character(), data, multivariate = FALSE, ...) {
 
   if (length(iv) <= 1 & multivariate) {
@@ -81,39 +83,40 @@
   nIV <- length(iv)
 
   if (length(covariates)) {
-    f.cov <- .formulaIt(dv, "", covariates)
+    f.cov <- internalformulaIt(dv, "", covariates)
   }
   data <- data
   if (multivariate) {
     message("Multivariate uses complete cases for all IVs and covariates")
 
-    f.all <- .formulaIt(dv, iv, covariates)
+    f.all <- internalformulaIt(dv, iv, covariates)
 
     data <- na.omit(get_all_vars(as.formula(f.all), data = data))
 
-    m.all <- .runIt(f.all, type, data = data, ...)
+    m.all <- internalrunIt(f.all, type, data = data, ...)
 
     if (length(covariates)) {
-      m.all.cov <- .runIt(f.cov, type, data = data, ...)
+      m.all.cov <- internalrunIt(f.cov, type, data = data, ...)
     }
   }
 
+  i <- NULL; rm(i) ## make Rcmd check happy
   results <- foreach(i = 1:nIV, .combine = list) %dopar% {
     if (multivariate) {
       out <- list(
         data = data,
-        Unadjusted = .runIt(.formulaIt(dv, iv[i], ""),
+        Unadjusted = internalrunIt(internalformulaIt(dv, iv[i], ""),
                             type = type, data = data,
                             ...),
         Covariate = m.all.cov,
         Adjusted = if (!length(covariates)) {
                      NA
                    } else {
-                     .runIt(.formulaIt(dv, iv[i], covariates),
+                     internalrunIt(internalformulaIt(dv, iv[i], covariates),
                             type = type, data = data,
                             ...)
                    },
-        Reduced =  .runIt(.formulaIt(dv, iv[-i], covariates),
+        Reduced =  internalrunIt(internalformulaIt(dv, iv[-i], covariates),
                           type = type, data = data,
                           ...),
         Full = m.all)
@@ -132,24 +135,24 @@
       out
     } else {
       tmpdata <- na.omit(get_all_vars(as.formula(
-        .formulaIt(dv, iv[i], covariates)), data = data))
+        internalformulaIt(dv, iv[i], covariates)), data = data))
 
       out <- list(
         data = tmpdata,
-        Unadjusted = .runIt(.formulaIt(dv, iv[i], ""),
+        Unadjusted = internalrunIt(internalformulaIt(dv, iv[i], ""),
                             type = type, data = tmpdata,
                             ...),
         Covariate = if (!length(covariates)) {
                       NA
                     } else {
-                      .runIt(.formulaIt(dv, "", covariates),
+                      internalrunIt(internalformulaIt(dv, "", covariates),
                              type = type, data = tmpdata,
                              ...)
                     },
         Adjusted = if (!length(covariates)) {
                      NA
                    } else {
-                     .runIt(.formulaIt(dv, iv[i], covariates),
+                     internalrunIt(internalformulaIt(dv, iv[i], covariates),
                             type = type, data = tmpdata,
                             ...)
                    },
@@ -162,7 +165,7 @@
                       out$Adjusted$r.sq - out$Covariate$r.sq),
                ifelse(is.na(out$Reduced)[1], NA,
                       out$Full$r.sq - out$Reduced$r.sq)),
-        D = c(out$Unadjusted$dev.expl,
+        Deviance = c(out$Unadjusted$dev.expl,
               ifelse(is.na(out$Adjusted)[1], NA,
                      out$Adjusted$dev.expl - out$Covariate$dev.expl),
               ifelse(is.na(out$Reduced)[1], NA,
@@ -177,33 +180,34 @@
 }
 
 
-##' Compares the effects of various independent variables on dependent variables
-##'
-##' Make me!
-##'
-##' @param dv A character string or vector of the depentent variable(s)
-##' @param type A character string or vector indicating the type of dependent variable(s)
-##' @param iv A character string or vector giving the IV(s)
-##' @param covariates A character string or vector giving the covariate(s)
-##' @param data The data to be used for analysis
-##' @param multivariate A logical value whether to have models with all IVs simultaneously.
-##' @param \ldots Additional arguments passed on to the internal function, \code{.runIt}.
-##' @return A list with all the model results.
-##' @keywords internal
-##' @export
-##' @examples
-##' test1 <- compareIVs(
-##'   dv = c("mpg", "disp"),
-##'   type = c("normal", "normal")
-##'   iv = c("hp", "qsec"),
-##'   covariates = "am",
-##'   data = mtcars, multivariate = TRUE)
-##' rm(test1)
+#' Compares the effects of various independent variables on dependent variables
+#'
+#' Utility to estimate the unadjusted, covariate adjusted, and multivariate adjusted
+#' unique contributions of one or more IVs on one or more DVs
+#'
+#' @param dv A character string or vector of the depentent variable(s)
+#' @param type A character string or vector indicating the type of dependent variable(s)
+#' @param iv A character string or vector giving the IV(s)
+#' @param covariates A character string or vector giving the covariate(s)
+#' @param data The data to be used for analysis
+#' @param multivariate A logical value whether to have models with all IVs simultaneously.
+#' @param \ldots Additional arguments passed on to the internal function, \code{.runIt}.
+#' @return A list with all the model results.
+#' @export
+#' @examples
+#' test1 <- compareIVs(
+#'   dv = c("mpg", "disp"),
+#'   type = c("normal", "normal"),
+#'   iv = c("hp", "qsec"),
+#'   covariates = "am",
+#'   data = mtcars, multivariate = TRUE)
+#' test1$OverallSummary
+#' rm(test1)
 compareIVs <- function(dv, type, iv, covariates = character(), data, multivariate = FALSE, ...) {
   stopifnot(identical(length(dv), length(type)))
 
   res <- lapply(seq_along(dv), function(i) {
-    .compareIV(
+    internalcompareIV(
       dv = dv[i], type = type[i],
       iv = iv,
       covariates = covariates,
