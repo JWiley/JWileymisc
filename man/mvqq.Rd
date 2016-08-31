@@ -3,9 +3,10 @@
 \name{mvqq}
 \alias{mvqq}
 \title{This is a simple plotting function designed to help examine
-multivariate normality using the Mahalanobis distance.}
+multivariate normality using the (squared) Mahalanobis distance.}
 \usage{
-mvqq(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs"))
+mvqq(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs"),
+  plot = TRUE)
 }
 \arguments{
 \item{dat}{A data frame or matrix of multivariate data to be plotted}
@@ -14,10 +15,17 @@ mvqq(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs"))
 (means and covariance matrix) should be estimated in the presence of
 missing data.  The default is to use full information maximum likelihood
 based on functions in \pkg{lavaan}.}
+
+\item{plot}{A logical argument whether to plot the results. Defaults to \code{TRUE}.}
+}
+\value{
+An invisible list of the density plot, QQ plot, and the data containing
+  quantiles from the chi-squared distribution. Can be useful to find and remove
+  multivariate outliers.
 }
 \description{
 This is a simple plotting function designed to help examine
-multivariate normality using the Mahalanobis distance.
+multivariate normality using the (squared) Mahalanobis distance.
 }
 \examples{
 mvqq(mtcars)

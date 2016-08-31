@@ -1,10 +1,12 @@
 Package: JWileymisc
 Type: Package
 Title: Miscellaneous Utilities and Functions
-Version: 0.2.0
-Date: 2016-08-24
+Version: 0.2.1
+Date: 2016-08-31
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
+URL: https://github.com/JWiley/JWileymisc
+BugReports: https://github.com/JWiley/JWileymisc/issues
 Description: A collection of miscellaneous tools and functions,
     such as tools to generate descriptive statistics tables,
     format output, visualize relations among variables or check
@@ -20,6 +22,7 @@ Depends:
 Imports:
     stats,
     utils,
+    MASS,
     Hmisc,
     multcompView,
     devtools,
