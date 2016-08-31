@@ -247,14 +247,175 @@ corplot <- function(x, coverage, pvalues,
   eval(p)
 }
 
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
+
+#' Graphically compare the distribution of a variable against a specific distribution
+#'
+#' @param x The data as a single variable or vector to check the distribution.
+#' @param distr A character string indicating the distribution to be tested.
+#'   Currently one of: \dQuote{normal}, \dQuote{beta}, \dQuote{chisq} (chi-squared),
+#'   \dQuote{f}, \dQuote{gamma}, \dQuote{nbinom} (negative binomial), or
+#'   \dQuote{poisson}.
+#' @param na.rm A logical value whether to omit missing values. Defaults to \code{TRUE}.
+#' @param starts A named list of the starting values. Not required for all distributions.
+#'   Passed on to \code{fitdistr} which fits the maximum likelihood estimates of the
+#'   distribution parameters.
+#' @param xlim An optional vector to control the x limits for the theoretical distribution
+#'   density line, useful when densities become extreme at boundary values to help keep the
+#'   scale of the graph reasonable.  Passed on to \code{stat_function}.
+#' @param varlab A character vector the label to use for the variable
+#' @param plot A logical vector whether to plot the graphs. Defaults to \code{TRUE}.
+#' @param ... Additional arguments passed on to \code{geom_density}
+#' @return An invisible list with the ggplot2 objects for graphs,
+#'   as well as information about the distribution (parameter estimates,
+#'   name, log likelihood (useful for comparing the fit of different distributions
+#'   to the data), and a dataset with the sorted data and theoretical quantiles.#'
+#' @importFrom MASS fitdistr
+#' @importFrom ggplot2 ggplot stat_function geom_density geom_point
+#' @importFrom ggplot2 geom_abline ggtitle xlab ylab
+#' @importFrom stats dnorm qnorm dbeta qbeta dchisq qchisq
+#' @importFrom stats df qf dgamma qgamma dnbinom qnbinom dpois qpois
+#' @importFrom stats logLik ppoints
+#' @export
+#' @keywords hplot
+#' @examples
+#'
+#' ## example data
+#' set.seed(1234)
+#' d <- data.frame(
+#'   Ynorm = rnorm(200),
+#'   Ybeta = rbeta(200, 1, 4),
+#'   Ychisq = rchisq(200, 8),
+#'   Yf = rf(200, 5, 10),
+#'   Ygamma = rgamma(200, 2, 2),
+#'   Ynbinom = rnbinom(200, mu = 4, size = 9),
+#'   Ypois = rpois(200, 4))
+#'
+#' ## testing and graphing
+#' testdistr(d$Ynorm, "normal")
+#' testdistr(d$Ybeta, "beta", starts = list(shape1 = 1, shape2 = 4))
+#' testdistr(d$Ychisq, "chisq", starts = list(df = 8))
+#' testdistr(d$Yf, "f", starts = list(df1 = 5, df2 = 10))
+#' testdistr(d$Ygamma, "gamma")
+#' testdistr(d$Ynbinom, "nbinom")
+#' testdistr(d$Ypois, "poisson")
+#'
+#' ## compare log likelihood of two different distributions
+#' testdistr(d$Ygamma, "normal")$Distribution$LL
+#' testdistr(d$Ygamma, "gamma")$Distribution$LL
+#'
+#' rm(d) ## cleanup
+testdistr <- function(x,
+  distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom", "poisson"),
+  na.rm = TRUE, starts, xlim = NULL, varlab = "X", plot = TRUE, ...) {
+
+  distr <- match.arg(distr)
+
+  if (missing(starts)) {
+    base <- "starts must be a named list as below with start values for 'XX':\n%s"
+    switch(distr,
+           beta = stop(sprintf(base, "list(shape1 = XX, shape2 = XX)")),
+           chisq = stop(sprintf(base, "list(df = XX)")),
+           f = stop(sprintf(base, "list(df1 = XX, df2 = XX)")),
+           "")
+  }
+
+  if (anyNA(x)) {
+    if (na.rm) {
+      x <- na.omit(x)
+    } else {
+      stop("Missing values cannot be present when na.rm = FALSE")
+    }
+  }
+
+  distribution <- switch(distr,
+                         normal = list(
+                           d = dnorm,
+                           q = qnorm,
+                           Name = "Normal",
+                           fit = fitdistr(x, "normal")),
+                         beta = list(
+                           d = dbeta,
+                           q = qbeta,
+                           Name = "Beta",
+                           fit = fitdistr(x, "beta", start = starts)),
+                         chisq = list(
+                           d = dchisq,
+                           q = qchisq,
+                           Name = "Chi-squared",
+                           fit = fitdistr(x, "chi-squared", start = starts)),
+                         f = list(
+                           d = df,
+                           q = qf,
+                           Name = "F",
+                           fit = fitdistr(x, "f", start = starts)),
+                         gamma = list(
+                           d = dgamma,
+                           q = qgamma,
+                           Name = "Gamma",
+                           fit = fitdistr(x, "gamma")),
+                         nbinom = list(
+                           d = dnbinom,
+                           q = qnbinom,
+                           Name = "Negative Binomial",
+                           fit = fitdistr(x, "negative binomial")),
+                         poisson = list(
+                           d = dpois,
+                           q = qpois,
+                           Name = "Poisson",
+                           fit = fitdistr(x, "poisson")))
+
+  distribution$LL <- logLik(distribution$fit)
+
+  d <- data.table(
+    X = do.call(distribution$q,
+                c(list(p = ppoints(length(x))),
+                  as.list(distribution$fit$estimate))),
+    Y = sort(x))
+
+  p.density <- ggplot(d, aes(Y)) +
+    geom_density(...) +
+    stat_function(fun = distribution$d,
+                  args = as.list(distribution$fit$estimate),
+                  colour = "blue", xlim = xlim) +
+    xlab(varlab) + ylab("Density") +
+    theme_cowplot() + ggtitle("Density Plot")
+
+  p.qq <- ggplot(d, aes(X, Y)) +
+    geom_point() +
+    geom_abline(intercept = 0, slope = 1) +
+    xlab(label = sprintf("Theoretical %s Quantiles", distribution$Name)) +
+    ylab(label = varlab) +
+    theme_cowplot() + ggtitle("Q-Q Plot")
+
+  if (plot) {
+    print(plot_grid(p.density, p.qq, ncol = 1, labels = c("A", "B")))
+  }
+
+  return(invisible(list(
+    DensityPlot = p.density,
+    QQPlot = p.qq,
+    Data = d,
+    Distribution = distribution)))
+}
+
+
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("D2", "ChiQuant"))
+
 #' This is a simple plotting function designed to help examine
-#' multivariate normality using the Mahalanobis distance.
+#' multivariate normality using the (squared) Mahalanobis distance.
 #'
 #' @param dat A data frame or matrix of multivariate data to be plotted
 #' @param use A character vector indicating how the moments
 #'   (means and covariance matrix) should be estimated in the presence of
 #'   missing data.  The default is to use full information maximum likelihood
 #'   based on functions in \pkg{lavaan}.
+#' @param plot A logical argument whether to plot the results. Defaults to \code{TRUE}.
+#' @return An invisible list of the density plot, QQ plot, and the data containing
+#'   quantiles from the chi-squared distribution. Can be useful to find and remove
+#'   multivariate outliers.
 #' @seealso \code{\link{SEMSummary}}
 #' @keywords multivariate
 #' @importFrom stats mahalanobis qchisq ppoints
@@ -263,9 +424,16 @@ corplot <- function(x, coverage, pvalues,
 #' @examples
 #' mvqq(mtcars)
 #'
-mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs")) {
+mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs"), plot = TRUE) {
   use <- match.arg(use)
-  if (!anyNA(dat)) use <- "complete.obs"
+
+
+  if (anyNA(dat)) {
+    OK <- rowSums(is.na(dat)) == 0
+  } else if (!anyNA(dat)) {
+    use <- "complete.obs"
+    OK <- rep(TRUE, nrow(dat))
+  }
 
   desc <- switch(match.arg(use),
     fiml = {moments(dat)},
@@ -274,25 +442,25 @@ mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs")) 
         sigma = cov(dat, use = "pairwise.complete.obs"))
     },
     complete.obs = {
-      list(mu = colMeans(na.omit(dat)),
-        sigma = cov(na.omit(dat)))
+      list(mu = colMeans(dat[OK,]),
+        sigma = cov(dat[OK,]))
     })
 
-  dat <- na.omit(dat)
+  d <- data.table(OK = OK)
+  d[OK == TRUE,
+    D2 := mahalanobis(dat[OK,], desc$mu, desc$sigma)]
+  d[OK == TRUE,
+    ChiQuant := qchisq(ppoints(.N), df = ncol(dat))[order(order(D2))]]
 
-  D2 <- ChiQuant <- NULL; rm(D2, ChiQuant) ## make Rcmd check happy
-  d <- data.table(D2 = mahalanobis(dat, desc$mu, desc$sigma))[order(D2)]
-  d[, ChiQuant := qchisq(ppoints(nrow(d)), df = ncol(dat))]
-
-  p.density <- ggplot(d, aes_string(x = "D2")) +
+  p.density <- ggplot(d[OK==TRUE], aes_string(x = "D2")) +
     geom_density() +
     geom_rug() +
     xlab("Mahalanobis Distances") +
     ylab("Density") +
-    ggtitle(sprintf("Mahalanobis Distances, n=%d, p=%d", nrow(dat), ncol(dat))) +
+    ggtitle(sprintf("Mahalanobis Distances, n=%d, p=%d", sum(OK), ncol(dat))) +
     theme_cowplot()
 
-  p.qq <- ggplot(d, aes_string(x = "D2", y = "ChiQuant")) +
+  p.qq <- ggplot(d[OK==TRUE], aes_string(x = "D2", y = "ChiQuant")) +
     geom_point() +
     geom_abline(intercept = 0, slope = 1) +
     xlab("Mahalanobis Distances") +
@@ -300,14 +468,22 @@ mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs")) 
     ggtitle(eval(substitute(
       expression("Q-Q plot of Mahalanobis" * ~D^2 * " vs. quantiles of" * ~chi[df]^2),
       list(df = ncol(dat))))) +
-    coord_equal() +
+    ## coord_equal() +
     theme_cowplot()
 
-  print(plot_grid(p.density, p.qq, ncol = 2, align = "h"))
+  if (plot) {
+    print(plot_grid(p.density, p.qq, ncol = 2, align = "h"))
+  }
 
-  return(invisible(list(DensityPlot = p.density, QQPlot = p.qq)))
+  return(invisible(list(
+    DensityPlot = p.density,
+    QQPlot = p.qq,
+    Data = d)))
 }
 
+
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("V1"))
 
 #' Tukey HSD Plot
 #'
@@ -365,7 +541,6 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
   ## Merge it with the labels
   labels.df <- merge(plot.levels, y.df, by.x = 'plot.labels', by.y = x, sort = FALSE)
 
-  V1 <- NULL; rm(V1) ## make Rcmd check happy
   p <- ggplot(d, aes_string(x=x, y=y)) +
     stat_summary(fun.data = function(d) mean_cl_normal(d, conf.int = ci), ...) +
     geom_text(data = labels.df,
