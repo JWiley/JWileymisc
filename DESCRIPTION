@@ -17,8 +17,7 @@ Depends:
     data.table (>= 1.9.6),
     ggplot2 (>= 2.0.0),
     cowplot,
-    foreach,
-    lavaan (>= 0.5-20)
+    foreach
 Imports:
     stats,
     utils,
@@ -29,7 +28,8 @@ Imports:
     graphics,
     mgcv,
     plyr,
-    mice
+    mice,
+    lavaan (>= 0.5-20)
 Suggests:
     scales,
     testthat
