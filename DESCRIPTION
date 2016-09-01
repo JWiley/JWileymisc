@@ -2,7 +2,7 @@ Package: JWileymisc
 Type: Package
 Title: Miscellaneous Utilities and Functions
 Version: 0.2.1
-Date: 2016-08-31
+Date: 2016-09-01
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 URL: https://github.com/JWiley/JWileymisc
@@ -15,10 +15,10 @@ License: GPL (>= 3)
 Depends:
     R (>= 3.2.0),
     data.table (>= 1.9.6),
-    ggplot2 (>= 0.9.0),
+    ggplot2 (>= 2.0.0),
     cowplot,
     foreach,
-    lavaan (>= 0.5-15)
+    lavaan (>= 0.5-20)
 Imports:
     stats,
     utils,

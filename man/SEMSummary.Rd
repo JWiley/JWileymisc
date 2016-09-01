@@ -80,6 +80,18 @@ SEMSummary(~ ., data = mtcars[, c(1, 2, 3, 9, 10, 11)])
 
 ## clean up
 rm(s)
+
+#' # sample data
+Xmiss <- as.matrix(iris[, -5])
+# make 25\% missing completely at random
+set.seed(10)
+Xmiss[sample(length(Xmiss), length(Xmiss) * .25)] <- NA
+Xmiss <- as.data.frame(Xmiss)
+
+SEMSummary(~ ., data = Xmiss, use = "fiml")
+
+## clean up
+rm(Xmiss)
 }
 \seealso{
 \code{\link{APAStyler}}
