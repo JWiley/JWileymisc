@@ -13,7 +13,8 @@
 #'   \item{sigma}{The covariance matrix.}
 #' @seealso \code{\link{SEMSummary}}
 #' @keywords multivariate
-#' @importFrom lavaan lavaan
+#' @importFrom lavaan lavCor lavInspect
+#' @author Suggested by Yves Rosseel author of the lavaan package on which this depends
 #' @export
 #' @examples
 #' # sample data
@@ -37,20 +38,20 @@
 #' # clean up
 #' rm(Xmiss)
 moments <- function(data, ...) {
+
   if (!is.data.frame(data)) {
     data <- as.data.frame(data)
   }
 
-  n <- colnames(data)
-  X <- lavaan:::lav_data_full(data, ov.names = n, missing = "fiml")
-  mpat <- lavaan:::getMissingPatternStats(X = X@X[[1L]], Mp = X@Mp[[1L]])
-  moments <- lavaan:::estimate.moments.EM(X = X@X[[1L]], M = mpat, verbose=FALSE, ...)
-  sigma <- moments$sigma
-  dimnames(sigma) <- list(n, n)
-  mu <- moments$mu
-  names(mu) <- n
+  ## from Yves
+  fit <- lavCor(data, output = "fit", missing = "ml")
+  out <- lavInspect(fit, "sampstat.h1")
 
-  return(list(mu = mu, sigma = sigma))
+  class(out$cov) <- "matrix"
+  class(out$mean) <- "numeric"
+  names(out) <- c("sigma", "mu")
+
+  return(out)
 }
 
 #' Summary Statistics for a SEM Analysis
@@ -124,6 +125,18 @@ moments <- function(data, ...) {
 #'
 #' ## clean up
 #' rm(s)
+#'
+#' #' # sample data
+#' Xmiss <- as.matrix(iris[, -5])
+#' # make 25% missing completely at random
+#' set.seed(10)
+#' Xmiss[sample(length(Xmiss), length(Xmiss) * .25)] <- NA
+#' Xmiss <- as.data.frame(Xmiss)
+#'
+#' SEMSummary(~ ., data = Xmiss, use = "fiml")
+#'
+#' ## clean up
+#' rm(Xmiss)
 SEMSummary <- function(formula, data,
   use = c("fiml", "pairwise.complete.obs", "complete.obs")) {
   env <- environment(formula)
