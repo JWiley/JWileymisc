@@ -130,11 +130,11 @@ plot.SEMSummary.list <- function(x, y, which, ...) {
 #' # using the plot method for SEMSummary (which basically just calls corplot)
 #' plot(sdat)
 #'
-#' # getting p values instaed of coverage
-#' plot(sdat, plot = "p")
+#' ## getting p values instaed of coverage
+#' # plot(sdat, plot = "p")
 #'
-#' # showing correlations instead of coverage
-#' plot(sdat, plot = "cor")
+#' ## showing correlations instead of coverage
+#' # plot(sdat, plot = "cor")
 #'
 #' # use the control.grobs argument to adjust the coverage scaling
 #' # to go from 0 to 1 rather than the range of coverage
@@ -252,11 +252,19 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 
 #' Graphically compare the distribution of a variable against a specific distribution
 #'
-#' @param x The data as a single variable or vector to check the distribution.
+#' This is a simple plotting function designed to help examine distributions.
+#' It also includes an option for assessing multivariate normality using the
+#' (squared) Mahalanobis distance.
+#'
+#' @param x The data as a single variable or vector to check the distribution unless
+#'   the distribution is \dQuote{mvnormal} in which case it should be a data frame or
+#'   data table.
 #' @param distr A character string indicating the distribution to be tested.
 #'   Currently one of: \dQuote{normal}, \dQuote{beta}, \dQuote{chisq} (chi-squared),
-#'   \dQuote{f}, \dQuote{gamma}, \dQuote{nbinom} (negative binomial), or
-#'   \dQuote{poisson}.
+#'   \dQuote{f}, \dQuote{gamma}, \dQuote{nbinom} (negative binomial),
+#'   \dQuote{poisson}, or \dQuote{mvnormal} for multivariate normal where Mahalanobis
+#'   distances are calculated and compared against a Chi-squared distribution with
+#'   degrees of freedom equal to the number of variables.
 #' @param na.rm A logical value whether to omit missing values. Defaults to \code{TRUE}.
 #' @param starts A named list of the starting values. Not required for all distributions.
 #'   Passed on to \code{fitdistr} which fits the maximum likelihood estimates of the
@@ -266,6 +274,10 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #'   scale of the graph reasonable.  Passed on to \code{stat_function}.
 #' @param varlab A character vector the label to use for the variable
 #' @param plot A logical vector whether to plot the graphs. Defaults to \code{TRUE}.
+#' @param use A character vector indicating how the moments
+#'   (means and covariance matrix) should be estimated in the presence of
+#'   missing data.  The default is to use full information maximum likelihood
+#'   based on functions in \pkg{lavaan}.
 #' @param ... Additional arguments passed on to \code{geom_density}
 #' @return An invisible list with the ggplot2 objects for graphs,
 #'   as well as information about the distribution (parameter estimates,
@@ -277,8 +289,10 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #' @importFrom stats dnorm qnorm dbeta qbeta dchisq qchisq
 #' @importFrom stats df qf dgamma qgamma dnbinom qnbinom dpois qpois
 #' @importFrom stats logLik ppoints
+#' @importFrom stats mahalanobis qchisq ppoints
+#' @seealso \code{\link{SEMSummary}}
 #' @export
-#' @keywords hplot
+#' @keywords hplot multivariate
 #' @examples
 #'
 #' ## example data
@@ -305,12 +319,39 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #' testdistr(d$Ygamma, "normal")$Distribution$LL
 #' testdistr(d$Ygamma, "gamma")$Distribution$LL
 #'
+#' testdistr(mtcars, "mvnormal")
+#'
 #' rm(d) ## cleanup
 testdistr <- function(x,
-  distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom", "poisson"),
-  na.rm = TRUE, starts, xlim = NULL, varlab = "X", plot = TRUE, ...) {
+  distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom", "poisson", "mvnormal"),
+  na.rm = TRUE, starts, xlim = NULL, varlab = "X", plot = TRUE,
+  use = c("fiml", "pairwise.complete.obs", "complete.obs"), ...) {
 
   distr <- match.arg(distr)
+  use <- match.arg(use)
+
+  if (identical(distr, "mvnormal")) {
+    if (anyNA(x)) {
+      OK <- rowSums(is.na(x)) == 0
+    } else if (!anyNA(x)) {
+      use <- "complete.obs"
+      OK <- rep(TRUE, nrow(x))
+    }
+
+    desc <- switch(match.arg(use),
+                   fiml = {moments(x)},
+                   pairwise.complete.obs = {
+                     list(mu = colMeans(x, na.rm = TRUE),
+                          sigma = cov(x, use = "pairwise.complete.obs"))
+                   },
+                   complete.obs = {
+                     list(mu = colMeans(x[OK,]),
+                          sigma = cov(x[OK,]))
+                   })
+
+    starts <- list(df = ncol(x))
+    x <- mahalanobis(x[OK,], desc$mu, desc$sigma)
+  }
 
   if (missing(starts)) {
     base <- "starts must be a named list as below with start values for 'XX':\n%s"
@@ -364,9 +405,16 @@ testdistr <- function(x,
                            d = dpois,
                            q = qpois,
                            Name = "Poisson",
-                           fit = fitdistr(x, "poisson")))
+                           fit = fitdistr(x, "poisson")),
+                         mvnormal = list(
+                           d = dchisq,
+                           q = qchisq,
+                           Name = "Chi-squared",
+                           fit = list(estimate = list(df = starts$df))))
 
-  distribution$LL <- logLik(distribution$fit)
+  if (!identical(distr, "mvnormal")) {
+    distribution$LL <- logLik(distribution$fit)
+  }
 
   d <- data.table(
     X = do.call(distribution$q,
@@ -379,15 +427,41 @@ testdistr <- function(x,
     stat_function(fun = distribution$d,
                   args = as.list(distribution$fit$estimate),
                   colour = "blue", xlim = xlim) +
-    xlab(varlab) + ylab("Density") +
-    theme_cowplot() + ggtitle("Density Plot")
+    geom_rug() +
+    ylab("Density") +
+    theme_cowplot()
+
+  if (identical(distr, "mvnormal")) {
+    p.density <- p.density +
+      xlab(sprintf("Mahalanobis Distances, p=%d", starts$df)) +
+      ggtitle("Density Plot (Chi-squared)")
+  } else {
+    p.density <- p.density +
+      xlab(varlab) +
+      ggtitle(sprintf("Density Plot (%s)\nLL(df = %d) = %0.2f",
+                      distribution$Name,
+                      attr(distribution$LL, "df"),
+                      distribution$LL))
+  }
 
   p.qq <- ggplot(d, aes(X, Y)) +
     geom_point() +
     geom_abline(intercept = 0, slope = 1) +
-    xlab(label = sprintf("Theoretical %s Quantiles", distribution$Name)) +
-    ylab(label = varlab) +
-    theme_cowplot() + ggtitle("Q-Q Plot")
+    xlab(label = "Theoretical Quantiles") +
+    theme_cowplot()
+
+  if (identical(distr, "mvnormal")) {
+    p.qq <- p.qq +
+      ylab(sprintf("Mahalanobis Distances, p=%d", starts$df)) +
+      ggtitle("Q-Q Plot (Chi-squared)")
+  } else {
+    p.qq <- p.qq +
+      ylab(label = varlab) +
+      ggtitle(sprintf("Q-Q Plot (%s)\nLL(df = %d) = %0.2f",
+                      distribution$Name,
+                      attr(distribution$LL, "df"),
+                      distribution$LL))
+  }
 
   if (plot) {
     print(plot_grid(p.density, p.qq, ncol = 1, labels = c("A", "B")))
@@ -404,6 +478,8 @@ testdistr <- function(x,
 # clear R CMD CHECK notes
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("D2", "ChiQuant"))
 
+#' NOTE: this function is replaced and combined into the \code{testdistr} function.
+#'
 #' This is a simple plotting function designed to help examine
 #' multivariate normality using the (squared) Mahalanobis distance.
 #'
@@ -422,11 +498,12 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("D2", "ChiQuant"))
 #' @importFrom cowplot theme_cowplot
 #' @export
 #' @examples
-#' mvqq(mtcars)
+#' testdistr(mtcars, "mvnormal")
 #'
 mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs"), plot = TRUE) {
   use <- match.arg(use)
 
+  .Deprecated("testdistr")
 
   if (anyNA(dat)) {
     OK <- rowSums(is.na(dat)) == 0
@@ -454,6 +531,9 @@ mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs"), 
 
   p.density <- ggplot(d[OK==TRUE], aes_string(x = "D2")) +
     geom_density() +
+    stat_function(fun = dchisq,
+                  args = list(df = ncol(dat)),
+                  colour = "blue") +
     geom_rug() +
     xlab("Mahalanobis Distances") +
     ylab("Density") +
