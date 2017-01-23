@@ -6,7 +6,8 @@
 \usage{
 testdistr(x, distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom",
   "poisson", "mvnormal"), na.rm = TRUE, starts, xlim = NULL, varlab = "X",
-  plot = TRUE, use = c("fiml", "pairwise.complete.obs", "complete.obs"),
+  plot = TRUE, extremevalues = c("no", "theoretical", "empirical"),
+  ev.perc = 0.005, use = c("fiml", "pairwise.complete.obs", "complete.obs"),
   ...)
 }
 \arguments{
@@ -34,6 +35,15 @@ scale of the graph reasonable.  Passed on to \code{stat_function}.}
 \item{varlab}{A character vector the label to use for the variable}
 
 \item{plot}{A logical vector whether to plot the graphs. Defaults to \code{TRUE}.}
+
+\item{extremevalues}{A character vector whether to indicate extreme values.
+Should be \dQuote{no} to do nothing, \dQuote{empirical} to show extreme
+values based on the observed data percentiles, or \dQuote{theoretical}
+to show extreme values based on percentiles of the theoretical distribution.}
+
+\item{ev.perc}{Percentile to use for extreme values.  For example if .01,
+then the lowest 1 percent and highest 1 percent will be labelled
+extreme values.  Defaults to the lowest and highest 0.5 percent.}
 
 \item{use}{A character vector indicating how the moments
 (means and covariance matrix) should be estimated in the presence of

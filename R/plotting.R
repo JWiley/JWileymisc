@@ -274,6 +274,13 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #'   scale of the graph reasonable.  Passed on to \code{stat_function}.
 #' @param varlab A character vector the label to use for the variable
 #' @param plot A logical vector whether to plot the graphs. Defaults to \code{TRUE}.
+#' @param extremevalues A character vector whether to indicate extreme values.
+#'   Should be \dQuote{no} to do nothing, \dQuote{empirical} to show extreme
+#'   values based on the observed data percentiles, or \dQuote{theoretical}
+#'   to show extreme values based on percentiles of the theoretical distribution.
+#' @param ev.perc Percentile to use for extreme values.  For example if .01,
+#'   then the lowest 1 percent and highest 1 percent will be labelled
+#'   extreme values.  Defaults to the lowest and highest 0.5 percent.
 #' @param use A character vector indicating how the moments
 #'   (means and covariance matrix) should be estimated in the presence of
 #'   missing data.  The default is to use full information maximum likelihood
@@ -290,6 +297,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #' @importFrom stats df qf dgamma qgamma dnbinom qnbinom dpois qpois
 #' @importFrom stats logLik ppoints
 #' @importFrom stats mahalanobis qchisq ppoints
+#' @importFrom data.table %inrange% %between%
 #' @seealso \code{\link{SEMSummary}}
 #' @export
 #' @keywords hplot multivariate
@@ -325,10 +333,13 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 testdistr <- function(x,
   distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom", "poisson", "mvnormal"),
   na.rm = TRUE, starts, xlim = NULL, varlab = "X", plot = TRUE,
+  extremevalues = c("no", "theoretical", "empirical"), ev.perc = .005,
   use = c("fiml", "pairwise.complete.obs", "complete.obs"), ...) {
 
   distr <- match.arg(distr)
   use <- match.arg(use)
+  extremevalues <- match.arg(extremevalues)
+  stopifnot(ev.perc %inrange% c(0L, 1L))
 
   if (identical(distr, "mvnormal")) {
     if (anyNA(x)) {
@@ -422,14 +433,24 @@ testdistr <- function(x,
                   as.list(distribution$fit$estimate))),
     Y = sort(x))
 
+  ev.limits <- switch(extremevalues,
+                      no = c(-Inf, Inf),
+                      empirical = quantile(x, probs = c(ev.perc, 1 - ev.perc), na.rm = TRUE),
+                      theoretical = do.call(distribution$q,
+                                            c(list(p = c(ev.perc, 1 - ev.perc)),
+                                              as.list(distribution$fit$estimate))))
+
+  d[, isEV := factor(Y %inrange% ev.limits, levels = c(TRUE, FALSE), labels = c("No", "Yes"))]
+
   p.density <- ggplot(d, aes(Y)) +
     geom_density(...) +
     stat_function(fun = distribution$d,
                   args = as.list(distribution$fit$estimate),
-                  colour = "blue", xlim = xlim) +
-    geom_rug() +
+                  colour = "blue", linetype = 2, size = 1, xlim = xlim) +
+    geom_rug(aes(colour = isEV)) +
+    scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
     ylab("Density") +
-    theme_cowplot()
+    theme_cowplot() + theme(legend.position = "none")
 
   if (identical(distr, "mvnormal")) {
     p.density <- p.density +
@@ -445,10 +466,11 @@ testdistr <- function(x,
   }
 
   p.qq <- ggplot(d, aes(X, Y)) +
-    geom_point() +
     geom_abline(intercept = 0, slope = 1) +
+    geom_point(aes(colour = isEV)) +
+    scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
     xlab(label = "Theoretical Quantiles") +
-    theme_cowplot()
+    theme_cowplot() + theme(legend.position = "none")
 
   if (identical(distr, "mvnormal")) {
     p.qq <- p.qq +
