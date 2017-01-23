@@ -1,3 +1,275 @@
+##' Function to find significant regions from an interaction
+##'
+##' This function uses the \code{contrast} function from \pkg{rms} to
+##' find the threshold for significance from interactions.
+##'
+##'
+##' @param object A fitted rms object
+##' @param l1 the first set of values to fix for the contrast function
+##' @param l2 the second set of values to fix for the contrast function
+##' @param name.vary the name of the model parameter to vary values for
+##'   to find the threshold.  Note that this should not be included in
+##'   \code{l1} or \code{l2} arguments.
+##' @param lower The lower bound to search for values for the varying value
+##' @param upper The upper bound to search for values for the varying value
+##' @param alpha The significance threshold, defaults to \code{.05}
+##' @param starts Number of starting values to try between the
+##'   lower and upper bounds.
+##' @return A data table with notes if no convergence or significance
+##'   thresholds (if any).
+##' @export
+##' @importFrom rms contrast
+##' @importFrom stats optim
+##' @examples
+##' ## make me
+findSigRegions <- function(object, l1, l2, name.vary, lower, upper, alpha = .05, starts = 50) {
+  foo <- function(x) {
+    tmp1 <- l1
+    tmp2 <- l2
+    tmp1[name.vary] <- x
+    tmp2[name.vary] <- x
+
+    out <- abs(alpha - as.data.table(as.data.frame(contrast(object, tmp1, tmp2)[c("Pvalue")]))[, Pvalue])
+
+    if (is.na(out) || is.nan(out) || !is.finite(out)) {
+      out <- 9
+    }
+
+    return(out)
+  }
+
+  fstarts <- function(startval) {
+    res <- optim(par = startval, fn = foo,
+                 lower = lower, upper = upper,
+                 method = "L-BFGS-B",
+                 control = list(factr = 1e11, maxit = 500))
+    conv <- valid <- sig <- FALSE
+
+    out <- data.table(A = as.numeric(startval), Contrast = NA_real_, Pvalue = NA_real_, Notes = NA_character_)
+    setnames(out, names(out), c(name.vary, "Contrast", "Pvalue", "Notes"))
+
+    if (isTRUE(all.equal(res$convergence, 0))) {
+      conv <- TRUE
+      out$Notes <- "Converged"
+      if (res$value > (-.Machine$double.eps) & res$value < (.95 + .Machine$double.eps)) {
+        valid <- TRUE
+        out$Notes <- paste(out$Notes, "Valid", sep = "; ")
+
+        if (res$value < .0001) {
+          sig <- TRUE
+
+          tmp1 <- l1
+          tmp1[name.vary] <- res$par
+          tmp2 <- l2
+          tmp2[name.vary] <- res$par
+          out <- cbind(
+            as.data.table(as.data.frame(contrast(object, tmp1, tmp2)[c(name.vary, "Contrast", "Pvalue")])),
+            Notes = out$Notes)
+        }
+      } else {
+        out$Notes <- paste(out$Notes, "Invalid result", sep = "; ")
+      }
+    } else {
+      out$Notes <- paste("Did not converge", res$convergence, res$message, sep = "; ")
+    }
+    return(out)
+  }
+
+  out <- do.call(rbind, lapply(seq(from = lower, to = upper, length.out = starts), fstarts))
+
+  if (any(!is.na(out$Pvalue))) {
+    out <- out[!is.na(Pvalue)]
+  }
+
+  out[, V2 := round(get(name.vary) / abs(lower - upper), 3)]
+  out <- out[order(V2, -abs(alpha - Pvalue))]
+  out[, Index := 1:.N, by = V2]
+
+  out[Index == 1][, Index := NULL][, V2 := NULL]
+}
+
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("Pvalue"))
+
+
+##' Function to find significant regions from an interaction
+##'
+##' This function uses the \code{contrast} function from \pkg{rms} to
+##' find the threshold for significance from interactions.
+##'
+##' @param object A fitted rms object
+##' @param predList TODO
+##' @param contrastList TODO
+##' @param xvar TODO
+##' @param varyvar TODO
+##' @param varyvar.levels TODO
+##' @param xlab optional
+##' @param ylab TODO
+##' @param ratio TODO
+##' @param xlim TODO
+##' @param ylim TODO
+##' @param xbreaks TODO
+##' @param xlabels optional
+##' @param scale.x optional
+##' @param scale.y optional
+##' @param starts Number of starting values to try between the
+##'   lower and upper bounds.
+##' @return A data table with notes if no convergence or significance
+##'   thresholds (if any).
+##' @export
+##' @importFrom rms Predict
+##' @examples
+##' ## make me
+intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
+                           varyvar.levels,
+                           xlab = xvar, ylab = "Predicted Values", ratio = 1,
+                           xlim, ylim,
+                           xbreaks, xlabels = xbreaks,
+                           scale.x = c(m = 0, s = 1), scale.y = c(m = 0, s = 1),
+                           starts = 50) {
+
+  preds <- as.data.table(do.call(Predict, list(x = object, factors = predList, conf.type = "mean")))
+  preds[, xz := (get(xvar) - scale.x["m"])/scale.x["s"]]
+  preds[, yz := (yhat - scale.y["m"])/scale.y["s"]]
+  preds[, yllz := (lower - scale.y["m"])/scale.y["s"]]
+  preds[, yulz := (upper - scale.y["m"])/scale.y["s"]]
+
+  simpleSlopes <- do.call(rbind, lapply(contrastList, function(x) {
+    out <- as.data.table(as.data.frame(
+      contrast(object,
+               c(x[[-1]], x[[1]][1]), c(x[[-1]], x[[1]][2]), type = "average")[
+        c("Contrast", "SE", "Lower", "Upper", "Pvalue")]))
+    out[, reglab := sprintf(
+            "b = %0.2f [%0.2f, %0.2f], %s",
+            Contrast, Lower, Upper,
+            formatPval(Pvalue, 3, 3, includeP = TRUE))]
+    return(out)
+  }))
+
+  yvals <- preds[, .(y = yhat[which.min(abs(get(xvar) - pmax(min(get(xvar), na.rm = TRUE), min(xlim))))],
+                     yz = yz[which.min(abs(xz - pmax(min(xz, na.rm = TRUE), min(xlim))))]),
+                     by = varyvar]
+  yvals2 <- preds[,
+                 .(y = yhat[which.min(abs(get(xvar) - pmin(max(get(xvar), na.rm = TRUE), max(xlim))))],
+                   yz = yz[which.min(abs(xz - pmin(max(xz, na.rm = TRUE), max(xlim))))]),
+                 by = varyvar]
+
+  if ((abs(diff(yvals$yz))/abs(diff(yvals2$yz)) < .9)) {
+    use.xmax <- TRUE
+    simpleSlopes[, x := pmin(max(preds[[xvar]], na.rm = TRUE), max(xlim))]
+    simpleSlopes[, xz := pmin(max(preds[["xz"]], na.rm = TRUE), max(xlim))]
+    simpleSlopes <- cbind(simpleSlopes, yvals2)
+  } else {
+    use.xmax <- FALSE
+    simpleSlopes[, x := pmax(min(preds[[xvar]], na.rm = TRUE), min(xlim))]
+    simpleSlopes[, xz := pmax(min(preds[["xz"]], na.rm = TRUE), min(xlim))]
+    simpleSlopes <- cbind(simpleSlopes, yvals)
+  }
+
+  simpleSlopes[, ContrastAngle := atan(Contrast * ratio)/(pi/180)]
+  simpleSlopes[, ContrastAngleZ := atan(Contrast * ratio * scale.x["s"])/(pi/180)]
+
+  sigThresh <- findSigRegions(object, contrastList[[1]][[2]], contrastList[[2]][[2]],
+                               name.vary = xvar,
+                               lower = min(preds[[xvar]], na.rm = TRUE),
+                               upper = max(preds[[xvar]], na.rm = TRUE),
+                              starts = starts)
+  sigThresh[, xz := (get(xvar) - scale.x["m"])/scale.x["s"]]
+
+  anysig <- any(!is.na(sigThresh$Pvalue))
+
+  if (anysig) {
+    sigThreshArrows <- lapply(1:nrow(sigThresh), function(i) {
+      z <- sigThresh[i, xz]
+      merge(cbind(preds[, .(Yhat = yhat[which.min(abs(xz - z))]), by = varyvar],
+                  xz = z), sigThresh[i], by = "xz", all = TRUE)
+    })
+  } else {
+    sigThreshArrows <- list(NA)
+  }
+
+  if (missing(varyvar.levels)) {
+    varyvar.levels <- list(levels = unique(preds[[varyvar]]), labels = unique(preds[[varyvar]]))
+  }
+
+  preds[, (varyvar) := factor(get(varyvar), levels = varyvar.levels$levels, labels = varyvar.levels$labels)]
+
+  finalOut <- list(
+    Predictions = preds,
+    simpleSlopes = simpleSlopes,
+    significantThresholds = sigThresh,
+    significantThresholdArrows = sigThreshArrows)
+
+  if (anysig) {
+    arrow.geoms <- lapply(sigThreshArrows, function(arr) {
+      geom_segment(aes(x = xz[1], y = Yhat[1], xend = xz[2], yend = Yhat[2]),
+                   data = arr,
+                   size=.6, arrow = arrow(length = unit(.03, "npc"), ends = "both"))
+    })
+  } else {
+    arrow.geoms <- list(NA)
+  }
+
+  base.code <- paste0('
+  ggplot(Predictions, aes(xz, y = yhat)) +
+    geom_ribbon(aes_string(ymin = "lower", ymax = "upper", group = \"', varyvar, '\"), alpha = .1) +
+    geom_line(aes_string(linetype = \"', varyvar, '\"), size = 2) +
+    geom_text(aes(x = xz, y = yz + ', (.05 * diff(ylim)), ', label = reglab, angle = ContrastAngleZ),
+              data = simpleSlopes, hjust = ', use.xmax, ') +
+    scale_x_continuous(breaks = ', deparse(xbreaks), ', labels = ', deparse(xlabels), ') +
+    theme_cowplot() +
+    theme(
+      legend.key.width = unit(2, "cm"),
+      legend.title = element_blank(),
+      legend.position = "bottom") +
+    xlab(', deparse(xlab), ') +
+    ylab(', deparse(ylab), ') +
+    coord_fixed(ratio = ', ratio, ',
+                xlim = ', deparse(xlim), ',
+                ylim = ', deparse(ylim), ',
+                expand = FALSE)')
+
+  if (anysig) {
+    p.code <- paste(c(base.code, sapply(1:length(sigThreshArrows), function(i) {
+                  paste0('geom_segment(aes(x = xz[1], y = Yhat[1], xend = xz[2], yend = Yhat[2]),
+                               data = significantThresholdArrows[[', i, ']],
+                               size=.6, arrow = arrow(length = unit(.03, "npc"), ends = "both"))')})),
+                  collapse = " + \n")
+  } else {
+    p.code <- base.code
+  }
+
+  p <- with(finalOut, eval(parse(text = p.code)))
+
+  ## p <- ggplot(finalOut$Predictions, aes(xz, y = yhat)) +
+  ##   geom_ribbon(aes_string(ymin = "lower", ymax = "upper", group = varyvar), alpha = .1) +
+  ##   geom_line(aes_string(linetype = varyvar), size = 2) +
+  ##   geom_text(aes(x = xz, y = yz + (.05 * diff(ylim)), label = reglab, angle = ContrastAngleZ),
+  ##             data = simpleSlopes, hjust = use.xmax) +
+  ##   scale_x_continuous(breaks = xbreaks, labels = xlabels) +
+  ##   theme_cowplot() +
+  ##   theme(
+  ##     legend.key.width = unit(2, "cm"),
+  ##     legend.title = element_blank(),
+  ##     legend.position = "bottom") +
+  ##   xlab(xlab) +
+  ##   ylab(ylab) +
+  ##   coord_fixed(ratio = ratio,
+  ##               xlim = xlim,
+  ##               ylim = ylim,
+  ##               expand = FALSE)
+  ## if (anysig) {
+  ##   for (i in length(arrow.geoms)) {
+  ##     p <- p + arrow.geoms[[i]]
+  ##   }
+  ## }
+
+  finalOut$Graph <- p
+  finalOut$GraphCode <- p.code
+
+  return(finalOut)
+}
+
 ##' Internal function to run a model using gam()
 ##'
 ##' This function is not intended to be called by users.
