@@ -5,16 +5,21 @@
 \title{Graphically compare the distribution of a variable against a specific distribution}
 \usage{
 testdistr(x, distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom",
-  "poisson"), na.rm = TRUE, starts, xlim = NULL, varlab = "X",
-  plot = TRUE, ...)
+  "poisson", "mvnormal"), na.rm = TRUE, starts, xlim = NULL, varlab = "X",
+  plot = TRUE, use = c("fiml", "pairwise.complete.obs", "complete.obs"),
+  ...)
 }
 \arguments{
-\item{x}{The data as a single variable or vector to check the distribution.}
+\item{x}{The data as a single variable or vector to check the distribution unless
+the distribution is \dQuote{mvnormal} in which case it should be a data frame or
+data table.}
 
 \item{distr}{A character string indicating the distribution to be tested.
 Currently one of: \dQuote{normal}, \dQuote{beta}, \dQuote{chisq} (chi-squared),
-\dQuote{f}, \dQuote{gamma}, \dQuote{nbinom} (negative binomial), or
-\dQuote{poisson}.}
+\dQuote{f}, \dQuote{gamma}, \dQuote{nbinom} (negative binomial),
+\dQuote{poisson}, or \dQuote{mvnormal} for multivariate normal where Mahalanobis
+distances are calculated and compared against a Chi-squared distribution with
+degrees of freedom equal to the number of variables.}
 
 \item{na.rm}{A logical value whether to omit missing values. Defaults to \code{TRUE}.}
 
@@ -30,6 +35,11 @@ scale of the graph reasonable.  Passed on to \code{stat_function}.}
 
 \item{plot}{A logical vector whether to plot the graphs. Defaults to \code{TRUE}.}
 
+\item{use}{A character vector indicating how the moments
+(means and covariance matrix) should be estimated in the presence of
+missing data.  The default is to use full information maximum likelihood
+based on functions in \pkg{lavaan}.}
+
 \item{...}{Additional arguments passed on to \code{geom_density}}
 }
 \value{
@@ -39,7 +49,9 @@ An invisible list with the ggplot2 objects for graphs,
   to the data), and a dataset with the sorted data and theoretical quantiles.#'
 }
 \description{
-Graphically compare the distribution of a variable against a specific distribution
+This is a simple plotting function designed to help examine distributions.
+It also includes an option for assessing multivariate normality using the
+(squared) Mahalanobis distance.
 }
 \examples{
 
@@ -67,7 +79,13 @@ testdistr(d$Ypois, "poisson")
 testdistr(d$Ygamma, "normal")$Distribution$LL
 testdistr(d$Ygamma, "gamma")$Distribution$LL
 
+testdistr(mtcars, "mvnormal")
+
 rm(d) ## cleanup
 }
+\seealso{
+\code{\link{SEMSummary}}
+}
 \keyword{hplot}
+\keyword{multivariate}
 

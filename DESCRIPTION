@@ -1,8 +1,8 @@
 Package: JWileymisc
 Type: Package
 Title: Miscellaneous Utilities and Functions
-Version: 0.2.1
-Date: 2016-09-01
+Version: 0.3.0
+Date: 2017-01-23
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 URL: https://github.com/JWiley/JWileymisc
@@ -29,6 +29,9 @@ Imports:
     mgcv,
     plyr,
     mice,
+    methods,
+    psych,
+    rms,
     lavaan (>= 0.5-20)
 Suggests:
     scales,

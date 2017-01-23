@@ -1,3 +1,14 @@
+# JWileymisc 0.3.0
+
+## New Features
+
+* `intSigRegGraph()` function added to graph regions of significance
+  from interactions with linear models as well as the mostly helper
+  function, `findSigRegions()`.
+
+* `testdistr()` function expanded to cover multivariate
+  normal data, and the old `mvqq()` function is now deprecated.
+
 # JWileymisc 0.2.1
 
 ## New Features

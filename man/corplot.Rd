@@ -76,11 +76,11 @@ sdat <- SEMSummary(~ ., data = dat)
 # using the plot method for SEMSummary (which basically just calls corplot)
 plot(sdat)
 
-# getting p values instaed of coverage
-plot(sdat, plot = "p")
+## getting p values instaed of coverage
+# plot(sdat, plot = "p")
 
-# showing correlations instead of coverage
-plot(sdat, plot = "cor")
+## showing correlations instead of coverage
+# plot(sdat, plot = "cor")
 
 # use the control.grobs argument to adjust the coverage scaling
 # to go from 0 to 1 rather than the range of coverage

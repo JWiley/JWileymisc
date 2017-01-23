@@ -2,8 +2,7 @@
 % Please edit documentation in R/plotting.R
 \name{mvqq}
 \alias{mvqq}
-\title{This is a simple plotting function designed to help examine
-multivariate normality using the (squared) Mahalanobis distance.}
+\title{NOTE: this function is replaced and combined into the \code{testdistr} function.}
 \usage{
 mvqq(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs"),
   plot = TRUE)
@@ -28,7 +27,7 @@ This is a simple plotting function designed to help examine
 multivariate normality using the (squared) Mahalanobis distance.
 }
 \examples{
-mvqq(mtcars)
+testdistr(mtcars, "mvnormal")
 
 }
 \seealso{
