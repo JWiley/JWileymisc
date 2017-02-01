@@ -7,8 +7,8 @@
 testdistr(x, distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom",
   "poisson", "mvnormal"), na.rm = TRUE, starts, xlim = NULL, varlab = "X",
   plot = TRUE, extremevalues = c("no", "theoretical", "empirical"),
-  ev.perc = 0.005, use = c("fiml", "pairwise.complete.obs", "complete.obs"),
-  ...)
+  ev.perc = 0.005, use = c("complete.obs", "pairwise.complete.obs", "fiml"),
+  robust = FALSE, ncol = 1, ...)
 }
 \arguments{
 \item{x}{The data as a single variable or vector to check the distribution unless
@@ -47,8 +47,19 @@ extreme values.  Defaults to the lowest and highest 0.5 percent.}
 
 \item{use}{A character vector indicating how the moments
 (means and covariance matrix) should be estimated in the presence of
-missing data.  The default is to use full information maximum likelihood
-based on functions in \pkg{lavaan}.}
+missing data when \code{distr = mvnormal}.
+The default is to use complete observations, but
+full information maximum likelihood based on functions in
+\pkg{lavaan} is also available.  See details.}
+
+\item{robust}{A logical whether to use robust estimation or not.
+Currently only applies to normally distributed data
+(univariate or multivariate).  Also, when \code{robust = TRUE},
+only complete observations are used (i.e., \code{use = "complete.obs"}).
+See details.}
+
+\item{ncol}{Number of columsn to use for plotting if \code{plot = TRUE}.
+Passed to \code{plot_grid}.}
 
 \item{...}{Additional arguments passed on to \code{geom_density}}
 }
@@ -62,6 +73,27 @@ An invisible list with the ggplot2 objects for graphs,
 This is a simple plotting function designed to help examine distributions.
 It also includes an option for assessing multivariate normality using the
 (squared) Mahalanobis distance.
+}
+\details{
+Note that for the \code{use} argument, several options are possible.
+By default it is \dQuote{complete.obs}, which uses only cases with complete
+data on all variables.
+Another option is \dQuote{pairwise.complete.obs}, which uses
+all available data for each variable indivdiually to estimate the means and
+variances, and all pairwise complete observation pairs for each covariance. Because
+the same cases are not used for all estimates, it is possible to obtain a covariance
+matrix that is not positive definite (e.g., correlations > +1 or < -1).
+
+Finally, the last option is \dQuote{fiml}, which uses full information maximum likelihood
+estimates of the means and covariance matrix.  Depending on the number of cases,
+missing data patterns, and variables, this may be quite slow and computationally
+demanding.
+
+The \code{robust} argument determines whether to use robust estimates or not
+when calculating densities, etc.  By default it is \code{FALSE}, but if
+\code{TRUE} and a univariate or multivariate normal distribution is tested,
+then robust estimates of the means and covariance matrix (a variance if univariate)
+will be used based on \code{covMcd} from the \pkg{robustbase} package.
 }
 \examples{
 
@@ -77,7 +109,6 @@ d <- data.frame(
   Ypois = rpois(200, 4))
 
 ## testing and graphing
-testdistr(d$Ynorm, "normal")
 testdistr(d$Ybeta, "beta", starts = list(shape1 = 1, shape2 = 4))
 testdistr(d$Ychisq, "chisq", starts = list(df = 8))
 testdistr(d$Yf, "f", starts = list(df1 = 5, df2 = 10))
@@ -88,6 +119,14 @@ testdistr(d$Ypois, "poisson")
 ## compare log likelihood of two different distributions
 testdistr(d$Ygamma, "normal")$Distribution$LL
 testdistr(d$Ygamma, "gamma")$Distribution$LL
+
+testdistr(d$Ynorm, "normal")
+testdistr(c(d$Ynorm, 10, 1000), "normal",
+  extremevalues = "theoretical")
+testdistr(c(d$Ynorm, 10, 1000), "normal",
+  extremevalues = "theoretical", robust = TRUE)
+testdistr(d$Ynorm, "normal",
+  extremevalues = "theoretical", robust = TRUE)
 
 testdistr(mtcars, "mvnormal")
 

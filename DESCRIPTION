@@ -2,7 +2,7 @@ Package: JWileymisc
 Type: Package
 Title: Miscellaneous Utilities and Functions
 Version: 0.3.0
-Date: 2017-01-23
+Date: 2017-02-02
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 URL: https://github.com/JWiley/JWileymisc
@@ -14,7 +14,7 @@ Description: A collection of miscellaneous tools and functions,
 License: GPL (>= 3)
 Depends:
     R (>= 3.2.0),
-    data.table (>= 1.9.6),
+    data.table (>= 1.9.10),
     ggplot2 (>= 2.0.0),
     cowplot,
     foreach
@@ -32,6 +32,7 @@ Imports:
     methods,
     psych,
     rms,
+    robustbase,
     lavaan (>= 0.5-20)
 Suggests:
     scales,

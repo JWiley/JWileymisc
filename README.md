@@ -41,6 +41,23 @@ few examples that I tend to use it for:
 testdistr(mtcars$mpg, "normal")
 ```
 
+- check the univariate distribution of a variable
+  with outlier and using robust mean and variance:
+
+```
+testdistr(c(mtcars$mpg, 60), "normal", extremevalues = "theoretical",
+  robust = TRUE)
+```
+
+- Winsorize to remove outlier:
+
+```
+testdistr(winsorizor(c(mtcars$mpg, 60), .01),
+  "normal", extremevalues = "theoretical",
+  robust = TRUE)
+```
+
+
 - check the distributions of a variables' residuals
 
 ```
@@ -50,7 +67,7 @@ testdistr(resid(lm(Petal.Length ~ Species, data = iris)), "normal")
 - check for multivariate normality
 
 ```
-mvqq(iris[,-5])
+testdistr(iris[,-5], "mvnormal")
 ```
 
 - view a heatmap of a correlation matrix

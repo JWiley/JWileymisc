@@ -9,6 +9,16 @@
 * `testdistr()` function expanded to cover multivariate
   normal data, and the old `mvqq()` function is now deprecated.
 
+* `testdistr()` includes optional robust estimates for
+   univariate and multivariate normal data
+
+## Bug Fixes
+
+* `winsorizor()` now properly handles atomic data. Fixes
+  an issue where variables in a data table would be
+  atomic after calling the `scale()` function and
+  `winsorizor()` would fail.
+
 # JWileymisc 0.2.1
 
 ## New Features
