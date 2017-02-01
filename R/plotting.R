@@ -256,6 +256,26 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #' It also includes an option for assessing multivariate normality using the
 #' (squared) Mahalanobis distance.
 #'
+#' Note that for the \code{use} argument, several options are possible.
+#' By default it is \dQuote{complete.obs}, which uses only cases with complete
+#' data on all variables.
+#' Another option is \dQuote{pairwise.complete.obs}, which uses
+#' all available data for each variable indivdiually to estimate the means and
+#' variances, and all pairwise complete observation pairs for each covariance. Because
+#' the same cases are not used for all estimates, it is possible to obtain a covariance
+#' matrix that is not positive definite (e.g., correlations > +1 or < -1).
+#'
+#' Finally, the last option is \dQuote{fiml}, which uses full information maximum likelihood
+#' estimates of the means and covariance matrix.  Depending on the number of cases,
+#' missing data patterns, and variables, this may be quite slow and computationally
+#' demanding.
+#'
+#' The \code{robust} argument determines whether to use robust estimates or not
+#' when calculating densities, etc.  By default it is \code{FALSE}, but if
+#' \code{TRUE} and a univariate or multivariate normal distribution is tested,
+#' then robust estimates of the means and covariance matrix (a variance if univariate)
+#' will be used based on \code{covMcd} from the \pkg{robustbase} package.
+#'
 #' @param x The data as a single variable or vector to check the distribution unless
 #'   the distribution is \dQuote{mvnormal} in which case it should be a data frame or
 #'   data table.
@@ -283,8 +303,17 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #'   extreme values.  Defaults to the lowest and highest 0.5 percent.
 #' @param use A character vector indicating how the moments
 #'   (means and covariance matrix) should be estimated in the presence of
-#'   missing data.  The default is to use full information maximum likelihood
-#'   based on functions in \pkg{lavaan}.
+#'   missing data when \code{distr = mvnormal}.
+#'   The default is to use complete observations, but
+#'   full information maximum likelihood based on functions in
+#'   \pkg{lavaan} is also available.  See details.
+#' @param robust A logical whether to use robust estimation or not.
+#'   Currently only applies to normally distributed data
+#'   (univariate or multivariate).  Also, when \code{robust = TRUE},
+#'   only complete observations are used (i.e., \code{use = "complete.obs"}).
+#'   See details.
+#' @param ncol Number of columsn to use for plotting if \code{plot = TRUE}.
+#'   Passed to \code{plot_grid}.
 #' @param ... Additional arguments passed on to \code{geom_density}
 #' @return An invisible list with the ggplot2 objects for graphs,
 #'   as well as information about the distribution (parameter estimates,
@@ -298,6 +327,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #' @importFrom stats logLik ppoints
 #' @importFrom stats mahalanobis qchisq ppoints
 #' @importFrom data.table %inrange% %between%
+#' @importFrom robustbase covMcd
 #' @seealso \code{\link{SEMSummary}}
 #' @export
 #' @keywords hplot multivariate
@@ -315,7 +345,6 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #'   Ypois = rpois(200, 4))
 #'
 #' ## testing and graphing
-#' testdistr(d$Ynorm, "normal")
 #' testdistr(d$Ybeta, "beta", starts = list(shape1 = 1, shape2 = 4))
 #' testdistr(d$Ychisq, "chisq", starts = list(df = 8))
 #' testdistr(d$Yf, "f", starts = list(df1 = 5, df2 = 10))
@@ -327,6 +356,14 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #' testdistr(d$Ygamma, "normal")$Distribution$LL
 #' testdistr(d$Ygamma, "gamma")$Distribution$LL
 #'
+#' testdistr(d$Ynorm, "normal")
+#' testdistr(c(d$Ynorm, 10, 1000), "normal",
+#'   extremevalues = "theoretical")
+#' testdistr(c(d$Ynorm, 10, 1000), "normal",
+#'   extremevalues = "theoretical", robust = TRUE)
+#' testdistr(d$Ynorm, "normal",
+#'   extremevalues = "theoretical", robust = TRUE)
+#'
 #' testdistr(mtcars, "mvnormal")
 #'
 #' rm(d) ## cleanup
@@ -334,10 +371,16 @@ testdistr <- function(x,
   distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom", "poisson", "mvnormal"),
   na.rm = TRUE, starts, xlim = NULL, varlab = "X", plot = TRUE,
   extremevalues = c("no", "theoretical", "empirical"), ev.perc = .005,
-  use = c("fiml", "pairwise.complete.obs", "complete.obs"), ...) {
+  use = c("complete.obs", "pairwise.complete.obs", "fiml"),
+  robust = FALSE, ncol = 1, ...) {
 
   distr <- match.arg(distr)
   use <- match.arg(use)
+  if (use != "complete.obs" & isTRUE(robust)) {
+    use <- "complete.obs"
+    message("use set to 'complete.obs' as robust = TRUE")
+  }
+
   extremevalues <- match.arg(extremevalues)
   stopifnot(ev.perc %inrange% c(0L, 1L))
 
@@ -349,7 +392,12 @@ testdistr <- function(x,
       OK <- rep(TRUE, nrow(x))
     }
 
-    desc <- switch(match.arg(use),
+    if (isTRUE(robust)) {
+      tmp <- covMcd(x[OK, , drop=FALSE])
+      desc <- list(mu = tmp$center, sigma = tmp$cov)
+      rm(tmp)
+    } else {
+      desc <- switch(match.arg(use),
                    fiml = {moments(x)},
                    pairwise.complete.obs = {
                      list(mu = colMeans(x, na.rm = TRUE),
@@ -359,6 +407,7 @@ testdistr <- function(x,
                      list(mu = colMeans(x[OK,]),
                           sigma = cov(x[OK,]))
                    })
+    }
 
     starts <- list(df = ncol(x))
     x <- mahalanobis(x[OK,], desc$mu, desc$sigma)
@@ -381,47 +430,65 @@ testdistr <- function(x,
     }
   }
 
-  distribution <- switch(distr,
-                         normal = list(
-                           d = dnorm,
-                           q = qnorm,
-                           Name = "Normal",
-                           fit = fitdistr(x, "normal")),
-                         beta = list(
-                           d = dbeta,
-                           q = qbeta,
-                           Name = "Beta",
-                           fit = fitdistr(x, "beta", start = starts)),
-                         chisq = list(
-                           d = dchisq,
-                           q = qchisq,
-                           Name = "Chi-squared",
-                           fit = fitdistr(x, "chi-squared", start = starts)),
-                         f = list(
-                           d = df,
-                           q = qf,
-                           Name = "F",
-                           fit = fitdistr(x, "f", start = starts)),
-                         gamma = list(
-                           d = dgamma,
-                           q = qgamma,
-                           Name = "Gamma",
-                           fit = fitdistr(x, "gamma")),
-                         nbinom = list(
-                           d = dnbinom,
-                           q = qnbinom,
-                           Name = "Negative Binomial",
-                           fit = fitdistr(x, "negative binomial")),
-                         poisson = list(
-                           d = dpois,
-                           q = qpois,
-                           Name = "Poisson",
-                           fit = fitdistr(x, "poisson")),
-                         mvnormal = list(
-                           d = dchisq,
-                           q = qchisq,
-                           Name = "Chi-squared",
-                           fit = list(estimate = list(df = starts$df))))
+  if (identical(distr, "normal") & isTRUE(robust)) {
+    estimate <- covMcd(x)
+    estimate <- c(
+      mean = as.vector(estimate$center),
+      sd = sqrt(as.vector(estimate$cov)))
+
+    distribution <- list(
+      d = dnorm,
+      q = qnorm,
+      Name = "Normal",
+      fit =  structure(list(
+        estimate = estimate,
+        loglik = sum(dnorm(x, estimate["mean"], estimate["sd"],
+                           log = TRUE))), class = "fitdistr"))
+    rm(estimate)
+  } else {
+
+    distribution <- switch(distr,
+                           normal = list(
+                             d = dnorm,
+                             q = qnorm,
+                             Name = "Normal",
+                             fit = fitdistr(x, "normal")),
+                           beta = list(
+                             d = dbeta,
+                             q = qbeta,
+                             Name = "Beta",
+                             fit = fitdistr(x, "beta", start = starts)),
+                           chisq = list(
+                             d = dchisq,
+                             q = qchisq,
+                             Name = "Chi-squared",
+                             fit = fitdistr(x, "chi-squared", start = starts)),
+                           f = list(
+                             d = df,
+                             q = qf,
+                             Name = "F",
+                             fit = fitdistr(x, "f", start = starts)),
+                           gamma = list(
+                             d = dgamma,
+                             q = qgamma,
+                             Name = "Gamma",
+                             fit = fitdistr(x, "gamma")),
+                           nbinom = list(
+                             d = dnbinom,
+                             q = qnbinom,
+                             Name = "Negative Binomial",
+                             fit = fitdistr(x, "negative binomial")),
+                           poisson = list(
+                             d = dpois,
+                             q = qpois,
+                             Name = "Poisson",
+                             fit = fitdistr(x, "poisson")),
+                           mvnormal = list(
+                             d = dchisq,
+                             q = qchisq,
+                             Name = "Chi-squared",
+                             fit = list(estimate = list(df = starts$df))))
+  }
 
   if (!identical(distr, "mvnormal")) {
     distribution$LL <- logLik(distribution$fit)
@@ -486,7 +553,7 @@ testdistr <- function(x,
   }
 
   if (plot) {
-    print(plot_grid(p.density, p.qq, ncol = 1, labels = c("A", "B")))
+    print(plot_grid(p.density, p.qq, ncol = ncol, labels = c("A", "B"), align = "hv"))
   }
 
   return(invisible(list(
