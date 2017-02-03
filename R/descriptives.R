@@ -426,7 +426,7 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
             tests <- summary(aov(dv ~ g, data = data.frame(dv = dat[[v]], g = g)))[[1]]
             out <- cbind.data.frame(out,
                              Test = c(sprintf("F(%d, %d) = %0.2f, %s", tests[1, "Df"], tests[2, "Df"], tests[1, "F value"],
-                                              formatPval(tests[1, "Pr(>F)"], 3, 3)),
+                                              formatPval(tests[1, "Pr(>F)"], 3, 3, includeP=TRUE)),
                                       rep("", nrow(out) - 1)),
                              stringsAsFactors = FALSE)
           } else {
@@ -434,7 +434,7 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
             out <- cbind.data.frame(out,
                              Test = c(sprintf("KW chi-square = %0.2f, df = %d, %s",
                                             tests$statistic, tests$parameter,
-                                            formatPval(tests$p.value, 3, 3)),
+                                            formatPval(tests$p.value, 3, 3, includeP=TRUE)),
                                       rep("", nrow(out) - 1)),
                              stringsAsFactors = FALSE)
           }
@@ -450,7 +450,7 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
                            Test = c(sprintf("Chi-square = %0.2f, %s, %s",
                                           tests$statistic,
                                           ifelse(simChisq, "simulated", sprintf("df = %d", tests$parameter)),
-                                          formatPval(tests$p.value, 3, 3)),
+                                          formatPval(tests$p.value, 3, 3, includeP=TRUE)),
                                     rep("", nrow(out) - 1)),
                            stringsAsFactors = FALSE)
         }
