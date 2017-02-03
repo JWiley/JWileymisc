@@ -11,6 +11,9 @@
 
 * `testdistr()` includes optional robust estimates for
    univariate and multivariate normal data
+   
+* `formatHtest()` gains support for pearson, kendal, and spearman
+  correlations from the `cor.test()` function
 
 ## Bug Fixes
 

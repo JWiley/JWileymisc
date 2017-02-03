@@ -4,14 +4,17 @@
 \alias{formatHtest}
 \title{Function to format the reuslts of a hypothesis test as text}
 \usage{
-formatHtest(x, type = c("t", "F", "chisq", "kw", "mh"), ...)
+formatHtest(x, type = c("t", "F", "chisq", "kw", "mh", "r_pearson",
+  "r_kendall", "r_spearman"), ...)
 }
 \arguments{
 \item{x}{A \code{htest} class object}
 
 \item{type}{The type of htest. Currently one of: \dQuote{t}, \dQuote{F}, \dQuote{chisq},
-\dQuote{kw}, or \dQuote{mh} for t-tests, F-tests, chi-square tests, kruskal-wallis tests,
-and Mantel-Haenszel tests, respectively.}
+\dQuote{kw}, \dQuote{mh}, \dQuote{r_pearson}, \dQuote{r_kendall}, or \dQuote{r_spearman}
+for t-tests, F-tests, chi-square tests, kruskal-wallis tests,
+Mantel-Haenszel tests, pearson correlations, kendall tau correlation,
+and spearman rho correlation, respectively.}
 
 \item{\dots}{Arguments passed on to p-value formatting}
 }
@@ -27,6 +30,9 @@ formatHtest(anova(aov(mpg ~ factor(cyl), data = mtcars)), type = "F")
 formatHtest(chisq.test(c(A = 20, B = 15, C = 25)), type = "chisq")
 formatHtest(kruskal.test(Ozone ~ Month, data = airquality))
 formatHtest(mantelhaen.test(UCBAdmissions), type = "mh")
+formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "pearson"), type = "r_pearson")
+formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "kendall"), type = "r_kendall")
+formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "spearman"), type = "r_spearman")
 }
 \keyword{misc}
 

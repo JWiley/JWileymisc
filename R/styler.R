@@ -383,8 +383,10 @@ param_summary_format <- function(d, digits = getOption("digits"), pretty = FALSE
 #'
 #' @param x A \code{htest} class object
 #' @param type The type of htest. Currently one of: \dQuote{t}, \dQuote{F}, \dQuote{chisq},
-#'   \dQuote{kw}, or \dQuote{mh} for t-tests, F-tests, chi-square tests, kruskal-wallis tests,
-#'   and Mantel-Haenszel tests, respectively.
+#'   \dQuote{kw}, \dQuote{mh}, \dQuote{r_pearson}, \dQuote{r_kendall}, or \dQuote{r_spearman}
+#'   for t-tests, F-tests, chi-square tests, kruskal-wallis tests,
+#'   Mantel-Haenszel tests, pearson correlations, kendall tau correlation,
+#'   and spearman rho correlation, respectively.
 #' @param \dots Arguments passed on to p-value formatting
 #' @return A character string with results
 #' @keywords misc
@@ -395,29 +397,45 @@ param_summary_format <- function(d, digits = getOption("digits"), pretty = FALSE
 #' formatHtest(chisq.test(c(A = 20, B = 15, C = 25)), type = "chisq")
 #' formatHtest(kruskal.test(Ozone ~ Month, data = airquality))
 #' formatHtest(mantelhaen.test(UCBAdmissions), type = "mh")
-formatHtest <- function(x, type = c("t", "F", "chisq", "kw", "mh"), ...) {
+#' formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "pearson"), type = "r_pearson")
+#' formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "kendall"), type = "r_kendall")
+#' formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "spearman"), type = "r_spearman")
+formatHtest <- function(x, type = c("t", "F", "chisq", "kw", "mh", "r_pearson", "r_kendall", "r_spearman"), ...) {
   type <- match.arg(type)
 
   switch(type,
-         t = sprintf("t = %0.2f, df = %s, %s",
-                     x$statistic,
+         r_pearson = sprintf("r = %0.2f, CI = (%0.2f, %0.2f), t(df = %s) = %0.2f, %s",
+                     x$estimate, x$conf.int[1], x$conf.int[2],
                      as.character(round(x$parameter, 2)),
+                     x$statistic,
+                     formatPval(x$p.value, includeP = TRUE, includeSign = TRUE, ...)),
+         r_kendall = sprintf("tau = %0.2f, z = %0.2f, %s",
+                     x$estimate,
+                     x$statistic,
+                     formatPval(x$p.value, includeP = TRUE, includeSign = TRUE, ...)),
+         r_spearman = sprintf("rho = %0.2f, S = %0.1f, %s",
+                     x$estimate,
+                     x$statistic,
+                     formatPval(x$p.value, includeP = TRUE, includeSign = TRUE, ...)),
+         t = sprintf("t(df = %s) = %0.2f, %s",
+                     as.character(round(x$parameter, 2)),
+                     x$statistic,
                      formatPval(x$p.value, includeP = TRUE, includeSign = TRUE, ...)),
          F = sprintf("F(%s, %s) = %0.2f, p-value = %s",
                      as.character(round(x[1, "Df"], 2)),
                      as.character(round(x[2, "Df"], 2)),
                      x[1, "F value"],
                      formatPval(x[1, "Pr(>F)"], includeP = TRUE, includeSign = TRUE, ...)),
-         chisq = sprintf("Chi-square = %s, df = %d, %s",
-                         as.character(round(x$statistic, 2)),
+         chisq = sprintf("Chi-square(df = %d) = %s, %s",
                          x$parameter,
+                         as.character(round(x$statistic, 2)),
                          formatPval(x$p.value, includeP = TRUE, includeSign = TRUE, ...)),
-         kw = sprintf("Kruskal-Wallis chi-square = %s, df = %d, %s",
-                      as.character(round(x$statistic, 2)),
+         kw = sprintf("Kruskal-Wallis chi-square(df = %d) = %s, %s",
                       x$parameter,
+                      as.character(round(x$statistic, 2)),
                       formatPval(x$p.value, includeP = TRUE, includeSign = TRUE, ...)),
-         mh = sprintf("Mantel-Haenszel chi-square = %0.2f, df = %d, %s, common odds ratio = %0.2f, CI = (%0.2f, %0.2f).",
-                      x$statistic, x$parameter,
+         mh = sprintf("Mantel-Haenszel chi-square(df = %d) = %0.2f, %s, common odds ratio = %0.2f, CI = (%0.2f, %0.2f).",
+                      x$parameter, x$statistic,
                       formatPval(x$p.value, includeP = TRUE, includeSign = TRUE, ...),
                       x$estimate, x$conf.int[1], x$conf.int[2]))
 }
