@@ -496,3 +496,177 @@ compareIVs <- function(dv, type, iv, covariates = character(), data, multivariat
 
   return(res)
 }
+
+
+#' Calculates all pairwise contrasts and omnibus tests for multinomial regression
+#'
+#' TODO: make me!
+#'
+#' @param formula A standard regression formula, passed to
+#'   \code{vglm} from the \pkg{VGAM} package.
+#' @param data A data frame (no other type currently supported)
+#'   to be used for model fitting.
+#' @param OR a logical value whether to report odds ratios and
+#'   95 percent confidence intervals, if \code{TRUE}, or
+#'   regression coefficients on the logit scale with standard
+#'   errors, if \code{FALSE}.
+#' @param digits An integer indicating the number of digits for coefficients,
+#'   standard errors, and confidence intervals
+#' @param pdigits An integer indicating the number of digits for
+#'   p-values.
+#' @return A list with two elements.
+#'   \code{Results} contains a data table of the actual estimates.
+#'   \code{Table} contains a nicely formatted character matrix.
+#'
+#' @export
+#' @importFrom VGAM vglm multinomial summary
+#' @importFrom multcomp glht Chisqtest
+#' @importFrom stats model.matrix
+#' @importFrom data.table data.table
+#' @examples
+#' ## make me!
+#'
+#' mtcars$cyl <- factor(mtcars$cyl)
+#' mtcars$am <- factor(mtcars$am)
+#'
+#' ezMULTINOM(cyl ~ qsec, data = mtcars)
+#' ezMULTINOM(cyl ~ qsec, data = mtcars, digits = 4)$Table
+#' ezMULTINOM(cyl ~ qsec, data = mtcars, OR = FALSE)
+#' ezMULTINOM(cyl ~ qsec, data = mtcars, digits = 4, OR = FALSE)$Table
+#'
+#' ezMULTINOM(cyl ~ scale(qsec), data = mtcars)
+#'
+#' ezMULTINOM(cyl ~ factor(vs) * scale(qsec), data = mtcars)
+#'
+#' ## does not work in binary case, no need for the computational overhead
+#' ## ezMULTINOM(am ~ qsec, data = mtcars)
+#'
+#' ezMULTINOM(Species ~ Sepal.Length, data = iris)
+#'
+ezMULTINOM <- function(formula, data, OR = TRUE, digits = 2L, pdigits = 3L) {
+
+  dv <- all.vars(formula)[[1]]
+  iv <- all.vars(formula)[-1]
+
+  stopifnot(is.data.frame(data))
+  usedat <- droplevels(na.omit(as.data.frame(data)[, c(dv, iv)]))
+
+  stopifnot(is.factor(usedat[[dv]]))
+  k <- levels(usedat[[dv]])
+
+  if (length(k) < 3) stop("DV must have at least 3 levels, after omitting missing data")
+
+  nk <- seq_along(k)[-length(k)]
+
+  ivterms <- attr(terms(formula), "term.labels")
+
+  ## models with different contrasts
+  m <- lapply(nk, function(i) {
+    VGAM::vglm(formula = formula,
+         family = VGAM::multinomial(refLevel = i),
+         data = usedat)
+  })
+
+  m.res <- lapply(nk, function(i) {
+    tab <- VGAM::coef(VGAM::summary(m[[i]]))
+    ci <- VGAM::confint(m[[i]])
+
+    out <- data.table(
+      Ref = k[i],
+      Num = as.integer(gsub("^(.*)\\:([1-9]*)$", "\\2", names(VGAM::coef(m[[1]])))),
+      Term = gsub("^(.*)\\:([1-9]*)$", "\\1", names(VGAM::coef(m[[1]]))),
+      B = tab[, "Estimate"],
+      SE = tab[, "Std. Error"],
+      P = tab[, "Pr(>|z|)"],
+      LL = ci[, 1],
+      UL = ci[, 2])
+    out[, Comp := k[-i][Num]]
+
+    return(out)
+  })
+
+  ## omnibus p-values
+  ivterms.pos <- attr(VGAM::model.matrix(m[[1]]), "assign")
+
+  terms.res <- lapply(ivterms, function(v) {
+    i <- ivterms.pos[[v]]
+
+    testmat <- matrix(0, nrow = length(i), ncol = length(coef(m[[1]])))
+    for (j in seq_along(i)) {
+      testmat[j, i[j]] <- 1
+    }
+
+    out <- summary(multcomp::glht(m[[1]], linfct = testmat),
+                   test = multcomp::Chisqtest())$test
+
+    p <- with(out,
+         sprintf(sprintf("Chi-square (df=%%d) = %%0.%df, %%s", digits),
+                 df[[1]][1], SSH[1,1], formatPval(pvalue[1, 1],
+                                                  pdigits, pdigits, includeP = TRUE)))
+
+    est <- do.call(rbind, lapply(nk, function(j) m.res[[j]][i][Num >= j]))
+    est[, Labels := sprintf("%s vs.\n%s", Comp, Ref)]
+
+    ulabels <- unique(est$Labels)
+    uterms <- unique(est$Term)
+
+    if (length(uterms) > 1) {
+      est[, Term := gsub(sprintf("^(%s)(.*)$", v), "\\2", Term)]
+      uterms <- unique(est$Term)
+
+      finaltab <- matrix("",
+                         nrow = length(uterms) + 1,
+                         ncol = choose(length(k), 2) + 2,
+                         dimnames = list(NULL, c("Variable", ulabels, "PValue")))
+
+      finaltab[1, "Variable"] <- v
+      finaltab[1, "PValue"] <- p
+
+      for (index in seq_along(uterms)) {
+        finaltab[index + 1, "Variable"] <- uterms[index]
+        finaltab[index + 1, "PValue"] <- ""
+        if (OR) {
+          for (i2 in ulabels) {
+            finaltab[index + 1, i2] <- est[Term == uterms[index] & Labels == i2, .(
+            resf = sprintf(sprintf("%%0.%df%%s\n[%%0.%df, %%0.%df]", digits, digits, digits),
+                           exp(B), star(P), exp(LL), exp(UL)))]$resf
+          }
+        } else {
+          for (i2 in ulabels) {
+            finaltab[index + 1, i2] <- est[Term == uterms[index] & Labels == i2, .(
+              resf = sprintf(sprintf("%%0.%df%%s (%%0.%df)", digits, digits), B, star(P), SE))]$resf
+          }
+        }
+      }
+    } else {
+      finaltab <- matrix("",
+                         nrow = 1,
+                         ncol = choose(length(k), 2) + 2,
+                         dimnames = list(NULL, c("Variable", ulabels, "PValue")))
+
+      finaltab[1, "Variable"] <- v
+      finaltab[1, "PValue"] <- p
+      if (OR) {
+        for (i2 in ulabels) {
+          finaltab[1, i2] <- est[Labels == i2, .(
+            resf = sprintf(sprintf("%%0.%df%%s\n[%%0.%df, %%0.%df]", digits, digits, digits),
+                           exp(B), star(P), exp(LL), exp(UL)))]$resf
+        }
+      } else {
+        for (i2 in ulabels) {
+          finaltab[1, i2] <- est[Labels == i2, .(
+              resf = sprintf(sprintf("%%0.%df%%s (%%0.%df)", digits, digits), B, star(P), SE))]$resf
+        }
+      }
+    }
+
+    return(list(Results = est, Table = finaltab))
+  })
+
+  list(
+    Results = do.call(rbind, lapply(terms.res, `[[`, "Results")),
+    Table = do.call(rbind, lapply(terms.res, `[[`, "Table")))
+}
+
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("Comp", "Num", "Labels", "Ref", "Term", "B", "P", "LL", "UL", "SE"))
