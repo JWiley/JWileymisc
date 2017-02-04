@@ -112,7 +112,6 @@ plot.SEMSummary.list <- function(x, y, which, ...) {
 #' @import ggplot2
 #' @importFrom stats setNames as.dist hclust
 #' @importFrom utils type.convert
-#' @importFrom plyr amv_dimnames
 #' @export
 #' @examples
 #' # example plotting the correlation matrix from the
@@ -150,10 +149,8 @@ corplot <- function(x, coverage, pvalues,
   plot = c("cor", "p", "coverage"),
   digits = 2, order = c("cluster", "asis"), ..., control.grobs = list()) {
 
-  ## copied from reshape2 as otherwise creates clashes with depending on data.table package
-  reshape2.melt.matrix <- function (data, varnames = names(dimnames(data)), ..., na.rm = FALSE,
-                           as.is = FALSE, value.name = "value")
-  {
+  ## copied and revised from reshape2 as otherwise creates clashes with depending on data.table package
+  reshape2.melt.matrix <- function (data, varnames = names(dimnames(data)), ..., value.name = "value")  {
     var.convert <- function(x) {
       if (!is.character(x))
         return(x)
@@ -162,17 +159,16 @@ corplot <- function(x, coverage, pvalues,
         return(x)
       factor(x, levels = unique(x))
     }
-    dn <- amv_dimnames(data)
+
+    dn <- list(
+      if (is.null(dimnames(data)[[1]])) 1:nrow(data) else dimnames(data)[[1]],
+      if (is.null(dimnames(data)[[2]])) paste0("V", 1:ncol(data)) else dimnames(data)[[2]])
+
     names(dn) <- varnames
-    if (!as.is) {
-      dn <- lapply(dn, var.convert)
-    }
+    dn <- lapply(dn, var.convert)
+
     labels <- expand.grid(dn, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-    if (na.rm) {
-      missing <- is.na(data)
-      data <- data[!missing]
-      labels <- labels[!missing, ]
-    }
+
     value_df <- setNames(data.frame(as.vector(data)), value.name)
     cbind(labels, value_df)
   }
@@ -652,7 +648,7 @@ mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs"), 
 
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("V1"))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", "."))
 
 #' Tukey HSD Plot
 #'
@@ -667,9 +663,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("V1"))
 #' @param ordered Logical, defaults to \code{FALSE}.
 #' @param \ldots Additional arguments passed on.
 #' @return A ggplot graph object.
-#' @importFrom stats TukeyHSD
-#' @importFrom Hmisc smean.cl.normal
-#' @importFrom plyr ddply
+#' @importFrom stats TukeyHSD qt
 #' @importFrom multcompView multcompLetters
 #' @keywords plot
 #' @export
@@ -688,6 +682,18 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
     d[[y]] <- as.numeric(as.character(d[[y]]))
   }
 
+  mCI <- function(x, conf.int = .95) {
+    n <- length(x <- na.omit(x))
+    m <- mean(x)
+
+    if (n < 2) {
+      data.frame(y = m, ymin = NA_real_, ymax = NA_real_)
+    } else {
+      delta <- (sd(x) / sqrt(n)) * qt((1 + conf.int)/2, n - 1)
+      data.frame(y = m, ymin = m - delta, ymax = m + delta)
+    }
+  }
+
   fit <- aov(as.formula(sprintf("%s ~ %s", y, x)), data = d)
   tHSD <- TukeyHSD(fit, ordered = ordered, conf.level = ci)
 
@@ -701,7 +707,8 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
 
   ## Get the top of the CIs
   ## upper quantile and label placement
-  y.df <- ddply(d, x, function(tmpd) mean_cl_normal(tmpd[[y]], conf.int = ci)$ymax)
+  y.df <- as.data.table(d)[, .(mCI(get(y), conf.int = ci)$ymax), keyby = get(x)]
+  setnames(y.df, names(y.df), c(x, "ymax"))
 
   ## Create a data frame out of the factor levels and Tukey's homogenous group letters
   plot.levels <- data.frame(plot.labels, labels = Tukey.labels[['Letters']],
@@ -711,10 +718,10 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
   labels.df <- merge(plot.levels, y.df, by.x = 'plot.labels', by.y = x, sort = FALSE)
 
   p <- ggplot(d, aes_string(x=x, y=y)) +
-    stat_summary(fun.data = function(d) mean_cl_normal(d, conf.int = ci), ...) +
+    stat_summary(fun.data = function(d) mCI(d, conf.int = ci), ...) +
     geom_text(data = labels.df,
               aes(x = plot.labels,
-                  y = V1 + (max(V1)*.05),
+                  y = ymax + (max(ymax)*.05),
                   label = labels))
 
   return(p)
