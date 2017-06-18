@@ -22,4 +22,3 @@ Function to simplify converting p-values to asterisks
 star(c(.0005, .001, .005, .01, .02, .05, .08, .1, .5, 1))
 }
 \keyword{misc}
-

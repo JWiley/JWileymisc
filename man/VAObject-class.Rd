@@ -51,6 +51,7 @@ and oculus dexter (OD; right eye)
 
 \item \code{summary}: summary method
 }}
+
 \section{Slots}{
 
 \describe{

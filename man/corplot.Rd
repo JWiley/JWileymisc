@@ -34,11 +34,11 @@ plot. Defaults to \sQuote{cluster} which uses hierarchical clustering
 to sensibly order the variables. The other option is \sQuote{asis}
 in which case the matrix is plotted in the order it is passed.}
 
-\item{control.grobs}{A list of additional \code{quote()}d
-options to customize the \code{ggplot2} output.}
-
 \item{\dots}{Additional arguments currently only passed to
 \code{hclust} and \code{corOK}.}
+
+\item{control.grobs}{A list of additional \code{quote()}d
+options to customize the \code{ggplot2} output.}
 }
 \value{
 Primarily called for the side effect of creating a plot.
@@ -94,4 +94,3 @@ plot(x = sdat, control.grobs = list(area = quote(scale_size_area(limits = c(0, 1
 rm(dat, sdat)
 }
 \keyword{hplot}
-

@@ -31,4 +31,3 @@ all.equal(cov(longley), cor2cov(cor(longley), sapply(longley, sd)))
 \seealso{
 \code{\link{cov2cor}}
 }
-

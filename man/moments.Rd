@@ -45,11 +45,10 @@ moments(Xmiss)
 # clean up
 rm(Xmiss)
 }
-\author{
-Suggested by Yves Rosseel author of the lavaan package on which this depends
-}
 \seealso{
 \code{\link{SEMSummary}}
 }
+\author{
+Suggested by Yves Rosseel author of the lavaan package on which this depends
+}
 \keyword{multivariate}
-

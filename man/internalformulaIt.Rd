@@ -28,4 +28,3 @@ JWileymisc:::internalformulaIt("mpg", "hp", "")
 JWileymisc:::internalformulaIt("mpg", "", "am")
 }
 \keyword{internal}
-

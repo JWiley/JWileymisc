@@ -23,4 +23,3 @@ Calculate F and p-value from the R2
 # make me!
 }
 \keyword{internal}
-

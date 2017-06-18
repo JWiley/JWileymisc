@@ -23,4 +23,3 @@ Plots SEMSummary.list object
 \seealso{
 \code{\link{corplot}}, \code{\link{SEMSummary}}
 }
-

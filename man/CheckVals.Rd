@@ -20,4 +20,3 @@ CheckVals(data, okay, na.rm = TRUE)
 This function creates a single scale score from a data frame, reversing as needed.
 }
 \keyword{internal}
-

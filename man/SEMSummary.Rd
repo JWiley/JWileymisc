@@ -97,4 +97,3 @@ rm(Xmiss)
 \code{\link{APAStyler}}
 }
 \keyword{multivariate}
-

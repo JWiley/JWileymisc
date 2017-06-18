@@ -24,4 +24,3 @@ optionally do it by a grouping factor, such as an ID.
 lagk(1:4, 1)
 }
 \keyword{utils}
-

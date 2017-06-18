@@ -3,8 +3,8 @@
 \docType{class}
 \name{VASummaryObject-class}
 \alias{VASummaryObject-class}
-\alias{plot,VASummaryObject,missing-method}
 \alias{show,VASummaryObject-method}
+\alias{plot,VASummaryObject,missing-method}
 \title{An S4 class to hold visual acuity summary data}
 \usage{
 \S4method{show}{VASummaryObject}(object)
@@ -29,6 +29,7 @@ A class designed to hold visual acuity summary data
 
 \item \code{plot}: plot method
 }}
+
 \section{Slots}{
 
 \describe{

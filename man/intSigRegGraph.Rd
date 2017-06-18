@@ -54,4 +54,3 @@ find the threshold for significance from interactions.
 \examples{
 ## make me
 }
-

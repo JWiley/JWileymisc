@@ -37,4 +37,3 @@ APAStyler(m, type = "cor", stars = TRUE, file = FALSE)
 APAStyler(m, type = "cov", stars = TRUE, file = FALSE)
 APAStyler(m, type = "both", stars = TRUE, file = FALSE)
 }
-

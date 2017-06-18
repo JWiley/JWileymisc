@@ -2,6 +2,17 @@
 
 ## New Features
 
+* `as.na()` function added to convert data to missing (NA) while
+    preserving the class/type of the data (useful for data.table).
+	
+* `meanDecompose()` function added to decompose multilevel or 
+    repeated measures data into means and residuals.
+	
+* `timeshift()` function added to center a time variable at a new 
+    zero point. Useful when times may start and end off the standard 
+	24 hour period (e.g., 11am to 2am, which technically fall on
+    different dates).
+
 * `intSigRegGraph()` function added to graph regions of significance
 	from interactions with linear models as well as the mostly helper
 	function, `findSigRegions()`.

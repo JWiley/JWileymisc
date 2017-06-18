@@ -38,4 +38,3 @@ This is a low level fitting function, for SEMSummary.
 \code{\link{SEMSummary}}
 }
 \keyword{multivariate}
-

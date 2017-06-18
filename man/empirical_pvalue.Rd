@@ -28,4 +28,3 @@ empirical_pvalue(rnorm(100))
 Joshua F. Wiley <josh@elkhartgroup.com>
 }
 \keyword{utilities}
-

@@ -53,4 +53,3 @@ ezMULTINOM(cyl ~ factor(vs) * scale(qsec), data = mtcars)
 ezMULTINOM(Species ~ Sepal.Length, data = iris)
 
 }
-

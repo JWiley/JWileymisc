@@ -33,4 +33,3 @@ TukeyHSDgg("Species", "Sepal.Length", iris, ci = .9)
 
 }
 \keyword{plot}
-

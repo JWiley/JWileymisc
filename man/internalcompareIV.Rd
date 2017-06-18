@@ -40,4 +40,3 @@ test1$Summary
 rm(test1)
 }
 \keyword{internal}
-

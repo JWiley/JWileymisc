@@ -32,4 +32,3 @@ plot(SEMSummary(~ ., data = mtcars), plot = "cor")
 \seealso{
 \code{\link{corplot}}, \code{\link{SEMSummary}}
 }
-

@@ -12,10 +12,10 @@ param_summary(x, trans = function(x) x, ..., na.rm = TRUE)
 \item{trans}{A function to transform the data. Used for summaries,
 but not p-values. Defaults to the identity function.}
 
-\item{na.rm}{Logical whether to remove NA values. Defaults to \code{TRUE}}
-
 \item{\dots}{Additional arguments passed to \code{formatPval}
 to control p-value printing.}
+
+\item{na.rm}{Logical whether to remove NA values. Defaults to \code{TRUE}}
 }
 \value{
 A data frame of summary statistics
@@ -34,4 +34,3 @@ param_summary(rnorm(100))
 Joshua F. Wiley <josh@elkhartgroup.com>
 }
 \keyword{utilities}
-

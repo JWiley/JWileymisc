@@ -53,4 +53,3 @@ corOK(cormat, maxiter=0)
 rm(cormat)
 }
 \keyword{utils}
-

@@ -23,4 +23,3 @@ A summary of the gam model.
 This function is not intended to be called by users.
 }
 \keyword{internal}
-

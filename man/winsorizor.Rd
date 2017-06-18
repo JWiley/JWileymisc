@@ -47,4 +47,3 @@ winsorizor(matrix(1:9, 3), .01)
 
 rm(dat) # clean up
 }
-

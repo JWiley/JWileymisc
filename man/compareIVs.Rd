@@ -39,4 +39,3 @@ test1 <- compareIVs(
 test1$OverallSummary
 rm(test1)
 }
-

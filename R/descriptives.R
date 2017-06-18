@@ -603,3 +603,61 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
 
     return(d)
 }
+
+
+#' Mean decomposition of a variable by group(s)
+#'
+#' This function decomposes a variable in a long data set by grouping
+#' factors, such as by ID.
+#'
+#' @param formula A formula of the variables to be used in the analysis.
+#'   Should have the form: variable ~ groupingfactors.
+#' @param data A data table or data frame containing the variables
+#'   used in the formula.  This is a required argument.
+#' @return A list of data tables with the means or residuals
+#' @keywords multivariate
+#' @importFrom stats terms
+#' @export
+#' @examples
+#' meanDecompose(mpg ~ vs, data = mtcars)
+#' meanDecompose(mpg ~ vs + cyl, data = mtcars)
+#'
+#' ## Example plotting the results
+#' tmp <- meanDecompose(Sepal.Length ~ Species, data = iris)
+#' do.call(plot_grid, c(lapply(names(tmp), function(x) {
+#'   testdistr(tmp[[x]]$X, plot = FALSE, varlab = x)$Density
+#' }), ncol = 1))
+#'
+#' rm(tmp)
+meanDecompose <- function(formula, data) {
+  v <- as.character(attr(terms(formula), "variables"))[-1]
+
+  if (!is.data.table(data)) {
+    data <- as.data.table(data)[, v, with = FALSE]
+  } else {
+    data <- data[, v, with = FALSE]
+  }
+
+  out <- vector("list", length = length(v))
+
+  vres <- paste0(v[1], "_residual")
+  stopifnot(!any(vres %in% v))
+
+  data[, (vres) := get(v[1])]
+
+  vfinal <- vector("character", length = length(v))
+
+  for (i in 2:length(v)) {
+    vname <- paste0(v[1], "_", v[i])
+    data[, (vname) := mean(get(vres), na.rm = TRUE), by = c(v[2:i])]
+    data[, (vres) := get(vres) - get(vname)]
+    out[[i - 1]] <- data[, .(X = get(vname)[1]), by = c(v[2:i])]
+    vfinal[i - 1] <- paste0(v[1], " by ", paste(v[2:i], collapse = " & "))
+  }
+  out[[length(v)]] <- data[, .(X = get(vres))]
+  vfinal[length(v)] <- paste0(v[1], " by ", "residual")
+
+  names(out) <- vfinal
+
+  return(out)
+}

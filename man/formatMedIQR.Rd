@@ -23,4 +23,3 @@ Function to format the median and IQR of a variable
 formatMedIQR(mtcars$mpg)
 }
 \keyword{misc}
-

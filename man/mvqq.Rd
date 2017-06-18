@@ -34,4 +34,3 @@ testdistr(mtcars, "mvnormal")
 \code{\link{SEMSummary}}
 }
 \keyword{multivariate}
-

@@ -171,6 +171,58 @@ corOK <- function(x, maxiter = 100) {
 }
 
 
+#' Coerces vectors to missing
+#'
+#' Given a vector, convert it to missing (NA) values,
+#' where the class of the missing matches the input class.
+#' Currently supports character, integer, factor, numeric,
+#' times (from \pkg{chron}), Date, POSIXct, POSIXlt, and
+#' zoo (from \pkg{zoo}).
+#'
+#' @param x A vector to convert to missing (NA)
+#' @return a vector the same length as the input with missing values of the same class
+#' @keywords utils
+#' @export
+#' @examples
+#' str(as.na(1L:5L))
+#' str(as.na(rnorm(5)))
+#' str(as.na(c(TRUE, FALSE)))
+#' str(as.NA(as.Date("2017-01-01")))
+as.na <- function(x) {
+  n <- length(x)
+  if (inherits(x, "character")) {
+    use <- NA_character_
+  } else if (inherits(x, "integer")) {
+    use <- NA_integer_
+  } else if (inherits(x, "factor")) {
+    use <- factor(NA, levels = levels(x))
+  } else if (inherits(x, "numeric")) {
+    use <- NA_real_
+  } else if (inherits(x, "times")) { ## from chron package
+    use <- structure(rep(NA, n), format = "h:m:s", class = "times")
+    return(use) ## force return as rep() does not play nicely with chron times
+  } else if (inherits(x, "Date")) {
+    use <- structure(NA_real_, class = "Date")
+  } else if (inherits(x, "POSIXct")) {
+    use <- structure(NA_real_, class = c("POSIXct", "POSIXt"))
+  } else if (inherits(x, "POSIXlt")) {
+    use <- structure(list(sec = NA_real_, min = NA_integer_, hour = NA_integer_,
+                          mday = NA_integer_, mon = NA_integer_, year = NA_integer_,
+                          wday = NA_integer_, yday = NA_integer_, isdst = -1L, zone = "",
+                          gmtoff = NA_integer_), .Names = c("sec", "min", "hour", "mday",
+                            "mon", "year", "wday", "yday", "isdst", "zone", "gmtoff"),
+                     class = c("POSIXlt", "POSIXt"),
+                     tzone = c("", "AEST", "AEDT"))
+  } else if (inherits(x, "zoo")) { ## from zoo package
+    use <- structure(rep(NA, n), index = rep(NA_integer_, n), class = "zoo")
+    return(use) ## force return as rep() does not play nicely with zoo
+  } else {
+    stop(sprintf("Unknown class of type %s", class(x)))
+  }
+  rep(use, n)
+}
+
+
 #' Create a lagged variable
 #'
 #' Given a variable, create a k lagged version,
@@ -210,6 +262,49 @@ lagk <- function(x, k = 1, by) {
     }))
   }
   return(out)
+}
+
+
+#' Shift a time variable to have a new center (zero point)
+#'
+#' Given a vector, shift the values to have a new center, but keeping the same
+#' minimum and maximum.  Designed to work with time values where
+#' the minimum indicates the same time as the maximum (e.g.,
+#' 24:00:00 is the same as 00:00:00).
+#'
+#' @param x the time scores to shift
+#' @param center A value (between the minimum and maximum) to center
+#'   the time scores. Defaults to 0, which has no effect.
+#' @param min The theoretical minimum of the time scores.
+#'   Defaults to 0.
+#' @param max the theoretical maximum of the time scores.
+#'   Defaults to 1.
+#' @param inverse A logical value, whether to \sQuote{unshift}
+#'   the time scores.  Defaults to \code{FALSE}.
+#' @return A vector of shifted time scores, recentered as specified.
+#' @export
+#' @examples
+#' ## example showing centering at 11am (i.e., 11am becomes new 0)
+#' plot((1:24)/24, timeshift((1:24)/24, 11/24))
+#'
+#' ## example showing the inverse, note that 24/24 becomes 0
+#' plot((1:24)/24, timeshift(timeshift((1:24)/24, 11/24), 11/24, inverse = TRUE))
+timeshift <- function(x, center = 0, min = 0, max = 1, inverse = FALSE) {
+  stopifnot(center >= min && center <= max)
+  stopifnot(all(x >= min))
+  stopifnot(all(x <= max))
+
+  if (isTRUE(inverse)) { ## need to fix this
+    ifelse(x >= (max - center),
+           (x + center) - max,
+           x + center)
+  } else if (identical(inverse, FALSE)) {
+    ifelse(x < center,
+           (max - (center - x)),
+           x - center)
+  } else {
+    stop("invalid inverse option, must be TRUE/FALSE")
+  }
 }
 
 

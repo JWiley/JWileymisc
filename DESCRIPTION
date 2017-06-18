@@ -2,7 +2,7 @@ Package: JWileymisc
 Type: Package
 Title: Miscellaneous Utilities and Functions
 Version: 0.3.0
-Date: 2017-02-04
+Date: 2017-06-20
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 URL: https://github.com/JWiley/JWileymisc
@@ -37,4 +37,4 @@ Imports:
 Suggests:
     scales,
     testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

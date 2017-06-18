@@ -22,4 +22,3 @@
 \description{
 A generic function for pretty printing in (semi) APA Style
 }
-

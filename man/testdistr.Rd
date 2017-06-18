@@ -137,4 +137,3 @@ rm(d) ## cleanup
 }
 \keyword{hplot}
 \keyword{multivariate}
-

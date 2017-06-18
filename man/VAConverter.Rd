@@ -90,4 +90,3 @@ than a crude "zero" approximation.
 ##              "20/70 - 2", "LP", NA, "Prosthetic")
 ## tmp <- VAConverter(OS = sampdat, OD = rev(sampdat), datatype = "snellen")
 }
-

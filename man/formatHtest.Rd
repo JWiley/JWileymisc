@@ -35,4 +35,3 @@ formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "kendall"), type = "r_k
 formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "spearman"), type = "r_spearman")
 }
 \keyword{misc}
-

@@ -37,4 +37,3 @@ rm(xsum)
 Joshua F. Wiley <josh@elkhartgroup.com>
 }
 \keyword{utilities}
-

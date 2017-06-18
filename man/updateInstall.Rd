@@ -21,4 +21,3 @@ Update R and install my core package set
 # updateInstall()
 }
 \keyword{utils}
-

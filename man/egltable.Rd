@@ -57,4 +57,3 @@ egltable(colnames(iris)[1:4], "Species", iris,
   parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
 }
 \keyword{utils}
-
