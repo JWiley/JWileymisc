@@ -36,6 +36,8 @@
 	an issue where variables in a data table would be
 	atomic after calling the `scale()` function and
 	`winsorizor()` would fail.
+	
+* `egltable()` now works with data.tables
 
 # JWileymisc 0.2.1
 

@@ -261,11 +261,12 @@ SEMSummary.fit <- function(formula, data,
 
 
 
-#' EGL Table function makes nice tables
+#' Function makes nice tables
 #'
 #' Give a dataset and a list of variables, or just the data
 #' in the vars.  For best results, convert categorical
-#' variables into factors.
+#' variables into factors.  Provides a table of estimated descriptive
+#' statistics optionally by group levels.
 #'
 #' @param vars Either an index (numeric or character) of
 #'   variables to access from the \code{data} argument,
@@ -307,6 +308,7 @@ SEMSummary.fit <- function(formula, data,
 egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = FALSE, sims = 1e6) {
   if (!missing(data)) {
     if (is.data.table(data)) {
+      dat <- as.data.frame(data[, vars, with=FALSE])
     } else {
       dat <- as.data.frame(data[, vars, drop=FALSE], stringsAsFactors=FALSE)
     }

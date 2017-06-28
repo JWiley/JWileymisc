@@ -2,7 +2,7 @@
 % Please edit documentation in R/descriptives.R
 \name{egltable}
 \alias{egltable}
-\title{EGL Table function makes nice tables}
+\title{Function makes nice tables}
 \usage{
 egltable(vars, g, data, strict = TRUE, parametric = TRUE,
   simChisq = FALSE, sims = 1e+06)
@@ -43,7 +43,8 @@ A data frame of the table.
 \description{
 Give a dataset and a list of variables, or just the data
 in the vars.  For best results, convert categorical
-variables into factors.
+variables into factors.  Provides a table of estimated descriptive
+statistics optionally by group levels.
 }
 \examples{
 egltable(iris)
