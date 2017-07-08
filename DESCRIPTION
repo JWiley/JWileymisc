@@ -2,7 +2,7 @@ Package: JWileymisc
 Type: Package
 Title: Miscellaneous Utilities and Functions
 Version: 0.3.0
-Date: 2017-06-29
+Date: 2017-07-10
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 URL: https://github.com/JWiley/JWileymisc
@@ -33,7 +33,8 @@ Imports:
     rms,
     robustbase,
     lavaan (>= 0.5-20),
-    VGAM
+    VGAM,
+    lme4
 Suggests:
     scales,
     testthat

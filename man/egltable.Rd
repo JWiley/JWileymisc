@@ -56,5 +56,8 @@ egltable(colnames(iris)[1:4], "Species", iris,
   parametric = c(TRUE, TRUE, FALSE, FALSE))
 egltable(colnames(iris)[1:4], "Species", iris,
   parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
+
+diris <- as.data.table(iris)
+egltable("Sepal.Length", g = "Species", data = diris)
 }
 \keyword{utils}

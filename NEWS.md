@@ -1,6 +1,22 @@
 # JWileymisc 0.3.0
 
 ## New Features
+* `iccMixed()` A function to calculate the intraclass correlation 
+	coefficient using mixed effects models.  Works with either 
+	normally distributed outcomes or binary outcomes, in which case 
+	the latent variable estimate of the ICC is computed.
+	
+* `nEffective()` Calculates the effective sample size based on 
+    the number of independent units, number of observations per 
+	unit, and the intraclass correlation coefficient.
+	
+* `acfByID()` Calculates the lagged autocorrelation of a variable 
+    by an ID variable and returns a data.table for further use,
+	such as examination, summary, or plotting
+
+* `meanDeviations()` A simple function to calculate means and mean 
+	deviations, useful for creating between and within versions of 
+	a variable in a data.table
 
 * `as.na()` function added to convert data to missing (NA) while
     preserving the class/type of the data (useful for data.table).
