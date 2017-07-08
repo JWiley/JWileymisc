@@ -305,12 +305,15 @@ SEMSummary.fit <- function(formula, data,
 #'   parametric = c(TRUE, TRUE, FALSE, FALSE))
 #' egltable(colnames(iris)[1:4], "Species", iris,
 #'   parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
+#'
+#' diris <- as.data.table(iris)
+#' egltable("Sepal.Length", g = "Species", data = diris)
 egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = FALSE, sims = 1e6) {
   if (!missing(data)) {
     if (is.data.table(data)) {
-      dat <- as.data.frame(data[, vars, with=FALSE])
+      dat <- data[, vars, with=FALSE]
     } else {
-      dat <- as.data.frame(data[, vars, drop=FALSE], stringsAsFactors=FALSE)
+      dat <- as.data.table(data[, vars, drop=FALSE])
     }
     if (!missing(g)) {
       if (length(g) == 1) {
@@ -318,7 +321,7 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
       }
     }
   } else {
-    dat <- as.data.frame(vars, stringsAsFactors=FALSE)
+    dat <- as.data.table(vars)
   }
 
   if (missing(g)) {
@@ -335,7 +338,7 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
     }
   }
 
-  vnames <- colnames(dat)
+  vnames <- names(dat)
 
   k <- ncol(dat)
 
@@ -358,7 +361,8 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
   }
 
 
-  tmpout <- by(dat, g, function(d) {
+  tmpout <- lapply(unique(g), function(gd) {
+    d <- dat[which(g == gd)]
     tmpres <- NULL
     reslab <- ""
 
@@ -367,78 +371,76 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
         n <- vnames[v]
         if (parametric[v]) {
           ## use parametric tests
-          data.frame(
+          data.table(
             Variable = sprintf("%s%s", n, c("", ", M (SD)")[multi+1]),
-            Res = sprintf("%0.2f (%0.2f)", mean(d[[n]], na.rm=TRUE), sd(d[[n]], na.rm=TRUE)),
-            stringsAsFactors=FALSE)
+            Res = sprintf("%0.2f (%0.2f)", mean(d[[n]], na.rm=TRUE), sd(d[[n]], na.rm=TRUE)))
         } else {
-          data.frame(
+          data.table(
             Variable = sprintf("%s%s", n, c("", ", Mdn (IQR)")[multi+1]),
             Res = sprintf("%0.2f (%0.2f)", median(d[[n]], na.rm=TRUE),
-                          abs(diff(quantile(d[[n]], c(.25, .75), na.rm = TRUE)))),
-            stringsAsFactors=FALSE)
+                          abs(diff(quantile(d[[n]], c(.25, .75), na.rm = TRUE)))))
         }
       })
 
       names(tmpcont) <- vnames[contvars.index]
       tmpres <- c(tmpres, tmpcont)
 
-      reslab <- paste0(reslab, c(ifelse(parametric[contvars.index[1]], "M (SD)", "Mdn (IQR)"), "See Rows")[multi+1])
+      reslab <- paste0(reslab, c(ifelse(parametric[contvars.index[1]],
+                                        "M (SD)", "Mdn (IQR)"), "See Rows")[multi+1])
     }
 
     if (length(catvars.index)) {
       tmpcat <- lapply(vnames[catvars.index], function(n) {
-         x <- table(d[, n])
-        data.frame(
+         x <- table(d[[n]])
+        data.table(
           Variable = c(n, paste0("  ", names(x))),
-          Res = c("", sprintf("%d (%2.1f)", x, prop.table(x) * 100)),
-          stringsAsFactors=FALSE)
+          Res = c("", sprintf("%d (%2.1f)", x, prop.table(x) * 100)))
       })
 
       names(tmpcat) <- vnames[catvars.index]
       tmpres <- c(tmpres, tmpcat)
 
-      reslab <- paste0(reslab, ifelse(nzchar(reslab), "/N (%)", "N (%)"))
+      reslab <- paste0(reslab, ifelse(nzchar(reslab),
+                                      "/N (%)", "N (%)"))
     }
 
     tmpres <- lapply(tmpres[vnames], function(d) {
-      colnames(d) <- c("Vars", reslab)
+      setnames(d, old = names(d), c("Vars", reslab))
       return(d)
       })
 
     return(tmpres)
-  }, simplify=FALSE)
+  })
 
 
   if (length(levels(g)) > 1) {
     tmpout <- lapply(seq_along(vnames), function(v) {
-      out <- do.call(cbind.data.frame, lapply(1:length(levels(g)), function(i) {
+      out <- do.call(cbind, lapply(1:length(levels(g)), function(i) {
         d <- tmpout[[i]][[v]]
-        colnames(d)[2] <- paste(levels(g)[i], colnames(d)[2], sep = " ")
+        setnames(d, old = names(d)[2], paste(levels(g)[i], names(d)[2], sep = " "))
         if (i == 1) {
           return(d)
         } else {
-          return(d[, -1, drop = FALSE])
+          return(d[, -1, with = FALSE])
         }
       }))
 
       if (length(contvars.index)) {
         if (v %in% contvars.index) {
           if (parametric[v]) {
-            tests <- summary(aov(dv ~ g, data = data.frame(dv = dat[[v]], g = g)))[[1]]
-            out <- cbind.data.frame(out,
-                             Test = c(sprintf("F(%d, %d) = %0.2f, %s", tests[1, "Df"], tests[2, "Df"], tests[1, "F value"],
-                                              formatPval(tests[1, "Pr(>F)"], 3, 3, includeP=TRUE)),
-                                      rep("", nrow(out) - 1)),
-                             stringsAsFactors = FALSE)
+            tests <- summary(aov(dv ~ g, data = data.table(dv = dat[[v]], g = g)))[[1]]
+            out <- cbind(out,
+                         Test = c(sprintf("F(%d, %d) = %0.2f, %s",
+                                          tests[1, "Df"], tests[2, "Df"], tests[1, "F value"],
+                                          formatPval(tests[1, "Pr(>F)"], 3, 3, includeP=TRUE)),
+                                  rep("", nrow(out) - 1)))
           } else {
             tests <- kruskal.test(dv ~ g, data = data.frame(dv = dat[[v]], g = g))
-            out <- cbind.data.frame(out,
-                             Test = c(sprintf("KW chi-square = %0.2f, df = %d, %s",
-                                            tests$statistic, tests$parameter,
-                                            formatPval(tests$p.value, 3, 3, includeP=TRUE)),
-                                      rep("", nrow(out) - 1)),
-                             stringsAsFactors = FALSE)
+            out <- cbind(out,
+                         Test = c(sprintf("KW chi-square = %0.2f, df = %d, %s",
+                                          tests$statistic, tests$parameter,
+                                          formatPval(tests$p.value, 3, 3, includeP=TRUE)),
+                                  rep("", nrow(out) - 1)))
           }
         }
       }
@@ -448,13 +450,12 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
           tests <- chisq.test(xtabs(~ dv + g, data = data.frame(dv = dat[[v]], g = g)),
                               correct = FALSE,
                               simulate.p.value = simChisq, B = sims)
-          out <- cbind.data.frame(out,
-                           Test = c(sprintf("Chi-square = %0.2f, %s, %s",
-                                          tests$statistic,
-                                          ifelse(simChisq, "simulated", sprintf("df = %d", tests$parameter)),
-                                          formatPval(tests$p.value, 3, 3, includeP=TRUE)),
-                                    rep("", nrow(out) - 1)),
-                           stringsAsFactors = FALSE)
+          out <- cbind(out,
+                       Test = c(sprintf("Chi-square = %0.2f, %s, %s",
+                                        tests$statistic,
+                                        ifelse(simChisq, "simulated", sprintf("df = %d", tests$parameter)),
+                                        formatPval(tests$p.value, 3, 3, includeP=TRUE)),
+                                rep("", nrow(out) - 1)))
         }
       }
 
@@ -464,9 +465,8 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
     tmpout <- tmpout[[1]]
   }
 
-  out <- do.call(rbind.data.frame, c(tmpout, stringsAsFactors = FALSE))
-  rownames(out) <- NULL
-  colnames(out)[1] <- ""
+  out <- do.call(rbind, tmpout)
+  setnames(out, old = names(out)[1], "")
 
   return(out)
 }
@@ -663,3 +663,290 @@ meanDecompose <- function(formula, data) {
 
   return(out)
 }
+
+
+#' Intraclass Correlation Coefficient (ICC) from Mixed Models
+#'
+#' This function estimates the ICC from mixed effects models
+#' estimated using \pkg{lme4}.
+#'
+#' @param dv A character string giving the variable name of
+#'   the dependent variable.
+#' @param id A character vector of length one or more giving
+#'   the ID variable(s).  Can be more than one.
+#' @param data A data.table containing the variables
+#'   used in the formula.  This is a required argument.
+#'   If a data.frame, it will silently coerce to a data.table.
+#'   If not a data.table or data.frame, it will attempt to coerce,
+#'   with a message.
+#' @param family A character vector giving the family to use
+#'   for the model.  Currently only supports
+#'   \dQuote{gaussian} or \dQuote{binomial}.
+#' @return A data table of the ICCs
+#' @references For details, see
+#' Campbell, M. K., Mollison, J., & Grimshaw, J. M. (2001).
+#' Cluster trials in implementation research: estimation of
+#' intracluster correlation coefficients and sample size.
+#' \emph{Statistics in Medicine, 20}(3), 391-399.
+#' @keywords multivariate
+#' @importFrom lme4 lmer glmer VarCorr
+#' @importFrom stats binomial
+#' @export
+#' @examples
+#' iccMixed("mpg", "cyl", mtcars)
+#' iccMixed("mpg", "cyl", as.data.table(mtcars))
+#' iccMixed("mpg", "cyl", as.data.table(mtcars), family = "gaussian")
+#' iccMixed("mpg", c("cyl", "am"), as.data.table(mtcars))
+#' iccMixed("am", "cyl", as.data.table(mtcars), family = "binomial")
+iccMixed <- function(dv, id, data, family = c("gaussian", "binomial")) {
+  if (!is.data.table(data)) {
+    if (is.data.frame(data)) {
+      data <- as.data.table(data)
+    } else {
+      message("Attempting to coerce data to a data.table")
+      data <- as.data.table(data)
+    }
+  }
+  stopifnot(all(c(dv, id) %in% names(data)))
+  stopifnot(is.character(dv))
+  stopifnot(all(is.character(id)))
+  stopifnot(identical(length(dv), 1L))
+  stopifnot(length(id) >= 1L)
+
+  d <- copy(data[, c(dv, id), with = FALSE])
+
+  f <- sprintf("%s ~ 1 + %s", dv, paste(paste0("(1 | ", id, ")"), collapse = " + "))
+
+  family <- match.arg(family)
+
+  ## constant estimate of residual variance for logistic model
+  ## on the 'latent variable' scale
+  res.binom <- (pi^2) / 3
+
+  m <- switch(family,
+              gaussian = lmer(formula = as.formula(f), data = d, REML = TRUE),
+              binomial = glmer(formula = as.formula(f), data = d, family = binomial())
+              )
+
+  est <- as.data.table(as.data.frame(VarCorr(m)))[, .(grp, vcov)]
+
+  if (identical(family, "binomial")) {
+    est <- rbind(est, est[1])
+    est[nrow(est), c("grp", "vcov") := .("Residual", res.binom)]
+  }
+
+  est[, .(Var = grp, Sigma = vcov, ICC = vcov / sum(vcov))]
+}
+
+
+
+
+#' Estimate the effective sample size from longitudinal data
+#'
+#' This function estimates the (approximate) effective sample
+#' size.
+#'
+#' @param n The number of unique/indepedent units of observation
+#' @param k The (average) number of observations per unit
+#' @param icc The estimated ICC.  If missing, will
+#'   estimate (and requires that the family argument be
+#'   correctly specified).
+#' @param dv A character string giving the variable name of
+#'   the dependent variable.
+#' @param id A character vector of length one giving
+#'   the ID variable.
+#' @param data A data.table containing the variables
+#'   used in the formula.  This is a required argument.
+#'   If a data.frame, it will silently coerce to a data.table.
+#'   If not a data.table or data.frame, it will attempt to coerce,
+#'   with a message.
+#' @param family A character vector giving the family to use
+#'   for the model.  Currently only supports
+#'   \dQuote{gaussian} or \dQuote{binomial}.
+#' @return A data.table including the effective sample size.
+#' @references For details, see
+#' Campbell, M. K., Mollison, J., & Grimshaw, J. M. (2001).
+#' Cluster trials in implementation research: estimation of
+#' intracluster correlation coefficients and sample size.
+#' \emph{Statistics in Medicine, 20}(3), 391-399.
+#' @keywords multivariate
+#' @export
+#' @examples
+#' ## example where n, k, and icc are estimated from the data
+#' ## provided, partly using iccMixed function
+#' nEffective(dv = "mpg", id = "cyl", data = mtcars)
+#'
+#' ## example where n, k, and icc are known (or being 'set')
+#' ## useful for sensitivity analyses
+#' nEffective(n = 60, k = 10, icc = .6)
+nEffective <- function(n, k, icc, dv, id, data, family = c("gaussian", "binomial")) {
+  if (any(missing(n), missing(k), missing(icc))) {
+    if (!is.data.table(data)) {
+      if (is.data.frame(data)) {
+        data <- as.data.table(data)
+      } else {
+        message("Attempting to coerce data to a data.table")
+        data <- as.data.table(data)
+      }
+    }
+    stopifnot(all(c(dv, id) %in% names(data)))
+    stopifnot(is.character(dv))
+    stopifnot(all(is.character(id)))
+    stopifnot(identical(length(dv), 1L))
+    stopifnot(identical(length(id), 1L))
+
+    d <- copy(data[, c(dv, id), with = FALSE])
+
+    if (missing(icc)) {
+      icc <- iccMixed(dv = dv, id = id, data = data, family = family)$ICC[1]
+    }
+
+    if (missing(n)) {
+      n <- length(unique(data[[id]]))
+    }
+
+    if (missing(k)) {
+      k <- nrow(data) / n
+    }
+  }
+
+  neff <- (n * k) / ((1 + (k - 1) * icc))
+
+  data.table(
+    Type = c("Effective Sample Size", "Independent Units", "Total Observations"),
+    N = c(neff, n, n * k))
+}
+
+#' Function to calculate the mean and deviations from mean
+#'
+#' Tiny helper function to calculate the mean and
+#' deviations from the mean, both returned as a list.
+#' Works nicely with data.table to calculate a between and
+#' within variable.
+#'
+#' @param x A vector, appropriate for the \code{mean}
+#'   function.
+#' @param na.rm A logical, whether to remove missing
+#'   or not.  Defaults to \code{TRUE}.
+#' @return A list of the mean (first element) and deviations
+#'   from the mean (second element).
+#' @export
+#' @examples
+#' ## simple example showing what it does
+#' meanDeviations(1:10)
+#'
+#' ## example use case, applied to a data.table
+#' d <- as.data.table(iris)
+#' d[, c("BSepal.Length", "WSepal.Length") := meanDeviations(Sepal.Length),
+#'   by = Species]
+#' str(d)
+meanDeviations <- function(x, na.rm = TRUE) {
+  m <- mean(x, na.rm = na.rm)
+  list(m, x - m)
+}
+
+
+#' Estimate the effective sample size from longitudinal data
+#'
+#' This function estimates the (approximate) effective sample
+#' size.
+#'
+#' @param xvar A character string giving the variable name of
+#'   the variable to calculate autocorrelations on.
+#' @param timevar A character string giving the variable name of
+#'   the time variable.
+#' @param idvar A character string giving the variable name of
+#'   the ID variable.  Can be missing if only one time series
+#'   provided, in which case one will be created.
+#' @param data A data.table containing the variables
+#'   used in the formula.  This is a required argument.
+#'   If a data.frame, it will silently coerce to a data.table.
+#'   If not a data.table or data.frame, it will attempt to coerce,
+#'   with a message.
+#' @param lag.max An integer of the maximum lag to estimate. Must be
+#'   equal to or greater than the number of observations
+#'   for all IDs in the dataset.
+#' @param na.function A character string giving the name of the function
+#'   to use to address any missing data.  Functions come from the
+#'   \pkg{zoo} package, and must be one of:
+#'   \dQuote{na.approx}, \dQuote{na.spline}, \dQuote{na.locf}.
+#' @return A data.table of the estimated autocorrelations by ID and lag
+#' @references For details, see
+#' Campbell, M. K., Mollison, J., & Grimshaw, J. M. (2001).
+#' Cluster trials in implementation research: estimation of
+#' intracluster correlation coefficients and sample size.
+#' \emph{Statistics in Medicine, 20}(3), 391-399.
+#' @keywords multivariate
+#' @importFrom zoo zoo na.approx na.spline na.locf
+#' @importFrom stats acf
+#' @export
+#' @examples
+#' ## example 1
+#' dat <- data.table(
+#'   x = sin(1:30),
+#'   time = 1:30,
+#'   id = 1)
+#' acfByID("x", "time", "id", data = dat)
+#'
+#' ## example 2
+#' dat2 <- data.table(
+#'   x = c(sin(1:30), sin((1:30)/10)),
+#'   time = c(1:30, 1:30),
+#'   id = rep(1:2, each = 30))
+#' dat2$x[4] <- NA
+#'
+#' res <- acfByID("x", "time", "id", data = dat2, na.function = "na.approx")
+#'
+#' ggplot(res, aes(factor(Lag), AutoCorrelation)) +
+#'   geom_boxplot()
+#'
+#' ## clean up
+#' rm(dat, dat2, res)
+acfByID <- function(xvar, timevar, idvar, data, lag.max = 10L, na.function = c("na.approx", "na.spline", "na.locf"), ...) {
+  if (!is.data.table(data)) {
+    if (is.data.frame(data)) {
+      data <- as.data.table(data)
+    } else {
+      message("Attempting to coerce data to a data.table")
+      data <- as.data.table(data)
+    }
+  }
+
+  stopifnot(is.integer(lag.max))
+  stopifnot(is.character(xvar))
+  stopifnot(is.character(timevar))
+
+  stopifnot(all(c(xvar, timevar) %in% names(data)))
+  stopifnot(identical(length(xvar), 1L))
+  stopifnot(identical(length(timevar), 1L))
+
+  na.function <- match.arg(na.function)
+  na.function <- switch(na.function,
+                        na.approx = na.approx,
+                        na.spline = na.spline,
+                        na.locf = na.locf)
+
+  if (!missing(idvar)) {
+    stopifnot(is.character(idvar))
+    stopifnot(idvar %in% names(data))
+    stopifnot(identical(length(idvar), 1L))
+
+    d <- copy(data[, c(xvar, timevar, idvar), with = FALSE])
+  } else {
+    d <- copy(data[, c(xvar, timevar), with = FALSE])
+    idvar <- "ID"
+    while(idvar %in% names(d)) {
+      idvar <- paste0("TMP_", idvar)
+    }
+    d[, (idvar) := 1L]
+  }
+
+
+  d[, .(
+    Variable = xvar,
+    Lag = 0:lag.max,
+    AutoCorrelation = acf(na.function(zoo(get(xvar), order.by = get(timevar))),
+                          lag.max = lag.max, plot = FALSE, ...)$acf[, 1, 1]),
+    by = idvar]
+}
+
