@@ -475,3 +475,108 @@ f.r2 <- function(r2, numdf, dendf) {
 }
 
 
+
+#' Format results from a linear mixed model
+#'
+#' @param list A list of one (or more) models estimated from lmer
+#' @param modelnames An (optional) vector of names to use in
+#'   the column headings for each model.
+#' @param dig A numeric value indicating the number of digits to print.
+#'   This is still in early implementation stages and currently does not
+#'   change all parts of the output (which default to 2 decimals per
+#'   APA style).
+#' @return a data table of character data
+#' @keywords misc
+#' @importFrom stats pnorm
+#' @importFrom lme4 lmer
+#' @importFrom nlme fixef
+#' @examples
+#' # make me!
+formatLMER <- function(list, modelnames, dig = 2) {
+  .formatRE <- function(m, idvar, digits = dig) {
+    m <- m[[idvar]]
+    ## random effect standard deviations and residual SD
+    re.sd <- sqrt(diag(m))
+    re.sd <- data.table(
+      Term = sprintf("SD (%s): %s", idvar, names(re.sd)),
+      Est = sprintf("%0.2f", round(re.sd, digits = digits)))
+    ## random effect correlations
+    re.cor <- cov2cor(m)
+    re.n <- rownames(re.cor)
+    ## remove redundant entries
+    re.cor[upper.tri(re.cor, diag=TRUE)] <- NA_real_
+    re.cor <- cbind(V1 = re.n, as.data.table(re.cor))
+    re.cor <- na.omit(melt(re.cor, id.vars = "V1", variable.name = "V2"))
+    re.cor[, ID := 1:.N]
+    re.cor[, V2 := as.character(V2)]
+    re.cor <- re.cor[, .(
+      Term = sprintf("Cor (%s): %s, %s", idvar, sort(c(V1, V2))[1], sort(c(V1, V2))[2]),
+      Est = sprintf("%0.2f", round(value, digits = digits))),
+      by = ID][, -1]
+    rbind(re.sd, re.cor)
+  }
+  .formatFE <- function(model, modelsum, digits = dig) {
+    m <- summary(model)
+    ## fixed effect estimates, p values, 95% CIs
+    fe.b <- fixef(model)
+    fe.ci <- confint(model, parm = "beta_", method = "Wald")
+    if ("Pr(>|t|)" %in% names(m$coefficients)) {
+      fe.p <- formatPval(m$coefficients[, "Pr(>|t|)"],
+                         includeP = TRUE, d = 3, sd = 3)
+    } else {
+      fe.p <- formatPval((1 - pnorm(abs(m$coefficients[, "t value"]))) * 2,
+                         includeP = TRUE, d = 3, sd = 3)
+    }
+    fe.all <- data.table(
+      Term = names(fe.b),
+      Est = sprintf("%0.2f, %s\n[%0.2f, %0.2f]",
+                    round(fe.b, digits = digits),
+                    fe.p,
+                    round(fe.ci[, 1], digits = digits),
+                    round(fe.ci[, 2], digits = digits)))
+    return(fe.all)
+  }
+  .formatMISC <- function(modelsum, digits = dig) {
+    data.table(
+      Term = c("AIC", sprintf("N Participants (%s)", names(modelsum$ngrps)), "N Obs"),
+      Est = c(round(modelsum$AICtab, digits = digits),
+              modelsum$ngrps, length(modelsum$residuals)))
+  }
+  k <- length(list)
+  res <- lapply(list, function(mod) {
+
+    msum <- summary(mod)
+
+    rbind(
+      .formatFE(mod, msum, 2),
+      do.call(rbind, lapply(names(msum$varcor), function(n) {
+        .formatRE(msum$varcor, n, 2)
+      })),
+      data.table(
+        Term = "Residual",
+        Est = sprintf("%0.2f", round(msum$sigma, digits = dig))),
+      .formatMISC(msum, 2))
+  })
+  if (missing(modelnames)) {
+    modelnames <- paste0("Model ", 1:k)
+  }
+  for (i in 1:k) {
+    setnames(res[[i]], old = "Est", new = modelnames[i])
+  }
+  if (k == 1) {
+    final <- res[[1]]
+  } else if (k > 1) {
+    final <- merge(res[[1]], res[[2]], by = "Term", all = TRUE)
+  } else if (k > 2) {
+    for (i in 3:k) {
+      final <- merge(final, res[[i]], by = "Term", all = TRUE)
+    }
+  }
+  type <- ifelse(grepl("^SD \\(", final$Term), 997,
+                 nchar(final$Term) - nchar(gsub(":", "", final$Term)))
+  type <- ifelse(grepl("^Cor \\(", final$Term), 998, type)
+  type <- ifelse(grepl("^AIC$", final$Term), 999, type)
+  type <- ifelse(grepl("^N Obs$", final$Term), 999, type)
+  type <- ifelse(grepl("^N Participants \\(", final$Term), 999, type)
+  final[order(type, Term), ]
+}
