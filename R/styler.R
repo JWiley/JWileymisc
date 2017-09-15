@@ -490,7 +490,6 @@ f.r2 <- function(r2, numdf, dendf) {
 #' @export
 #' @importFrom stats pnorm
 #' @importFrom nlme fixef
-#' @importMethodsFrom lme4 summary
 #' @importMethodsFrom lmerTest summary
 #' @examples
 #' # make me!
