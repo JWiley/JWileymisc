@@ -476,6 +476,7 @@ f.r2 <- function(r2, numdf, dendf) {
 
 
 
+
 #' Format results from a linear mixed model
 #'
 #' @param list A list of one (or more) models estimated from lmer
@@ -547,6 +548,7 @@ formatLMER <- function(list, modelnames, dig = 2) {
   res <- lapply(list, function(mod) {
 
     msum <- summary(mod)
+    r2 <- R2LMER(mod, msum)
 
     rbind(
       .formatFE(mod, msum, 2),
@@ -554,8 +556,11 @@ formatLMER <- function(list, modelnames, dig = 2) {
         .formatRE(msum$varcor, n, 2)
       })),
       data.table(
-        Term = "Residual",
+        Term = "SD: Residual",
         Est = sprintf("%0.2f", round(msum$sigma, digits = dig))),
+      data.table(
+        Term = names(r2),
+        Est = sprintf("%0.2f%%", round(r2 * 100, digits = dig))),
       .formatMISC(msum, 2))
   })
   if (missing(modelnames)) {
@@ -573,9 +578,12 @@ formatLMER <- function(list, modelnames, dig = 2) {
       final <- merge(final, res[[i]], by = "Term", all = TRUE)
     }
   }
-  type <- ifelse(grepl("^SD \\(", final$Term), 997,
+  type <- ifelse(grepl("^SD \\(", final$Term), 994,
                  nchar(final$Term) - nchar(gsub(":", "", final$Term)))
-  type <- ifelse(grepl("^Cor \\(", final$Term), 998, type)
+  type <- ifelse(grepl("^SD: Residual", final$Term), 995, type)
+  type <- ifelse(grepl("^Cor \\(", final$Term), 996, type)
+  type <- ifelse(grepl("MarginalR2", final$Term), 997, type)
+  type <- ifelse(grepl("ConditionalR2", final$Term), 998, type)
   type <- ifelse(grepl("^AIC$", final$Term), 999, type)
   type <- ifelse(grepl("^N Obs$", final$Term), 999, type)
   type <- ifelse(grepl("^N Participants \\(", final$Term), 999, type)

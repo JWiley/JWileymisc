@@ -1,6 +1,15 @@
 # JWileymisc 0.3.0
 
 ## New Features
+* `R2LMER()` A simple function to calculate the marginal and
+  conditional variance accounted for by a model estimated by 
+  `lmer()`.
+  
+* `formatLMER()` A function to nicely format the fixed and random
+  effects output from `lmer()` including confidence intervals, 
+  p-values (using `lmerTest` if used), random effects, and fit
+  indices.
+  
 * `iccMixed()` A function to calculate the intraclass correlation 
 	coefficient using mixed effects models.  Works with either 
 	normally distributed outcomes or binary outcomes, in which case 

@@ -491,3 +491,36 @@ updateInstall <- function(x, repo) {
 
   return(NULL)
 }
+
+
+#' Calculates the Marginal and Conditional R2 from lmer models
+#'
+#' @param model A model estimated by \code{lmer}.
+#' @param modelsum The saved model summary (i.e., \code{summary(model)}).
+#' @return a named vector with the marginal and conditional R2 values
+#' @references For estimating the marginal and conditional R-squared values,
+#'   see: Nakagawa, S. and Schielzeth, H. (2013). A general and simple method
+#'   for obtaining R2 from generalized linear mixed-effects models.
+#'   Methods in Ecology and Evolution, 4(2), 133-142. as well as:
+#'   Johnson, P. C. (2014). Extension of Nakagawa & Schielzeth's R2GLMM to
+#'   random slopes models. Methods in Ecology and Evolution, 5(9), 944-946.
+#' @keywords utils
+#' @export
+#' @importFrom stats model.matrix
+#' @importFrom stats model.frame
+#' @importFrom nlme VarCorr
+#' @examples
+#' # make me!
+R2LMER <- function(model, modelsum) {
+  X <- model.matrix(model)
+  n <- nrow(X)
+  var.fe <- var(as.vector(X %*% fixef(model))) * (n - 1) / n
+  var.re <- sum(sapply(VarCorr(model)[names(modelsum$ngrps)], function(Sigma) {
+    Z <- X[, rownames(Sigma), drop = FALSE]
+    sum(diag(crossprod(Z %*% Sigma, Z))) / n
+  }))
+  var.e <- modelsum$sigma^2
+  var.total <- var.fe + var.re + var.e
+  c("MarginalR2" = var.fe / var.total,
+    "ConditionalR2" = (var.fe + var.re) / var.total)
+}
