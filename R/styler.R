@@ -522,7 +522,7 @@ formatLMER <- function(list, modelnames, dig = 2) {
     ## fixed effect estimates, p values, 95% CIs
     fe.b <- fixef(model)
     fe.ci <- confint(model, parm = "beta_", method = "Wald")
-    if ("Pr(>|t|)" %in% names(m$coefficients)) {
+    if ("Pr(>|t|)" %in% colnames(m$coefficients)) {
       fe.p <- formatPval(m$coefficients[, "Pr(>|t|)"],
                          includeP = TRUE, d = 3, sd = 3)
     } else {
