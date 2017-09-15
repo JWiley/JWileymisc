@@ -34,7 +34,8 @@ Imports:
     robustbase,
     lavaan (>= 0.5-20),
     VGAM,
-    lme4
+    lme4,
+    lmerTest
 Suggests:
     scales,
     testthat

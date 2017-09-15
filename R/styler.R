@@ -487,9 +487,11 @@ f.r2 <- function(r2, numdf, dendf) {
 #'   APA style).
 #' @return a data table of character data
 #' @keywords misc
+#' @export
 #' @importFrom stats pnorm
-#' @importFrom lme4 lmer
 #' @importFrom nlme fixef
+#' @importMethodsFrom lme4 summary
+#' @importMethodsFrom lmerTest summary
 #' @examples
 #' # make me!
 formatLMER <- function(list, modelnames, dig = 2) {
