@@ -308,9 +308,13 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #'   (univariate or multivariate).  Also, when \code{robust = TRUE},
 #'   only complete observations are used (i.e., \code{use = "complete.obs"}).
 #'   See details.
-#' @param ncol Number of columsn to use for plotting if \code{plot = TRUE}.
-#'   Passed to \code{plot_grid}.
-#' @param ... Additional arguments passed on to \code{geom_density}
+#' @param rugthreshold Integer determining the number of observations beyond
+#'   which no rug plot is added. Note that even if this threshold is exceeded,
+#'   a rug plot will still be added for any extreme values (if extreme values are
+#'   used and present).
+#' @param ... Additional arguments. If these include mu and sigma and the distribution
+#'   is multivariate normal, then it will use the passed values instead of calculating
+#'   the mean and covariances of the data.
 #' @return An invisible list with the ggplot2 objects for graphs,
 #'   as well as information about the distribution (parameter estimates,
 #'   name, log likelihood (useful for comparing the fit of different distributions
@@ -318,6 +322,9 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #' @importFrom MASS fitdistr
 #' @importFrom ggplot2 ggplot stat_function geom_density geom_point
 #' @importFrom ggplot2 geom_abline ggtitle xlab ylab
+#' @importFrom ggplot2 scale_x_continuous scale_y_continuous theme ggtitle
+#' @importFrom ggplot2 element_text element_line
+#' @importFrom ggthemes geom_rangeframe theme_tufte
 #' @importFrom stats dnorm qnorm dbeta qbeta dchisq qchisq
 #' @importFrom stats df qf dgamma qgamma dnbinom qnbinom dpois qpois
 #' @importFrom stats logLik ppoints
@@ -368,7 +375,7 @@ testdistr <- function(x,
   na.rm = TRUE, starts, xlim = NULL, varlab = "X", plot = TRUE,
   extremevalues = c("no", "theoretical", "empirical"), ev.perc = .005,
   use = c("complete.obs", "pairwise.complete.obs", "fiml"),
-  robust = FALSE, ncol = 1, ...) {
+  robust = FALSE, rugthreshold = 500, ...) {
 
   distr <- match.arg(distr)
   use <- match.arg(use)
@@ -388,21 +395,40 @@ testdistr <- function(x,
       OK <- rep(TRUE, nrow(x))
     }
 
-    if (isTRUE(robust)) {
-      tmp <- covMcd(x[OK, , drop=FALSE])
-      desc <- list(mu = tmp$center, sigma = tmp$cov)
-      rm(tmp)
+    optargs <- list(...)
+    if (all(c("mu", "sigma") %in% names(optargs))) {
+      desc <- list(mu = optargs$mu,
+                   sigma = optargs$sigma)
     } else {
-      desc <- switch(match.arg(use),
-                   fiml = {moments(x)},
-                   pairwise.complete.obs = {
-                     list(mu = colMeans(x, na.rm = TRUE),
-                          sigma = cov(x, use = "pairwise.complete.obs"))
-                   },
-                   complete.obs = {
-                     list(mu = colMeans(x[OK,]),
-                          sigma = cov(x[OK,]))
-                   })
+
+      if (isTRUE(robust)) {
+        tmp <- covMcd(x[OK, , drop=FALSE])
+        desc <- list(mu = tmp$center, sigma = tmp$cov)
+        rm(tmp)
+      } else {
+        desc <- switch(match.arg(use),
+                       fiml = {moments(x)},
+                       pairwise.complete.obs = {
+                         list(mu = colMeans(x, na.rm = TRUE),
+                              sigma = cov(x, use = "pairwise.complete.obs"))
+                       },
+                       complete.obs = {
+                         list(mu = colMeans(x[OK,]),
+                              sigma = cov(x[OK,]))
+                       })
+      }
+    }
+
+    ## if any variances near zero, set to at least 1e-10
+    if (any(diag(desc$sigma) < 1e-10)) {
+      diag(desc$sigma) <- pmax(diag(desc$sigma), 1e-10)
+    }
+    ## if covariance matrix is singular, inflate diagonal (variances)
+    ## five percent increase per iteration, up to 10 iterations
+    i <- 1L
+    while(isTRUE(tryCatch(solve(desc$sigma), error = function(e) TRUE)) && i <= 10) {
+      diag(desc$sigma) <- diag(desc$sigma) * 1.05
+      i <- i + 1L
     }
 
     starts <- list(df = ncol(x))
@@ -494,7 +520,8 @@ testdistr <- function(x,
     X = do.call(distribution$q,
                 c(list(p = ppoints(length(x))),
                   as.list(distribution$fit$estimate))),
-    Y = sort(x))
+    Y = sort(x),
+    OriginalOrder = order(x))
 
   ev.limits <- switch(extremevalues,
                       no = c(-Inf, Inf),
@@ -505,15 +532,25 @@ testdistr <- function(x,
 
   d[, isEV := factor(Y %inrange% ev.limits, levels = c(TRUE, FALSE), labels = c("No", "Yes"))]
 
+  nok <- sum(!is.na(d$Y))
+
   p.density <- ggplot(d, aes(Y)) +
-    geom_density(...) +
+    geom_density() +
     stat_function(fun = distribution$d,
                   args = as.list(distribution$fit$estimate),
                   colour = "blue", linetype = 2, size = 1, xlim = xlim) +
-    geom_rug(aes(colour = isEV)) +
+    geom_rug(aes(colour = isEV),
+             data = d[isEV == "Yes" | (nok < rugthreshold)],
+             alpha = pmax(pmin(1 / sqrt(log10(nok)), 1), as.integer(nok >= rugthreshold))) +
     scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
     ylab("Density") +
-    theme_cowplot() + theme(legend.position = "none")
+    scale_x_continuous(breaks = roundedfivenum(d$Y)) +
+    geom_rangeframe() +
+    theme_tufte(base_family = "sans") +
+    theme(
+      legend.position = "none",
+      axis.text = element_text(colour = "black"),
+      axis.ticks = element_line(colour = "white", size = 2))
 
   if (identical(distr, "mvnormal")) {
     p.density <- p.density +
@@ -533,7 +570,13 @@ testdistr <- function(x,
     geom_point(aes(colour = isEV)) +
     scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
     xlab(label = "Theoretical Quantiles") +
-    theme_cowplot() + theme(legend.position = "none")
+    scale_x_continuous(breaks = roundedfivenum(d$X)) +
+    scale_y_continuous(breaks = roundedfivenum(d$Y)) +
+    geom_rangeframe() +
+    theme_tufte(base_family = "sans") +
+    theme(
+      legend.position = "none",
+      axis.text = element_text(colour = "black"))
 
   if (identical(distr, "mvnormal")) {
     p.qq <- p.qq +
@@ -548,13 +591,30 @@ testdistr <- function(x,
                       distribution$LL))
   }
 
+  d$YDeviates <- resid(lm(Y ~ 0 + offset(X), data = d))
+
+  p.qqdeviates <- ggplot(d, aes(X, YDeviates)) +
+    geom_point(aes(colour = isEV)) +
+    scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
+    geom_hline(yintercept = 0) +
+    ylab("Deviates") +
+    theme_tufte(base_family = "sans") +
+    theme(axis.line.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          legend.position = "none")
+
   if (plot) {
-    print(plot_grid(p.density, p.qq, ncol = ncol, labels = c("A", "B"), align = "hv"))
+    print(plot_grid(p.density, p.qqdeviates,
+                    ncol = 1, align = "v",
+                    rel_heights = c(3, 1)))
   }
 
   return(invisible(list(
     DensityPlot = p.density,
     QQPlot = p.qq,
+    QQDeviatesPlot = p.qqdeviates,
     Data = d,
     Distribution = distribution)))
 }
@@ -725,4 +785,330 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
                   label = labels))
 
   return(p)
+}
+
+#' Plot Residual Diagnostics
+#'
+#' This is an internal worker function and is not meant to be
+#' called directly.
+#'
+#' @param object A fitted model object from lm.
+#' @param ev.perc A real number between 0 and 1 indicating the
+#'   proportion of the theoretical distribution beyond which
+#'   values are considered extreme values (possible outliers).
+#'   Defaults to .001.
+#' @return a list including plots of the residuals,
+#'   residuals versus fitted values, and one list for
+#'   plots of all random effects and finally a data table with
+#'   any extreme values identified
+#' @importFrom quantreg qss rq rqss
+#' @importFrom ggplot2 ggtitle theme geom_quantile stat_smooth
+#' @importFrom ggplot2 geom_point geom_bin2d scale_fill_gradient scale_x_continuous scale_y_continuous
+#' @importFrom ggplot2 element_text element_line
+#' @importFrom ggthemes geom_rangeframe theme_tufte
+#' @importFrom cowplot plot_grid
+#' @keywords plot internal
+#' @examples
+#' # make me!
+.plotDiagnosticsResiduals <- function(object, ev.perc = .001) {
+  d.frame <- model.frame(object)
+  dv <- names(d.frame)[1]
+
+  d.res <- data.table(
+    StandardizedResiduals = resid(object, type = "pearson", scaled = TRUE),
+    Predicted = fitted(object))
+
+  ## residuals versus fitted
+  p.resfit <- ggplot(d.res, aes(Predicted, StandardizedResiduals))
+  if (nrow(d.res) < 500) {
+    p.resfit <- p.resfit +
+      geom_point(alpha = pmin(1 / sqrt(log10(nrow(d.res))), 1))
+  } else {
+    p.resfit <- p.resfit +
+      geom_bin2d(aes(fill = ..count..), bins = 80) +
+      scale_fill_gradient(low = "grey70", high = "black")
+  }
+
+  p.resfit <- p.resfit +
+    stat_smooth(method = "loess", se = FALSE, size = 1, colour = "blue") +
+    geom_rangeframe() +
+    scale_x_continuous(breaks = roundedfivenum(d.res$Predicted)) +
+    scale_y_continuous(breaks = roundedfivenum(d.res$StandardizedResiduals)) +
+    theme_tufte(base_family = "sans") +
+    theme(
+      legend.position = "bottom",
+      axis.text = element_text(colour = "black"),
+      axis.ticks.x = element_line(colour = "white", size = 2)) +
+    ggtitle(dv)
+
+  d.hat <- data.table(
+    Predicted = seq(
+      min(d.res$Predicted),
+      max(d.res$Predicted),
+      length.out = 1000))
+  tau.1 <- tryCatch(
+    rqss(StandardizedResiduals ~ qss(Predicted, lambda = 1),
+         tau = .1, data = d.res),
+    error = function(e) TRUE)
+  if (!isTRUE(tau.1)) {
+    tau.9 <- tryCatch(
+      rqss(StandardizedResiduals ~ qss(Predicted, lambda = 1),
+           tau = .9, data = d.res),
+      error = function(e) TRUE)
+  } else {
+    tau.9 <- TRUE
+  }
+  if (!isTRUE(tau.1) && !isTRUE(tau.9)) {
+    d.hat[, Res.1 := predict(tau.1, d.hat)]
+    d.hat[, Res.9 := predict(tau.9, d.hat)]
+  }
+  if (isTRUE(tau.1) || isTRUE(tau.9) || isTRUE(all.equal(d.hat$Res.1, d.hat$Res.9))) {
+    tau.21 <- tryCatch(
+      rq(StandardizedResiduals ~ Predicted, tau = .1, data = d.res),
+      error = function(e) TRUE)
+    if (!isTRUE(tau.21)) {
+      tau.29 <- tryCatch(
+        rq(StandardizedResiduals ~ Predicted, tau = .9, data = d.res),
+        error = function(e) TRUE)
+    } else {
+      tau.29 <- TRUE
+    }
+    if (!isTRUE(tau.21) && !isTRUE(tau.29)) {
+      d.hat[, Res.1 := predict(tau.21, d.hat)]
+      d.hat[, Res.9 := predict(tau.29, d.hat)]
+    }
+  }
+  if (isTRUE(all.equal(d.hat$Res.1, d.hat$Res.9))) {
+    d.hat[, Res.1 := NA_real_]
+    d.hat[, Res.9 := NA_real_]
+  }
+
+  p.resfit <- p.resfit +
+    geom_line(mapping = aes(x = Predicted, y = Res.1),
+              data = d.hat, colour = "blue", size = 1, linetype = 2) +
+    geom_line(mapping = aes(x = Predicted, y = Res.9),
+              data = d.hat, colour = "blue", size = 1, linetype = 2)
+
+  ## distributions of residuals
+  p.tmpres <- testdistr(d.res[, StandardizedResiduals],
+                     varlab = "Standardized Residuals",
+                     plot = FALSE, extremevalues = "theoretical",
+                     ev.perc = ev.perc)
+  p.res <- plot_grid(
+    p.tmpres$DensityPlot + ggtitle(dv),
+    p.tmpres$QQDeviatesPlot, ncol = 1,
+    rel_heights = c(3, 1), align = "v")
+
+  return(list(
+    p.res = p.res,
+    p.tmpres = p.tmpres,
+    p.resfit = p.resfit,
+    d.res = d.res,
+    d.frame = d.frame,
+    dv = dv))
+}
+
+
+#' Plot Diagnostics for an lmer model
+#'
+#' This function creates a number of diagnostic plots
+#' from lmer models. It relies heavily on the \code{testdistr}
+#' function.
+#'
+#' @param object A fitted model object, either of class merMod from
+#'   the lme4 package or merModLmerTest from the lmerTest package.
+#' @param plot A logical value whether or not to plot the results or
+#'   simply return the graaphical  objects.
+#' @param ev.perc A real number between 0 and 1 indicating the
+#'   proportion of the theoretical distribution beyond which
+#'   values are considered extreme values (possible outliers).
+#'   Defaults to .001.
+#' @param ask A logical whether to ask before changing plots.
+#'   Only applies to interactive environments.
+#' @param ncol The number of columns to use for interactive plots
+#'   Must be either 1 or 2.  Defaults to 1.
+#' @return a list including plots of the residuals,
+#'   residuals versus fitted values, and one list for
+#'   plots of all random effects and finally a data table with
+#'   any extreme values identified
+#'
+#' @importFrom grDevices dev.interactive devAskNewPage
+#' @importFrom quantreg qss
+#' @importFrom ggplot2 ggtitle theme geom_quantile stat_smooth
+#' @importFrom ggplot2 geom_point geom_bin2d scale_fill_gradient scale_x_continuous scale_y_continuous
+#' @importFrom ggplot2 element_text element_line
+#' @importFrom ggthemes geom_rangeframe theme_tufte
+#' @importFrom nlme VarCorr
+#' @importFrom cowplot plot_grid
+#' @keywords plot
+#' @export
+#' @examples
+#' # make me!
+plotDiagnosticsLMER <- function(object, plot = TRUE, ev.perc = .001, ask = TRUE, ncol = 1) {
+  stopifnot(ncol %in% 1:2)
+
+  x <- .plotDiagnosticsResiduals(object, ev.perc = ev.perc)
+  idvars <- names(VarCorr(object))
+
+  ## data for outliers
+  d.extreme <- x$d.frame[1, c(x$dv, idvars)]
+  d.extreme[] <- lapply(d.extreme, as.na)
+  d.extreme <- as.data.table(d.extreme)
+  if ("EffectType" %in% names(d.extreme)) {
+    stop("EffectType is used internally and cannot be a variable or ID in the model")
+  }
+  d.extreme[, EffectType := NA_character_]
+
+  if (any(x$p.tmpres$Data[, isEV] == "Yes")) {
+    d.extreme <- rbind(d.extreme,
+                       cbind(as.data.table(
+                         x$d.frame[x$p.tmpres$Data[isEV == "Yes", OriginalOrder],
+                                 c(x$dv, idvars)]),
+                         EffectType = "Residuals"))
+  }
+
+  p.ranef <- list()
+  for (n in idvars) {
+    tmp <- subset(coef(object)[[n]],
+                  select = names(ranef(object)[[n]]))
+    for (n2 in names(tmp)) {
+      p.tmpranef <- testdistr(tmp[[n2]],
+                              varlab = "Random Effects",
+                              plot = FALSE, extremevalues = "theoretical",
+                              ev.perc = ev.perc)
+      p.ranef <- c(p.ranef, list(plot_grid(
+                              p.tmpranef$DensityPlot + ggtitle(paste(n, ":", n2)),
+                              p.tmpranef$QQDeviatesPlot, ncol = 1,
+                              rel_heights = c(3, 1), align = "v")))
+      if (any(p.tmpranef$Data[, isEV] == "Yes")) {
+        d.extreme <- rbind(d.extreme,
+                           cbind(as.data.table(
+                             x$d.frame[x$d.frame[[n]] %in% rownames(tmp)[p.tmpranef$Data[isEV == "Yes", OriginalOrder]],
+                                     c(x$dv, idvars)]),
+                             EffectType = paste("Random Effect", n, ":", n2)))
+      }
+    }
+    if (ncol(tmp) > 1) {
+      p.tmpranef <- testdistr(tmp, distr = "mvnormal",
+                              varlab = "Random Effects",
+                              plot = FALSE, extremevalues = "theoretical",
+                              ev.perc = ev.perc)
+      p.ranef <- c(p.ranef, list(plot_grid(
+                              p.tmpranef$DensityPlot + ggtitle(paste(n, ":", "MV Normal")),
+                              p.tmpranef$QQDeviatesPlot, ncol = 1,
+                              rel_heights = c(3, 1), align = "v")))
+      if (any(p.tmpranef$Data[, isEV] == "Yes")) {
+        d.extreme <- rbind(d.extreme,
+                           cbind(as.data.table(
+                             x$d.frame[x$d.frame[[n]] %in% rownames(tmp)[p.tmpranef$Data[isEV == "Yes", OriginalOrder]],
+                                     c(x$dv, idvars)]),
+                             EffectType = paste("Multivariate Random Effect", n)))
+      }
+    }
+  }
+
+  if (plot) {
+    if (ask && dev.interactive()) {
+        oask <- devAskNewPage(TRUE)
+        on.exit(devAskNewPage(oask))
+    }
+    if (ncol == 1) {
+      print(x$p.res)
+      print(x$p.resfit)
+      for (i in seq_along(p.ranef)) {
+        print(p.ranef[[i]])
+      }
+    } else if (ncol == 2) {
+      print(plot_grid(
+        x$p.res,
+        x$p.resfit,
+        ncol = 2))
+      for (i in 1:ceiling(length(p.ranef) / 2)) {
+        print(do.call(plot_grid, c(p.ranef[(i * 2 - 1):(i * 2)], ncol = 2)))
+      }
+    }
+  }
+
+  return(invisible(list(
+    ResPlot = x$p.res,
+    ResFittedPlot = x$p.resfit,
+    RanefPlot = p.ranef,
+    ExtremeValues = na.omit(d.extreme))))
+}
+
+
+
+#' Plot Diagnostics for an lm model
+#'
+#' This function creates a number of diagnostic plots
+#' from lm models. It relies heavily on the \code{testdistr}
+#' function.
+#'
+#' @param object A fitted model object from lm.
+#' @param plot A logical value whether or not to plot the results or
+#'   simply return the graaphical  objects.
+#' @param ev.perc A real number between 0 and 1 indicating the
+#'   proportion of the theoretical distribution beyond which
+#'   values are considered extreme values (possible outliers).
+#'   Defaults to .001.
+#' @param ask A logical whether to ask before changing plots.
+#'   Only applies to interactive environments.
+#' @param ncol The number of columns to use for interactive plots
+#'   Must be either 1 or 2.  Defaults to 1.
+#' @return a list including plots of the residuals,
+#'   residuals versus fitted values, and one list for
+#'   plots of all random effects and finally a data table with
+#'   any extreme values identified
+#'
+#' @importFrom grDevices dev.interactive devAskNewPage
+#' @importFrom ggplot2 ggtitle theme geom_quantile stat_smooth
+#' @importFrom ggplot2 geom_point geom_bin2d scale_fill_gradient scale_x_continuous scale_y_continuous
+#' @importFrom ggplot2 element_text element_line
+#' @importFrom ggthemes geom_rangeframe theme_tufte
+#' @importFrom cowplot plot_grid
+#' @keywords plot
+#' @export
+#' @examples
+#' # make me!
+plotDiagnosticsLM <- function(object, plot = TRUE, ev.perc = .001, ask = TRUE, ncol = 1) {
+  stopifnot(ncol %in% 1:2)
+
+  x <- .plotDiagnosticsResiduals(object, ev.perc = ev.perc)
+
+  ## data for outliers
+  d.extreme <- data.table(dv = NA_real_,
+                          EffectType = NA_character_)
+  setnames(d.extreme, names(d.extreme), c(x$dv, "EffectType"))
+  if ("EffectType" %in% x$dv) {
+    stop("EffectType is used internally and cannot be a variable in the model")
+  }
+
+  if (any(x$p.tmpres$Data[, isEV] == "Yes")) {
+    d.extreme <- rbind(d.extreme,
+                       cbind(as.data.table(
+                         x$d.frame[x$p.tmpres$Data[isEV == "Yes", OriginalOrder],
+                                 c(x$dv), drop = FALSE]),
+                         EffectType = "Residuals"))
+  }
+
+  if (plot) {
+    if (ask && dev.interactive()) {
+        oask <- devAskNewPage(TRUE)
+        on.exit(devAskNewPage(oask))
+    }
+    if (ncol == 1) {
+      print(x$p.res)
+      print(x$p.resfit)
+    } else if (ncol == 2) {
+      print(plot_grid(
+        x$p.res,
+        x$p.resfit,
+        ncol = 2))
+    }
+  }
+
+  return(invisible(list(
+    ResPlot = x$p.res,
+    ResFittedPlot = x$p.resfit,
+    ExtremeValues = na.omit(d.extreme))))
 }
