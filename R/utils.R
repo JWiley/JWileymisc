@@ -175,7 +175,7 @@ corOK <- function(x, maxiter = 100) {
 #'
 #' Given a vector, convert it to missing (NA) values,
 #' where the class of the missing matches the input class.
-#' Currently supports character, integer, factor, numeric,
+#' Currently supports character, logical, integer, factor, numeric,
 #' times (from \pkg{chron}), Date, POSIXct, POSIXlt, and
 #' zoo (from \pkg{zoo}).
 #'
@@ -187,11 +187,13 @@ corOK <- function(x, maxiter = 100) {
 #' str(as.na(1L:5L))
 #' str(as.na(rnorm(5)))
 #' str(as.na(c(TRUE, FALSE)))
-#' str(as.NA(as.Date("2017-01-01")))
+#' str(as.na(as.Date("2017-01-01")))
 as.na <- function(x) {
   n <- length(x)
   if (inherits(x, "character")) {
     use <- NA_character_
+  } else if (inherits(x, "logical")) {
+    use <- NA
   } else if (inherits(x, "integer")) {
     use <- NA_integer_
   } else if (inherits(x, "factor")) {
@@ -492,6 +494,8 @@ updateInstall <- function(x, repo) {
   return(NULL)
 }
 
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("DV", "Predicted"))
 
 #' Calculates the R2 from lmer models
 #'
@@ -515,9 +519,9 @@ updateInstall <- function(x, repo) {
 #'   random slopes models. Methods in Ecology and Evolution, 5(9), 944-946.
 #' @keywords utils
 #' @export
-#' @importFrom stats model.matrix
+#' @importFrom stats model.matrix model.frame cor var
 #' @importFrom stats model.frame
-#' @importFrom nlme VarCorr
+#' @importFrom nlme VarCorr fixef
 #' @examples
 #' # make me!
 R2LMER <- function(model, modelsum, cluster = FALSE) {

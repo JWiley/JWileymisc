@@ -1,3 +1,7 @@
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("V2", "Index"))
+
+
 ##' Function to find significant regions from an interaction
 ##'
 ##' This function uses the \code{contrast} function from \pkg{rms} to
@@ -89,7 +93,9 @@ findSigRegions <- function(object, l1, l2, name.vary, lower, upper, alpha = .05,
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("Pvalue"))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("Pvalue", "xz", "yz", "yhat", "yllz",
+                                                        "lower", "yulz", "upper", "reglab", "Contrast",
+                                                        "Lower", "Upper", "x", "ContrastAngle", "ContrastAngleZ", "Yhat"))
 
 
 ##' Function to find significant regions from an interaction

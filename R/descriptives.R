@@ -664,6 +664,8 @@ meanDecompose <- function(formula, data) {
   return(out)
 }
 
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("vcov", "grp"))
 
 #' Intraclass Correlation Coefficient (ICC) from Mixed Models
 #'
@@ -689,7 +691,8 @@ meanDecompose <- function(formula, data) {
 #' intracluster correlation coefficients and sample size.
 #' \emph{Statistics in Medicine, 20}(3), 391-399.
 #' @keywords multivariate
-#' @importFrom lme4 lmer glmer VarCorr
+#' @importFrom lme4 lmer glmer
+#' @importFrom nlme VarCorr
 #' @importFrom stats binomial
 #' @export
 #' @examples
@@ -870,6 +873,7 @@ meanDeviations <- function(x, na.rm = TRUE) {
 #'   to use to address any missing data.  Functions come from the
 #'   \pkg{zoo} package, and must be one of:
 #'   \dQuote{na.approx}, \dQuote{na.spline}, \dQuote{na.locf}.
+#' @param ... Additional arguments passed to \code{zoo}.
 #' @return A data.table of the estimated autocorrelations by ID and lag
 #' @references For details, see
 #' Campbell, M. K., Mollison, J., & Grimshaw, J. M. (2001).

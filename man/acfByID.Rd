@@ -32,6 +32,8 @@ for all IDs in the dataset.}
 to use to address any missing data.  Functions come from the
 \pkg{zoo} package, and must be one of:
 \dQuote{na.approx}, \dQuote{na.spline}, \dQuote{na.locf}.}
+
+\item{...}{Additional arguments passed to \code{zoo}.}
 }
 \value{
 A data.table of the estimated autocorrelations by ID and lag

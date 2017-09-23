@@ -475,6 +475,8 @@ f.r2 <- function(r2, numdf, dendf) {
 }
 
 
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("ID", "V2", "V1", "value"))
 
 
 #' Format results from a linear mixed model

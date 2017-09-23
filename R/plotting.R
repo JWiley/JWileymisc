@@ -244,7 +244,7 @@ corplot <- function(x, coverage, pvalues,
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDeviates", "..count.."))
 
 #' Graphically compare the distribution of a variable against a specific distribution
 #'
@@ -329,6 +329,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y"))
 #' @importFrom stats df qf dgamma qgamma dnbinom qnbinom dpois qpois
 #' @importFrom stats logLik ppoints
 #' @importFrom stats mahalanobis qchisq ppoints
+#' @importFrom stats lm resid offset
 #' @importFrom data.table %inrange% %between%
 #' @importFrom robustbase covMcd
 #' @seealso \code{\link{SEMSummary}}
@@ -787,6 +788,11 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
   return(p)
 }
 
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "StandardizedResiduals",
+                                                        "Res.1", "Res.9"))
+
+
 #' Plot Residual Diagnostics
 #'
 #' This is an internal worker function and is not meant to be
@@ -807,6 +813,7 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
 #' @importFrom ggplot2 element_text element_line
 #' @importFrom ggthemes geom_rangeframe theme_tufte
 #' @importFrom cowplot plot_grid
+#' @importFrom stats resid fitted coef predict
 #' @keywords plot internal
 #' @rdname plotDiagnosticsResiduals
 #' @examples
@@ -909,6 +916,9 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
     dv = dv))
 }
 
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("EffectType", "OriginalOrder"))
+
 
 #' Plot Diagnostics for an lmer model
 #'
@@ -939,7 +949,7 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
 #' @importFrom ggplot2 geom_point geom_bin2d scale_fill_gradient scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 element_text element_line
 #' @importFrom ggthemes geom_rangeframe theme_tufte
-#' @importFrom nlme VarCorr
+#' @importFrom nlme VarCorr ranef
 #' @importFrom cowplot plot_grid
 #' @keywords plot
 #' @export

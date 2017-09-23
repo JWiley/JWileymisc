@@ -14,8 +14,8 @@ Description: A collection of miscellaneous tools and functions,
 License: GPL (>= 3)
 Depends:
     R (>= 3.2.0),
-    data.table (>= 1.9.10),
-    ggplot2 (>= 2.0.0),
+    data.table (>= 1.10.0),
+    ggplot2 (>= 2.2.0),
     cowplot,
     foreach
 Imports:
@@ -30,12 +30,14 @@ Imports:
     mgcv,
     mice,
     methods,
+    zoo,
     psych,
     rms,
     robustbase,
     quantreg,
     lavaan (>= 0.5-20),
     VGAM,
+    nlme, 
     lme4,
     lmerTest
 Suggests:
