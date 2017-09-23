@@ -8,7 +8,7 @@ testdistr(x, distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom",
   "poisson", "mvnormal"), na.rm = TRUE, starts, xlim = NULL, varlab = "X",
   plot = TRUE, extremevalues = c("no", "theoretical", "empirical"),
   ev.perc = 0.005, use = c("complete.obs", "pairwise.complete.obs", "fiml"),
-  robust = FALSE, ncol = 1, ...)
+  robust = FALSE, rugthreshold = 500, ...)
 }
 \arguments{
 \item{x}{The data as a single variable or vector to check the distribution unless
@@ -58,10 +58,14 @@ Currently only applies to normally distributed data
 only complete observations are used (i.e., \code{use = "complete.obs"}).
 See details.}
 
-\item{ncol}{Number of columsn to use for plotting if \code{plot = TRUE}.
-Passed to \code{plot_grid}.}
+\item{rugthreshold}{Integer determining the number of observations beyond
+which no rug plot is added. Note that even if this threshold is exceeded,
+a rug plot will still be added for any extreme values (if extreme values are
+used and present).}
 
-\item{...}{Additional arguments passed on to \code{geom_density}}
+\item{...}{Additional arguments. If these include mu and sigma and the distribution
+is multivariate normal, then it will use the passed values instead of calculating
+the mean and covariances of the data.}
 }
 \value{
 An invisible list with the ggplot2 objects for graphs,

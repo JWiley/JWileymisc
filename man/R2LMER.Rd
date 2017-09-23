@@ -2,20 +2,28 @@
 % Please edit documentation in R/utils.R
 \name{R2LMER}
 \alias{R2LMER}
-\title{Calculates the Marginal and Conditional R2 from lmer models}
+\title{Calculates the R2 from lmer models}
 \usage{
-R2LMER(model, modelsum)
+R2LMER(model, modelsum, cluster = FALSE)
 }
 \arguments{
 \item{model}{A model estimated by \code{lmer}.}
 
 \item{modelsum}{The saved model summary (i.e., \code{summary(model)}).}
+
+\item{cluster}{A logical whether to calculate individual pseudo R2 values by
+cluster unit (if \code{TRUE}) or the marginal and conditional R2 for the
+overall model (if \code{FALSE}, the default).}
 }
 \value{
-a named vector with the marginal and conditional R2 values
+a named vector with the marginal and conditional R2 values,
+  if \code{CLUSTER = FALSE}, otherwise, a data table with the pseudo R2
+  for each cluster unit.
 }
 \description{
-Calculates the Marginal and Conditional R2 from lmer models
+For pseudo R2 by cluster, the squared correlation between observed
+and predicted values for each cluster unit is returned.  For the overall model,
+the marginal and conditional R2 are calculated as described in the references.
 }
 \examples{
 # make me!

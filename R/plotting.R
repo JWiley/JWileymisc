@@ -808,6 +808,7 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
 #' @importFrom ggthemes geom_rangeframe theme_tufte
 #' @importFrom cowplot plot_grid
 #' @keywords plot internal
+#' @rdname plotDiagnosticsResiduals
 #' @examples
 #' # make me!
 .plotDiagnosticsResiduals <- function(object, ev.perc = .001) {
