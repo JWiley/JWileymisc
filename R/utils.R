@@ -493,11 +493,20 @@ updateInstall <- function(x, repo) {
 }
 
 
-#' Calculates the Marginal and Conditional R2 from lmer models
+#' Calculates the R2 from lmer models
+#'
+#' For pseudo R2 by cluster, the squared correlation between observed
+#' and predicted values for each cluster unit is returned.  For the overall model,
+#' the marginal and conditional R2 are calculated as described in the references.
 #'
 #' @param model A model estimated by \code{lmer}.
 #' @param modelsum The saved model summary (i.e., \code{summary(model)}).
-#' @return a named vector with the marginal and conditional R2 values
+#' @param cluster A logical whether to calculate individual pseudo R2 values by
+#'   cluster unit (if \code{TRUE}) or the marginal and conditional R2 for the
+#'   overall model (if \code{FALSE}, the default).
+#' @return a named vector with the marginal and conditional R2 values,
+#'   if \code{CLUSTER = FALSE}, otherwise, a data table with the pseudo R2
+#'   for each cluster unit.
 #' @references For estimating the marginal and conditional R-squared values,
 #'   see: Nakagawa, S. and Schielzeth, H. (2013). A general and simple method
 #'   for obtaining R2 from generalized linear mixed-effects models.
@@ -511,11 +520,14 @@ updateInstall <- function(x, repo) {
 #' @importFrom nlme VarCorr
 #' @examples
 #' # make me!
-R2LMER <- function(model, modelsum) {
+R2LMER <- function(model, modelsum, cluster = FALSE) {
+  idvars <- names(modelsum$ngrps)
+
+  if (!isTRUE(cluster)) {
   X <- model.matrix(model)
   n <- nrow(X)
   var.fe <- var(as.vector(X %*% fixef(model))) * (n - 1) / n
-  var.re <- sum(sapply(VarCorr(model)[names(modelsum$ngrps)], function(Sigma) {
+  var.re <- sum(sapply(VarCorr(model)[idvars], function(Sigma) {
     Z <- X[, rownames(Sigma), drop = FALSE]
     sum(diag(crossprod(Z %*% Sigma, Z))) / n
   }))
@@ -523,4 +535,44 @@ R2LMER <- function(model, modelsum) {
   var.total <- var.fe + var.re + var.e
   c("MarginalR2" = var.fe / var.total,
     "ConditionalR2" = (var.fe + var.re) / var.total)
+  } else {
+    tmpd <- cbind(data.table(
+      DV = model.frame(model)[, 1],
+      Predicted = fitted(model)),
+      as.data.table(
+        model.frame(model)[, idvars, drop = FALSE]))
+
+    do.call(rbind, lapply(idvars, function(n) {
+      out <- tmpd[, .(
+        IDVariable = n,
+        R2 = cor(DV, Predicted)^2), by = get(n)]
+      setnames(out, old = "get", new = "ID")
+      return(out)
+    }))
+  }
+}
+
+
+#' Calculate a rounded five number summary
+#'
+#' Numbers are the minimum, 25th percentile, median,
+#' 75th percentile, and maximum, of the non missing data.
+#' Values returned are either the significant digits or rounded values,
+#' whichever ends up resulting in the fewest total digits.
+#'
+#' @param x The data to have the summary calculated on
+#' @param round The number of digits to try rounding
+#' @param sig The number of significant digits to try
+#' @return The rounded or significant digit five number summary
+#' @importFrom stats fivenum
+#' @examples
+#' JWileymisc:::roundedfivenum(rnorm(1000))
+#' JWileymisc:::roundedfivenum(mtcars$hp)
+roundedfivenum <- function(x, round = 2, sig = 3) {
+  x <- fivenum(x[!is.na(x)])
+  if(max(nchar(signif(x, sig))) < max(nchar(round(x, round)))) {
+    signif(x, sig)
+  } else {
+    round(x, round)
+  }
 }
