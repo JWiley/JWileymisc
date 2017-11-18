@@ -328,7 +328,7 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
     g <- rep(1, nrow(dat))
   }
 
-  g <- as.factor(g)
+  g <- droplevels(as.factor(g))
 
   if (identical(length(parametric), 1L)) {
     if (isTRUE(parametric)) {
@@ -361,7 +361,7 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
   }
 
 
-  tmpout <- lapply(unique(g), function(gd) {
+  tmpout <- lapply(levels(g), function(gd) {
     d <- dat[which(g == gd)]
     tmpres <- NULL
     reslab <- ""
