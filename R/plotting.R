@@ -822,8 +822,14 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Standardiz
   d.frame <- model.frame(object)
   dv <- names(d.frame)[1]
 
+  if (isTRUE(inherits(object, c("ols", "rms", "lm")))) {
+    tmp.res <- resid(object, type = "ordinary")
+  } else {
+    tmp.res <- resid(object, type = "pearson", scaled = TRUE)
+  }
+
   d.res <- data.table(
-    StandardizedResiduals = resid(object, type = "pearson", scaled = TRUE),
+    StandardizedResiduals = tmp.res,
     Predicted = fitted(object))
 
   ## residuals versus fitted
