@@ -243,6 +243,72 @@ corplot <- function(x, coverage, pvalues,
   eval(p)
 }
 
+
+#' Creates a plot for likert scale
+#'
+#' @param x Variable to plot on the x axis (the likert scale responses or averages)
+#' @param y The variable containing an index of the different items, should be integers
+#' @param leftLab The variable with anchors for the low end of the Likert scale
+#' @param rightLab The variable with anchors for the high end of the Likert scale
+#' @param data The data to use for plotting
+#' @param xlim A vector giving the lower an upper limit for the x axis.  This should be the
+#'   possible range of the Likert scale, not the actual range.
+#' @param title A character vector giving the title for the plot
+#' @param shape A number indicating the point shape, passed to \code{\link{geom_point}}
+#' @param size  A number indicating the size of points, passed to \code{\link{geom_point}}
+#' @param colour  A character string giving the colour of points, passed to \code{\link{geom_point}}
+#' @importFrom ggplot2 ggplot aes_string geom_point scale_y_reverse dup_axis
+#' @importFrom ggplot2 theme element_line element_blank element_text coord_cartesian ggtitle
+#' @importFrom cowplot theme_cowplot
+#' @export
+#' @examples
+#'
+#' testdat <- data.frame(
+#'   Var = 1:4,
+#'   Mean = c(1.5, 3, 2.2, 4.6),
+#'   Low = c("Happy", "Peaceful", "Excited", "Content"),
+#'   High = c("Sad", "Angry", "Hopeless", "Anxious"),
+#'   stringsAsFactors = FALSE)
+#'
+#' gglikert("Mean", "Var", "Low", "High", testdat, xlim = c(1, 5),
+#'   "Example Plot of Average Affect Ratings")
+#'
+#' ## clean up
+#' rm(testdat)
+gglikert <- function(x, y, leftLab, rightLab, data, xlim, title,
+                     shape = 18, size = 7, colour = "grey50") {
+  databreaks <- data[[y]]
+  stopifnot(!anyDuplicated(databreaks))
+  stopifnot(is.character(data[[leftLab]]))
+  stopifnot(is.character(data[[rightLab]]))
+
+  if (!(is.numeric(data[[y]]) || is.integer(data[[y]]))) {
+    data[[y]] <- as.numeric(data[[y]])
+    message(sprintf("attempting to coerce %s to numeric", y))
+  }
+
+  ggplot(data, aes_string(x = x, y = y)) +
+    geom_point(shape = shape, size = size, colour = colour) +
+    scale_y_reverse("",
+      breaks = databreaks, labels = data[[leftLab]],
+      sec.axis = dup_axis(
+        breaks = databreaks,
+        labels = data[[rightLab]])) +
+    theme_cowplot() +
+    theme(
+      panel.grid.major.y = element_line(size = 1),
+      axis.line = element_blank(),
+      axis.title = element_blank(),
+      axis.ticks.y = element_blank(),
+      axis.text.y = element_text(hjust = 0),
+      axis.text.y.right = element_text(hjust = 1)) +
+    coord_cartesian(
+      xlim = xlim,
+      ylim = c(min(data[[y]]) - .5, max(data[[y]]) + .5),
+      expand = FALSE) +
+    ggtitle(title)
+}
+
 # clear R CMD CHECK notes
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDeviates", "..count.."))
 
