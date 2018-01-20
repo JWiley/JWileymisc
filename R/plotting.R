@@ -250,13 +250,13 @@ corplot <- function(x, coverage, pvalues,
 #' @param y The variable containing an index of the different items, should be integers
 #' @param leftLab The variable with anchors for the low end of the Likert scale
 #' @param rightLab The variable with anchors for the high end of the Likert scale
+#' @param colour  A character string giving the name of a variable for colouring the data, like a grouping variable. Alternately the colour of points passed to \code{\link{geom_point}}
 #' @param data The data to use for plotting
 #' @param xlim A vector giving the lower an upper limit for the x axis.  This should be the
 #'   possible range of the Likert scale, not the actual range.
 #' @param title A character vector giving the title for the plot
 #' @param shape A number indicating the point shape, passed to \code{\link{geom_point}}
 #' @param size  A number indicating the size of points, passed to \code{\link{geom_point}}
-#' @param colour  A character string giving the colour of points, passed to \code{\link{geom_point}}
 #' @importFrom ggplot2 ggplot aes_string geom_point scale_y_reverse dup_axis
 #' @importFrom ggplot2 theme element_line element_blank element_text coord_cartesian ggtitle
 #' @importFrom cowplot theme_cowplot
@@ -270,15 +270,22 @@ corplot <- function(x, coverage, pvalues,
 #'   High = c("Sad", "Angry", "Hopeless", "Anxious"),
 #'   stringsAsFactors = FALSE)
 #'
-#' gglikert("Mean", "Var", "Low", "High", testdat, xlim = c(1, 5),
-#'   "Example Plot of Average Affect Ratings")
+#' gglikert("Mean", "Var", "Low", "High", data = testdat, xlim = c(1, 5),
+#'   title = "Example Plot of Average Affect Ratings")
+#'
+#' testdat <- rbind(
+#'   cbind(testdat, Group = "Young"),
+#'   cbind(testdat, Group = "Old"))
+#' testdat$Mean[5:8] <- c(1.7, 2.6, 2.0, 4.4)
+#'
+#' gglikert("Mean", "Var", "Low", "High", colour = "Group",
+#'   data = testdat, xlim = c(1, 5),
+#'   title = "Example Plot of Average Affect Ratings")
 #'
 #' ## clean up
 #' rm(testdat)
-gglikert <- function(x, y, leftLab, rightLab, data, xlim, title,
-                     shape = 18, size = 7, colour = "grey50") {
-  databreaks <- data[[y]]
-  stopifnot(!anyDuplicated(databreaks))
+gglikert <- function(x, y, leftLab, rightLab, colour, data, xlim, title,
+                     shape = 18, size = 7) {
   stopifnot(is.character(data[[leftLab]]))
   stopifnot(is.character(data[[rightLab]]))
 
@@ -287,13 +294,25 @@ gglikert <- function(x, y, leftLab, rightLab, data, xlim, title,
     message(sprintf("attempting to coerce %s to numeric", y))
   }
 
-  ggplot(data, aes_string(x = x, y = y)) +
-    geom_point(shape = shape, size = size, colour = colour) +
-    scale_y_reverse("",
-      breaks = databreaks, labels = data[[leftLab]],
+  index <- !duplicated(data[[y]])
+  databreaks <- data[[y]][index]
+
+  if (missing(colour)) {
+    p <- ggplot(data, aes_string(x = x, y = y)) +
+      geom_point(shape = shape, size = size, colour = "grey50")
+  } else if (colour %in% names(data)) {
+    p <- ggplot(data, aes_string(x = x, y = y, colour = colour)) +
+      geom_point(shape = shape, size = size)
+  } else {
+    p <- ggplot(data, aes_string(x = x, y = y)) +
+      geom_point(shape = shape, size = size, colour = colour)
+  }
+
+  p + scale_y_reverse("",
+      breaks = databreaks, labels = data[[leftLab]][index],
       sec.axis = dup_axis(
         breaks = databreaks,
-        labels = data[[rightLab]])) +
+        labels = data[[rightLab]][index])) +
     theme_cowplot() +
     theme(
       panel.grid.major.y = element_line(size = 1),

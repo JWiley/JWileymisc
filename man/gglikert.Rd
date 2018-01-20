@@ -4,8 +4,8 @@
 \alias{gglikert}
 \title{Creates a plot for likert scale}
 \usage{
-gglikert(x, y, leftLab, rightLab, data, xlim, title, shape = 18, size = 7,
-  colour = "grey50")
+gglikert(x, y, leftLab, rightLab, colour, data, xlim, title, shape = 18,
+  size = 7)
 }
 \arguments{
 \item{x}{Variable to plot on the x axis (the likert scale responses or averages)}
@@ -15,6 +15,8 @@ gglikert(x, y, leftLab, rightLab, data, xlim, title, shape = 18, size = 7,
 \item{leftLab}{The variable with anchors for the low end of the Likert scale}
 
 \item{rightLab}{The variable with anchors for the high end of the Likert scale}
+
+\item{colour}{A character string giving the name of a variable for colouring the data, like a grouping variable. Alternately the colour of points passed to \code{\link{geom_point}}}
 
 \item{data}{The data to use for plotting}
 
@@ -26,8 +28,6 @@ possible range of the Likert scale, not the actual range.}
 \item{shape}{A number indicating the point shape, passed to \code{\link{geom_point}}}
 
 \item{size}{A number indicating the size of points, passed to \code{\link{geom_point}}}
-
-\item{colour}{A character string giving the colour of points, passed to \code{\link{geom_point}}}
 }
 \description{
 Creates a plot for likert scale
@@ -41,8 +41,17 @@ testdat <- data.frame(
   High = c("Sad", "Angry", "Hopeless", "Anxious"),
   stringsAsFactors = FALSE)
 
-gglikert("Mean", "Var", "Low", "High", testdat, xlim = c(1, 5),
-  "Example Plot of Average Affect Ratings")
+gglikert("Mean", "Var", "Low", "High", data = testdat, xlim = c(1, 5),
+  title = "Example Plot of Average Affect Ratings")
+
+testdat <- rbind(
+  cbind(testdat, Group = "Young"),
+  cbind(testdat, Group = "Old"))
+testdat$Mean[5:8] <- c(1.7, 2.6, 2.0, 4.4)
+
+gglikert("Mean", "Var", "Low", "High", colour = "Group",
+  data = testdat, xlim = c(1, 5),
+  title = "Example Plot of Average Affect Ratings")
 
 ## clean up
 rm(testdat)
