@@ -282,6 +282,11 @@ corplot <- function(x, coverage, pvalues,
 #'   data = testdat, xlim = c(1, 5),
 #'   title = "Example Plot of Average Affect Ratings")
 #'
+#' gglikert("Mean", "Var", "Low", "High", colour = "Group",
+#'   data = testdat, xlim = c(1, 5),
+#'   title = "Example Plot of Average Affect Ratings") +
+#' scale_colour_manual(values = c("Young" = "grey50", "Old" = "black"))
+#'
 #' ## clean up
 #' rm(testdat)
 gglikert <- function(x, y, leftLab, rightLab, colour, data, xlim, title,
