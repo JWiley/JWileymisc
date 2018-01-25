@@ -24,6 +24,7 @@ Imports:
     MASS,
     multcomp,
     multcompView,
+    lsmeans,
     devtools,
     graphics,
     ggthemes,

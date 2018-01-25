@@ -807,23 +807,33 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", "."))
 #' as well as which groups are different based on Tukey's HSD.
 #' Inspired by http://stackoverflow.com/questions/18771516/is-there-a-function-to-add-aov-post-hoc-testing-results-to-ggplot2-boxplot
 #'
-#' @param x X
-#' @param y Y
-#' @param d D
-#' @param ci Confidence interval, defaults to .95
-#' @param ordered Logical, defaults to \code{FALSE}.
+#' @param x A categorical grouping variable name.
+#' @param y A continuous outcome variable name.
+#' @param d A dataset
+#' @param idvar An optional ID variable for multilevel data
 #' @param \ldots Additional arguments passed on.
 #' @return A ggplot graph object.
-#' @importFrom stats TukeyHSD qt
+#' @importFrom lme4 lmer
+#' @importFrom lsmeans lsmeans
 #' @importFrom multcompView multcompLetters
 #' @keywords plot
 #' @export
 #' @examples
-#' TukeyHSDgg("cyl", "mpg", mtcars)
-#' TukeyHSDgg("Species", "Sepal.Length", iris, ci = .9)
 #'
-TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
-  d <- droplevels(na.omit(as.data.frame(d)[, c(x, y)]))
+#' ## examples using it with single level data
+#' ## differences based on an ANOVA and follow up contrasts
+#' TukeyHSDgg("cyl", "mpg", mtcars)
+#' TukeyHSDgg("Species", "Sepal.Length", iris)
+#'
+#' ## example based on multilevel data
+#' ## differences based on model fit with lmer and follow up contrasts
+#' TukeyHSDgg("treatment", "decrease", OrchardSprays, idvar = "colpos")
+TukeyHSDgg <- function(x, y, d, ci = .95, idvar, ...) {
+  if (missing(idvar)) {
+    d <- droplevels(na.omit(as.data.frame(d)[, c(x, y)]))
+  } else {
+    d <- droplevels(na.omit(as.data.frame(d)[, c(x, y, idvar)]))
+  }
   if (!is.factor(d[[x]])) {
     warning("x was not a factor, attempting to coerce")
     d[[x]] <- factor(d[[x]])
@@ -833,47 +843,31 @@ TukeyHSDgg <- function(x, y, d, ci = .95, ordered = FALSE, ...) {
     d[[y]] <- as.numeric(as.character(d[[y]]))
   }
 
-  mCI <- function(x, conf.int = .95) {
-    n <- length(x <- na.omit(x))
-    m <- mean(x)
-
-    if (n < 2) {
-      data.frame(y = m, ymin = NA_real_, ymax = NA_real_)
-    } else {
-      delta <- (sd(x) / sqrt(n)) * qt((1 + conf.int)/2, n - 1)
-      data.frame(y = m, ymin = m - delta, ymax = m + delta)
-    }
+  if (missing(idvar)) {
+    fit <- aov(as.formula(sprintf("%s ~ %s", y, x)), data = d)
+  } else {
+    fit <- lmer(as.formula(sprintf("%s ~ %s + (1 | %s)", y, x, idvar)), data = d)
   }
-
-  fit <- aov(as.formula(sprintf("%s ~ %s", y, x)), data = d)
-  tHSD <- TukeyHSD(fit, ordered = ordered, conf.level = ci)
+  tHSD <- lsmeans(fit, specs = as.formula(sprintf("pairwise ~ %s", x)))
+  tHSDs <- summary(tHSD)
 
   ## Extract labels and factor levels from Tukey post-hoc
-  Tukey.levels.names <- rownames(tHSD[[x]][, 4, drop = FALSE])
-  Tukey.levels <- tHSD[[x]][, 4]
-  names(Tukey.levels) <- Tukey.levels.names
+  Tukey.levels.names <- tHSDs[["contrasts"]][, "contrast"]
+  Tukey.levels <- tHSDs[["contrasts"]][, "p.value"]
+  names(Tukey.levels) <- gsub("\\s", "", Tukey.levels.names)
 
   Tukey.labels <- multcompLetters(Tukey.levels)['Letters']
   plot.labels <- names(Tukey.labels[['Letters']])
 
-  ## Get the top of the CIs
-  ## upper quantile and label placement
-  y.df <- as.data.table(d)[, .(mCI(get(y), conf.int = ci)$ymax), keyby = get(x)]
-  setnames(y.df, names(y.df), c(x, "ymax"))
+  plotdf <- merge(
+    tHSDs$lsmeans,
+    data.frame(Labels = plot.labels, Letters = Tukey.labels),
+    by.x = x, by.y = "Labels")
 
-  ## Create a data frame out of the factor levels and Tukey's homogenous group letters
-  plot.levels <- data.frame(plot.labels, labels = Tukey.labels[['Letters']],
-                            stringsAsFactors = FALSE)
-
-  ## Merge it with the labels
-  labels.df <- merge(plot.levels, y.df, by.x = 'plot.labels', by.y = x, sort = FALSE)
-
-  p <- ggplot(d, aes_string(x=x, y=y)) +
-    stat_summary(fun.data = function(d) mCI(d, conf.int = ci), ...) +
-    geom_text(data = labels.df,
-              aes(x = plot.labels,
-                  y = ymax + (max(ymax)*.05),
-                  label = labels))
+  p <- ggplot(plotdf, aes_string(x=x, y="lsmean", ymin = "lower.CL", ymax = "upper.CL")) +
+    geom_pointrange() + geom_point() +
+    geom_text(aes(y = upper.CL + (max(upper.CL) * .05),
+                  label = Letters))
 
   return(p)
 }

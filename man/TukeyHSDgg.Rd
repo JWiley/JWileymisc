@@ -4,18 +4,16 @@
 \alias{TukeyHSDgg}
 \title{Tukey HSD Plot}
 \usage{
-TukeyHSDgg(x, y, d, ci = 0.95, ordered = FALSE, ...)
+TukeyHSDgg(x, y, d, ci = 0.95, idvar, ...)
 }
 \arguments{
-\item{x}{X}
+\item{x}{A categorical grouping variable name.}
 
-\item{y}{Y}
+\item{y}{A continuous outcome variable name.}
 
-\item{d}{D}
+\item{d}{A dataset}
 
-\item{ci}{Confidence interval, defaults to .95}
-
-\item{ordered}{Logical, defaults to \code{FALSE}.}
+\item{idvar}{An optional ID variable for multilevel data}
 
 \item{\ldots}{Additional arguments passed on.}
 }
@@ -28,8 +26,14 @@ as well as which groups are different based on Tukey's HSD.
 Inspired by http://stackoverflow.com/questions/18771516/is-there-a-function-to-add-aov-post-hoc-testing-results-to-ggplot2-boxplot
 }
 \examples{
-TukeyHSDgg("cyl", "mpg", mtcars)
-TukeyHSDgg("Species", "Sepal.Length", iris, ci = .9)
 
+## examples using it with single level data
+## differences based on an ANOVA and follow up contrasts
+TukeyHSDgg("cyl", "mpg", mtcars)
+TukeyHSDgg("Species", "Sepal.Length", iris)
+
+## example based on multilevel data
+## differences based on model fit with lmer and follow up contrasts
+TukeyHSDgg("treatment", "decrease", OrchardSprays, idvar = "colpos")
 }
 \keyword{plot}
