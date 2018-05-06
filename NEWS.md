@@ -54,6 +54,12 @@
    
 * `formatHtest()` gains support for pearson, kendal, and spearman
 	correlations from the `cor.test()` function
+	
+* `logicals` A series of support functions for findings values in 
+    a particular range, such as `%gele%` for values greater than or 
+    equal to the min and less than or equal to the max as well as 
+	to automatically subset the data when prefixed with an s, 
+	`%sgele%`.
 
 ## Bug Fixes
 
