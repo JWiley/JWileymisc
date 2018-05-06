@@ -580,3 +580,155 @@ roundedfivenum <- function(x, round = 2, sig = 3) {
     round(x, round)
   }
 }
+
+
+#' @name logicals
+#' @rdname logicals
+#' 
+#' @title Several logical range comparison helpers
+#' 
+#' @param e1 A number of vector to be evaluated
+#' @param e2 A vector of one or two numbers used to denote the 
+#'   limits for logical comparison.
+#'   
+#' @return A logical vector of the same length as \code{e1} or for 
+#'  those functions prefaced with \dQuote{s} the subsetted vector.
+NULL
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %gele% c(2, 4)
+#' 1:5 %gele% c(4, 2) # order does not matter uses min / max
+`%gele%` <- function(e1, e2) {
+  stopifnot(identical(length(e2), 2L))
+  stopifnot(!anyNA(e2))
+ 
+  e1 >= min(e2) & e1 <= max(e2)
+}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %gel% c(2, 4)
+#' 1:5 %gel% c(4, 2) # order does not matter uses min / max
+`%gel%` <- function(e1, e2) {
+  stopifnot(identical(length(e2), 2L))
+  stopifnot(!anyNA(e2))
+  
+  e1 >= min(e2) & e1 < max(e2)
+}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %gle% c(2, 4)
+#' 1:5 %gle% c(4, 2) # order does not matter uses min / max
+`%gle%` <- function(e1, e2) {
+  stopifnot(identical(length(e2), 2L))
+  stopifnot(!anyNA(e2))
+  
+  e1 > min(e2) & e1 <= max(e2)
+}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %gl% c(2, 4)
+#' 1:5 %gl% c(4, 2) # order does not matter uses min / max
+`%gl%` <- function(e1, e2) {
+  stopifnot(identical(length(e2), 2L))
+  stopifnot(!anyNA(e2))
+  
+  e1 > min(e2) & e1 < max(e2)
+}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %sgele% c(2, 4)
+#' 1:5 %sgele% c(4, 2) # order does not matter uses min / max
+`%sgele%` <- function(e1, e2) {
+  stopifnot(identical(length(e2), 2L))
+  stopifnot(!anyNA(e2))
+  
+  e1[e1 >= min(e2) & e1 <= max(e2)]
+}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %sgel% c(2, 4)
+#' 1:5 %sgel% c(4, 2) # order does not matter uses min / max
+`%sgel%` <- function(e1, e2) {
+  stopifnot(identical(length(e2), 2L))
+  stopifnot(!anyNA(e2))
+  
+  e1[e1 >= min(e2) & e1 < max(e2)]
+}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %sgle% c(2, 4)
+#' 1:5 %sgle% c(4, 2) # order does not matter uses min / max
+`%sgle%` <- function(e1, e2) {
+  stopifnot(identical(length(e2), 2L))
+  stopifnot(!anyNA(e2))
+  
+  e1[e1 > min(e2) & e1 <= max(e2)]
+}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %sgl% c(2, 4)
+#' 1:5 %sgl% c(4, 2) # order does not matter uses min / max
+`%sgl%` <- function(e1, e2) {
+  stopifnot(identical(length(e2), 2L))
+  stopifnot(!anyNA(e2))
+  
+  e1[e1 > min(e2) & e1 < max(e2)]
+}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %sge% 2
+#' 1:5 %sge% 4
+`%sge%` <- function(e1, e2) {e1[e1 >= e2]}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %sg% 2
+#' 1:5 %sg% 4
+`%sg%` <- function(e1, e2) {e1[e1 > e2]}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %sle% 2
+#' 1:5 %sle% 4
+`%sle%` <- function(e1, e2) {e1[e1 <= e2]}
+
+#' @rdname logicals
+#' @export 
+#' @examples 
+#' 
+#' 1:5 %sl% 2
+#' 1:5 %sl% 4
+`%sl%` <- function(e1, e2) {e1[e1 < e2]}
+
+
