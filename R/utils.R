@@ -557,176 +557,237 @@ R2LMER <- function(model, modelsum, cluster = FALSE) {
 }
 
 
-#' Calculate a rounded five number summary
-#'
-#' Numbers are the minimum, 25th percentile, median,
-#' 75th percentile, and maximum, of the non missing data.
-#' Values returned are either the significant digits or rounded values,
-#' whichever ends up resulting in the fewest total digits.
-#'
-#' @param x The data to have the summary calculated on
-#' @param round The number of digits to try rounding
-#' @param sig The number of significant digits to try
-#' @return The rounded or significant digit five number summary
-#' @importFrom stats fivenum
-#' @examples
-#' JWileymisc:::roundedfivenum(rnorm(1000))
-#' JWileymisc:::roundedfivenum(mtcars$hp)
-roundedfivenum <- function(x, round = 2, sig = 3) {
-  x <- fivenum(x[!is.na(x)])
-  if(max(nchar(signif(x, sig))) < max(nchar(round(x, round)))) {
-    signif(x, sig)
-  } else {
-    round(x, round)
-  }
-}
 
+
+
+
+
+
+#' Compare two lmer models
+#'
+#' This function provides fit statistics and effect sizes for
+#' model comparisons.  The models must be nested.
+#'
+#' @param m1 A model estimated by \code{lmer}.
+#' @param m2 A model estimated by \code{lmer}.
+#' @return a data table with the fit indices for each model
+#' and comparing models to each other.
+#' @references For estimating the marginal and conditional R-squared values,
+#'   see: Nakagawa, S. and Schielzeth, H. (2013). A general and simple method
+#'   for obtaining R2 from generalized linear mixed-effects models.
+#'   Methods in Ecology and Evolution, 4(2), 133-142. as well as:
+#'   Johnson, P. C. (2014). Extension of Nakagawa & Schielzeth's R2GLMM to
+#'   random slopes models. Methods in Ecology and Evolution, 5(9), 944-946.
+#' @keywords utils
+#' @export
+#' @importFrom stats AIC BIC logLik
+#' @examples
+#' m.a <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+#' m.b <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+#' compareLMER(m.a, m.b)
+#'
+#' rm(m.a, m.b)
+compareLMER <- function(m1, m2) {
+  m1sum <- summary(m1)
+  m2sum <- summary(m2)
+  df1 <- attr(m1sum$logLik, "df")
+  df2 <- attr(m2sum$logLik, "df")
+
+  if (identical(df1, df2)) {
+    stop("One model must be nested within the other")
+  } else if (df1 < df2) {
+    ## do nothing
+  } else if (df1 > df2) {
+    df3 <- df1
+    m3 <- m1
+    m3sum <- m1sum
+
+    m1 <- m2
+    m1sum <- m2sum
+    df1 <- df2
+
+    m2 <- m3
+    df2 <- df3
+    m2sum <- m3sum
+
+    rm(df3, m3, m3sum)
+  }
+
+  test <- anova(m1, m2, test = "LRT")
+  R21 <- R2LMER(m1, m1sum)
+  R22 <- R2LMER(m2, m2sum)
+
+  data.table(
+    Model = c("Model 1", "Model 2", "Difference"),
+    AIC = c(AIC(m1), AIC(m2), AIC(m2) - AIC(m1)),
+    BIC = c(BIC(m1), BIC(m2), BIC(m2) - BIC(m1)),
+    DF = c(df1, df2, df2 - df1),
+    LL = c(logLik(m1), logLik(m2), logLik(m2) - logLik(m1)),
+    MarginalR2 = c(
+      R21[["MarginalR2"]], R22[["MarginalR2"]],
+      R22[["MarginalR2"]] - R21[["MarginalR2"]]),
+    MarginalF2 = c(
+      R21[["MarginalR2"]] / (1 - R21[["MarginalR2"]]),
+      R22[["MarginalR2"]] / (1 - R22[["MarginalR2"]]),
+      (R22[["MarginalR2"]] - R21[["MarginalR2"]]) /
+      (1 - R22[["MarginalR2"]])),
+    ConditionalR2 = c(
+      R21[["ConditionalR2"]], R22[["ConditionalR2"]],
+      R22[["ConditionalR2"]] - R21[["ConditionalR2"]]),
+    ConditionalF2 = c(
+      R21[["ConditionalR2"]] / (1 - R21[["ConditionalR2"]]),
+      R22[["ConditionalR2"]] / (1 - R22[["ConditionalR2"]]),
+      (R22[["ConditionalR2"]] - R21[["ConditionalR2"]]) /
+      (1 - R22[["ConditionalR2"]])),
+    Chi2 = c(NA_real_, NA_real_, test[, "Chisq"][2]),
+    P = c(NA_real_, NA_real_, test[, "Pr(>Chisq)"][2]))
+}
 
 #' @name logicals
 #' @rdname logicals
-#' 
+#'
 #' @title Several logical range comparison helpers
-#' 
+#'
 #' @param e1 A number of vector to be evaluated
-#' @param e2 A vector of one or two numbers used to denote the 
+#' @param e2 A vector of one or two numbers used to denote the
 #'   limits for logical comparison.
-#'   
-#' @return A logical vector of the same length as \code{e1} or for 
+#'
+#' @return A logical vector of the same length as \code{e1} or for
 #'  those functions prefaced with \dQuote{s} the subsetted vector.
 NULL
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %gele% c(2, 4)
 #' 1:5 %gele% c(4, 2) # order does not matter uses min / max
 `%gele%` <- function(e1, e2) {
   stopifnot(identical(length(e2), 2L))
   stopifnot(!anyNA(e2))
- 
+
   e1 >= min(e2) & e1 <= max(e2)
 }
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %gel% c(2, 4)
 #' 1:5 %gel% c(4, 2) # order does not matter uses min / max
 `%gel%` <- function(e1, e2) {
   stopifnot(identical(length(e2), 2L))
   stopifnot(!anyNA(e2))
-  
+
   e1 >= min(e2) & e1 < max(e2)
 }
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %gle% c(2, 4)
 #' 1:5 %gle% c(4, 2) # order does not matter uses min / max
 `%gle%` <- function(e1, e2) {
   stopifnot(identical(length(e2), 2L))
   stopifnot(!anyNA(e2))
-  
+
   e1 > min(e2) & e1 <= max(e2)
 }
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %gl% c(2, 4)
 #' 1:5 %gl% c(4, 2) # order does not matter uses min / max
 `%gl%` <- function(e1, e2) {
   stopifnot(identical(length(e2), 2L))
   stopifnot(!anyNA(e2))
-  
+
   e1 > min(e2) & e1 < max(e2)
 }
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %sgele% c(2, 4)
 #' 1:5 %sgele% c(4, 2) # order does not matter uses min / max
 `%sgele%` <- function(e1, e2) {
   stopifnot(identical(length(e2), 2L))
   stopifnot(!anyNA(e2))
-  
+
   e1[e1 >= min(e2) & e1 <= max(e2)]
 }
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %sgel% c(2, 4)
 #' 1:5 %sgel% c(4, 2) # order does not matter uses min / max
 `%sgel%` <- function(e1, e2) {
   stopifnot(identical(length(e2), 2L))
   stopifnot(!anyNA(e2))
-  
+
   e1[e1 >= min(e2) & e1 < max(e2)]
 }
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %sgle% c(2, 4)
 #' 1:5 %sgle% c(4, 2) # order does not matter uses min / max
 `%sgle%` <- function(e1, e2) {
   stopifnot(identical(length(e2), 2L))
   stopifnot(!anyNA(e2))
-  
+
   e1[e1 > min(e2) & e1 <= max(e2)]
 }
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %sgl% c(2, 4)
 #' 1:5 %sgl% c(4, 2) # order does not matter uses min / max
 `%sgl%` <- function(e1, e2) {
   stopifnot(identical(length(e2), 2L))
   stopifnot(!anyNA(e2))
-  
+
   e1[e1 > min(e2) & e1 < max(e2)]
 }
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %sge% 2
 #' 1:5 %sge% 4
 `%sge%` <- function(e1, e2) {e1[e1 >= e2]}
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %sg% 2
 #' 1:5 %sg% 4
 `%sg%` <- function(e1, e2) {e1[e1 > e2]}
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %sle% 2
 #' 1:5 %sle% 4
 `%sle%` <- function(e1, e2) {e1[e1 <= e2]}
 
 #' @rdname logicals
-#' @export 
-#' @examples 
-#' 
+#' @export
+#' @examples
+#'
 #' 1:5 %sl% 2
 #' 1:5 %sl% 4
 `%sl%` <- function(e1, e2) {e1[e1 < e2]}

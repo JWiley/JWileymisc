@@ -849,6 +849,31 @@ meanDeviations <- function(x, na.rm = TRUE) {
 }
 
 
+#' Calculate a rounded five number summary
+#'
+#' Numbers are the minimum, 25th percentile, median,
+#' 75th percentile, and maximum, of the non missing data.
+#' Values returned are either the significant digits or rounded values,
+#' whichever ends up resulting in the fewest total digits.
+#'
+#' @param x The data to have the summary calculated on
+#' @param round The number of digits to try rounding
+#' @param sig The number of significant digits to try
+#' @return The rounded or significant digit five number summary
+#' @importFrom stats fivenum
+#' @examples
+#' JWileymisc:::roundedfivenum(rnorm(1000))
+#' JWileymisc:::roundedfivenum(mtcars$hp)
+roundedfivenum <- function(x, round = 2, sig = 3) {
+  x <- fivenum(x[!is.na(x)])
+  if(max(nchar(signif(x, sig))) < max(nchar(round(x, round)))) {
+    signif(x, sig)
+  } else {
+    round(x, round)
+  }
+}
+
+
 #' Estimate the effective sample size from longitudinal data
 #'
 #' This function estimates the (approximate) effective sample

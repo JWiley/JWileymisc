@@ -93,10 +93,13 @@ findSigRegions <- function(object, l1, l2, name.vary, lower, upper, alpha = .05,
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("Pvalue", "xz", "yz", "yhat", "yllz",
-                                                        "lower", "yulz", "upper", "reglab", "Contrast",
-                                                        "Lower", "Upper", "x", "ContrastAngle", "ContrastAngleZ", "Yhat"))
-
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c(
+           "Pvalue", "xz", "yz", "yhat", "yllz",
+           "lower", "yulz", "upper", "reglab", "Contrast",
+           "Lower", "Upper", "x", "ContrastAngle",
+           "ContrastAngleZ", "Yhat"))
+}
 
 ##' Function to find significant regions from an interaction
 ##'
@@ -675,4 +678,8 @@ ezMULTINOM <- function(formula, data, OR = TRUE, digits = 2L, pdigits = 3L) {
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("Comp", "Num", "Labels", "Ref", "Term", "B", "P", "LL", "UL", "SE"))
+if(getRversion() >= "2.15.1") {
+  utils::globalVariables(c(
+           "Comp", "Num", "Labels", "Ref", "Term",
+           "B", "P", "LL", "UL", "SE"))
+}

@@ -2,7 +2,7 @@ Package: JWileymisc
 Type: Package
 Title: Miscellaneous Utilities and Functions
 Version: 0.3.0
-Date: 2018-05-06
+Date: 2018-06-15
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 URL: https://github.com/JWiley/JWileymisc

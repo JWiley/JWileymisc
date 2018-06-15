@@ -43,11 +43,11 @@ e1 \%sl\% e2
 \arguments{
 \item{e1}{A number of vector to be evaluated}
 
-\item{e2}{A vector of one or two numbers used to denote the 
+\item{e2}{A vector of one or two numbers used to denote the
 limits for logical comparison.}
 }
 \value{
-A logical vector of the same length as \code{e1} or for 
+A logical vector of the same length as \code{e1} or for
  those functions prefaced with \dQuote{s} the subsetted vector.
 }
 \examples{
