@@ -532,7 +532,9 @@ R2LMER <- function(model, modelsum, cluster = FALSE) {
   n <- nrow(X)
   var.fe <- var(as.vector(X %*% fixef(model))) * (n - 1) / n
   var.re <- sum(sapply(VarCorr(model)[idvars], function(Sigma) {
-    Z <- X[, rownames(Sigma), drop = FALSE]
+    xvar <- rownames(Sigma)
+    xvar <- sapply(xvar, function(v) colnames(X)[colnames(X) %flipIn% v])
+    Z <- X[, xvar, drop = FALSE]
     sum(diag(crossprod(Z %*% Sigma, Z))) / n
   }))
   var.e <- modelsum$sigma^2
@@ -555,13 +557,6 @@ R2LMER <- function(model, modelsum, cluster = FALSE) {
     }))
   }
 }
-
-
-
-
-
-
-
 
 #' Compare two lmer models
 #'
@@ -622,7 +617,7 @@ compareLMER <- function(m1, m2) {
     AIC = c(AIC(m1), AIC(m2), AIC(m2) - AIC(m1)),
     BIC = c(BIC(m1), BIC(m2), BIC(m2) - BIC(m1)),
     DF = c(df1, df2, df2 - df1),
-    LL = c(logLik(m1), logLik(m2), logLik(m2) - logLik(m1)),
+    logLik = c(logLik(m1), logLik(m2), logLik(m2) - logLik(m1)),
     MarginalR2 = c(
       R21[["MarginalR2"]], R22[["MarginalR2"]],
       R22[["MarginalR2"]] - R21[["MarginalR2"]]),
@@ -642,6 +637,294 @@ compareLMER <- function(m1, m2) {
     Chi2 = c(NA_real_, NA_real_, test[, "Chisq"][2]),
     P = c(NA_real_, NA_real_, test[, "Pr(>Chisq)"][2]))
 }
+
+
+#' drop1 for both fixed and random effects
+#'
+#' This function extends the current \code{drop1} method for
+#' \code{merMod} class objects from the lme4 package. Where
+#' the default method to be able to drop both fixed and random
+#' effects at once.
+#'
+#' At the moment, the function is aimed to \code{lmer} models
+#' and has very few features for \code{glmer} or \code{nlmer}
+#' models. The primary motivation was to provide a way to
+#' provide an overall test of whether a variable
+#' \dQuote{matters}.  In multilevel data, a variable may be
+#' included in both the fixed and random effects. To provide
+#' an overall test of whether it matters requires jointly testing
+#' the fixed and random effects. This also is needed to provide
+#' an overall effect size.
+#'
+#' The function works by generating a formula with one specific
+#' variable or \dQuote{term} removed at all levels. A model is then
+#' fit on this reduced formula and compared to the full model passed
+#' in. This is a complex operation for mixed effects models for several
+#' reasons. Firstly, \code{R} has no default mechanism for dropping
+#' terms from both the fixed and random portions. Secondly,
+#' mixed effects models do not accomodate all types of models. For example,
+#' if a model includes only a random slope with no random intercept,
+#' if the random slope was dropped, there would be no more random effects,
+#' and at that point, \code{lmer} or \code{glmer} will not run the model.
+#' It is theoretically possible to instead fit the model using
+#' \code{lm} or \code{glm} but this becomes more complex for certain
+#' model comparisons and calculations and is not currently implemented.
+#' Marginal and conditional R2 values are calculated for each term,
+#' and these are used also to calculate something akin to an
+#' f-squared effect size.
+#'
+#' This is a new function and it is important to carefully evaluate
+#' the results and check that they are accurate and that they are
+#' sensible. Check accuracy by viewing the model formulae for each
+#' reduced model and checking that those are indeed accurate.
+#' In terms of checking whether a result is sensible or not,
+#' there is a large literature on the difficulty interpretting
+#' main effect tests in the presence of interactions. As it is
+#' challenging to detect all interactions, especially ones that are
+#' made outside of \code{R} formulae, all terms are tested. However,
+#' it likely does not make sense to report results from dropping a
+#' main effect but keeping the interaction term, so present
+#' and interpret these with caution.
+#'
+#' @param obj A \code{merMod} class object, the fitted result of
+#'   \code{lmer}.
+#' @param method A character vector indicating the types of confidence
+#'   intervals to calculate. One of \dQuote{Wald}, \dQuote{profile}, or
+#'   \dQuote{boot}.
+#' @param \ldots Additional arguments passed to \code{confint}
+#' @export
+#' @examples
+#'
+#' \dontrun{
+#' data(sleepstudy)
+#' m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject),
+#'   data = sleepstudy)
+#' m2 <- lme4::lmer(Reaction ~ Days + I(Days^2) + (1 + Days | Subject),
+#'   data = sleepstudy)
+#' testm1 <- detailedTests(m1, method = "profile")
+#' testm2 <- detailedTests(m2, method = "profile")
+#' testm2b <- detailedTests(m2, method = "boot", nsim = 100)
+#' }
+detailedTests <- function(obj, method = c("Wald", "profile", "boot"), ...) {
+  if (isGLMM(obj) || isNLMM(obj)) {
+    stop("GLMMs and NLMMs are not currently supported")
+  }
+  if (!isLMM(obj)) {
+    stop("Only LMMs fit with lmer() are currently supported")
+  }
+  method <- match.arg(method)
+
+  cis <- confint(obj, method = method, oldNames = FALSE, ...)
+  cis2 <- data.table(
+    Term = rownames(cis),
+    LL = cis[,1],
+    UL = cis[,2])
+
+  res <- as.data.table(as.data.frame(VarCorr(obj)))
+  res[, Term := ifelse(grp == "Residual",
+                       "sigma",
+                ifelse(
+                  is.na(var2),
+                  sprintf("sd_%s|%s", var1, grp),
+                  sprintf("cor_%s.%s|%s", var2, var1, grp)))]
+  res <- res[, .(Term = Term, Est = sdcor)]
+
+  fes <- data.table(
+    Term = names(fixef(obj)),
+    Est = as.numeric(fixef(obj)))
+
+  all <- merge(
+    rbind(
+      cbind(res, Type = "RE"),
+      cbind(fes, Type = "FE")),
+    cis2,
+    by = "Term", all = TRUE)
+
+  out.res <- all[Type == "RE"]
+  out.fes <- all[Type == "FE"]
+
+  objsum <- summary(obj)
+
+  if ("Pr(>|t|)" %in% colnames(objsum$coefficients)) {
+    fe.p <- data.table(
+      Term = rownames(objsum$coefficients),
+      Pval = objsum$coefficients[, "Pr(>|t|)"])
+  } else {
+    fe.p <- data.table(
+      Term = rownames(objsum$coefficients),
+      Pval = (1 - pnorm(abs(objsum$coefficients[, "t value"]))) * 2)
+  }
+
+  out.fes <- merge(out.fes, fe.p, by = "Term", all = TRUE)
+
+  ## check if linear mixed model is fit with REML
+  ## and if so refit it with ML
+  if (isLMM(obj) && isREML(obj)) {
+    message(paste0(
+      "Parameters and CIs are based on REML, ",
+      "but detailedTests requires ML not REML fit for comparisons, ",
+      "and these are used in effect sizes. Refitting."))
+  }
+  obj <- update(obj, data = model.frame(obj), REML = FALSE)
+
+  ngrps <- ngrps(obj)
+  out.misc <- data.table(
+    Type = ifelse(isREML(obj), "REML", "ML"),
+    AIC = AIC(obj),
+    BIC = BIC(obj),
+    logLik = logLik(obj),
+    DF = attr(logLik(obj), "df"),
+    as.data.table(t(R2LMER(obj, summary(obj)))),
+    N_Obs = nobs(obj),
+    as.data.table(t(ngrps)))
+
+  setnames(out.misc,
+           old = names(ngrps),
+           new = paste0("N_", names(ngrps)))
+
+
+  ## get formula
+  f <- formula(obj)
+
+  ## fixed effects
+  fe <- lme4:::nobars(f)
+  fe.terms <- terms(fe)
+  fe.labs <- labels(fe.terms)
+  fe.intercept <- if(identical(attr(fe.terms, "intercept"), 1L)) "1" else "0"
+
+  ## random effects
+  re <- lapply(lme4:::findbars(f), deparse)
+
+  re.group <- lapply(re, function(v) {
+    gsub("(^.*)\\|(.*$)", "\\2", v)
+  })
+
+  re.terms <- lapply(re, function(v) {
+    v <- gsub("(^.*)(\\|.*$)", "\\1", v)
+    v <- sprintf("dv ~ %s", v)
+    terms(as.formula(v))
+  })
+  re.labs <- lapply(re.terms, labels)
+  re.intercept <- lapply(re.terms, function(x) {
+    if(identical(attr(x, "intercept"), 1L)) "1" else "0"
+  })
+
+  ## all terms from fixed and random effects
+  all.labs <- unique(c(fe.labs, unlist(re.labs)))
+  tmp <- vector("character")
+  for (i in seq_along(all.labs)) {
+    tmp <- c(
+      tmp,
+      all.labs[match(TRUE, all.labs %flipIn% all.labs[i])])
+  }
+  all.labs <- unique(tmp)
+
+  labs.levels <- data.table(
+    Terms = all.labs,
+    FE = as.integer(vapply(all.labs,
+      function(v) any(unlist(fe.labs) %flipIn% v),
+      FUN.VALUE = NA)),
+    RE = as.integer(vapply(all.labs,
+      function(v) any(unlist(re.labs) %flipIn% v),
+      FUN.VALUE = NA)))
+  labs.levels[, Type := paste0(FE, RE)]
+  labs.levels <- labs.levels[,
+    .(Type = if(Type == "11") c("11", "01") else Type),
+    by = Terms]
+  labs.levels[, FE := substr(Type, 1, 1) == "1"]
+  labs.levels[, RE := substr(Type, 2, 2) == "1"]
+
+  ## formula from reduced models, dropping one term at a time
+  out.f <- unlist(lapply(seq_along(labs.levels$Terms), function(i) {
+    use.fe.labs <- fe.labs[!((fe.labs %flipIn% labs.levels$Terms[i]) & labs.levels$FE[i])]
+    use.re.labs <- lapply(re.labs, function(x) {
+      if (length(x)) {
+        x[!((x %flipIn%  labs.levels$Terms[i]) & labs.levels$RE[i])]
+      } else {
+        x
+      }
+    })
+
+    fe.built <- sprintf("%s ~ %s%s%s",
+                        as.character(f)[2],
+                        fe.intercept,
+                        if (length(use.fe.labs)) " + " else "",
+                        paste(use.fe.labs, collapse = " + "))
+
+    re.built <- lapply(seq_along(re), function(i) {
+      if (re.intercept[[i]] == "0" && !length(use.re.labs[[i]])) {
+        vector("character", 0L)
+      } else {
+        sprintf("(%s%s%s |%s)",
+                re.intercept[[i]],
+                if (length(use.re.labs[[i]])) " + " else "",
+                paste(use.re.labs[[i]], collapse = " + "),
+                re.group[[i]])
+      }
+    })
+
+    re.built <- paste(unlist(re.built), collapse = " + ")
+
+    if (nzchar(re.built)) {
+      all.built <- paste(c(fe.built, re.built), collapse = " + ")
+    } else {
+      all.built <- NA_character_
+    }
+    return(all.built)
+  }))
+
+  labs.levels[, Formula := out.f]
+
+  testm <- lapply(out.f, function(f) {
+    if (!is.na(f)) {
+      if (isLMM(obj)) {
+        lmer(as.formula(f), data = model.frame(obj), REML = FALSE)
+      } else if (isGLMM(obj)) {
+        glmer(as.formula(f), data = model.frame(obj),
+              family = family(obj))
+      }
+    } else {
+      NA
+    }
+  })
+
+  out.tests <- do.call(rbind, lapply(seq_along(testm), function(i) {
+    objreduced <- testm[[i]]
+    v <- labs.levels$Terms[[i]]
+
+    if (!isTRUE(inherits(objreduced, "merMod"))) {
+      tmp <- data.table(
+        Variable = v,
+        AIC = NA_real_,
+        BIC = NA_real_,
+        DF = NA_integer_,
+        logLik = NA_real_,
+        MarginalR2 = NA_real_,
+        MarginalF2 = NA_real_,
+        ConditionalR2 = NA_real_,
+        ConditionalF2 = NA_real_,
+        Chi2 = NA_real_,
+        P = NA_real_)
+    } else {
+      tmp <- compareLMER(obj, objreduced)[3]
+      setnames(tmp, old = "Model", new = "Variable")
+      tmp$Variable <- v
+    }
+    return(tmp)
+  }))
+
+  out.tests <- cbind(out.tests, labs.levels[, -(1:2)])
+  out.tests[, Type := factor(paste0(FE, RE),
+                             levels = c("FALSETRUE", "TRUEFALSE", "TRUETRUE"),
+                             labels = c("Random", "Fixed", "Fixed + Random"))]
+
+  list(
+    FixedEffects = out.fes,
+    RandomEffects = out.res,
+    EffectSizes = out.tests,
+    OverallModel = out.misc)
+}
+
 
 #' @name logicals
 #' @rdname logicals
@@ -756,7 +1039,6 @@ NULL
 `%sgl%` <- function(e1, e2) {
   stopifnot(identical(length(e2), 2L))
   stopifnot(!anyNA(e2))
-
   e1[e1 > min(e2) & e1 < max(e2)]
 }
 
@@ -792,4 +1074,41 @@ NULL
 #' 1:5 %sl% 4
 `%sl%` <- function(e1, e2) {e1[e1 < e2]}
 
+#' @rdname logicals
+#' @export
+#' @examples
+#'
+#' 1:5 %nin% c(2, 99)
+#' c("jack", "jill", "john", "jane") %nin% c("jill", "jane", "bill")
+`%nin%` <- function(e1, e2) {!(e1 %in% e2)}
 
+#' @rdname logicals
+#' @export
+#' @examples
+#'
+#' 1:5 %sin% c(2, 99)
+#' c("jack", "jill", "john", "jane") %sin% c("jill", "jane", "bill")
+`%sin%` <- function(e1, e2) {e1[e1 %in% e2]}
+
+#' @rdname logicals
+#' @export
+#' @examples
+#'
+#' 1:5 %snin% c(2, 99)
+#' c("jack", "jill", "john", "jane") %snin% c("jill", "jane", "bill")
+`%snin%` <- function(e1, e2) {e1[e1 %nin% e2]}
+
+#' @rdname logicals
+#' @export
+## compare two strings where flips around
+## a colon do not matter, used for interactions
+`%flipIn%` <- function(e1, e2) {
+  .flipMatch <- function(e1, e2) {
+    e1 <- unlist(strsplit(e1, ":"))
+    e2 <- unlist(strsplit(e2, ":"))
+    all(e1 %in% e2) && all(e2 %in% e1)
+  }
+  sapply(e1, function(v) {
+    .flipMatch(v, e2)
+  })
+}

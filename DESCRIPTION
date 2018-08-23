@@ -2,7 +2,7 @@ Package: JWileymisc
 Type: Package
 Title: Miscellaneous Utilities and Functions
 Version: 0.3.0
-Date: 2018-06-15
+Date: 2018-08-23
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 URL: https://github.com/JWiley/JWileymisc
@@ -40,7 +40,8 @@ Imports:
     VGAM,
     nlme, 
     lme4,
-    lmerTest
+    lmerTest,
+    h2o
 Suggests:
     scales,
     testthat

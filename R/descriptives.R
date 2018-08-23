@@ -308,7 +308,7 @@ SEMSummary.fit <- function(formula, data,
 #'
 #' diris <- as.data.table(iris)
 #' egltable("Sepal.Length", g = "Species", data = diris)
-egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = FALSE, sims = 1e6) {
+egltable <- function(vars, g, idvar, data, strict=TRUE, parametric = TRUE, simChisq = FALSE, sims = 1e6) {
   if (!missing(data)) {
     if (is.data.table(data)) {
       dat <- data[, vars, with=FALSE]
@@ -319,6 +319,9 @@ egltable <- function(vars, g, data, strict=TRUE, parametric = TRUE, simChisq = F
       if (length(g) == 1) {
         g <- data[[g]]
       }
+    }
+    if (!missing(idvar)) {
+      ids <- data[[idvar]]
     }
   } else {
     dat <- as.data.table(vars)

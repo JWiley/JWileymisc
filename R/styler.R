@@ -478,7 +478,6 @@ f.r2 <- function(r2, numdf, dendf) {
 # clear R CMD CHECK notes
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("ID", "V2", "V1", "value"))
 
-
 #' Format results from a linear mixed model
 #'
 #' @param list A list of one (or more) models estimated from lmer
@@ -488,6 +487,12 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("ID", "V2", "V1", "value
 #'   This is still in early implementation stages and currently does not
 #'   change all parts of the output (which default to 2 decimals per
 #'   APA style).
+#' @param method A character vector indicating the method used to calculate
+#'   confidence intervals. Defaults to \dQuote{Wald} but may also be
+#'   \dQuote{profile} or \dQuote{boot}. Note that bootstrapping may be
+#'   computationally demanding.
+#' @param \ldots Additional arguments passed to \code{confint}. Notably
+#'   \code{nsim} and \code{boot.type} if the bootstrap method is used.
 #' @return a data table of character data
 #' @keywords misc
 #' @export
@@ -495,99 +500,149 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("ID", "V2", "V1", "value
 #' @importFrom nlme fixef
 #' @importMethodsFrom lmerTest summary
 #' @examples
-#' # make me!
-formatLMER <- function(list, modelnames, dig = 2) {
-  .formatRE <- function(m, idvar, digits = dig) {
-    m <- m[[idvar]]
-    ## random effect standard deviations and residual SD
-    re.sd <- sqrt(diag(m))
-    re.sd <- data.table(
-      Term = sprintf("SD (%s): %s", idvar, names(re.sd)),
-      Est = sprintf("%0.2f", round(re.sd, digits = digits)))
-    ## random effect correlations
-    re.cor <- cov2cor(m)
-    re.n <- rownames(re.cor)
-    ## remove redundant entries
-    re.cor[upper.tri(re.cor, diag=TRUE)] <- NA_real_
-    re.cor <- cbind(V1 = re.n, as.data.table(re.cor))
-    re.cor <- na.omit(melt(re.cor, id.vars = "V1", variable.name = "V2"))
-    re.cor[, ID := 1:.N]
-    re.cor[, V2 := as.character(V2)]
-    re.cor <- re.cor[, .(
-      Term = sprintf("Cor (%s): %s, %s", idvar, sort(c(V1, V2))[1], sort(c(V1, V2))[2]),
-      Est = sprintf("%0.2f", round(value, digits = digits))),
-      by = ID][, -1]
-    rbind(re.sd, re.cor)
+#'
+#' \dontrun{
+#' data(sleepstudy)
+#' m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject),
+#'   data = sleepstudy)
+#' m2 <- lme4::lmer(Reaction ~ Days + I(Days^2) + (1 + Days | Subject),
+#'   data = sleepstudy)
+#'
+#' testm1 <- detailedTests(m1, method = "profile")
+#' testm2 <- detailedTests(m2, method = "profile")
+#' formatLMER(list(testm1, testm2))
+#' formatLMER(list(testm1, testm2),
+#'   format = list(
+#'     FixedEffects = "%s, %s (%s, %s)",
+#'     RandomEffects = c("%s", "%s (%s, %s)"),
+#'     EffectSizes = "%s, %s; %s"),
+#'   pcontrol = list(digits = 3, stars = FALSE,
+#'                   includeP = TRUE, includeSign = TRUE,
+#'                   dropLeadingZero = TRUE))
+#' }
+formatLMER <- function(list, modelnames,
+                       format = list(
+                         FixedEffects = c("%s%s [%s, %s]"),
+                         RandomEffects = c("%s", "%s [%s, %s]"),
+                         EffectSizes = c("%s/%s, %s")),
+                       digits = 2,
+  pcontrol = list(digits = 3, stars = TRUE, includeP = FALSE, includeSign = FALSE,
+                  dropLeadingZero = TRUE),
+  ...) {
+
+  formround <- function(x, digits) {
+    format(round(x, digits = digits), digits = digits, nsmall = digits)
   }
-  .formatFE <- function(model, modelsum, digits = dig) {
-    m <- summary(model)
-    ## fixed effect estimates, p values, 95% CIs
-    fe.b <- fixef(model)
-    fe.ci <- confint(model, parm = "beta_", method = "Wald")
-    if ("Pr(>|t|)" %in% colnames(m$coefficients)) {
-      fe.p <- formatPval(m$coefficients[, "Pr(>|t|)"],
-                         includeP = TRUE, d = 3, sd = 3)
-    } else {
-      fe.p <- formatPval((1 - pnorm(abs(m$coefficients[, "t value"]))) * 2,
-                         includeP = TRUE, d = 3, sd = 3)
+
+  .formatRE <- function(x, digits) {
+    tmp <- copy(x[, .(
+      Term = Term,
+      Est = formround(Est, digits = digits),
+      LL = ifelse(is.na(LL), "", formround(LL, digits = digits)),
+      UL = ifelse(is.na(UL), "", formround(UL, digits = digits)))])
+    tmp[, .(
+      Term = Term,
+      Est = ifelse(nzchar(LL) & nzchar(UL),
+                   sprintf(format$RandomEffects[2], Est, LL, UL),
+                   sprintf(format$RandomEffects[1], Est)))]
     }
-    fe.all <- data.table(
-      Term = names(fe.b),
-      Est = sprintf("%0.2f, %s\n[%0.2f, %0.2f]",
-                    round(fe.b, digits = digits),
-                    fe.p,
-                    round(fe.ci[, 1], digits = digits),
-                    round(fe.ci[, 2], digits = digits)))
-    return(fe.all)
-  }
-  .formatMISC <- function(modelsum, digits = dig) {
+
+  .formatFE <- function(x, digits) {
+    tmp <- copy(x[, .(
+      Term = Term,
+      Est = formround(Est, digits = digits),
+      LL = ifelse(is.na(LL), "", formround(LL, digits = digits)),
+      UL = ifelse(is.na(LL), "", formround(LL, digits = digits)),
+      P = if (pcontrol$stars) {
+            star(Pval)
+          } else {
+            formatPval(Pval,
+                       d = pcontrol$digits,
+                       sd = pcontrol$digits,
+                       includeP = pcontrol$includeP,
+                       includeSign = pcontrol$includeSign,
+                       dropLeadingZero = pcontrol$dropLeadingZero)
+          })])
+    tmp[, .(
+      Term = Term,
+      Est = sprintf(format$FixedEffects, Est, P, LL, UL))]
+    }
+  .formatMISC <- function(x, digits) {
+    ngrps <- gsub("^N_(.*)$", "\\1",
+                  grep("^N_.*$", names(x), value = TRUE)) %snin% "Obs"
     data.table(
-      Term = c("AIC", sprintf("N Participants (%s)", names(modelsum$ngrps)), "N Obs"),
-      Est = c(round(modelsum$AICtab, digits = digits),
-              modelsum$ngrps, length(modelsum$residuals)))
+      Term = c(
+        "Model DF",
+        sprintf("N (%s)", ngrps),
+        "N (Observations)",
+        "logLik",
+        "AIC",
+        "BIC",
+        "Marginal R2",
+        "Conditional R2"),
+      Est = c(
+        as.character(x$DF),
+        as.character(unlist(x[, paste0("N_", ngrps), with = FALSE])),
+        as.character(x$N_Obs),
+        formround(x$logLik, digits = digits),
+        formround(x$AIC, digits = digits),
+        formround(x$BIC, digits = digits),
+        formround(x$MarginalR2, digits = digits),
+        formround(x$ConditionalR2, digits = digits)))
   }
+
+  .formatEFFECT <- function(x, digits) {
+    copy(x[, .(
+      Term = sprintf("%s (%s)", Variable, Type),
+      Est = sprintf(format$EffectSizes,
+                    formround(MarginalF2, digits = digits),
+                    formround(ConditionalF2, digits = digits),
+                    formatPval(P, d = pcontrol$digits, sd = pcontrol$digits,
+                              includeP = TRUE, includeSign = TRUE)))])
+  }
+
+
+
   k <- length(list)
-  res <- lapply(list, function(mod) {
-
-    msum <- summary(mod)
-    r2 <- R2LMER(mod, msum)
-
-    rbind(
-      .formatFE(mod, msum, 2),
-      do.call(rbind, lapply(names(msum$varcor), function(n) {
-        .formatRE(msum$varcor, n, 2)
-      })),
-      data.table(
-        Term = "SD: Residual",
-        Est = sprintf("%0.2f", round(msum$sigma, digits = dig))),
-      data.table(
-        Term = names(r2),
-        Est = sprintf("%0.2f%%", round(r2 * 100, digits = dig))),
-      .formatMISC(msum, 2))
-  })
   if (missing(modelnames)) {
     modelnames <- paste0("Model ", 1:k)
   }
-  for (i in 1:k) {
-    setnames(res[[i]], old = "Est", new = modelnames[i])
-  }
-  if (k == 1) {
-    final <- res[[1]]
-  } else if (k > 1) {
-    final <- merge(res[[1]], res[[2]], by = "Term", all = TRUE)
-  } else if (k > 2) {
-    for (i in 3:k) {
-      final <- merge(final, res[[i]], by = "Term", all = TRUE)
+
+  mergeIt <- function(z, func, term) {
+    res <- lapply(z, function(mod) func(mod[[term]], digits = digits))
+    for (i in 1:k) {
+      setnames(res[[i]], old = "Est", new = modelnames[i])
     }
+
+    if (k == 1) {
+      final <- res[[1]]
+    } else if (k > 1) {
+      final <- merge(res[[1]], res[[2]], by = "Term", all = TRUE)
+    } else if (k > 2) {
+      for (i in 3:k) {
+        final <- merge(final, res[[i]], by = "Term", all = TRUE)
+      }
+    }
+    return(final)
   }
-  type <- ifelse(grepl("^SD \\(", final$Term), 994,
-                 nchar(final$Term) - nchar(gsub(":", "", final$Term)))
-  type <- ifelse(grepl("^SD: Residual", final$Term), 995, type)
-  type <- ifelse(grepl("^Cor \\(", final$Term), 996, type)
-  type <- ifelse(grepl("MarginalR2", final$Term), 997, type)
-  type <- ifelse(grepl("ConditionalR2", final$Term), 998, type)
-  type <- ifelse(grepl("^AIC$", final$Term), 999, type)
-  type <- ifelse(grepl("^N Obs$", final$Term), 999, type)
-  type <- ifelse(grepl("^N Participants \\(", final$Term), 999, type)
-  final[order(type, Term), ]
+
+  final.fe <- mergeIt(list, .formatFE, "FixedEffects")
+  final.re <- mergeIt(list, .formatRE, "RandomEffects")
+  final.misc <- mergeIt(list, .formatMISC, "OverallModel")
+  final.ef <- mergeIt(list, .formatEFFECT, "EffectSizes")
+
+  placeholder <- final.fe[1]
+  for (i in names(placeholder)) {
+    placeholder[, (i) := ""]
+  }
+  place.fe <- copy(placeholder)[, Term := "Fixed Effects"]
+  place.re <- copy(placeholder)[, Term := "Random Effects"]
+  place.misc <- copy(placeholder)[, Term := "Overall Model"]
+  place.ef <- copy(placeholder)[, Term := "Effect Sizes"]
+
+  rbind(
+    place.fe, final.fe,
+    place.re, final.re,
+    place.misc, final.misc,
+    place.ef, final.ef)
 }

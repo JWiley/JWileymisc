@@ -4,11 +4,19 @@
 * `R2LMER()` A simple function to calculate the marginal and
   conditional variance accounted for by a model estimated by 
   `lmer()`.
-  
-* `formatLMER()` A function to nicely format the fixed and random
-  effects output from `lmer()` including confidence intervals, 
-  p-values (using `lmerTest` if used), random effects, and fit
-  indices.
+
+* `compareLMER()` A function to compare two models estimated by 
+   `lmer()` include significance tests and effect sizes 
+   for estimates of the variance explained.
+   
+* `detailedTests()` A function to compute detailed tests on a 
+   model estimated from `lmer()` including confidence intervals 
+   for parameters, significance tests, where possible, 
+   overall model fit, and effect sizes for the model and each variable.
+     
+* `formatLMER()` A function to nicely format detailed model results,
+  possibly from multiple models.  Requires results from 
+  `detailedTests()` based on `lmer()` models, at the moment.
   
 * `iccMixed()` A function to calculate the intraclass correlation 
 	coefficient using mixed effects models.  Works with either 
@@ -59,7 +67,7 @@
     a particular range, such as `%gele%` for values greater than or 
     equal to the min and less than or equal to the max as well as 
 	to automatically subset the data when prefixed with an s, 
-	`%sgele%`.
+	`%sgele%` `%sin%` etc.
 
 ## Bug Fixes
 
