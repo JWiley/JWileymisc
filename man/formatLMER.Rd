@@ -4,7 +4,11 @@
 \alias{formatLMER}
 \title{Format results from a linear mixed model}
 \usage{
-formatLMER(list, modelnames, dig = 2)
+formatLMER(list, modelnames, format = list(FixedEffects =
+  c("\%s\%s [\%s, \%s]"), RandomEffects = c("\%s", "\%s [\%s, \%s]"),
+  EffectSizes = c("\%s/\%s, \%s")), digits = 2, pcontrol = list(digits = 3,
+  stars = TRUE, includeP = FALSE, includeSign = FALSE, dropLeadingZero = TRUE),
+  ...)
 }
 \arguments{
 \item{list}{A list of one (or more) models estimated from lmer}
@@ -16,6 +20,14 @@ the column headings for each model.}
 This is still in early implementation stages and currently does not
 change all parts of the output (which default to 2 decimals per
 APA style).}
+
+\item{method}{A character vector indicating the method used to calculate
+confidence intervals. Defaults to \dQuote{Wald} but may also be
+\dQuote{profile} or \dQuote{boot}. Note that bootstrapping may be
+computationally demanding.}
+
+\item{\ldots}{Additional arguments passed to \code{confint}. Notably
+\code{nsim} and \code{boot.type} if the bootstrap method is used.}
 }
 \value{
 a data table of character data
@@ -24,6 +36,25 @@ a data table of character data
 Format results from a linear mixed model
 }
 \examples{
-# make me!
+
+\dontrun{
+data(sleepstudy)
+m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject),
+  data = sleepstudy)
+m2 <- lme4::lmer(Reaction ~ Days + I(Days^2) + (1 + Days | Subject),
+  data = sleepstudy)
+
+testm1 <- detailedTests(m1, method = "profile")
+testm2 <- detailedTests(m2, method = "profile")
+formatLMER(list(testm1, testm2))
+formatLMER(list(testm1, testm2),
+  format = list(
+    FixedEffects = "\%s, \%s (\%s, \%s)",
+    RandomEffects = c("\%s", "\%s (\%s, \%s)"),
+    EffectSizes = "\%s, \%s; \%s"),
+  pcontrol = list(digits = 3, stars = FALSE,
+                  includeP = TRUE, includeSign = TRUE,
+                  dropLeadingZero = TRUE))
+}
 }
 \keyword{misc}

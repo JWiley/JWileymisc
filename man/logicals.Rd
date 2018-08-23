@@ -14,6 +14,10 @@
 \alias{\%sg\%}
 \alias{\%sle\%}
 \alias{\%sl\%}
+\alias{\%nin\%}
+\alias{\%sin\%}
+\alias{\%snin\%}
+\alias{\%flipIn\%}
 \title{Several logical range comparison helpers}
 \usage{
 e1 \%gele\% e2
@@ -39,6 +43,14 @@ e1 \%sg\% e2
 e1 \%sle\% e2
 
 e1 \%sl\% e2
+
+e1 \%nin\% e2
+
+e1 \%sin\% e2
+
+e1 \%snin\% e2
+
+e1 \%flipIn\% e2
 }
 \arguments{
 \item{e1}{A number of vector to be evaluated}
@@ -87,4 +99,13 @@ A logical vector of the same length as \code{e1} or for
 
 1:5 \%sl\% 2
 1:5 \%sl\% 4
+
+1:5 \%nin\% c(2, 99)
+c("jack", "jill", "john", "jane") \%nin\% c("jill", "jane", "bill")
+
+1:5 \%sin\% c(2, 99)
+c("jack", "jill", "john", "jane") \%sin\% c("jill", "jane", "bill")
+
+1:5 \%snin\% c(2, 99)
+c("jack", "jill", "john", "jane") \%snin\% c("jill", "jane", "bill")
 }
