@@ -528,13 +528,14 @@ compareIVs <- function(dv, type, iv, covariates = character(), data, multivariat
 #'   \code{Table} contains a nicely formatted character matrix.
 #'
 #' @export
+#' @importFrom stats model.matrix vcov
 #' @importFrom VGAM vglm multinomial summary
+#' @importMethodsFrom VGAM vcov
 #' @importFrom multcomp glht Chisqtest
-#' @importFrom stats model.matrix
 #' @importFrom data.table data.table
 #' @examples
-#' ## make me!
 #'
+#' \dontrun{
 #' mtcars$cyl <- factor(mtcars$cyl)
 #' mtcars$am <- factor(mtcars$am)
 #'
@@ -551,7 +552,7 @@ compareIVs <- function(dv, type, iv, covariates = character(), data, multivariat
 #' ## ezMULTINOM(am ~ qsec, data = mtcars)
 #'
 #' ezMULTINOM(Species ~ Sepal.Length, data = iris)
-#'
+#' }
 ezMULTINOM <- function(formula, data, OR = TRUE, digits = 2L, pdigits = 3L) {
 
   dv <- all.vars(formula)[[1]]

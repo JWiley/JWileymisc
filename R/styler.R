@@ -476,21 +476,26 @@ f.r2 <- function(r2, numdf, dendf) {
 
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("ID", "V2", "V1", "value"))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("ID", "V2", "V1",
+                                                        "value", "Est", "Pval",
+                                                        "Variable", "Type",
+                                                        "MarginalF2", "ConditionalF2"))
 
 #' Format results from a linear mixed model
 #'
 #' @param list A list of one (or more) models estimated from lmer
 #' @param modelnames An (optional) vector of names to use in
 #'   the column headings for each model.
-#' @param dig A numeric value indicating the number of digits to print.
+#' @param format A list giving the formatting style to be used for
+#'   the fixed effecvts, random effects, and effect sizes.
+#'   For the random effects, must be two options, one for when the
+#'   random effects do not have confidence intervals and one when the
+#'   random effects do have confidence intervals.
+#' @param digits A numeric value indicating the number of digits to print.
 #'   This is still in early implementation stages and currently does not
 #'   change all parts of the output (which default to 2 decimals per
 #'   APA style).
-#' @param method A character vector indicating the method used to calculate
-#'   confidence intervals. Defaults to \dQuote{Wald} but may also be
-#'   \dQuote{profile} or \dQuote{boot}. Note that bootstrapping may be
-#'   computationally demanding.
+#' @param pcontrol A list controlling how p values are formatted.
 #' @param \ldots Additional arguments passed to \code{confint}. Notably
 #'   \code{nsim} and \code{boot.type} if the bootstrap method is used.
 #' @return a data table of character data
@@ -498,7 +503,6 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("ID", "V2", "V1", "value
 #' @export
 #' @importFrom stats pnorm
 #' @importFrom nlme fixef
-#' @importMethodsFrom lmerTest summary
 #' @examples
 #'
 #' \dontrun{

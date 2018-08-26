@@ -20,11 +20,18 @@ This function provides fit statistics and effect sizes for
 model comparisons.  The models must be nested.
 }
 \examples{
-m.a <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-m.b <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-compareLMER(m.a, m.b)
 
-rm(m.a, m.b)
+\dontrun{
+data(aces_daily)
+m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
+  data = aces_daily)
+m2 <- lme4::lmer(NegAff ~ STRESS + (1 | UserID),
+  data = aces_daily)
+
+compareLMER(m1, m2)
+
+rm(m1, m2)
+}
 }
 \references{
 For estimating the marginal and conditional R-squared values,

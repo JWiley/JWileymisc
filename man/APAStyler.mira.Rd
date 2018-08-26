@@ -4,7 +4,8 @@
 \alias{APAStyler.mira}
 \title{A generic function for pretty printing in (semi) APA Style}
 \usage{
-\method{APAStyler}{mira}(object, lmobject, digits = 2, pdigits, file, ...)
+\method{APAStyler}{mira}(object, lmobject, digits = 2, pdigits, file,
+  ...)
 }
 \arguments{
 \item{object}{\code{mira} object}

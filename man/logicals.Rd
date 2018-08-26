@@ -62,6 +62,9 @@ limits for logical comparison.}
 A logical vector of the same length as \code{e1} or for
  those functions prefaced with \dQuote{s} the subsetted vector.
 }
+\description{
+Several logical range comparison helpers
+}
 \examples{
 
 1:5 \%gele\% c(2, 4)

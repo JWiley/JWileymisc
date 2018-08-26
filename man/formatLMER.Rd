@@ -6,9 +6,9 @@
 \usage{
 formatLMER(list, modelnames, format = list(FixedEffects =
   c("\%s\%s [\%s, \%s]"), RandomEffects = c("\%s", "\%s [\%s, \%s]"),
-  EffectSizes = c("\%s/\%s, \%s")), digits = 2, pcontrol = list(digits = 3,
-  stars = TRUE, includeP = FALSE, includeSign = FALSE, dropLeadingZero = TRUE),
-  ...)
+  EffectSizes = c("\%s/\%s, \%s")), digits = 2, pcontrol = list(digits
+  = 3, stars = TRUE, includeP = FALSE, includeSign = FALSE, dropLeadingZero
+  = TRUE), ...)
 }
 \arguments{
 \item{list}{A list of one (or more) models estimated from lmer}
@@ -16,15 +16,18 @@ formatLMER(list, modelnames, format = list(FixedEffects =
 \item{modelnames}{An (optional) vector of names to use in
 the column headings for each model.}
 
-\item{dig}{A numeric value indicating the number of digits to print.
+\item{format}{A list giving the formatting style to be used for
+the fixed effecvts, random effects, and effect sizes.
+For the random effects, must be two options, one for when the
+random effects do not have confidence intervals and one when the
+random effects do have confidence intervals.}
+
+\item{digits}{A numeric value indicating the number of digits to print.
 This is still in early implementation stages and currently does not
 change all parts of the output (which default to 2 decimals per
 APA style).}
 
-\item{method}{A character vector indicating the method used to calculate
-confidence intervals. Defaults to \dQuote{Wald} but may also be
-\dQuote{profile} or \dQuote{boot}. Note that bootstrapping may be
-computationally demanding.}
+\item{pcontrol}{A list controlling how p values are formatted.}
 
 \item{\ldots}{Additional arguments passed to \code{confint}. Notably
 \code{nsim} and \code{boot.type} if the bootstrap method is used.}

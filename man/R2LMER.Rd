@@ -26,7 +26,16 @@ and predicted values for each cluster unit is returned.  For the overall model,
 the marginal and conditional R2 are calculated as described in the references.
 }
 \examples{
-# make me!
+
+\dontrun{
+data(aces_daily)
+m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
+  data = aces_daily)
+
+R2LMER(m1, summary(m2))
+
+rm(m1)
+}
 }
 \references{
 For estimating the marginal and conditional R-squared values,

@@ -33,8 +33,8 @@ A list with two elements.
 TODO: make me!
 }
 \examples{
-## make me!
 
+\dontrun{
 mtcars$cyl <- factor(mtcars$cyl)
 mtcars$am <- factor(mtcars$am)
 
@@ -51,5 +51,5 @@ ezMULTINOM(cyl ~ factor(vs) * scale(qsec), data = mtcars)
 ## ezMULTINOM(am ~ qsec, data = mtcars)
 
 ezMULTINOM(Species ~ Sepal.Length, data = iris)
-
+}
 }

@@ -273,6 +273,9 @@ SEMSummary.fit <- function(formula, data,
 #'   or the data to be described itself.
 #' @param g A variable used tou group/separate the data prior
 #'   to calculating descriptive statistics.
+#' @param idvar A character string indicating the variable name
+#'   of the ID variable.  Not currently used, but will eventually
+#'   support \code{egltable} supporting repeated measures data.
 #' @param data optional argument of the dataset containing
 #'   the variables to be described.
 #' @param strict Logical, whether to strictly follow the

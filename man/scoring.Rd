@@ -23,18 +23,20 @@ score(data, reverse = NULL, limits = NULL, mean = TRUE,
 
 .scoreMastery(data, okay = c(1, 2, 3, 4), reverse = c(1, 6), ...)
 
-.scoreMOSSSS(data, okay = c(1, 2, 3, 4, 5), indices = list(Structural = 1,
-  Tangible = c(2, 5, 12, 15), Affectionate = c(6, 10, 20), PositiveInteraction =
-  c(7, 11, 18), EmotionalInformational = c(3, 9, 16, 19, 4, 8, 13, 17),
-  Functional = 2:20), ...)
+.scoreMOSSSS(data, okay = c(1, 2, 3, 4, 5), indices = list(Structural =
+  1, Tangible = c(2, 5, 12, 15), Affectionate = c(6, 10, 20),
+  PositiveInteraction = c(7, 11, 18), EmotionalInformational = c(3, 9, 16,
+  19, 4, 8, 13, 17), Functional = 2:20), ...)
 
-.scorePANAS(data, okay = c(1, 2, 3, 4, 5), indices = list(pos = c(1, 3, 5,
-  9, 10, 12, 14, 16, 17, 19), neg = c(2, 4, 6, 7, 8, 11, 13, 15, 18, 20)), ...)
+.scorePANAS(data, okay = c(1, 2, 3, 4, 5), indices = list(pos = c(1, 3,
+  5, 9, 10, 12, 14, 16, 17, 19), neg = c(2, 4, 6, 7, 8, 11, 13, 15, 18,
+  20)), ...)
 
-.scoreRSES(data, okay = c(0, 1, 2, 3), reverse = c(3, 5, 8, 9, 10), ...)
+.scoreRSES(data, okay = c(0, 1, 2, 3), reverse = c(3, 5, 8, 9, 10),
+  ...)
 
-.scoreMOOD(data, indices = list(vision = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-  12, 18, 19), impact = c(13, 14, 15, 16, 17, 20, 21)), ...)
+.scoreMOOD(data, indices = list(vision = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  11, 12, 18, 19), impact = c(13, 14, 15, 16, 17, 20, 21)), ...)
 
 scaleScore(data, type = c("CESD", "LOTR", "Mastery", "RSES", "MOSSSS",
   "PANAS"), ...)

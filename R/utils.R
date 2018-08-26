@@ -494,7 +494,7 @@ updateInstall <- function(x, repo) {
   return(NULL)
 }
 
-# clear R CMD CHECK notes
+## clear R CMD CHECK notes
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("DV", "Predicted"))
 
 #' Calculates the R2 from lmer models
@@ -523,7 +523,16 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("DV", "Predicted"))
 #' @importFrom stats model.frame
 #' @importFrom nlme VarCorr fixef
 #' @examples
-#' # make me!
+#'
+#' \dontrun{
+#' data(aces_daily)
+#' m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
+#'   data = aces_daily)
+#'
+#' R2LMER(m1, summary(m2))
+#'
+#' rm(m1)
+#' }
 R2LMER <- function(model, modelsum, cluster = FALSE) {
   idvars <- names(modelsum$ngrps)
 
@@ -575,13 +584,21 @@ R2LMER <- function(model, modelsum, cluster = FALSE) {
 #'   random slopes models. Methods in Ecology and Evolution, 5(9), 944-946.
 #' @keywords utils
 #' @export
-#' @importFrom stats AIC BIC logLik
+#' @importFrom Matrix summary
+#' @importFrom stats AIC BIC logLik anova
 #' @examples
-#' m.a <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-#' m.b <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-#' compareLMER(m.a, m.b)
 #'
-#' rm(m.a, m.b)
+#' \dontrun{
+#' data(aces_daily)
+#' m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
+#'   data = aces_daily)
+#' m2 <- lme4::lmer(NegAff ~ STRESS + (1 | UserID),
+#'   data = aces_daily)
+#'
+#' compareLMER(m1, m2)
+#'
+#' rm(m1, m2)
+#' }
 compareLMER <- function(m1, m2) {
   m1sum <- summary(m1)
   m2sum <- summary(m2)
@@ -639,6 +656,10 @@ compareLMER <- function(m1, m2) {
 }
 
 
+## clear R CMD CHECK notes
+if(getRversion() >= "2.15.1") utils::globalVariables(c("var1", "var2", "sdcor", "Type",
+                                                       "FE", "RE", "Terms", "Formula"))
+
 #' drop1 for both fixed and random effects
 #'
 #' This function extends the current \code{drop1} method for
@@ -692,15 +713,18 @@ compareLMER <- function(m1, m2) {
 #'   intervals to calculate. One of \dQuote{Wald}, \dQuote{profile}, or
 #'   \dQuote{boot}.
 #' @param \ldots Additional arguments passed to \code{confint}
+#' @importFrom lme4 isGLMM isNLMM isLMM isREML nobars findbars
+#' @importFrom stats family formula nobs update
+#' @importFrom lmerTest lsmeansLT
 #' @export
 #' @examples
 #'
 #' \dontrun{
-#' data(sleepstudy)
-#' m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject),
-#'   data = sleepstudy)
-#' m2 <- lme4::lmer(Reaction ~ Days + I(Days^2) + (1 + Days | Subject),
-#'   data = sleepstudy)
+#' data(aces_daily)
+#' m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
+#'   data = aces_daily)
+#' m2 <- lme4::lmer(NegAff ~ STRESS + I(STRESS^2) + (1 + STRESS | UserID),
+#'   data = aces_daily)
 #' testm1 <- detailedTests(m1, method = "profile")
 #' testm2 <- detailedTests(m2, method = "profile")
 #' testm2b <- detailedTests(m2, method = "boot", nsim = 100)
@@ -761,8 +785,8 @@ detailedTests <- function(obj, method = c("Wald", "profile", "boot"), ...) {
   ## and if so refit it with ML
   if (isLMM(obj) && isREML(obj)) {
     message(paste0(
-      "Parameters and CIs are based on REML, ",
-      "but detailedTests requires ML not REML fit for comparisons, ",
+      "Parameters and CIs are based on REML, \n",
+      "but detailedTests requires ML not REML fit for comparisons, \n",
       "and these are used in effect sizes. Refitting."))
   }
   obj <- update(obj, data = model.frame(obj), REML = FALSE)
@@ -787,13 +811,13 @@ detailedTests <- function(obj, method = c("Wald", "profile", "boot"), ...) {
   f <- formula(obj)
 
   ## fixed effects
-  fe <- lme4:::nobars(f)
+  fe <- nobars(f)
   fe.terms <- terms(fe)
   fe.labs <- labels(fe.terms)
   fe.intercept <- if(identical(attr(fe.terms, "intercept"), 1L)) "1" else "0"
 
   ## random effects
-  re <- lapply(lme4:::findbars(f), deparse)
+  re <- lapply(findbars(f), deparse)
 
   re.group <- lapply(re, function(v) {
     gsub("(^.*)\\|(.*$)", "\\2", v)

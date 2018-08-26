@@ -455,8 +455,6 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDevi
 #'   extremevalues = "theoretical")
 #' testdistr(c(d$Ynorm, 10, 1000), "normal",
 #'   extremevalues = "theoretical", robust = TRUE)
-#' testdistr(d$Ynorm, "normal",
-#'   extremevalues = "theoretical", robust = TRUE)
 #'
 #' testdistr(mtcars, "mvnormal")
 #'
@@ -799,7 +797,7 @@ mvqq <- function(dat, use = c("fiml", "pairwise.complete.obs", "complete.obs"), 
 
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", "."))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", ".", "upper.CL", "Letters"))
 
 #' Tukey HSD Plot
 #'
@@ -810,6 +808,8 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", "."))
 #' @param x A categorical grouping variable name.
 #' @param y A continuous outcome variable name.
 #' @param d A dataset
+#' @param ci A numeric value indicating the coverage of the
+#'   confidence interval to use.  Defaults to 0.95.
 #' @param idvar An optional ID variable for multilevel data
 #' @param \ldots Additional arguments passed on.
 #' @return A ggplot graph object.

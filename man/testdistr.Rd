@@ -5,10 +5,11 @@
 \title{Graphically compare the distribution of a variable against a specific distribution}
 \usage{
 testdistr(x, distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom",
-  "poisson", "mvnormal"), na.rm = TRUE, starts, xlim = NULL, varlab = "X",
-  plot = TRUE, extremevalues = c("no", "theoretical", "empirical"),
-  ev.perc = 0.005, use = c("complete.obs", "pairwise.complete.obs", "fiml"),
-  robust = FALSE, rugthreshold = 500, ...)
+  "poisson", "mvnormal"), na.rm = TRUE, starts, xlim = NULL,
+  varlab = "X", plot = TRUE, extremevalues = c("no", "theoretical",
+  "empirical"), ev.perc = 0.005, use = c("complete.obs",
+  "pairwise.complete.obs", "fiml"), robust = FALSE, rugthreshold = 500,
+  ...)
 }
 \arguments{
 \item{x}{The data as a single variable or vector to check the distribution unless

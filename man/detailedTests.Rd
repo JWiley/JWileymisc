@@ -66,11 +66,11 @@ and interpret these with caution.
 \examples{
 
 \dontrun{
-data(sleepstudy)
-m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject),
-  data = sleepstudy)
-m2 <- lme4::lmer(Reaction ~ Days + I(Days^2) + (1 + Days | Subject),
-  data = sleepstudy)
+data(aces_daily)
+m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
+  data = aces_daily)
+m2 <- lme4::lmer(NegAff ~ STRESS + I(STRESS^2) + (1 + STRESS | UserID),
+  data = aces_daily)
 testm1 <- detailedTests(m1, method = "profile")
 testm2 <- detailedTests(m2, method = "profile")
 testm2b <- detailedTests(m2, method = "boot", nsim = 100)

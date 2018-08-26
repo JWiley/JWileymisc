@@ -13,6 +13,9 @@ TukeyHSDgg(x, y, d, ci = 0.95, idvar, ...)
 
 \item{d}{A dataset}
 
+\item{ci}{A numeric value indicating the coverage of the
+confidence interval to use.  Defaults to 0.95.}
+
 \item{idvar}{An optional ID variable for multilevel data}
 
 \item{\ldots}{Additional arguments passed on.}
