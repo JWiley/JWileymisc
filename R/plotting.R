@@ -427,6 +427,8 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDevi
 #' @keywords hplot multivariate
 #' @examples
 #'
+#' \dontrun{
+#'
 #' ## example data
 #' set.seed(1234)
 #' d <- data.frame(
@@ -459,6 +461,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDevi
 #' testdistr(mtcars, "mvnormal")
 #'
 #' rm(d) ## cleanup
+#' }
 testdistr <- function(x,
   distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom", "poisson", "mvnormal"),
   na.rm = TRUE, starts, xlim = NULL, varlab = "X", plot = TRUE,

@@ -102,6 +102,8 @@ will be used based on \code{covMcd} from the \pkg{robustbase} package.
 }
 \examples{
 
+\dontrun{
+
 ## example data
 set.seed(1234)
 d <- data.frame(
@@ -130,12 +132,11 @@ testdistr(c(d$Ynorm, 10, 1000), "normal",
   extremevalues = "theoretical")
 testdistr(c(d$Ynorm, 10, 1000), "normal",
   extremevalues = "theoretical", robust = TRUE)
-testdistr(d$Ynorm, "normal",
-  extremevalues = "theoretical", robust = TRUE)
 
 testdistr(mtcars, "mvnormal")
 
 rm(d) ## cleanup
+}
 }
 \seealso{
 \code{\link{SEMSummary}}
