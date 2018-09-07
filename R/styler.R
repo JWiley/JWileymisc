@@ -556,7 +556,7 @@ formatLMER <- function(list, modelnames,
       Term = Term,
       Est = formround(Est, digits = digits),
       LL = ifelse(is.na(LL), "", formround(LL, digits = digits)),
-      UL = ifelse(is.na(LL), "", formround(LL, digits = digits)),
+      UL = ifelse(is.na(UL), "", formround(UL, digits = digits)),
       P = if (pcontrol$stars) {
             star(Pval)
           } else {
