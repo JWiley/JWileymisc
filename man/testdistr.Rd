@@ -9,7 +9,7 @@ testdistr(x, distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom",
   varlab = "X", plot = TRUE, extremevalues = c("no", "theoretical",
   "empirical"), ev.perc = 0.005, use = c("complete.obs",
   "pairwise.complete.obs", "fiml"), robust = FALSE, rugthreshold = 500,
-  ...)
+  seed = 1234, factor = 1, ...)
 }
 \arguments{
 \item{x}{The data as a single variable or vector to check the distribution unless
@@ -63,6 +63,13 @@ See details.}
 which no rug plot is added. Note that even if this threshold is exceeded,
 a rug plot will still be added for any extreme values (if extreme values are
 used and present).}
+
+\item{seed}{a random seed used to make the jitter added for Poisson and
+Negative Binomial distributions reproducible}
+
+\item{factor}{A scale factor fo the amount of jitter added to the QQ and Deviates
+plots for Poisson and Negative Binomial distributions. Defaults to 1.
+This results in 1 * smallest distance between points / 5 being used.}
 
 \item{...}{Additional arguments. If these include mu and sigma and the distribution
 is multivariate normal, then it will use the passed values instead of calculating
@@ -120,6 +127,7 @@ testdistr(d$Ybeta, "beta", starts = list(shape1 = 1, shape2 = 4))
 testdistr(d$Ychisq, "chisq", starts = list(df = 8))
 testdistr(d$Yf, "f", starts = list(df1 = 5, df2 = 10))
 testdistr(d$Ygamma, "gamma")
+testdistr(d$Ynbinom, "poisson")
 testdistr(d$Ynbinom, "nbinom")
 testdistr(d$Ypois, "poisson")
 
