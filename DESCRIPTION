@@ -1,8 +1,8 @@
 Package: JWileymisc
 Type: Package
 Title: Miscellaneous Utilities and Functions
-Version: 0.3.0
-Date: 2018-08-26
+Version: 0.3.1
+Date: 2018-09-15
 Author: Joshua F. Wiley <jwiley.psych@gmail.com>
 Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
 URL: https://github.com/JWiley/JWileymisc
@@ -13,7 +13,7 @@ Description: A collection of miscellaneous tools and functions,
     distributions.
 License: GPL (>= 3)
 Depends:
-    R (>= 3.2.0),
+    R (>= 3.4.0),
     data.table (>= 1.10.0),
     ggplot2 (>= 2.2.0),
     cowplot,
@@ -24,7 +24,7 @@ Imports:
     MASS,
     multcomp,
     multcompView,
-    lsmeans,
+    emmeans,
     devtools,
     graphics,
     ggthemes,

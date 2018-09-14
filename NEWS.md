@@ -1,3 +1,19 @@
+# JWileymisc 0.3.1
+
+## Bug Fixes
+* `testdistr()` now creates more appropriate plots for discrete 
+   distributions including the Poisson and Negative Binomial.
+
+* `moments()` now updated to accomodate changes in the lavaan 
+  package (thanks to Yves Rosseel)
+  
+* `TukeyHSDgg()` updated to use the emmeans package instead of 
+  the now defunct lsmeans package.
+  
+* `formatLMER()` returned the lower confidence interval twice 
+  instead of the lower and upper confidence interval. 
+  This is now fixed.
+
 # JWileymisc 0.3.0
 
 ## New Features

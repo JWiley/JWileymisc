@@ -44,7 +44,9 @@ moments <- function(data, ...) {
   }
 
   ## from Yves
-  fit <- lavCor(data, output = "fit", missing = "ml")
+  fit <- lavCor(data,
+                meanstructure = TRUE,
+                output = "fit", missing = "ml")
   out <- lavInspect(fit, "sampstat.h1")
 
   class(out$cov) <- "matrix"

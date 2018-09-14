@@ -402,6 +402,11 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDevi
 #'   which no rug plot is added. Note that even if this threshold is exceeded,
 #'   a rug plot will still be added for any extreme values (if extreme values are
 #'   used and present).
+#' @param seed a random seed used to make the jitter added for Poisson and
+#'   Negative Binomial distributions reproducible
+#' @param factor A scale factor fo the amount of jitter added to the QQ and Deviates
+#'   plots for Poisson and Negative Binomial distributions. Defaults to 1.
+#'   This results in 1 * smallest distance between points / 5 being used.
 #' @param ... Additional arguments. If these include mu and sigma and the distribution
 #'   is multivariate normal, then it will use the passed values instead of calculating
 #'   the mean and covariances of the data.
@@ -445,6 +450,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDevi
 #' testdistr(d$Ychisq, "chisq", starts = list(df = 8))
 #' testdistr(d$Yf, "f", starts = list(df1 = 5, df2 = 10))
 #' testdistr(d$Ygamma, "gamma")
+#' testdistr(d$Ynbinom, "poisson")
 #' testdistr(d$Ynbinom, "nbinom")
 #' testdistr(d$Ypois, "poisson")
 #'
@@ -467,7 +473,7 @@ testdistr <- function(x,
   na.rm = TRUE, starts, xlim = NULL, varlab = "X", plot = TRUE,
   extremevalues = c("no", "theoretical", "empirical"), ev.perc = .005,
   use = c("complete.obs", "pairwise.complete.obs", "fiml"),
-  robust = FALSE, rugthreshold = 500, ...) {
+  robust = FALSE, rugthreshold = 500, seed = 1234, factor = 1, ...) {
 
   distr <- match.arg(distr)
   use <- match.arg(use)
@@ -622,27 +628,58 @@ testdistr <- function(x,
                                             c(list(p = c(ev.perc, 1 - ev.perc)),
                                               as.list(distribution$fit$estimate))))
 
-  d[, isEV := factor(Y %inrange% ev.limits, levels = c(TRUE, FALSE), labels = c("No", "Yes"))]
+  d[, isEV := factor(as.numeric(Y) %inrange% ev.limits,
+                     levels = c(TRUE, FALSE), labels = c("No", "Yes"))]
 
   nok <- sum(!is.na(d$Y))
 
-  p.density <- ggplot(d, aes(Y)) +
-    geom_density() +
-    stat_function(fun = distribution$d,
-                  args = as.list(distribution$fit$estimate),
-                  colour = "blue", linetype = 2, size = 1, xlim = xlim) +
-    geom_rug(aes(colour = isEV),
-             data = d[isEV == "Yes" | (nok < rugthreshold)],
-             alpha = pmax(pmin(1 / sqrt(log10(nok)), 1), as.integer(nok >= rugthreshold))) +
-    scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
-    ylab("Density") +
-    scale_x_continuous(breaks = roundedfivenum(d$Y)) +
-    geom_rangeframe() +
-    theme_tufte(base_family = "sans") +
-    theme(
-      legend.position = "none",
-      axis.text = element_text(colour = "black"),
-      axis.ticks = element_line(colour = "white", size = 2))
+  if (distr %in% c("poisson", "nbinom")) {
+    tmpd <- as.data.table(prop.table(table(d$Y)))
+    tmpd[, V1 := as.numeric(V1)]
+    tmpd$Density <- do.call(distribution$d,
+                            c(
+                              list(x = tmpd$V1),
+                              as.list(distribution$fit$estimate)))
+    setnames(tmpd, old = c("N", "Density"), new = c("Observed", "Expected"))
+    tmpd <- melt(tmpd, id.vars = "V1")
+
+    p.density <- ggplot(tmpd) +
+      geom_col(aes(V1, value, fill = variable),
+               position = "dodge", width = .3) +
+      scale_fill_manual("", values = c(
+                              "Observed" = "grey30",
+                              "Expected" = "blue")) +
+      geom_rug(aes(x = Y, colour = isEV),
+               data = d[isEV == "Yes" | (nok < rugthreshold)],
+               alpha = pmax(pmin(1 / sqrt(log10(nok)), 1), as.integer(nok >= rugthreshold))) +
+      scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
+      ylab("Density") +
+      scale_x_continuous(breaks = roundedfivenum(d$Y)) +
+      geom_rangeframe() +
+      theme_tufte(base_family = "sans") +
+      theme(
+        legend.position = "none",
+        axis.text = element_text(colour = "black"),
+        axis.ticks = element_line(colour = "white", size = 2))
+  } else {
+    p.density <- ggplot(d, aes(Y)) +
+      geom_density() +
+      stat_function(fun = distribution$d,
+                    args = as.list(distribution$fit$estimate),
+                    colour = "blue", linetype = 2, size = 1, xlim = xlim) +
+      geom_rug(aes(colour = isEV),
+               data = d[isEV == "Yes" | (nok < rugthreshold)],
+               alpha = pmax(pmin(1 / sqrt(log10(nok)), 1), as.integer(nok >= rugthreshold))) +
+      scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
+      ylab("Density") +
+      scale_x_continuous(breaks = roundedfivenum(d$Y)) +
+      geom_rangeframe() +
+      theme_tufte(base_family = "sans") +
+      theme(
+        legend.position = "none",
+        axis.text = element_text(colour = "black"),
+        axis.ticks = element_line(colour = "white", size = 2))
+  }
 
   if (identical(distr, "mvnormal")) {
     p.density <- p.density +
@@ -655,6 +692,17 @@ testdistr <- function(x,
                       distribution$Name,
                       attr(distribution$LL, "df"),
                       distribution$LL))
+  }
+
+  d$YDeviates <- resid(lm(Y ~ 0 + offset(X), data = d))
+
+  ## if categorical, jitter values slightly to reduce overplotting
+  ## by factor * smallest distance / 5
+  if (distr %in% c("poisson", "nbinom")) {
+    set.seed(seed)
+    d$X <- jitter(d$X, factor = factor)
+    d$Y <- jitter(d$Y, factor = factor)
+    d$YDeviates <- jitter(d$YDeviates, factor = factor)
   }
 
   p.qq <- ggplot(d, aes(X, Y)) +
@@ -682,8 +730,6 @@ testdistr <- function(x,
                       attr(distribution$LL, "df"),
                       distribution$LL))
   }
-
-  d$YDeviates <- resid(lm(Y ~ 0 + offset(X), data = d))
 
   p.qqdeviates <- ggplot(d, aes(X, YDeviates)) +
     geom_point(aes(colour = isEV)) +
@@ -817,7 +863,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", ".", "upper.CL",
 #' @param \ldots Additional arguments passed on.
 #' @return A ggplot graph object.
 #' @importFrom lme4 lmer
-#' @importFrom lsmeans lsmeans
+#' @importFrom emmeans emmeans
 #' @importFrom multcompView multcompLetters
 #' @keywords plot
 #' @export
@@ -851,7 +897,7 @@ TukeyHSDgg <- function(x, y, d, ci = .95, idvar, ...) {
   } else {
     fit <- lmer(as.formula(sprintf("%s ~ %s + (1 | %s)", y, x, idvar)), data = d)
   }
-  tHSD <- lsmeans(fit, specs = as.formula(sprintf("pairwise ~ %s", x)))
+  tHSD <- emmeans(fit, specs = as.formula(sprintf("pairwise ~ %s", x)))
   tHSDs <- summary(tHSD)
 
   ## Extract labels and factor levels from Tukey post-hoc
@@ -861,13 +907,17 @@ TukeyHSDgg <- function(x, y, d, ci = .95, idvar, ...) {
 
   Tukey.labels <- multcompLetters(Tukey.levels)['Letters']
   plot.labels <- names(Tukey.labels[['Letters']])
+  plot.labels <- gsub("[ \t]$", "", gsub("^(\\s)*(.*)$", "\\2", plot.labels))
+
+  thsdsem <- tHSDs$emmeans
+  thsdsem[[x]] <- gsub("\\s", "", thsdsem[[x]])
 
   plotdf <- merge(
-    tHSDs$lsmeans,
+    thsdsem,
     data.frame(Labels = plot.labels, Letters = Tukey.labels),
     by.x = x, by.y = "Labels")
 
-  p <- ggplot(plotdf, aes_string(x=x, y="lsmean", ymin = "lower.CL", ymax = "upper.CL")) +
+  p <- ggplot(plotdf, aes_string(x=x, y="emmean", ymin = "lower.CL", ymax = "upper.CL")) +
     geom_pointrange() + geom_point() +
     geom_text(aes(y = upper.CL + (max(upper.CL) * .05),
                   label = Letters))
