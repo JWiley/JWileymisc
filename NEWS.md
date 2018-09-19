@@ -1,3 +1,9 @@
+# JWileymisc 0.3.2
+
+## Bug Fixes
+* `testdistr()` now only finds extreme values for the right tail of a 
+   chi-square distribution.
+
 # JWileymisc 0.3.1
 
 ## Changes
