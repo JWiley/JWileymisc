@@ -448,6 +448,14 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDevi
 #' ## testing and graphing
 #' testdistr(d$Ybeta, "beta", starts = list(shape1 = 1, shape2 = 4))
 #' testdistr(d$Ychisq, "chisq", starts = list(df = 8))
+#'
+#' ## for chi-square distribution, extreme values only on
+#' ## the right tail
+#' testdistr(d$Ychisq, "chisq", starts = list(df = 8),
+#'   extremevalues = "empirical", ev.perc = .1)
+#' testdistr(d$Ychisq, "chisq", starts = list(df = 8),
+#'   extremevalues = "theoretical", ev.perc = .1)
+#'
 #' testdistr(d$Yf, "f", starts = list(df1 = 5, df2 = 10))
 #' testdistr(d$Ygamma, "gamma")
 #' testdistr(d$Ynbinom, "poisson")
@@ -465,6 +473,14 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDevi
 #'   extremevalues = "theoretical", robust = TRUE)
 #'
 #' testdistr(mtcars, "mvnormal")
+#'
+#' ## for multivariate normal mahalanobis distance
+#' ## which follows a chi-square distribution, extreme values only on
+#' ## the right tail
+#' testdistr(mtcars, "mvnormal", extremevalues = "empirical",
+#'   ev.perc = .1)
+#' testdistr(mtcars, "mvnormal", extremevalues = "theoretical",
+#'   ev.perc = .1)
 #'
 #' rm(d) ## cleanup
 #' }
@@ -622,15 +638,20 @@ testdistr <- function(x,
     OriginalOrder = order(x))
 
   ev.limits <- switch(extremevalues,
-                      no = c(-Inf, Inf),
-                      empirical = if (!identical(distr, "mvnormal")) {
-                                    quantile(x, probs = c(ev.perc, 1 - ev.perc), na.rm = TRUE)
-                                  } else {
-                                    c(-Inf, quantile(x, probs = 1 - ev.perc, na.rm = TRUE))
-                                  },
-                      theoretical = do.call(distribution$q,
-                                            c(list(p = c(ev.perc, 1 - ev.perc)),
-                                              as.list(distribution$fit$estimate))))
+    no = c(-Inf, Inf),
+    empirical = if (!identical(distr, "mvnormal") && !identical(distr, "chisq")) {
+                  quantile(x, probs = c(ev.perc, 1 - ev.perc), na.rm = TRUE)
+                } else {
+                  c(-Inf, quantile(x, probs = 1 - ev.perc, na.rm = TRUE))
+                },
+    theoretical = do.call(distribution$q,
+      c(list(
+        p = if (!identical(distr, "mvnormal") && !identical(distr, "chisq")) {
+              c(ev.perc, 1 - ev.perc)
+            } else {
+              c(0, 1 - ev.perc)
+            }),
+        as.list(distribution$fit$estimate))))
 
   d[, isEV := factor(as.numeric(Y) %inrange% ev.limits,
                      levels = c(TRUE, FALSE), labels = c("No", "Yes"))]
