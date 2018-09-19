@@ -1,5 +1,13 @@
 # JWileymisc 0.3.1
 
+## Changes
+* `detailedTests()` is now more generic and dispatches to 
+  `.detailedTestsLMER()` or `.detailedTestsVGLM()` to provide 
+  detailed tests for both linear mixed effects models and 
+  multinomial logistic regression models fit by `vglm()`.
+* `ezMULTINOM()` is now deprecated in favor of the new, more 
+  generic `detailedTests()`.
+
 ## Bug Fixes
 * `testdistr()` now creates more appropriate plots for discrete 
    distributions including the Poisson and Negative Binomial.

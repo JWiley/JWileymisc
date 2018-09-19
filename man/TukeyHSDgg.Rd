@@ -33,10 +33,13 @@ Inspired by http://stackoverflow.com/questions/18771516/is-there-a-function-to-a
 ## examples using it with single level data
 ## differences based on an ANOVA and follow up contrasts
 TukeyHSDgg("cyl", "mpg", mtcars)
+
+\dontrun{
 TukeyHSDgg("Species", "Sepal.Length", iris)
 
 ## example based on multilevel data
 ## differences based on model fit with lmer and follow up contrasts
 TukeyHSDgg("treatment", "decrease", OrchardSprays, idvar = "colpos")
+}
 }
 \keyword{plot}

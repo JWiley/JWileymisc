@@ -334,7 +334,7 @@ gglikert <- function(x, y, leftLab, rightLab, colour, data, xlim, title,
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDeviates", "..count.."))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDeviates", "..count..", "variable"))
 
 #' Graphically compare the distribution of a variable against a specific distribution
 #'
@@ -623,7 +623,11 @@ testdistr <- function(x,
 
   ev.limits <- switch(extremevalues,
                       no = c(-Inf, Inf),
-                      empirical = quantile(x, probs = c(ev.perc, 1 - ev.perc), na.rm = TRUE),
+                      empirical = if (!identical(distr, "mvnormal")) {
+                                    quantile(x, probs = c(ev.perc, 1 - ev.perc), na.rm = TRUE)
+                                  } else {
+                                    c(-Inf, quantile(x, probs = 1 - ev.perc, na.rm = TRUE))
+                                  },
                       theoretical = do.call(distribution$q,
                                             c(list(p = c(ev.perc, 1 - ev.perc)),
                                               as.list(distribution$fit$estimate))))
@@ -872,11 +876,14 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", ".", "upper.CL",
 #' ## examples using it with single level data
 #' ## differences based on an ANOVA and follow up contrasts
 #' TukeyHSDgg("cyl", "mpg", mtcars)
+#'
+#' \dontrun{
 #' TukeyHSDgg("Species", "Sepal.Length", iris)
 #'
 #' ## example based on multilevel data
 #' ## differences based on model fit with lmer and follow up contrasts
 #' TukeyHSDgg("treatment", "decrease", OrchardSprays, idvar = "colpos")
+#' }
 TukeyHSDgg <- function(x, y, d, ci = .95, idvar, ...) {
   if (missing(idvar)) {
     d <- droplevels(na.omit(as.data.frame(d)[, c(x, y)]))
