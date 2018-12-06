@@ -9,8 +9,7 @@ omegaSEM(items, id, data, savemodel = FALSE)
 \arguments{
 \item{items}{A character vector giving the variables that map
 to the items in the scale. Note that these should be reverse
-scored prior to running this function. Currently must be three
-or more items.}
+scored prior to running this function.}
 
 \item{id}{A character string giving the name of the variable that
 indicates which rows of the dataset belong to the same person
@@ -41,9 +40,8 @@ omega.
     id = "UserID",
     data = aces_daily,
     savemodel = FALSE)
-
 }
 }
 \references{
-TODO.
+Geldhof, G. J., Preacher, K. J., & Zyphur, M. J. (2014). Reliability estimation in a multilevel confirmatory factor analysis framework. Psychological Methods, 19(1), 72.
 }

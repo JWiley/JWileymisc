@@ -6,8 +6,7 @@
 #'
 #' @param items A character vector giving the variables that map
 #'  to the items in the scale. Note that these should be reverse
-#'  scored prior to running this function. Currently must be three
-#'  or more items.
+#'  scored prior to running this function.
 #' @param id A character string giving the name of the variable that
 #'  indicates which rows of the dataset belong to the same person
 #'  or group for the multilevel analysis.
@@ -18,7 +17,7 @@
 #'  estimates for coefficient omega at the within and between level. The
 #'  next element, \dQuote{Fit} contains the entire fitted model from lavaan, if
 #'  \code{savemodel = TRUE}.
-#' @references TODO.
+#' @references Geldhof, G. J., Preacher, K. J., & Zyphur, M. J. (2014). Reliability estimation in a multilevel confirmatory factor analysis framework. Psychological Methods, 19(1), 72.
 #' @export
 #' @importFrom lavaan sem parameterEstimates
 #' @examples
@@ -32,6 +31,9 @@
 #'     savemodel = FALSE)
 #' }
 omegaSEM <- function(items, id, data, savemodel = FALSE) {
+  if (length(items) < 2) {
+    stop("omega requires at least two items")
+  }
 
   llabels.within <- paste0("wl", seq_along(items))
   rlabels.within <- paste0("wr", seq_along(items))
@@ -58,6 +60,18 @@ omegaSEM <- function(items, id, data, savemodel = FALSE) {
   variances.between <- paste(sprintf(
     "%s~~%s*%s", items, rlabels.between, items),
     collapse = "\n")
+
+  ## if only two items, need to add constraints
+  ## for proper estimation
+  if (identical(length(items), 2L)) {
+    constraints.within <- paste0(
+      constraints.within,
+      "\nwl1 == wl2\n")
+    constraints.between <- paste0(
+      constraints.between,
+      "\nbl1 == bl2\n")
+  }
+
 
  model.within <- sprintf(
    "
