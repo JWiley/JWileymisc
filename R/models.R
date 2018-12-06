@@ -1,3 +1,132 @@
+#' Calculate multilevel omega reliability
+#'
+#' This function uses multilevel structural equation modelling
+#' to calculate between and within reliability using coefficient
+#' omega.
+#'
+#' @param items A character vector giving the variables that map
+#'  to the items in the scale. Note that these should be reverse
+#'  scored prior to running this function. Currently must be three
+#'  or more items.
+#' @param id A character string giving the name of the variable that
+#'  indicates which rows of the dataset belong to the same person
+#'  or group for the multilevel analysis.
+#' @param data A data table or data frame to be used for analysis.
+#' @param savemodel A logical value indicating whether the underlying model
+#'  should be saved and returned. Defaults to \code{FALSE}.
+#' @return a list with two elements, the first, \dQuote{Results} contains the
+#'  estimates for coefficient omega at the within and between level. The
+#'  next element, \dQuote{Fit} contains the entire fitted model from lavaan, if
+#'  \code{savemodel = TRUE}.
+#' @references TODO.
+#' @export
+#' @importFrom lavaan sem parameterEstimates
+#' @examples
+#'
+#' \dontrun{
+#'   data(aces_daily)
+#'   omegaSEM(
+#'     items = c("COPEPrb", "COPEPrc", "COPEExp"),
+#'     id = "UserID",
+#'     data = aces_daily,
+#'     savemodel = FALSE)
+#' }
+omegaSEM <- function(items, id, data, savemodel = FALSE) {
+
+  llabels.within <- paste0("wl", seq_along(items))
+  rlabels.within <- paste0("wr", seq_along(items))
+  constraints.within <- paste(
+    sprintf("%s > 0", rlabels.within),
+    collapse = "\n")
+  loadings.within <- paste(c(
+    sprintf("NA * %s", items[[1]]),
+    sprintf("%s * %s", llabels.within, items)),
+    collapse = " + ")
+  variances.within <- paste(sprintf(
+    "%s~~%s*%s", items, rlabels.within, items),
+    collapse = "\n")
+
+  llabels.between <- paste0("bl", seq_along(items))
+  rlabels.between <- paste0("br", seq_along(items))
+  constraints.between <- paste(
+    sprintf("%s > 0", rlabels.between),
+    collapse = "\n")
+  loadings.between <- paste(c(
+    sprintf("NA * %s", items[[1]]),
+    sprintf("%s * %s", llabels.between, items)),
+    collapse = " + ")
+  variances.between <- paste(sprintf(
+    "%s~~%s*%s", items, rlabels.between, items),
+    collapse = "\n")
+
+ model.within <- sprintf(
+   "
+## within level first
+level: 1
+ ## single factor model
+ f_within =~ %s
+
+ ## set variances
+ f_within~~1*f_within
+ %s
+ ## set constraints
+ %s
+
+ ## define new parameters
+ num_within := (%s)^2
+ denom_within := (%s)^2 + (%s)
+ omega_within := num_within / denom_within
+",
+loadings.within,
+variances.within,
+constraints.within,
+paste(llabels.within, collapse = " + "),
+paste(llabels.within, collapse = " + "),
+paste(rlabels.within, collapse = " + "))
+
+ model.between <- sprintf(
+   "
+## between level second
+level: 2
+ ## single factor model
+ f_between =~ %s
+
+ ## set variances
+ f_between~~1*f_between
+ %s
+ ## set constraints
+ %s
+
+ ## define new parameters
+ num_between := (%s)^2
+ denom_between := (%s)^2 + (%s)
+ omega_between := num_between / denom_between
+",
+loadings.between,
+variances.between,
+constraints.between,
+paste(llabels.between, collapse = " + "),
+paste(llabels.between, collapse = " + "),
+paste(rlabels.between, collapse = " + "))
+
+  model <- sprintf("%s \n%s", model.within, model.between)
+  fit <- lavaan::sem(model = model, data = data,
+             cluster = id)
+  output <- lavaan::parameterEstimates(fit)
+  output <- subset(output, label %in% c("omega_within", "omega_between"))
+  output <- output[, c("label", "est", "ci.lower", "ci.upper")]
+
+  if (savemodel) {
+    list(
+    Results = output,
+    Fit = fit)
+  } else {
+    list(
+    Results = output)
+  }
+}
+
+
 
 ## clear R CMD CHECK notes
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("DV", "Predicted"))

@@ -125,6 +125,14 @@ d <- data.frame(
 ## testing and graphing
 testdistr(d$Ybeta, "beta", starts = list(shape1 = 1, shape2 = 4))
 testdistr(d$Ychisq, "chisq", starts = list(df = 8))
+
+## for chi-square distribution, extreme values only on
+## the right tail
+testdistr(d$Ychisq, "chisq", starts = list(df = 8),
+  extremevalues = "empirical", ev.perc = .1)
+testdistr(d$Ychisq, "chisq", starts = list(df = 8),
+  extremevalues = "theoretical", ev.perc = .1)
+
 testdistr(d$Yf, "f", starts = list(df1 = 5, df2 = 10))
 testdistr(d$Ygamma, "gamma")
 testdistr(d$Ynbinom, "poisson")
@@ -142,6 +150,14 @@ testdistr(c(d$Ynorm, 10, 1000), "normal",
   extremevalues = "theoretical", robust = TRUE)
 
 testdistr(mtcars, "mvnormal")
+
+## for multivariate normal mahalanobis distance
+## which follows a chi-square distribution, extreme values only on
+## the right tail
+testdistr(mtcars, "mvnormal", extremevalues = "empirical",
+  ev.perc = .1)
+testdistr(mtcars, "mvnormal", extremevalues = "theoretical",
+  ev.perc = .1)
 
 rm(d) ## cleanup
 }
