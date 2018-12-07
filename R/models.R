@@ -667,7 +667,7 @@ if(getRversion() >= "2.15.1") utils::globalVariables(c("var1", "var2", "sdcor", 
     stop ("must be a vglm class object")
   }
 
-  k <- 1L:ncol(m@y)
+  k <- 1L:ncol(obj@y)
   if (length(k) < 3) stop("DV must have at least 3 levels, after omitting missing data")
 
   nk <- seq_along(k)[-length(k)]

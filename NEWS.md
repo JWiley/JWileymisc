@@ -1,8 +1,16 @@
 # JWileymisc 0.3.2
 
+## New Features
+* `omegaSEM()` Function that calculates coefficient omega for 
+  measuring internal consistency reliability. Works for two 
+  level models and returns within and between level omega 
+  values.
+
 ## Bug Fixes
 * `testdistr()` now only finds extreme values for the right tail of a 
    chi-square distribution.
+* `.detailedTestsVGLM()` now identifies levels of the outcome
+  correctly.
 
 # JWileymisc 0.3.1
 
