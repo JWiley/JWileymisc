@@ -4,7 +4,7 @@
 \alias{egltable}
 \title{Function makes nice tables}
 \usage{
-egltable(vars, g, idvar, data, strict = TRUE, parametric = TRUE,
+egltable(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
   simChisq = FALSE, sims = 1e+06)
 }
 \arguments{
@@ -15,12 +15,12 @@ or the data to be described itself.}
 \item{g}{A variable used tou group/separate the data prior
 to calculating descriptive statistics.}
 
+\item{data}{optional argument of the dataset containing
+the variables to be described.}
+
 \item{idvar}{A character string indicating the variable name
 of the ID variable.  Not currently used, but will eventually
 support \code{egltable} supporting repeated measures data.}
-
-\item{data}{optional argument of the dataset containing
-the variables to be described.}
 
 \item{strict}{Logical, whether to strictly follow the
 type of each variable, or to assume categorical if
@@ -52,7 +52,7 @@ statistics optionally by group levels.
 }
 \examples{
 egltable(iris)
-egltable(colnames(iris)[1:4], "Species", iris)
+egltable(colnames(iris)[1:4], "Species", data = iris)
 egltable(iris, parametric = FALSE)
 egltable(colnames(iris)[1:4], "Species", iris,
   parametric = FALSE)
@@ -63,5 +63,11 @@ egltable(colnames(iris)[1:4], "Species", iris,
 
 diris <- as.data.table(iris)
 egltable("Sepal.Length", g = "Species", data = diris)
+
+tmp <- mtcars
+tmp$cyl <- factor(tmp$cyl)
+tmp$am <- factor(tmp$am)
+egltable(c("am", "cyl"), "vs", tmp)
+rm(tmp)
 }
 \keyword{utils}

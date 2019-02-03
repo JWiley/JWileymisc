@@ -56,6 +56,40 @@ moments <- function(data, ...) {
   return(out)
 }
 
+#' Calculate Phi or Cramer's V effect size
+#'
+#' Simple function to calculate effect sizes for frequency tables.
+#'
+#' @param x A frequency table, such as from \code{xtabs()}.
+#' @return A numeriv value with Phi for 2 x 2 tables or Cramer's V
+#'   for tables larger than 2 x 2.
+#' @importFrom stats ftable
+#' @importFrom MASS loglm
+#' @export
+#' @examples
+#' cramerV(xtabs(~ am + vs, data = mtcars))
+#' cramerV(xtabs(~ cyl + vs, data = mtcars))
+#' cramerV(xtabs(~ cyl + am, data = mtcars))
+cramerV <- function(x) {
+  if (length(dim(x)) > 2L) {
+    stop("Cannot calculate effect size on more than two dimensions")
+  }
+
+  x2 <- ftable(x)
+  chi2 <- summary(MASS::loglm(~ 1 + 2, x2))$tests["Pearson", "X^2"]
+  N <- sum(x2)
+  k <- min(dim(x2))
+
+  out <- sqrt(chi2 / (N * (k - 1)))
+
+  if (identical(dim(x), c(2L, 2L))) {
+    names(out) <- "Phi"
+  } else {
+    names(out) <- "Cramer's V"
+  }
+  return(out)
+}
+
 #' Summary Statistics for a SEM Analysis
 #'
 #' This function is designed to calculate the descriptive statistics and
@@ -275,11 +309,11 @@ SEMSummary.fit <- function(formula, data,
 #'   or the data to be described itself.
 #' @param g A variable used tou group/separate the data prior
 #'   to calculating descriptive statistics.
+#' @param data optional argument of the dataset containing
+#'   the variables to be described.
 #' @param idvar A character string indicating the variable name
 #'   of the ID variable.  Not currently used, but will eventually
 #'   support \code{egltable} supporting repeated measures data.
-#' @param data optional argument of the dataset containing
-#'   the variables to be described.
 #' @param strict Logical, whether to strictly follow the
 #'   type of each variable, or to assume categorical if
 #'   the number of unique values is less than or equal to 3.
@@ -302,7 +336,7 @@ SEMSummary.fit <- function(formula, data,
 #' @importFrom stats sd aov chisq.test kruskal.test quantile xtabs
 #' @examples
 #' egltable(iris)
-#' egltable(colnames(iris)[1:4], "Species", iris)
+#' egltable(colnames(iris)[1:4], "Species", data = iris)
 #' egltable(iris, parametric = FALSE)
 #' egltable(colnames(iris)[1:4], "Species", iris,
 #'   parametric = FALSE)
@@ -313,7 +347,13 @@ SEMSummary.fit <- function(formula, data,
 #'
 #' diris <- as.data.table(iris)
 #' egltable("Sepal.Length", g = "Species", data = diris)
-egltable <- function(vars, g, idvar, data, strict=TRUE, parametric = TRUE, simChisq = FALSE, sims = 1e6) {
+#'
+#' tmp <- mtcars
+#' tmp$cyl <- factor(tmp$cyl)
+#' tmp$am <- factor(tmp$am)
+#' egltable(c("am", "cyl"), "vs", tmp)
+#' rm(tmp)
+egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE, simChisq = FALSE, sims = 1e6) {
   if (!missing(data)) {
     if (is.data.table(data)) {
       dat <- data[, vars, with=FALSE]
@@ -436,11 +476,14 @@ egltable <- function(vars, g, idvar, data, strict=TRUE, parametric = TRUE, simCh
       if (length(contvars.index)) {
         if (v %in% contvars.index) {
           if (parametric[v]) {
+
             tests <- summary(aov(dv ~ g, data = data.table(dv = dat[[v]], g = g)))[[1]]
+            es <- tests[1, "Sum Sq"] / sum(tests[, "Sum Sq"])
             out <- cbind(out,
-                         Test = c(sprintf("F(%d, %d) = %0.2f, %s",
+                         Test = c(sprintf("F(%d, %d) = %0.2f, %s, Eta-squared = %0.2f",
                                           tests[1, "Df"], tests[2, "Df"], tests[1, "F value"],
-                                          formatPval(tests[1, "Pr(>F)"], 3, 3, includeP=TRUE)),
+                                          formatPval(tests[1, "Pr(>F)"], 3, 3, includeP=TRUE),
+                                          es),
                                   rep("", nrow(out) - 1)))
           } else {
             tests <- kruskal.test(dv ~ g, data = data.frame(dv = dat[[v]], g = g))
@@ -455,14 +498,20 @@ egltable <- function(vars, g, idvar, data, strict=TRUE, parametric = TRUE, simCh
 
       if (length(catvars.index)) {
         if (v %in% catvars.index) {
-          tests <- chisq.test(xtabs(~ dv + g, data = data.frame(dv = dat[[v]], g = g)),
+
+          tabs <- xtabs(~ dv + g, data = data.frame(dv = dat[[v]], g = g))
+          es <- cramerV(tabs)
+          tests <- chisq.test(tabs,
                               correct = FALSE,
-                              simulate.p.value = simChisq, B = sims)
+                              simulate.p.value = simChisq,
+                              B = sims)
           out <- cbind(out,
-                       Test = c(sprintf("Chi-square = %0.2f, %s, %s",
+                       Test = c(sprintf("Chi-square = %0.2f, %s, %s, %s",
                                         tests$statistic,
                                         ifelse(simChisq, "simulated", sprintf("df = %d", tests$parameter)),
-                                        formatPval(tests$p.value, 3, 3, includeP=TRUE)),
+                                        formatPval(tests$p.value, 3, 3, includeP=TRUE),
+                                        sprintf("%s = %0.2f", names(es), es)
+                                        ),
                                 rep("", nrow(out) - 1)))
         }
       }
