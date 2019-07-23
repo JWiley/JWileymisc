@@ -90,6 +90,59 @@ cramerV <- function(x) {
   return(out)
 }
 
+
+#' Calculate Standardized Mean Difference (SMD)
+#'
+#' Simple function to calculate effect sizes for mean differences.
+#'
+#' @param x A continuous variable
+#' @param g A grouping variable, with two levels
+#' @param index A character string: \dQuote{all} uses pooled variance,
+#'   \dQuote{1} uses the first factor level variance,
+#'   \dQuote{2} uses the second factor level variance.
+#' @return The standardized mean difference.
+#' @export
+#' @examples
+#' smd(mtcars$mpg, mtcars$am)
+#' smd(mtcars$mpg, mtcars$am, "all")
+#' smd(mtcars$mpg, mtcars$am, "1")
+#' smd(mtcars$mpg, mtcars$am, "2")
+#'
+#' smd(mtcars$hp, mtcars$vs)
+#'
+#' d <- data.table::as.data.table(mtcars)
+#' d[, smd(mpg, vs)]
+#' rm(d)
+smd <- function(x, g, index = c("all", "1", "2")) {
+  index <- match.arg(index)
+
+  ok <- !is.na(x) & !is.na(g)
+  x <- x[ok]
+  g <- g[ok]
+
+  if (!is.factor(g)) {
+    g <- factor(g)
+  }
+  k <- length(levels(g))
+
+  if (!identical(k, 2L)) stop("Must have two groups")
+
+  m <- as.vector(by(x, g, mean))
+  v <- as.vector(by(x, g, var))
+  n <- as.vector(by(x, g, length))
+
+  useV <- switch(index,
+    `all` = sum((n - 1) * v) / (sum(n) - k),
+    `1` = v[1],
+    `2` = v[2])
+
+  out <- abs(diff(m) / sqrt(useV))
+
+  names(out) <- "SMD"
+  return(out)
+}
+
+
 #' Summary Statistics for a SEM Analysis
 #'
 #' This function is designed to calculate the descriptive statistics and
@@ -350,10 +403,14 @@ SEMSummary.fit <- function(formula, data,
 #'
 #' tmp <- mtcars
 #' tmp$cyl <- factor(tmp$cyl)
-#' tmp$am <- factor(tmp$am)
+#' tmp$am <- factor(tmp$am, levels = 0:1)
+#'
+#' egltable(c("mpg", "hp"), "vs", tmp)
+#' egltable(c("mpg", "hp"), "am", tmp)
 #' egltable(c("am", "cyl"), "vs", tmp)
 #' rm(tmp)
-egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE, simChisq = FALSE, sims = 1e6) {
+egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
+                     simChisq = FALSE, sims = 1e6) {
   if (!missing(data)) {
     if (is.data.table(data)) {
       dat <- data[, vars, with=FALSE]
@@ -476,15 +533,28 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE, simCh
       if (length(contvars.index)) {
         if (v %in% contvars.index) {
           if (parametric[v]) {
+            if (length(levels(g)) > 2) {
+              tests <- summary(aov(dv ~ g, data = data.table(dv = dat[[v]], g = g)))[[1]]
+              es <- tests[1, "Sum Sq"] / sum(tests[, "Sum Sq"])
+              out <- cbind(out,
+                           Test = c(sprintf("F(%d, %d) = %0.2f, %s, Eta-squared = %0.2f",
+                                            tests[1, "Df"], tests[2, "Df"], tests[1, "F value"],
+                                            formatPval(tests[1, "Pr(>F)"], 3, 3, includeP=TRUE),
+                                            es),
+                                    rep("", nrow(out) - 1)))
+            } else if (length(levels(g)) == 2) {
 
-            tests <- summary(aov(dv ~ g, data = data.table(dv = dat[[v]], g = g)))[[1]]
-            es <- tests[1, "Sum Sq"] / sum(tests[, "Sum Sq"])
-            out <- cbind(out,
-                         Test = c(sprintf("F(%d, %d) = %0.2f, %s, Eta-squared = %0.2f",
-                                          tests[1, "Df"], tests[2, "Df"], tests[1, "F value"],
-                                          formatPval(tests[1, "Pr(>F)"], 3, 3, includeP=TRUE),
-                                          es),
-                                  rep("", nrow(out) - 1)))
+              tests <- t.test(dv ~ g, data = data.table(dv = dat[[v]], g = g),
+                              var.equal=TRUE)
+              es <- data.table(dv = dat[[v]], g = g)[, smd(dv, g, "all")]
+              out <- cbind(out,
+                           Test = c(sprintf("t(df=%0.0f) = %0.2f, %s, d = %0.2f",
+                                            tests$parameter[["df"]],
+                                            tests$statistic[["t"]],
+                                            formatPval(tests$p.value, 3, 3, includeP=TRUE),
+                                            es),
+                                    rep("", nrow(out) - 1)))
+            }
           } else {
             tests <- kruskal.test(dv ~ g, data = data.frame(dv = dat[[v]], g = g))
             out <- cbind(out,
