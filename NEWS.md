@@ -6,6 +6,10 @@
   level models and returns within and between level omega 
   values.
 
+* `egltable()` Function has added effect sizes when multiple groups
+  are compared including Cohen's d for two groups, eta-squared for
+  multiple groups, and phi for categorical variables.
+
 ## Bug Fixes
 * `testdistr()` now only finds extreme values for the right tail of a 
    chi-square distribution.

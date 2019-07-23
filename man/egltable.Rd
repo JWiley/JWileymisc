@@ -66,7 +66,10 @@ egltable("Sepal.Length", g = "Species", data = diris)
 
 tmp <- mtcars
 tmp$cyl <- factor(tmp$cyl)
-tmp$am <- factor(tmp$am)
+tmp$am <- factor(tmp$am, levels = 0:1)
+
+egltable(c("mpg", "hp"), "vs", tmp)
+egltable(c("mpg", "hp"), "am", tmp)
 egltable(c("am", "cyl"), "vs", tmp)
 rm(tmp)
 }
