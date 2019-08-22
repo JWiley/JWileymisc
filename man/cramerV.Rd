@@ -10,7 +10,7 @@ cramerV(x)
 \item{x}{A frequency table, such as from \code{xtabs()}.}
 }
 \value{
-A numeriv value with Phi for 2 x 2 tables or Cramer's V
+A numeric value with Phi for 2 x 2 tables or Cramer's V
   for tables larger than 2 x 2.
 }
 \description{

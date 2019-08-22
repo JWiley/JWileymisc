@@ -1,3 +1,46 @@
+#' Calculate a Circular Mean
+#'
+#' Function to calculate circular mean
+#'
+#' @param x Numeric or integer values
+#' @param max The theoretical maximum (e.g., if degrees, 360)
+#' @param na.rm A logical value indicating whether to remove missing values.
+#'   Defaults to \code{TRUE}.
+#' @return A numeric value with the circular mean.
+#' @export
+#' @examples
+#' meanCircular(c(22:23, 1:2), max = 24)
+#' meanCircular(c(.91, .96, .05, .16), max = 1)
+meanCircular <- function(x, max, na.rm = TRUE) {
+  if(!(is.integer(x) || is.numeric(x))) {
+    stop(sprintf("x must be class integer or numeric but was %s",
+                 paste(class(x), collapse = "; ")))
+  }
+
+  if (na.rm) {
+    x <- x[!is.na(x)]
+    if (!length(x)) {
+      return(NA_real_)
+    }
+  } else if (anyNA(x)) {
+    return(NA_real_)
+  }
+
+  if (any(x < 0)) {
+    stop("For cicular means, cannot have negative numbers")
+  }
+  if (any(x > max)) {
+    stop("For cicular means, cannot have values above the theoretical maximum")
+  }
+
+  scale <- 360 / max
+  rad <- x * scale * (pi / 180)
+  mean.cos <- .Internal(mean(cos(rad)))
+  mean.sin <- .Internal(mean(sin(rad)))
+  out <- atan2(mean.sin, mean.cos) * (180 / pi) / scale
+  if (out < 0) out + max else out
+}
+
 #' Estimate the first and second moments
 #'
 #' This function relies on the \pkg{lavaan} package to use the
@@ -61,7 +104,7 @@ moments <- function(data, ...) {
 #' Simple function to calculate effect sizes for frequency tables.
 #'
 #' @param x A frequency table, such as from \code{xtabs()}.
-#' @return A numeriv value with Phi for 2 x 2 tables or Cramer's V
+#' @return A numeric value with Phi for 2 x 2 tables or Cramer's V
 #'   for tables larger than 2 x 2.
 #' @importFrom stats ftable
 #' @importFrom MASS loglm
