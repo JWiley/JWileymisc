@@ -3,3 +3,7 @@ desktop.ini
 .RData
 *~
 
+# artifacts of R CMD check/build
+*.Rcheck
+*.tar.gz
+Rplots.pdf

@@ -14,7 +14,6 @@ Description: A collection of miscellaneous tools and functions,
 License: GPL (>= 3)
 Depends:
     R (>= 3.5.1),
-    data.table (>= 1.10.0),
     ggplot2 (>= 2.2.0),
     cowplot,
     foreach
@@ -24,6 +23,7 @@ Imports:
     MASS,
     multcompView,
     emmeans,
+    data.table (>= 1.10.0),
     devtools,
     graphics,
     ggthemes,
@@ -44,4 +44,5 @@ Imports:
 Suggests:
     scales,
     testthat
+Encoding: UTF-8
 RoxygenNote: 6.1.1

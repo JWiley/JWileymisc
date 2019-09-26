@@ -127,6 +127,7 @@ paste(rlabels.between, collapse = " + "))
   fit <- lavaan::sem(model = model, data = data,
              cluster = id)
   output <- lavaan::parameterEstimates(fit)
+  label = NULL # <- palliate R CMD check
   output <- subset(output, label %in% c("omega_within", "omega_between"))
   output <- output[, c("label", "est", "ci.lower", "ci.upper")]
 
@@ -361,6 +362,7 @@ if(getRversion() >= "2.15.1") utils::globalVariables(c("var1", "var2", "sdcor", 
 #'   intervals to calculate. One of \dQuote{Wald}, \dQuote{profile}, or
 #'   \dQuote{boot}.
 #' @param \ldots Additional arguments passed to \code{confint}
+#' @importFrom data.table as.data.table := setnames
 #' @importFrom lme4 isGLMM isNLMM isLMM isREML nobars findbars
 #' @importFrom lme4 ngrps
 #' @importFrom stats family formula nobs update
@@ -884,6 +886,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("V2", "Index"))
 ##' @return A data table with notes if no convergence or significance
 ##'   thresholds (if any).
 ##' @export
+##' @importFrom data.table .N
 ##' @importFrom rms contrast
 ##' @importFrom stats optim
 ##' @examples
