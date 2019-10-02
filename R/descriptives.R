@@ -10,7 +10,13 @@
 #' @export
 #' @examples
 #' meanCircular(c(22:23, 1:2), max = 24)
+#' meanCircular(c(12, 24), max = 24)
+#' meanCircular(c(6, 7, 23), max = 24)
+#' meanCircular(c(6, 7, 21), max = 24)
+#' meanCircular(c(6, 21), max = 24)
+#' meanCircular(c(6, 23), max = 24)
 #' meanCircular(c(.91, .96, .05, .16), max = 1)
+#'
 meanCircular <- function(x, max, na.rm = TRUE) {
   if(!(is.integer(x) || is.numeric(x))) {
     stop(sprintf("x must be class integer or numeric but was %s",
@@ -35,10 +41,25 @@ meanCircular <- function(x, max, na.rm = TRUE) {
 
   scale <- 360 / max
   rad <- x * scale * (pi / 180)
-  mean.cos <- mean(cos(rad))
-  mean.sin <- mean(sin(rad))
-  out <- atan2(mean.sin, mean.cos) * (180 / pi) / scale
-  if (out < 0) out + max else out
+  mc <- .Internal(mean(cos(rad)))
+  ms <- .Internal(mean(sin(rad)))
+
+  if (ms > 0 && mc > 0) {
+    out <- atan2(ms, mc)
+  } else if (mc <= 0) {
+    out <- atan2(ms, mc) + pi
+  } else if (ms < 0 && mc > 0) {
+    out <- atan2(ms, mc) + 2 * pi
+  }
+
+  ## radians to degrees and unscale to the inputs
+  out <- out * (180 / pi) / scale
+  if (out == max) {
+    0
+  } else {
+    out
+  }
+
 }
 
 #' Estimate the first and second moments
