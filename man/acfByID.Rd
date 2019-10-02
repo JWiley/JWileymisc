@@ -44,14 +44,14 @@ size.
 }
 \examples{
 ## example 1
-dat <- data.table(
+dat <- data.table::data.table(
   x = sin(1:30),
   time = 1:30,
   id = 1)
 acfByID("x", "time", "id", data = dat)
 
 ## example 2
-dat2 <- data.table(
+dat2 <- data.table::data.table(
   x = c(sin(1:30), sin((1:30)/10)),
   time = c(1:30, 1:30),
   id = rep(1:2, each = 30))

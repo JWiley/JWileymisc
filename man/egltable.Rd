@@ -61,7 +61,7 @@ egltable(colnames(iris)[1:4], "Species", iris,
 egltable(colnames(iris)[1:4], "Species", iris,
   parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
 
-diris <- as.data.table(iris)
+diris <- data.table::as.data.table(iris)
 egltable("Sepal.Length", g = "Species", data = diris)
 
 tmp <- mtcars

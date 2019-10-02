@@ -35,8 +35,8 @@ meanCircular <- function(x, max, na.rm = TRUE) {
 
   scale <- 360 / max
   rad <- x * scale * (pi / 180)
-  mean.cos <- .Internal(mean(cos(rad)))
-  mean.sin <- .Internal(mean(sin(rad)))
+  mean.cos <- mean(cos(rad))
+  mean.sin <- mean(sin(rad))
   out <- atan2(mean.sin, mean.cos) * (180 / pi) / scale
   if (out < 0) out + max else out
 }
@@ -428,8 +428,7 @@ SEMSummary.fit <- function(formula, data,
 #' @return A data frame of the table.
 #' @keywords utils
 #' @export
-#' @import data.table
-#' @importFrom stats sd aov chisq.test kruskal.test quantile xtabs
+#' @importFrom stats sd aov chisq.test kruskal.test quantile xtabs t.test
 #' @examples
 #' egltable(iris)
 #' egltable(colnames(iris)[1:4], "Species", data = iris)
@@ -441,7 +440,7 @@ SEMSummary.fit <- function(formula, data,
 #' egltable(colnames(iris)[1:4], "Species", iris,
 #'   parametric = c(TRUE, TRUE, FALSE, FALSE), simChisq=TRUE)
 #'
-#' diris <- as.data.table(iris)
+#' diris <- data.table::as.data.table(iris)
 #' egltable("Sepal.Length", g = "Species", data = diris)
 #'
 #' tmp <- mtcars
@@ -589,6 +588,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
 
               tests <- t.test(dv ~ g, data = data.table(dv = dat[[v]], g = g),
                               var.equal=TRUE)
+              dv = NULL # <- palliate R CMD check
               es <- data.table(dv = dat[[v]], g = g)[, smd(dv, g, "all")]
               out <- cbind(out,
                            Test = c(sprintf("t(df=%0.0f) = %0.2f, %s, d = %0.2f",
@@ -665,6 +665,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
 #' hist(as.vector(eurodist), main = "Eurodist")
 #' hist(winsorizor(as.vector(eurodist), .05), main = "Eurodist with lower and upper\n5% winsorized")
 #'
+#' library(data.table)
 #' dat <- data.table(x = 1:5)
 #' dat[, y := scale(1:5)]
 #' winsorizor(dat$y, .01)
@@ -866,6 +867,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("vcov", "grp"))
 #' @importFrom stats binomial
 #' @export
 #' @examples
+#' library(data.table)
 #' iccMixed("mpg", "cyl", mtcars)
 #' iccMixed("mpg", "cyl", as.data.table(mtcars))
 #' iccMixed("mpg", "cyl", as.data.table(mtcars), family = "gaussian")
@@ -1009,6 +1011,7 @@ nEffective <- function(n, k, icc, dv, id, data, family = c("gaussian", "binomial
 #' meanDeviations(1:10)
 #'
 #' ## example use case, applied to a data.table
+#' library(data.table)
 #' d <- as.data.table(iris)
 #' d[, c("BSepal.Length", "WSepal.Length") := meanDeviations(Sepal.Length),
 #'   by = Species]
@@ -1076,19 +1079,20 @@ roundedfivenum <- function(x, round = 2, sig = 3) {
 #' intracluster correlation coefficients and sample size.
 #' \emph{Statistics in Medicine, 20}(3), 391-399.
 #' @keywords multivariate
+#' @importFrom data.table copy
 #' @importFrom zoo zoo na.approx na.spline na.locf
 #' @importFrom stats acf
 #' @export
 #' @examples
 #' ## example 1
-#' dat <- data.table(
+#' dat <- data.table::data.table(
 #'   x = sin(1:30),
 #'   time = 1:30,
 #'   id = 1)
 #' acfByID("x", "time", "id", data = dat)
 #'
 #' ## example 2
-#' dat2 <- data.table(
+#' dat2 <- data.table::data.table(
 #'   x = c(sin(1:30), sin((1:30)/10)),
 #'   time = c(1:30, 1:30),
 #'   id = rep(1:2, each = 30))
@@ -1148,4 +1152,3 @@ acfByID <- function(xvar, timevar, idvar, data, lag.max = 10L, na.function = c("
                           lag.max = lag.max, plot = FALSE, ...)$acf[, 1, 1]),
     by = idvar]
 }
-

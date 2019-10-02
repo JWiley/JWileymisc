@@ -34,6 +34,7 @@ par(mfrow = c(1, 2))
 hist(as.vector(eurodist), main = "Eurodist")
 hist(winsorizor(as.vector(eurodist), .05), main = "Eurodist with lower and upper\\n5\% winsorized")
 
+library(data.table)
 dat <- data.table(x = 1:5)
 dat[, y := scale(1:5)]
 winsorizor(dat$y, .01)

@@ -28,6 +28,7 @@ within variable.
 meanDeviations(1:10)
 
 ## example use case, applied to a data.table
+library(data.table)
 d <- as.data.table(iris)
 d[, c("BSepal.Length", "WSepal.Length") := meanDeviations(Sepal.Length),
   by = Species]

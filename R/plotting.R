@@ -425,7 +425,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("X", "Y", "isEV", "YDevi
 #' @importFrom stats logLik ppoints
 #' @importFrom stats mahalanobis qchisq ppoints
 #' @importFrom stats lm resid offset
-#' @importFrom data.table %inrange% %between%
+#' @importFrom data.table %inrange% %between% melt
 #' @importFrom robustbase covMcd
 #' @seealso \code{\link{SEMSummary}}
 #' @export

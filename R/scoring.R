@@ -285,7 +285,6 @@ score <- function(data, reverse = NULL, limits = NULL, mean = TRUE,
 }
 
 ##' @rdname scoring
-##' @importFrom data.table is.data.table
 ##' @export
 scaleScore <- function(data, type = c("CESD", "LOTR", "Mastery", "RSES", "MOSSSS", "PANAS"), ...) {
   type <- match.arg(type)

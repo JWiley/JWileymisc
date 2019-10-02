@@ -31,6 +31,7 @@ This function estimates the ICC from mixed effects models
 estimated using \pkg{lme4}.
 }
 \examples{
+library(data.table)
 iccMixed("mpg", "cyl", mtcars)
 iccMixed("mpg", "cyl", as.data.table(mtcars))
 iccMixed("mpg", "cyl", as.data.table(mtcars), family = "gaussian")
