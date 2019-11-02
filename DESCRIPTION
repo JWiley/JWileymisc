@@ -51,7 +51,8 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    pander
+    pander,
+    GPArotation
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr

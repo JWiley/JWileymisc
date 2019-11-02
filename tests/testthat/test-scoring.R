@@ -6,3 +6,12 @@ test_that("CheckVals works", {
   expect_true(CheckVals(as.matrix(mtcars[, c("cyl", "am")]), c(0, 1, 4, 6, 8)))
   expect_error(CheckVals(mtcars[, c("cyl", "am")], c(0, 4, 6, 8)))
 })
+
+context(".scoreCESD")
+
+test_that(".scoreCESD works", {
+  set.seet(1234)
+  x <- matrix(sample(0:3, size = 20 * 5, TRUE), ncol = 20)
+  expect_warning(x <- .scoreCESD(x))
+  expect_is(x, "list")
+})
