@@ -30,7 +30,4 @@ side of zero.
 
 param_summary(rnorm(100))
 }
-\author{
-Joshua F. Wiley <josh@elkhartgroup.com>
-}
 \keyword{utilities}

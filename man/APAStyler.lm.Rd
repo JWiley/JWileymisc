@@ -2,12 +2,12 @@
 % Please edit documentation in R/styler.R
 \name{APAStyler.lm}
 \alias{APAStyler.lm}
-\title{A generic function for pretty printing in (semi) APA Style}
+\title{APAStyler method for linear models}
 \usage{
 \method{APAStyler}{lm}(object, digits = 2, pdigits, file, ...)
 }
 \arguments{
-\item{object}{\code{lm} object}
+\item{object}{A \code{lm} object}
 
 \item{digits}{The number of digits to round results to. Defaults to 2.}
 
@@ -18,5 +18,5 @@
 \item{...}{Additional argiuments passed on to \code{write.table}.}
 }
 \description{
-A generic function for pretty printing in (semi) APA Style
+APAStyler method for linear models
 }

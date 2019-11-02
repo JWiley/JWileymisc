@@ -4,7 +4,7 @@
 \alias{corplot}
 \title{Heatmap of a Correlation Matrix}
 \usage{
-corplot(x, coverage, pvalues, plot = c("cor", "p", "coverage"),
+corplot(x, coverage, pvalues, type = c("cor", "p", "coverage"),
   digits = 2, order = c("cluster", "asis"), ...,
   control.grobs = list())
 }
@@ -19,7 +19,7 @@ useful when the correlation matrix is a pairwise present.}
 \code{x} giving the p values for each correlation. To show, use
 \code{plot = "p"}.}
 
-\item{plot}{A character string indicating what to show on top of the heatmap. Can be
+\item{type}{A character string indicating what to show on top of the heatmap. Can be
 \sQuote{coverage}, in which case bubble points show coverage;
 \sQuote{p}, in which case p values are shown, or
 \sQuote{cor}, in which case correlations are shown.
@@ -78,10 +78,10 @@ sdat <- SEMSummary(~ ., data = dat)
 plot(sdat)
 
 ## getting p values instaed of coverage
-# plot(sdat, plot = "p")
+# plot(sdat, type = "p")
 
 ## showing correlations instead of coverage
-# plot(sdat, plot = "cor")
+# plot(sdat, type = "cor")
 
 # use the control.grobs argument to adjust the coverage scaling
 # to go from 0 to 1 rather than the range of coverage

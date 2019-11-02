@@ -32,7 +32,9 @@ Inspired by http://stackoverflow.com/questions/18771516/is-there-a-function-to-a
 
 ## examples using it with single level data
 ## differences based on an ANOVA and follow up contrasts
+mtcars$cyl <- factor(mtcars$cyl)
 TukeyHSDgg("cyl", "mpg", mtcars)
+rm(mtcars)
 
 \dontrun{
 TukeyHSDgg("Species", "Sepal.Length", iris)

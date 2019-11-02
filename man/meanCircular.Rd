@@ -22,5 +22,11 @@ Function to calculate circular mean
 }
 \examples{
 meanCircular(c(22:23, 1:2), max = 24)
+meanCircular(c(12, 24), max = 24)
+meanCircular(c(6, 7, 23), max = 24)
+meanCircular(c(6, 7, 21), max = 24)
+meanCircular(c(6, 21), max = 24)
+meanCircular(c(6, 23), max = 24)
 meanCircular(c(.91, .96, .05, .16), max = 1)
+
 }

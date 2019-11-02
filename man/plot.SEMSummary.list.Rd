@@ -4,7 +4,7 @@
 \alias{plot.SEMSummary.list}
 \title{Plots SEMSummary.list object}
 \usage{
-\method{plot}{SEMSummary.list}(x, y, which, ...)
+\method{plot}{SEMSummary.list}(x, y, which, plot = TRUE, ...)
 }
 \arguments{
 \item{x}{An object of class SEMSummary.list.}
@@ -14,6 +14,9 @@
 \item{which}{either a numeric vector based on the positions,
 or a character vector giving the names of the levels of the
 list to plot.}
+
+\item{plot}{A logical, whether to actually plot the results or not.
+Defaults to \code{TRUE}.}
 
 \item{\dots}{Additional arguments passed on to the real workhorse, \code{corplot}.}
 }

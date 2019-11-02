@@ -34,12 +34,11 @@ Creates a plot for likert scale
 }
 \examples{
 
-testdat <- data.frame(
+testdat <- data.table::data.table(
   Var = 1:4,
   Mean = c(1.5, 3, 2.2, 4.6),
   Low = c("Happy", "Peaceful", "Excited", "Content"),
-  High = c("Sad", "Angry", "Hopeless", "Anxious"),
-  stringsAsFactors = FALSE)
+  High = c("Sad", "Angry", "Hopeless", "Anxious"))
 
 gglikert("Mean", "Var", "Low", "High", data = testdat, xlim = c(1, 5),
   title = "Example Plot of Average Affect Ratings")
@@ -56,7 +55,7 @@ gglikert("Mean", "Var", "Low", "High", colour = "Group",
 gglikert("Mean", "Var", "Low", "High", colour = "Group",
   data = testdat, xlim = c(1, 5),
   title = "Example Plot of Average Affect Ratings") +
-scale_colour_manual(values = c("Young" = "grey50", "Old" = "black"))
+ggplot2::scale_colour_manual(values = c("Young" = "grey50", "Old" = "black"))
 
 ## clean up
 rm(testdat)

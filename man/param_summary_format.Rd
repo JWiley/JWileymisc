@@ -15,7 +15,7 @@ param_summary_format(d, digits = getOption("digits"), pretty = FALSE)
 Defaults to \code{FALSE}.}
 }
 \value{
-A formatted data frame of summary statistics or a formated
+A formatted data.table of summary statistics or a formated
 vector (if \code{pretty = TRUE}).
 }
 \description{
@@ -32,8 +32,5 @@ param_summary_format(xsum)
 param_summary_format(xsum, pretty = TRUE)
 
 rm(xsum)
-}
-\author{
-Joshua F. Wiley <josh@elkhartgroup.com>
 }
 \keyword{utilities}
