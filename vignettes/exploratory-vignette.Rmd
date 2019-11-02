@@ -1,0 +1,268 @@
+---
+title: "Exploratory and Descriptive Statistics and Plots"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{exploratory-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+To start, load the package.
+
+```{r setup}
+library(JWileymisc)
+library(ggplot2)
+library(data.table)
+```
+
+# Descriptive Statistics
+
+The `egltable()` function calculates basic descriptive statistics.
+
+```{r, results = "hide"}
+
+egltable(c("mpg", "hp", "qsec", "wt", "vs"),
+         data = mtcars)
+
+``` 
+
+
+```{r, echo = FALSE, results = "asis"}
+
+pander::pandoc.table(
+          egltable(c("mpg", "hp", "qsec", "wt", "vs"),
+                   data = mtcars),
+          caption = "Example descriptive statistics table.",
+          justify = "left")
+
+```
+
+
+The `strict` argument can be used if variables are categorical but are
+not coded as factors. In this case, `vs` has two levels: 0 and 1 and
+the frequency and percentage of each are shown instead of the mean and
+standard deviation.
+
+```{r, results = "hide"}
+
+egltable(c("mpg", "hp", "qsec", "wt", "vs"),
+         data = mtcars, strict=FALSE)
+
+```
+
+```{r, echo = FALSE, results = "asis"}
+
+pander::pandoc.table(
+          egltable(c("mpg", "hp", "qsec", "wt", "vs"),
+                   data = mtcars, strict=FALSE),
+          caption = "Example descriptive statistics table with automatic categorical variables.",
+          justify = "left")
+
+```
+
+
+`egltable()` also allows descriptive statistics to be broken down by
+another variable by using the `g` argument. This not only separates
+results by group but also calculates bivariate tests of the
+differences between groups and effect sizes. For example, t-tests for
+continuous variables and two groups or chi-square tests for
+categorical variables. For more than two groups, ANOVAs are used. 
+
+```{r, results = "hide"}
+
+egltable(c("mpg", "hp", "qsec", "wt", "vs"), 
+  g = "am", data = mtcars, strict = FALSE)
+
+```
+
+
+```{r, echo = FALSE, results = "asis"}
+
+pander::pandoc.table(
+          egltable(c("mpg", "hp", "qsec", "wt", "vs"), 
+                   g = "am", data = mtcars, strict = FALSE),
+          caption = "Example descriptive statistics table by group.",
+          justify = "left")
+
+```
+
+
+
+For very skewed continuous variables, non-parametric statistics and
+tests may be more appropriate. These can be generated using the
+`parametric` argument. For chi-square tests with small cell sizes,
+simulated p-values also can be generated.
+
+```{r, results = "hide"}
+
+egltable(c("mpg", "hp", "qsec", "wt", "vs"), 
+         g = "am", data = mtcars, strict = FALSE,
+         parametric = FALSE)
+
+```
+
+
+```{r, echo = FALSE, results = "asis"}
+
+pander::pandoc.table(
+          egltable(c("mpg", "hp", "qsec", "wt", "vs"), 
+                   g = "am", data = mtcars, strict = FALSE,
+                   parametric = FALSE),
+          caption = "Example non parametric descriptive statistics table by group.",
+          justify = "left")
+
+```
+
+
+
+# Correlation Summaries
+
+For continuous variables, correlation matrices are commonly
+examined. This is especially true for structural equation models or
+path analyses.
+
+The `SEMSummary()` function provides a simple way to generate these
+under various options. There is a formula interface, similar to `lm()`
+or other regression models. Missing data can be handled using listwise
+deletion, pairwise present data, or full information maximum
+likelihood (FIML). When assumptions are met, FIML is less biased and
+uses all available data, and is the default.
+
+```{r}
+
+m <- SEMSummary(~ mpg + hp + qsec + wt, data = mtcars)
+
+corTab <- APAStyler(m, type = "cor", stars = TRUE)
+
+```
+
+These correlations can be nicely formatted into a table.
+
+```{r, echo = FALSE, results = "asis"}
+
+pander::pandoc.table(
+          corTab$table,
+          caption = "Example correlation table.",
+          justify = "left")
+
+```
+
+
+
+
+Plot methods exist for `SEMSummary()` objects. Numbers can be p-values
+or correlations. By default, another useful feature is that
+hierarchical clustering is used to group similar variables together in
+clusters, provided a more useful sorting of the data than many
+"default" correlation matrices. If a specific order is desired, you
+can use the `order = "asis"` option to keep the variable order the
+same as written in `SEMSummary()`. 
+
+```{r}
+
+plot(m, type = "cor") +
+  ggtitle("Order by hierarchical clustering")
+
+plot(m, type = "cor", order = "asis") +
+  ggtitle("Order as written")
+
+``` 
+
+```{r}
+
+plot(m, type = "p") +
+  ggtitle("Numbers are p-values")
+
+```
+
+## Grouped Correlations
+
+Correlations also can be broken down by group. 
+Here results are separated by species which are automaticaly 
+used as the title of each graph.
+
+```{r}
+
+mg <- SEMSummary(~ Sepal.Length + Petal.Length +
+                  Sepal.Width + Petal.Width | Species,
+                 data = iris)
+
+plot(mg)
+
+```
+
+# Likert Scale Plots
+
+In much of psychological and consumer/market research, likert rating
+scales are used. For example, rating a question/item from "Strongly
+DISagree" to "Strongly Agree" or rating satisfaction from "Not at all"
+to "Very Satisfied" or adjectives that capture mood/affect from "Not
+at all" to "Extremely". Likert plots aim to show these results clearly
+and aid interpretation by presenting the anchors as well.
+
+The following code creates some simulated data, summarizes it, adds
+the necessary labels/anchors, and creates a nice plot.
+
+```{r}
+
+## simulate some likert style data
+set.seed(1234)
+d <- data.table(
+  Happy = sample(1:5, 200, TRUE, c(.1, .2, .4, .2, .1)),
+  Cheerful = sample(1:5, 200, TRUE, c(.1, .2, .2, .4, .1)),
+  Peaceful = sample(1:5, 200, TRUE, c(.1, .1, .2, .4, .2)),
+  Sad = sample(1:5, 200, TRUE, c(.1, .3, .3, .2, .1)),
+  Hopeless = sample(1:5, 200, TRUE, c(.3, .3, .2, .2, 0)),  
+  Angry = sample(1:5, 200, TRUE, c(.4, .3, .2, .08, .02)))
+
+dmeans <- melt(d, measure.vars = names(d))[,
+  .(Mean = mean(value, na.rm = TRUE)), by = variable]
+
+dmeans[, Low := paste0(variable, "\nNot at all")]
+dmeans[, High := paste0(variable, "\nExtremely")]
+dmeans[, variable := as.integer(factor(variable))]
+
+## view the summarised data
+print(dmeans)
+
+gglikert("Mean", "variable", "Low", "High", data = dmeans,
+         xlim = c(1, 5),
+         title = "Average Affect Ratings")
+
+```
+
+
+```{r}
+
+## create a grouping variable
+dg <- cbind(d, Group = ifelse(
+                 d$Happy > mean(d$Happy, na.rm = TRUE),
+                 "General Population", "Depressed"))
+
+dgmeans <- melt(dg, measure.vars = names(d), id.vars = "Group")[,
+  .(Mean = mean(value, na.rm = TRUE)), by = .(variable, Group)]
+
+dgmeans[, Low := paste0(variable, "\nNot at all")]
+dgmeans[, High := paste0(variable, "\nExtremely")]
+dgmeans[, variable := as.integer(factor(variable))]
+
+## view the summarised data
+print(dgmeans)
+
+gglikert("Mean", "variable", "Low", "High",
+         colour = "Group",
+         data = dgmeans,
+         xlim = c(1, 5),
+         title = "Average Affect Ratings") +
+  scale_colour_manual(
+    values = c("Depressed" = "black",
+               "General Population" = "grey70"))
+
+``` 
