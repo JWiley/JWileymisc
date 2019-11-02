@@ -6,6 +6,7 @@
 ##' @param okay A vector of okay or acceptable values
 ##' @param na.rm Logical whether to remove missing values or not. Defaults to \code{TRUE}
 ##' @return \code{TRUE} if all values are okay, otherwise an error
+##' @importFrom extraoperators %snin%
 ##' @keywords internal
 CheckVals <- function(data, okay, na.rm = TRUE) {
   cx <- class(data)
@@ -18,11 +19,9 @@ CheckVals <- function(data, okay, na.rm = TRUE) {
   }
   if (!is.vector(data)) stop(cx, " is not a valid class for this function")
 
-  '%nin%' <- function(x, table) !(match(x, table, 0L, NULL) > 0L)
-
   if (na.rm) okay <- c(okay, NA)
 
-  nm <- data[data %nin% okay]
+  nm <- data %snin% okay
   if (length(nm) > 0)
     stop("\nThe following values are not valid: \n[", paste(nm, collapse = ", "), "]")
 
@@ -87,7 +86,9 @@ score <- function(data, reverse = NULL, limits = NULL, mean = TRUE,
 
   if (reliability) {
     reliability <- omega(m = data, plot = FALSE, ...)
-  } else {reliability <- NULL}
+  } else {
+    reliability <- NULL
+  }
   output <- list(score = value, reliability = reliability)
 
   return(output)

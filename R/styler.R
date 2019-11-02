@@ -1,4 +1,5 @@
 #' A generic function for pretty printing in (semi) APA Style
+#'
 #' @param object An object with a class matching one of the methods
 #' @param ... Additional argiuments passed on to methods.
 #' @export
@@ -6,15 +7,147 @@ APAStyler <- function(object, ...) {
   UseMethod("APAStyler")
 }
 
-#' A generic function for pretty printing in (semi) APA Style
+
+#' APAStyler method for lists
 #'
-#' @param object \code{lm} object
+#' This assumes that all the objects in a list have the same class
+#' and that an \code{APAStyler} method exists for that class.
+#'
+#' @param object A list in this case, where each element
+#'   is another known class.
+#' @param ... Additional arguments.
+#' @return Styled results.
+#' @method APAStyler list
+#' @export
+#' @examples
+#' m1 <- lm(mpg ~ qsec * hp, data = mtcars)
+#' m2 <- lm(mpg ~ qsec + hp, data = mtcars)
+#' mt1 <- modelTest(m1)
+#' mt2 <- modelTest(m2)
+#' APAStyler(list(m1, m2))
+#' APAStyler(list(mt1, mt2))
+#'
+#' APAStyler(list(mt1, mt2), format = list(
+#'   FixedEffects = "%s, %s\n(%s, %s)",
+#'   EffectSizes = "Cohen's f2 = %s (%s)"))
+#'
+#' ## clean up
+#' rm(m1, m2, mt1, mt2)
+APAStyler.list <- function(object, ...) {
+  out <- lapply(object, APAStyler, ...)
+  return(out)
+}
+
+
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1") utils::globalVariables(c("Est", "Pval", "Type",
+                                                       "F2"))
+
+#' APAStyler method for model tests from a linear model
+#'
+#' @param object A \code{modelTest.lm} class object,
+#'   results from running \code{modelTest()} function on a
+#'   class \code{lm} object.
+#' @param format A list giving the formatting style to be used for
+#'   the fixed effecvts and effect sizes.
+#' @param digits A numeric value indicating the number of digits to print.
+#'   This is still in early implementation stages and currently does not
+#'   change all parts of the output (which default to 2 decimals per
+#'   APA style).
+#' @param pcontrol A list controlling how p values are formatted.
+#' @param ... Additional arguments.
+#' @return Styled results.
+#' @method APAStyler modelTest.lm
+#' @export
+#' @examples
+#' m1 <- lm(mpg ~ qsec * hp, data = mtcars)
+#' APAStyler(modelTest(m1))
+#'
+#' APAStyler(modelTest(m1),
+#' format = list(
+#'   FixedEffects = "%s, %s\n(%s, %s)",
+#'   EffectSizes = "Cohen's f2 = %s (%s)"),
+#' pcontrol = list(digits = 4,
+#'   stars = FALSE, includeP = TRUE,
+#'   includeSign = TRUE,
+#'   dropLeadingZero = TRUE))
+#'
+#' ## clean up
+#' rm(m1)
+APAStyler.modelTest.lm <- function(object,
+  format = list(
+    FixedEffects = c("%s%s [%s, %s]"),
+    EffectSizes = c("f2 = %s, %s")),
+  digits = 2,
+  pcontrol = list(
+    digits = 3, stars = TRUE,
+    includeP = FALSE, includeSign = FALSE,
+    dropLeadingZero = TRUE),  ...) {
+
+  FE <- copy(object$FixedEffects[, .(
+    Term = Term,
+    Est = .fround(Est, digits),
+    LL = ifelse(is.na(LL), "", .fround(LL, digits)),
+    UL = ifelse(is.na(UL), "", .fround(UL, digits)),
+    P = if (pcontrol$stars) {
+          star(Pval)
+        } else {
+          formatPval(Pval,
+                     d = pcontrol$digits,
+                     sd = pcontrol$digits,
+                     includeP = pcontrol$includeP,
+                     includeSign = pcontrol$includeSign,
+                     dropLeadingZero = pcontrol$dropLeadingZero)
+        })])
+  FE <- FE[, .(
+    Term = Term,
+    Est = sprintf(format$FixedEffects, Est, P, LL, UL),
+    Type = "Fixed Effects")]
+
+  MISC <- data.table(
+      Term = c(
+        "N (Observations)",
+        "logLik DF",
+        "logLik",
+        "AIC",
+        "BIC",
+        "F2",
+        "R2",
+        "Adj R2"),
+      Est = c(
+        as.character(object$OverallModel$Performance$N_Obs),
+        as.character(object$OverallModel$Performance$LLDF),
+        .fround(object$OverallModel$Performance$LL, digits),
+        .fround(object$OverallModel$Performance$AIC, digits),
+        .fround(object$OverallModel$Performance$BIC, digits),
+        .fround(object$OverallModel$Performance$F2, digits),
+        .fround(object$OverallModel$Performance$R2, digits),
+        .fround(object$OverallModel$Performance$AdjR2, digits)))
+  MISC[, Type := "Overall Model"]
+
+  EFFECT <- copy(object$EffectSizes[, .(
+      Term = Term,
+      Est = sprintf(format$EffectSizes,
+                    .fround(F2, digits = digits),
+                    formatPval(P, d = pcontrol$digits, sd = pcontrol$digits,
+                               includeP = TRUE, includeSign = TRUE)))])
+  EFFECT[, Type := "Effect Sizes"]
+
+  rbind(FE, MISC, EFFECT)
+}
+
+
+
+#' APAStyler method for linear models
+#'
+#' @param object A \code{lm} object
 #' @param digits The number of digits to round results to. Defaults to 2.
 #' @param pdigits The number of digits to use for p values. Defaults to digits + 1 if missing.
 #' @param file An optional argument indicating whether the output should be written to a file.
 #' @param ... Additional argiuments passed on to \code{write.table}.
 #' @importFrom stats coef confint
 #' @importFrom utils write.table
+#' @method APAStyler lm
 #' @export
 APAStyler.lm <- function(object, digits = 2, pdigits, file, ...) {
   if (missing(pdigits)) pdigits <- digits + 1
@@ -22,29 +155,27 @@ APAStyler.lm <- function(object, digits = 2, pdigits, file, ...) {
   s <- summary(object)
   ctable <- coef(s)
   cstars <- star(ctable[, "Pr(>|t|)"])
-  ctable <- format(round(ctable, digits = digits),
-                   trim = TRUE, nsmall = digits)
+  ctable <- .fround(ctable, digits = digits)
   est <- paste(ctable[, "Estimate"], cstars, " (",
                ctable[, "Std. Error"], ")", sep = "")
 
-  ci <- format(round(confint(object, level = 0.95), digits = digits),
-               nsmall = digits, trim = TRUE)
+  ci <- .fround(confint(object, level = 0.95), digits = digits)
   ci <- paste("[", ci[, 1], ", ", ci[, 2], "]", sep = "")
 
 
   F <- s$fstatistic
+  if (is.null(F)) {
+    F <- c("value" = NA_real_,
+           "numdf" = NA_real_,
+           "dendf" = NA_real_)
+  }
   p <- pf(F[1], F[2], F[3], lower.tail = FALSE)
 
-  r2 <- paste(format(round(s$r.squared, digits = digits),
-                     nsmall = digits), star(p), sep = "")
-  F <- format(round(F, digits = digits), nsmall = digits, trim = TRUE)
+  r2 <- paste(.fround(s$r.squared, digits = digits), star(p), sep = "")
+  F <- .fround(F, digits = digits)
 
-  if (identical(round(p[[1]], digits = pdigits), 0)) {
-    p <- paste("p < .", paste(rep(0, pdigits - 1), collapse = ""),
-               "1", sep = "")
-  } else {p <- paste("p = ", format(round(p, digits = pdigits),
-                                    nsmall = pdigits), sep = "")
-  }
+  p <- formatPval(p, d = pdigits, includeP = TRUE, includeSign = TRUE,
+                  dropLeadingZero = TRUE)
 
   F <- c(paste("F(", F[2], ", ", F[3], ") = ", F[1], sep = ""), p)
 
@@ -72,6 +203,7 @@ APAStyler.lm <- function(object, digits = 2, pdigits, file, ...) {
 #' @param ... Additional argiuments passed on to \code{write.table}.
 #' @importFrom mice pool.r.squared
 #' @importFrom mice pool
+#' @method APAStyler mira
 #' @export
 APAStyler.mira <- function(object, lmobject, digits = 2, pdigits, file, ...) {
   if (!inherits(object[["analyses"]][[1]], "lm"))
@@ -82,8 +214,7 @@ APAStyler.mira <- function(object, lmobject, digits = 2, pdigits, file, ...) {
 
   ctable <- summary(pool(object))
   cstars <- star(ctable[, "Pr(>|t|)"])
-  ctable <- format(round(ctable, digits = digits),
-                   trim = TRUE, nsmall = digits)
+  ctable <- .fround(ctable, digits = digits)
 
   est <- paste(ctable[, "est"], cstars, " (",
                ctable[, "se"], ")", sep = "")
@@ -104,24 +235,18 @@ APAStyler.mira <- function(object, lmobject, digits = 2, pdigits, file, ...) {
       F <- f.r2(r2, df[1], df[2])[1:3]
       p <- f.r2(r2, df[1], df[2])[4]
 
-      r2 <- c(paste(format(round(r2, digits = digits),
-                           nsmall = digits), star(p), sep = ""), "")
+      r2 <- c(paste(.fround(r2, digits = digits), star(p), sep = ""), "")
 
-      F <- format(round(F, digits = digits), nsmall = digits, trim = TRUE)
+      F <- .fround(F, digits = digits)
 
-      if (identical(round(p[[1]], digits = pdigits), 0)) {
-        p <- paste("p < .", paste(rep(0, pdigits - 1), collapse = ""),
-                   "1", sep = "")
-      } else {p <- paste("p = ", format(round(p, digits = pdigits),
-                                        nsmall = pdigits), sep = "")
-      }
+      p <- formatPval(p, d = pdigits, includeP = TRUE, includeSign = TRUE,
+                      dropLeadingZero = TRUE)
 
       F <- c(paste("F(", F[2], ", ", F[3], ") = ", F[1], sep = ""), p)
       warning("Using the degrees of freedom for the listwise deleted model for the F test and R^2 significance.",
               call. = FALSE)
     } else {
-      r2 <- c(paste(format(round(r2, digits = digits),
-                           nsmall = digits), sep = ""), "")
+      r2 <- c(paste(.fround(r2, digits = digits), sep = ""), "")
     }
     out <- rbind(out, "R^2" = r2, "F" = F)
   } else if (!missing(lmobject)) warning("lmobject argument ignored")
@@ -145,6 +270,7 @@ APAStyler.mira <- function(object, lmobject, digits = 2, pdigits, file, ...) {
 #' @param sep Character what the separator for the table should be. Defaults to tabs.
 #' @param ... Additional argiuments passed on to \code{write.table}.
 #' @export
+#' @method APAStyler SEMSummary
 #' @examples
 #' m <- SEMSummary(~., data = mtcars)
 #' APAStyler(m, type = "cor", stars = FALSE, file = FALSE)
@@ -159,22 +285,22 @@ APAStyler.SEMSummary <- function(object, digits = 2, type = c("cov", "cor", "bot
   type <- match.arg(type)
   mat <- switch(type,
                 cov = {
-                  m <- format(round(object$Sigma, digits = digits), nsmall = digits)
+                  m <- .fround(object$Sigma, digits = digits)
                   if (stars) m[] <- paste0(m, star(object$pvalue))
                   m[lower.tri(m)] <- ""
                   diag(m) <- " - "
                   m
                 },
                 cor = {
-                  m <- format(round(object$sSigma, digits = digits), nsmall = digits)
+                  m <- .fround(object$sSigma, digits = digits)
                   if (stars) m[] <- paste0(m, star(object$pvalue))
                   m[lower.tri(m)] <- ""
                   diag(m) <- " - "
                   m
                 },
                 both = {
-                  mv <- format(round(object$Sigma, digits = digits), nsmall = digits)
-                  mc <- format(round(object$sSigma, digits = digits), nsmall = digits)
+                  mv <- .fround(object$Sigma, digits = digits)
+                  mc <- .fround(object$sSigma, digits = digits)
 
                   if (stars) {
                     mv[] <- paste0(mv, star(object$pvalue))
@@ -287,8 +413,6 @@ formatPval <- function(x, d = 3, sd, includeP = FALSE, includeSign = FALSE, drop
     out <- ifelse(x < 1/(10^d),
            paste0("p < .", paste(rep(0, d - 1), collapse = ""), "1"),
            paste0("p = ", format(round(x, digits = d), digits = d, nsmall = d, scientific = sd)))
-  } else {
-    stop("error, invalid combination of includeP and includeSign")
   }
 
   if (dropLeadingZero) {
@@ -311,15 +435,15 @@ formatPval <- function(x, d = 3, sd, includeP = FALSE, includeSign = FALSE, drop
 #'   to control p-value printing.
 #' @param na.rm Logical whether to remove NA values. Defaults to \code{TRUE}
 #' @return A data frame of summary statistics
-#' @author Joshua F. Wiley <josh@@elkhartgroup.com>
 #' @export
 #' @keywords utilities
 #' @importFrom stats median sd
+#' @importFrom data.table data.table
 #' @examples
 #'
 #' param_summary(rnorm(100))
 param_summary <- function(x, trans = function(x) x, ..., na.rm = TRUE) {
-  data.frame(
+  data.table(
     Mean = trans(mean(x, na.rm = na.rm)),
     Median = trans(median(x, na.rm = na.rm)),
     SE = sd(trans(x), na.rm = na.rm),
@@ -338,10 +462,10 @@ param_summary <- function(x, trans = function(x) x, ..., na.rm = TRUE) {
 #' @param digits Number of digits to round to for printing
 #' @param pretty Logical value whether prettified values should be returned.
 #'   Defaults to \code{FALSE}.
-#' @return A formatted data frame of summary statistics or a formated
+#' @return A formatted data.table of summary statistics or a formated
 #' vector (if \code{pretty = TRUE}).
-#' @author Joshua F. Wiley <josh@@elkhartgroup.com>
 #' @export
+#' @importFrom data.table as.data.table
 #' @keywords utilities
 #' @examples
 #' set.seed(1234)
@@ -365,13 +489,13 @@ param_summary_format <- function(d, digits = getOption("digits"), pretty = FALSE
                           paste0("p = ", d$pvalue)))
     names(out) <- rownames(d)
   } else {
-    out <- as.data.frame(lapply(d, function(x) {
+    out <- as.data.table(as.data.frame(lapply(d, function(x) {
       if (is.numeric(x)) {
         sprintf(sprintf("%%01.%df", digits), x)
       } else {
         x
       }
-    }), stringsAsFactors = FALSE)
+    }), stringsAsFactors = FALSE))
     rownames(out) <- rownames(d)
     }
 
@@ -395,7 +519,7 @@ param_summary_format <- function(d, digits = getOption("digits"), pretty = FALSE
 #' formatHtest(t.test(extra ~ group, data = sleep), type = "t")
 #' formatHtest(anova(aov(mpg ~ factor(cyl), data = mtcars)), type = "F")
 #' formatHtest(chisq.test(c(A = 20, B = 15, C = 25)), type = "chisq")
-#' formatHtest(kruskal.test(Ozone ~ Month, data = airquality))
+#' formatHtest(kruskal.test(Ozone ~ Month, data = airquality), type = "kw")
 #' formatHtest(mantelhaen.test(UCBAdmissions), type = "mh")
 #' formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "pearson"), type = "r_pearson")
 #' formatHtest(cor.test(~ mpg + hp, data = mtcars, method = "kendall"), type = "r_kendall")
@@ -421,7 +545,7 @@ formatHtest <- function(x, type = c("t", "F", "chisq", "kw", "mh", "r_pearson", 
                      as.character(round(x$parameter, 2)),
                      x$statistic,
                      formatPval(x$p.value, includeP = TRUE, includeSign = TRUE, ...)),
-         F = sprintf("F(%s, %s) = %0.2f, p-value = %s",
+         F = sprintf("F(%s, %s) = %0.2f, %s",
                      as.character(round(x[1, "Df"], 2)),
                      as.character(round(x[2, "Df"], 2)),
                      x[1, "F value"],
@@ -457,196 +581,12 @@ formatMedIQR <- function(x, d = 2, na.rm = TRUE) {
          stats[1], stats[2], stats[3])
 }
 
-
-#' Calculate F and p-value from the R2
+#' Function to round and format a number
 #'
-#' @param r2 r squareds
-#' @param numdf numerator degrees of freedom
-#' @param dendf denominator degrees of freedom
-#' @return a vector
-#' @keywords internal
-#' @importFrom stats pf
-#' @examples
-#' # make me!
-f.r2 <- function(r2, numdf, dendf) {
-  F <- (dendf/numdf) * (-r2/(r2 - 1))
-  p <- pf(F, df1 = numdf, df2 = dendf, lower.tail = FALSE)
-  c(F = F[[1]], numdf, dendf, p = p[[1]])
-}
-
-
-# clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("ID", "V2", "V1",
-                                                        "value", "Est", "Pval",
-                                                        "Variable", "Type",
-                                                        "MarginalF2", "ConditionalF2"))
-
-#' Format results from a linear mixed model
-#'
-#' @param list A list of one (or more) models estimated from lmer
-#' @param modelnames An (optional) vector of names to use in
-#'   the column headings for each model.
-#' @param format A list giving the formatting style to be used for
-#'   the fixed effecvts, random effects, and effect sizes.
-#'   For the random effects, must be two options, one for when the
-#'   random effects do not have confidence intervals and one when the
-#'   random effects do have confidence intervals.
-#' @param digits A numeric value indicating the number of digits to print.
-#'   This is still in early implementation stages and currently does not
-#'   change all parts of the output (which default to 2 decimals per
-#'   APA style).
-#' @param pcontrol A list controlling how p values are formatted.
-#' @param \ldots Additional arguments passed to \code{confint}. Notably
-#'   \code{nsim} and \code{boot.type} if the bootstrap method is used.
-#' @return a data table of character data
-#' @keywords misc
+#' @param x the data to round and format
+#' @param digits the number of digits to used
+#' @return a character vector
 #' @export
-#' @importFrom stats pnorm
-#' @importFrom nlme fixef
-#' @examples
-#'
-#' \dontrun{
-#' data(sleepstudy)
-#' m1 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject),
-#'   data = sleepstudy)
-#' m2 <- lme4::lmer(Reaction ~ Days + I(Days^2) + (1 + Days | Subject),
-#'   data = sleepstudy)
-#'
-#' testm1 <- detailedTests(m1, method = "profile")
-#' testm2 <- detailedTests(m2, method = "profile")
-#' formatLMER(list(testm1, testm2))
-#' formatLMER(list(testm1, testm2),
-#'   format = list(
-#'     FixedEffects = "%s, %s (%s, %s)",
-#'     RandomEffects = c("%s", "%s (%s, %s)"),
-#'     EffectSizes = "%s, %s; %s"),
-#'   pcontrol = list(digits = 3, stars = FALSE,
-#'                   includeP = TRUE, includeSign = TRUE,
-#'                   dropLeadingZero = TRUE))
-#' }
-formatLMER <- function(list, modelnames,
-                       format = list(
-                         FixedEffects = c("%s%s [%s, %s]"),
-                         RandomEffects = c("%s", "%s [%s, %s]"),
-                         EffectSizes = c("%s/%s, %s")),
-                       digits = 2,
-  pcontrol = list(digits = 3, stars = TRUE, includeP = FALSE, includeSign = FALSE,
-                  dropLeadingZero = TRUE),
-  ...) {
-
-  formround <- function(x, digits) {
-    format(round(x, digits = digits), digits = digits, nsmall = digits)
-  }
-
-  .formatRE <- function(x, digits) {
-    tmp <- copy(x[, .(
-      Term = Term,
-      Est = formround(Est, digits = digits),
-      LL = ifelse(is.na(LL), "", formround(LL, digits = digits)),
-      UL = ifelse(is.na(UL), "", formround(UL, digits = digits)))])
-    tmp[, .(
-      Term = Term,
-      Est = ifelse(nzchar(LL) & nzchar(UL),
-                   sprintf(format$RandomEffects[2], Est, LL, UL),
-                   sprintf(format$RandomEffects[1], Est)))]
-    }
-
-  .formatFE <- function(x, digits) {
-    tmp <- copy(x[, .(
-      Term = Term,
-      Est = formround(Est, digits = digits),
-      LL = ifelse(is.na(LL), "", formround(LL, digits = digits)),
-      UL = ifelse(is.na(UL), "", formround(UL, digits = digits)),
-      P = if (pcontrol$stars) {
-            star(Pval)
-          } else {
-            formatPval(Pval,
-                       d = pcontrol$digits,
-                       sd = pcontrol$digits,
-                       includeP = pcontrol$includeP,
-                       includeSign = pcontrol$includeSign,
-                       dropLeadingZero = pcontrol$dropLeadingZero)
-          })])
-    tmp[, .(
-      Term = Term,
-      Est = sprintf(format$FixedEffects, Est, P, LL, UL))]
-    }
-  .formatMISC <- function(x, digits) {
-    ngrps <- gsub("^N_(.*)$", "\\1",
-                  grep("^N_.*$", names(x), value = TRUE)) %snin% "Obs"
-    data.table(
-      Term = c(
-        "Model DF",
-        sprintf("N (%s)", ngrps),
-        "N (Observations)",
-        "logLik",
-        "AIC",
-        "BIC",
-        "Marginal R2",
-        "Conditional R2"),
-      Est = c(
-        as.character(x$DF),
-        as.character(unlist(x[, paste0("N_", ngrps), with = FALSE])),
-        as.character(x$N_Obs),
-        formround(x$logLik, digits = digits),
-        formround(x$AIC, digits = digits),
-        formround(x$BIC, digits = digits),
-        formround(x$MarginalR2, digits = digits),
-        formround(x$ConditionalR2, digits = digits)))
-  }
-
-  .formatEFFECT <- function(x, digits) {
-    copy(x[, .(
-      Term = sprintf("%s (%s)", Variable, Type),
-      Est = sprintf(format$EffectSizes,
-                    formround(MarginalF2, digits = digits),
-                    formround(ConditionalF2, digits = digits),
-                    formatPval(P, d = pcontrol$digits, sd = pcontrol$digits,
-                              includeP = TRUE, includeSign = TRUE)))])
-  }
-
-
-
-  k <- length(list)
-  if (missing(modelnames)) {
-    modelnames <- paste0("Model ", 1:k)
-  }
-
-  mergeIt <- function(z, func, term) {
-    res <- lapply(z, function(mod) func(mod[[term]], digits = digits))
-    for (i in 1:k) {
-      setnames(res[[i]], old = "Est", new = modelnames[i])
-    }
-
-    if (k == 1) {
-      final <- res[[1]]
-    } else if (k > 1) {
-      final <- merge(res[[1]], res[[2]], by = "Term", all = TRUE)
-    } else if (k > 2) {
-      for (i in 3:k) {
-        final <- merge(final, res[[i]], by = "Term", all = TRUE)
-      }
-    }
-    return(final)
-  }
-
-  final.fe <- mergeIt(list, .formatFE, "FixedEffects")
-  final.re <- mergeIt(list, .formatRE, "RandomEffects")
-  final.misc <- mergeIt(list, .formatMISC, "OverallModel")
-  final.ef <- mergeIt(list, .formatEFFECT, "EffectSizes")
-
-  placeholder <- final.fe[1]
-  for (i in names(placeholder)) {
-    placeholder[, (i) := ""]
-  }
-  place.fe <- copy(placeholder)[, Term := "Fixed Effects"]
-  place.re <- copy(placeholder)[, Term := "Random Effects"]
-  place.misc <- copy(placeholder)[, Term := "Overall Model"]
-  place.ef <- copy(placeholder)[, Term := "Effect Sizes"]
-
-  rbind(
-    place.fe, final.fe,
-    place.re, final.re,
-    place.misc, final.misc,
-    place.ef, final.ef)
+.fround <- function(x, digits) {
+  format(round(x, digits = digits), digits = digits, nsmall = digits)
 }

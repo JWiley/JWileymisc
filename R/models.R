@@ -1,613 +1,319 @@
-#' Calculate multilevel omega reliability
+#' Return Indices of Model Performance
 #'
-#' This function uses multilevel structural equation modelling
-#' to calculate between and within reliability using coefficient
-#' omega.
+#' Generic function. Generally returns things like
+#' fit indices, absolute error metrics, tests of
+#' overall model significance.
 #'
-#' @param items A character vector giving the variables that map
-#'  to the items in the scale. Note that these should be reverse
-#'  scored prior to running this function.
-#' @param id A character string giving the name of the variable that
-#'  indicates which rows of the dataset belong to the same person
-#'  or group for the multilevel analysis.
-#' @param data A data table or data frame to be used for analysis.
-#' @param savemodel A logical value indicating whether the underlying model
-#'  should be saved and returned. Defaults to \code{FALSE}.
-#' @return a list with two elements, the first, \dQuote{Results} contains the
-#'  estimates for coefficient omega at the within and between level. The
-#'  next element, \dQuote{Fit} contains the entire fitted model from lavaan, if
-#'  \code{savemodel = TRUE}.
-#' @references Geldhof, G. J., Preacher, K. J., & Zyphur, M. J. (2014). Reliability estimation in a multilevel confirmatory factor analysis framework. Psychological Methods, 19(1), 72.
+#' For \code{lm} class objects, return number of observations,
+#' AIC, BIC, log likelihood, R2, overall model F test, and p-value.
+#'
+#' @param object A fitted model object. The class of the model
+#'   determines which specific method is called.
+#' @param ... Additional arguments passed to specific methods.
+#' @return A \code{data.table} with results.
 #' @export
-#' @importFrom lavaan sem parameterEstimates
+#' @rdname modelPerformance
+modelPerformance <- function(object, ...) {
+  UseMethod("modelPerformance", object)
+}
+
+#' @param x A object (e.g., list or a modelPerformance object) to
+#'   test or attempt coercing to a modelPerformance object.
+#' @importFrom data.table is.data.table as.data.table
+#' @rdname modelPerformance
+#' @export
+as.modelPerformance <- function(x) {
+  if (!is.modelPerformance(x)) {
+    if(!is.list(x)) {
+      stop("Input must be a list or a modelPerformance object")
+    }
+    augmentClass <- attr(x, "augmentClass")
+
+    x <- list(
+      Performance = x[[1]])
+
+    if(is.null(augmentClass)) {
+      class(x) <- "modelPerformance"
+    } else {
+      class(x) <- c(paste0("modelPerformance.", augmentClass), "modelPerformance")
+    }
+  }
+
+  ## checks that the object is not malformed
+  stopifnot("Model" %in% names(x[[1]]))
+  stopifnot(is.data.table(x[[1]]))
+
+  return(x)
+}
+
+#' @rdname modelPerformance
+#' @export
+is.modelPerformance <- function(x) {
+  inherits(x, "modelPerformance")
+}
+
+#' @rdname modelPerformance
+#' @export
+#' @method modelPerformance lm
+#' @return A list with a \code{data.table} with the following elements:
+#'   Model, N_Obs (number of observations), AIC (Akaike Information Criterion),
+#'   BIC (Bayesian Information Criterion), LL (log likelihood),
+#'   LLDF (log likelihood degrees of freedom), Sigma (residual),
+#'   R2 (in sample variance explained),
+#'   F2 (Cohen's F2 effect size R2 / (1 - R2),
+#'   AdjR2 (adjusted variance explained),
+#'   F (F value for overall model significance test),
+#'   FNumDF and FDenDF (numerator and denominator degrees of freedom for F test),
+#'   P (p-value for overall model F test).
 #' @examples
+#' modelPerformance(lm(mpg ~ qsec * hp, data = mtcars))
+#'
+#' modelPerformance(lm(mpg ~ hp, data = mtcars))
 #'
 #' \dontrun{
-#'   data(aces_daily)
-#'   omegaSEM(
-#'     items = c("COPEPrb", "COPEPrc", "COPEExp"),
-#'     id = "UserID",
-#'     data = aces_daily,
-#'     savemodel = FALSE)
+#' modelPerformance(lm(mpg ~ 0 + hp, data = mtcars))
+#' modelPerformance(lm(mpg ~ 1, data = mtcars))
+#' modelPerformance(lm(mpg ~ 0, data = mtcars))
 #' }
-omegaSEM <- function(items, id, data, savemodel = FALSE) {
-  if (length(items) < 2) {
-    stop("omega requires at least two items")
+modelPerformance.lm <- function(object, ...) {
+  LL <- logLik(object)
+  LLdf <- attr(LL, "df")
+
+  msum <- summary(object)
+
+  ## empty model or intercept only model
+  if (object$rank == 0 || (object$rank == 1 && attr(terms(object), "intercept") == 1)) {
+    msum$fstatistic <- c(value = NA_real_, numdf = NA_real_, dendf = NA_real_)
   }
+  P <- pf(msum$fstatistic[["value"]],
+          msum$fstatistic[["numdf"]],
+          msum$fstatistic[["dendf"]],
+          lower.tail = FALSE)
 
-  llabels.within <- paste0("wl", seq_along(items))
-  rlabels.within <- paste0("wr", seq_along(items))
-  constraints.within <- paste(
-    sprintf("%s > 0", rlabels.within),
-    collapse = "\n")
-  loadings.within <- paste(c(
-    sprintf("NA * %s", items[[1]]),
-    sprintf("%s * %s", llabels.within, items)),
-    collapse = " + ")
-  variances.within <- paste(sprintf(
-    "%s~~%s*%s", items, rlabels.within, items),
-    collapse = "\n")
+  out <- data.table(
+    Model = as.character("lm"),
+    N_Obs =  as.numeric(nrow(model.matrix(object))),
+    AIC =   as.numeric(AIC(object)),
+    BIC =   as.numeric(BIC(object)),
+    LL =    as.numeric(LL),
+    LLDF =  as.numeric(LLdf),
+    Sigma = as.numeric(msum$sigma),
+    R2 =    as.numeric(msum$r.squared),
+    F2 =    as.numeric(msum$r.squared / (1 - msum$r.squared)),
+    AdjR2 = as.numeric(msum$adj.r.squared),
+    F =     as.numeric(msum$fstatistic[["value"]]),
+    FNumDF= as.numeric(msum$fstatistic[["numdf"]]),
+    FDenDF= as.numeric(msum$fstatistic[["dendf"]]),
+    P =     as.numeric(P))
+  out <- list(out)
+  attr(out, "augmentClass") <- "lm"
 
-  llabels.between <- paste0("bl", seq_along(items))
-  rlabels.between <- paste0("br", seq_along(items))
-  constraints.between <- paste(
-    sprintf("%s > 0", rlabels.between),
-    collapse = "\n")
-  loadings.between <- paste(c(
-    sprintf("NA * %s", items[[1]]),
-    sprintf("%s * %s", llabels.between, items)),
-    collapse = " + ")
-  variances.between <- paste(sprintf(
-    "%s~~%s*%s", items, rlabels.between, items),
-    collapse = "\n")
-
-  ## if only two items, need to add constraints
-  ## for proper estimation
-  if (identical(length(items), 2L)) {
-    constraints.within <- paste0(
-      constraints.within,
-      "\nwl1 == wl2\n")
-    constraints.between <- paste0(
-      constraints.between,
-      "\nbl1 == bl2\n")
-  }
-
-
- model.within <- sprintf(
-   "
-## within level first
-level: 1
- ## single factor model
- f_within =~ %s
-
- ## set variances
- f_within~~1*f_within
- %s
- ## set constraints
- %s
-
- ## define new parameters
- num_within := (%s)^2
- denom_within := (%s)^2 + (%s)
- omega_within := num_within / denom_within
-",
-loadings.within,
-variances.within,
-constraints.within,
-paste(llabels.within, collapse = " + "),
-paste(llabels.within, collapse = " + "),
-paste(rlabels.within, collapse = " + "))
-
- model.between <- sprintf(
-   "
-## between level second
-level: 2
- ## single factor model
- f_between =~ %s
-
- ## set variances
- f_between~~1*f_between
- %s
- ## set constraints
- %s
-
- ## define new parameters
- num_between := (%s)^2
- denom_between := (%s)^2 + (%s)
- omega_between := num_between / denom_between
-",
-loadings.between,
-variances.between,
-constraints.between,
-paste(llabels.between, collapse = " + "),
-paste(llabels.between, collapse = " + "),
-paste(rlabels.between, collapse = " + "))
-
-  model <- sprintf("%s \n%s", model.within, model.between)
-  fit <- lavaan::sem(model = model, data = data,
-             cluster = id)
-  output <- lavaan::parameterEstimates(fit)
-  label = NULL # <- palliate R CMD check
-  output <- subset(output, label %in% c("omega_within", "omega_between"))
-  output <- output[, c("label", "est", "ci.lower", "ci.upper")]
-
-  if (savemodel) {
-    list(
-    Results = output,
-    Fit = fit)
-  } else {
-    list(
-    Results = output)
-  }
+  as.modelPerformance(out)
 }
 
 
+#' Calculate R2 Values
+#'
+#' Generic function to return variance explained (R2)
+#' estimates from various models. In some cases these will be true
+#' R2 values, in other cases they may be pseudo-R2 values if
+#' R2 is not strictly defined for a model.
+#'
+#' @param object A fitted model object.
+#' @param ... Additional arguments passed to specific methods.
+#' @return Depends on the method dispatch.
+#' @export
+#' @rdname R2
+R2 <- function(object, ...) {
+  UseMethod("R2", object)
+}
+
+
+#' @return The raw and adjusted r-squared value.
+#' @method R2 lm
+#' @export
+#' @rdname R2
+#' @examples
+#' R2(lm(mpg ~ qsec * hp, data = mtcars))
+R2.lm <- function(object, ...) {
+  unlist(modelPerformance(object)$Performance[, c("R2", "AdjR2"), with = FALSE])
+}
+
+
+#' Compare Two Models
+#'
+#' Generic function.
+#'
+#' @param model1 A fitted model object.
+#' @param model2 A fitted model object to compare to \code{model1}
+#' @param ... Additional arguments passed to specific methods.
+#' @return Depends on the method dispatch.
+#' @rdname modelCompare
+#' @export
+modelCompare <- function(model1, model2, ...) {
+  UseMethod("modelCompare", model1)
+}
+
+#' @param x An object (e.g., list or a modelCompare object) to
+#'   test or attempt coercing to a modelCompare object.
+#' @importFrom data.table is.data.table as.data.table
+#' @rdname modelCompare
+#' @export
+as.modelCompare <- function(x) {
+  if (!is.modelCompare(x)) {
+    if(!is.list(x)) {
+      stop("Input must be a list or a modelCompare object")
+    }
+    augmentClass <- attr(x, "augmentClass")
+
+    x <- list(
+      Comparison = x[[1]])
+
+    if(is.null(augmentClass)) {
+      class(x) <- "modelCompare"
+    } else {
+      class(x) <- c(paste0("modelCompare.", augmentClass), "modelCompare")
+    }
+  }
+
+  ## checks that the object is not malformed
+  stopifnot("Model" %in% names(x[[1]]))
+  stopifnot(is.data.table(x[[1]]))
+  stopifnot(nrow(x[[1]]) > 2)
+
+  return(x)
+}
+
+#' @rdname modelCompare
+#' @export
+is.modelCompare <- function(x) {
+  inherits(x, "modelCompare")
+}
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("DV", "Predicted"))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("F2", "FNumDF", "FDenDF"))
 
-#' Calculates the R2 from lmer models
-#'
-#' For pseudo R2 by cluster, the squared correlation between observed
-#' and predicted values for each cluster unit is returned.  For the overall model,
-#' the marginal and conditional R2 are calculated as described in the references.
-#'
-#' @param model A model estimated by \code{lmer}.
-#' @param modelsum The saved model summary (i.e., \code{summary(model)}).
-#' @param cluster A logical whether to calculate individual pseudo R2 values by
-#'   cluster unit (if \code{TRUE}) or the marginal and conditional R2 for the
-#'   overall model (if \code{FALSE}, the default).
-#' @return a named vector with the marginal and conditional R2 values,
-#'   if \code{CLUSTER = FALSE}, otherwise, a data table with the pseudo R2
-#'   for each cluster unit.
-#' @references For estimating the marginal and conditional R-squared values,
-#'   see: Nakagawa, S. and Schielzeth, H. (2013). A general and simple method
-#'   for obtaining R2 from generalized linear mixed-effects models.
-#'   Methods in Ecology and Evolution, 4(2), 133-142. as well as:
-#'   Johnson, P. C. (2014). Extension of Nakagawa & Schielzeth's R2GLMM to
-#'   random slopes models. Methods in Ecology and Evolution, 5(9), 944-946.
-#' @keywords utils
+#' @rdname modelCompare
+#' @importFrom data.table data.table
+#' @importFrom stats logLik anova AIC BIC
+#' @method modelCompare lm
 #' @export
-#' @importFrom stats model.matrix model.frame cor var
-#' @importFrom stats model.frame
-#' @importFrom nlme VarCorr fixef
 #' @examples
+#' m1 <- lm(mpg ~ qsec * hp, data = mtcars)
 #'
-#' \dontrun{
-#' data(aces_daily)
-#' m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
-#'   data = aces_daily)
+#' m2 <- lm(mpg ~ am, data = mtcars)
 #'
-#' R2LMER(m1, summary(m2))
+#' modelCompare(m1, m2)
 #'
-#' rm(m1)
-#' }
-R2LMER <- function(model, modelsum, cluster = FALSE) {
-  idvars <- names(modelsum$ngrps)
-
-  if (!isTRUE(cluster)) {
-  X <- model.matrix(model)
-  n <- nrow(X)
-  var.fe <- var(as.vector(X %*% fixef(model))) * (n - 1) / n
-  var.re <- sum(sapply(VarCorr(model)[idvars], function(Sigma) {
-    xvar <- rownames(Sigma)
-    xvar <- sapply(xvar, function(v) colnames(X)[colnames(X) %flipIn% v])
-    Z <- X[, xvar, drop = FALSE]
-    sum(diag(crossprod(Z %*% Sigma, Z))) / n
-  }))
-  var.e <- modelsum$sigma^2
-  var.total <- var.fe + var.re + var.e
-  c("MarginalR2" = var.fe / var.total,
-    "ConditionalR2" = (var.fe + var.re) / var.total)
-  } else {
-    tmpd <- cbind(data.table(
-      DV = model.frame(model)[, 1],
-      Predicted = fitted(model)),
-      as.data.table(
-        model.frame(model)[, idvars, drop = FALSE]))
-
-    do.call(rbind, lapply(idvars, function(n) {
-      out <- tmpd[, .(
-        IDVariable = n,
-        R2 = cor(DV, Predicted)^2), by = get(n)]
-      setnames(out, old = "get", new = "ID")
-      return(out)
-    }))
-  }
-}
-
-#' Compare two lmer models
-#'
-#' This function provides fit statistics and effect sizes for
-#' model comparisons.  The models must be nested.
-#'
-#' @param m1 A model estimated by \code{lmer}.
-#' @param m2 A model estimated by \code{lmer}.
-#' @return a data table with the fit indices for each model
-#' and comparing models to each other.
-#' @references For estimating the marginal and conditional R-squared values,
-#'   see: Nakagawa, S. and Schielzeth, H. (2013). A general and simple method
-#'   for obtaining R2 from generalized linear mixed-effects models.
-#'   Methods in Ecology and Evolution, 4(2), 133-142. as well as:
-#'   Johnson, P. C. (2014). Extension of Nakagawa & Schielzeth's R2GLMM to
-#'   random slopes models. Methods in Ecology and Evolution, 5(9), 944-946.
-#' @keywords utils
-#' @export
-#' @importFrom Matrix summary
-#' @importFrom stats AIC BIC logLik anova
-#' @examples
-#'
-#' \dontrun{
-#' data(aces_daily)
-#' m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
-#'   data = aces_daily)
-#' m2 <- lme4::lmer(NegAff ~ STRESS + (1 | UserID),
-#'   data = aces_daily)
-#'
-#' compareLMER(m1, m2)
-#'
+#' ## cleanup
 #' rm(m1, m2)
-#' }
-compareLMER <- function(m1, m2) {
-  m1sum <- summary(m1)
-  m2sum <- summary(m2)
-  df1 <- attr(m1sum$logLik, "df")
-  df2 <- attr(m2sum$logLik, "df")
-
-  if (identical(df1, df2)) {
-    stop("One model must be nested within the other")
-  } else if (df1 < df2) {
-    ## do nothing
-  } else if (df1 > df2) {
-    df3 <- df1
-    m3 <- m1
-    m3sum <- m1sum
-
-    m1 <- m2
-    m1sum <- m2sum
-    df1 <- df2
-
-    m2 <- m3
-    df2 <- df3
-    m2sum <- m3sum
-
-    rm(df3, m3, m3sum)
-  }
-
-  test <- anova(m1, m2, test = "LRT")
-  R21 <- R2LMER(m1, m1sum)
-  R22 <- R2LMER(m2, m2sum)
-
-  data.table(
-    Model = c("Model 1", "Model 2", "Difference"),
-    AIC = c(AIC(m1), AIC(m2), AIC(m2) - AIC(m1)),
-    BIC = c(BIC(m1), BIC(m2), BIC(m2) - BIC(m1)),
-    DF = c(df1, df2, df2 - df1),
-    logLik = c(logLik(m1), logLik(m2), logLik(m2) - logLik(m1)),
-    MarginalR2 = c(
-      R21[["MarginalR2"]], R22[["MarginalR2"]],
-      R22[["MarginalR2"]] - R21[["MarginalR2"]]),
-    MarginalF2 = c(
-      R21[["MarginalR2"]] / (1 - R21[["MarginalR2"]]),
-      R22[["MarginalR2"]] / (1 - R22[["MarginalR2"]]),
-      (R22[["MarginalR2"]] - R21[["MarginalR2"]]) /
-      (1 - R22[["MarginalR2"]])),
-    ConditionalR2 = c(
-      R21[["ConditionalR2"]], R22[["ConditionalR2"]],
-      R22[["ConditionalR2"]] - R21[["ConditionalR2"]]),
-    ConditionalF2 = c(
-      R21[["ConditionalR2"]] / (1 - R21[["ConditionalR2"]]),
-      R22[["ConditionalR2"]] / (1 - R22[["ConditionalR2"]]),
-      (R22[["ConditionalR2"]] - R21[["ConditionalR2"]]) /
-      (1 - R22[["ConditionalR2"]])),
-    Chi2 = c(NA_real_, NA_real_, test[, "Chisq"][2]),
-    P = c(NA_real_, NA_real_, test[, "Pr(>Chisq)"][2]))
-}
-
-
-## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1") utils::globalVariables(c("var1", "var2", "sdcor", "Type",
-                                                       "FE", "RE", "Terms", "Formula"))
-
-#' estimate detailed results per variable and effect sizes for both fixed and random effects from lmer models
-#'
-#' This function extends the current \code{drop1} method for
-#' \code{merMod} class objects from the lme4 package. Where
-#' the default method to be able to drop both fixed and random
-#' effects at once.
-#'
-#' At the moment, the function is aimed to \code{lmer} models
-#' and has very few features for \code{glmer} or \code{nlmer}
-#' models. The primary motivation was to provide a way to
-#' provide an overall test of whether a variable
-#' \dQuote{matters}.  In multilevel data, a variable may be
-#' included in both the fixed and random effects. To provide
-#' an overall test of whether it matters requires jointly testing
-#' the fixed and random effects. This also is needed to provide
-#' an overall effect size.
-#'
-#' The function works by generating a formula with one specific
-#' variable or \dQuote{term} removed at all levels. A model is then
-#' fit on this reduced formula and compared to the full model passed
-#' in. This is a complex operation for mixed effects models for several
-#' reasons. Firstly, \code{R} has no default mechanism for dropping
-#' terms from both the fixed and random portions. Secondly,
-#' mixed effects models do not accomodate all types of models. For example,
-#' if a model includes only a random slope with no random intercept,
-#' if the random slope was dropped, there would be no more random effects,
-#' and at that point, \code{lmer} or \code{glmer} will not run the model.
-#' It is theoretically possible to instead fit the model using
-#' \code{lm} or \code{glm} but this becomes more complex for certain
-#' model comparisons and calculations and is not currently implemented.
-#' Marginal and conditional R2 values are calculated for each term,
-#' and these are used also to calculate something akin to an
-#' f-squared effect size.
-#'
-#' This is a new function and it is important to carefully evaluate
-#' the results and check that they are accurate and that they are
-#' sensible. Check accuracy by viewing the model formulae for each
-#' reduced model and checking that those are indeed accurate.
-#' In terms of checking whether a result is sensible or not,
-#' there is a large literature on the difficulty interpretting
-#' main effect tests in the presence of interactions. As it is
-#' challenging to detect all interactions, especially ones that are
-#' made outside of \code{R} formulae, all terms are tested. However,
-#' it likely does not make sense to report results from dropping a
-#' main effect but keeping the interaction term, so present
-#' and interpret these with caution.
-#'
-#' @param obj A \code{merMod} class object, the fitted result of
-#'   \code{lmer}.
-#' @param method A character vector indicating the types of confidence
-#'   intervals to calculate. One of \dQuote{Wald}, \dQuote{profile}, or
-#'   \dQuote{boot}.
-#' @param \ldots Additional arguments passed to \code{confint}
-#' @importFrom data.table as.data.table := setnames
-#' @importFrom lme4 isGLMM isNLMM isLMM isREML nobars findbars
-#' @importFrom lme4 ngrps
-#' @importFrom stats family formula nobs update
-#' @importFrom lmerTest lsmeansLT
-#' @export
-#' @examples
 #'
 #' \dontrun{
-#' data(aces_daily)
-#' m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
-#'   data = aces_daily)
-#' m2 <- lme4::lmer(NegAff ~ STRESS + I(STRESS^2) + (1 + STRESS | UserID),
-#'   data = aces_daily)
-#' testm1 <- .detailedTests(m1, method = "profile")
-#' testm2 <- .detailedTests(m2, method = "profile")
-#' testm2b <- .detailedTests(m2, method = "boot", nsim = 100)
+#' m3 <- lm(mpg ~ 1, data = mtcars)
+#' m4 <- lm(mpg ~ 0, data = mtcars)
+#' modelCompare(m3, m4)
+#'
+#' ## cleanup
+#' rm(m3, m4)
 #' }
-.detailedTestsLMER <- function(obj, method = c("Wald", "profile", "boot"), ...) {
-  if (isGLMM(obj) || isNLMM(obj)) {
-    stop("GLMMs and NLMMs are not currently supported")
+modelCompare.lm <- function(model1, model2, ...) {
+  stopifnot(identical(class(model1), class(model2)))
+
+  i1 <- modelPerformance(model1)$Performance
+  i2 <- modelPerformance(model2)$Performance
+
+  if (identical(i1$LLDF, i2$LLDF)) {
+    stop("One model must be nested within the other")
   }
-  if (!isLMM(obj)) {
-    stop("Only LMMs fit with lmer() are currently supported")
-  }
-  method <- match.arg(method)
+  if (i1$LLDF > i2$LLDF) {
+    i3 <- i1
+    model3 <- model1
 
-  cis <- confint(obj, method = method, oldNames = FALSE, ...)
-  cis2 <- data.table(
-    Term = rownames(cis),
-    LL = cis[,1],
-    UL = cis[,2])
+    i1 <- i2
+    model1 <- model2
 
-  res <- as.data.table(as.data.frame(VarCorr(obj)))
-  res[, Term := ifelse(grp == "Residual",
-                       "sigma",
-                ifelse(
-                  is.na(var2),
-                  sprintf("sd_%s|%s", var1, grp),
-                  sprintf("cor_%s.%s|%s", var2, var1, grp)))]
-  res <- res[, .(Term = Term, Est = sdcor)]
-
-  fes <- data.table(
-    Term = names(fixef(obj)),
-    Est = as.numeric(fixef(obj)))
-
-  all <- merge(
-    rbind(
-      cbind(res, Type = "RE"),
-      cbind(fes, Type = "FE")),
-    cis2,
-    by = "Term", all = TRUE)
-
-  out.res <- all[Type == "RE"]
-  out.fes <- all[Type == "FE"]
-
-  objsum <- summary(obj)
-
-  if ("Pr(>|t|)" %in% colnames(objsum$coefficients)) {
-    fe.p <- data.table(
-      Term = rownames(objsum$coefficients),
-      Pval = objsum$coefficients[, "Pr(>|t|)"])
-  } else {
-    fe.p <- data.table(
-      Term = rownames(objsum$coefficients),
-      Pval = (1 - pnorm(abs(objsum$coefficients[, "t value"]))) * 2)
+    i2 <- i3
+    model2 <- model3
+    rm(i3, model3)
   }
 
-  out.fes <- merge(out.fes, fe.p, by = "Term", all = TRUE)
+  test <- anova(model1, model2, test = "F")
+  i1$Model <- "Reduced"
+  i2$Model <- "Full"
+  out <- rbind(
+    i1, i2,
+    cbind(Model = "Difference", i2[,-1] - i1[,-1]))
+  out[3, F2 := R2 / (1 - out[2, R2])]
+  out[3, F := test$F[2]]
+  out[3, FNumDF := test$Df[2]]
+  out[3, FDenDF := test$Res.Df[2]]
+  out[3, P := test[["Pr(>F)"]][2]]
 
-  ## check if linear mixed model is fit with REML
-  ## and if so refit it with ML
-  if (isLMM(obj) && isREML(obj)) {
-    message(paste0(
-      "Parameters and CIs are based on REML, \n",
-      "but detailedTests requires ML not REML fit for comparisons, \n",
-      "and these are used in effect sizes. Refitting."))
-  }
-  obj <- update(obj, data = model.frame(obj), REML = FALSE)
+  out <- list(out)
+  attr(out, "augmentClass") <- "lm"
 
-  ngrps <- ngrps(obj)
-  out.misc <- data.table(
-    Type = ifelse(isREML(obj), "REML", "ML"),
-    AIC = AIC(obj),
-    BIC = BIC(obj),
-    logLik = logLik(obj),
-    DF = attr(logLik(obj), "df"),
-    as.data.table(t(R2LMER(obj, summary(obj)))),
-    N_Obs = nobs(obj),
-    as.data.table(t(ngrps)))
-
-  setnames(out.misc,
-           old = names(ngrps),
-           new = paste0("N_", names(ngrps)))
-
-
-  ## get formula
-  f <- formula(obj)
-
-  ## fixed effects
-  fe <- nobars(f)
-  fe.terms <- terms(fe)
-  fe.labs <- labels(fe.terms)
-  fe.intercept <- if(identical(attr(fe.terms, "intercept"), 1L)) "1" else "0"
-
-  ## random effects
-  re <- lapply(findbars(f), deparse)
-
-  re.group <- lapply(re, function(v) {
-    gsub("(^.*)\\|(.*$)", "\\2", v)
-  })
-
-  re.terms <- lapply(re, function(v) {
-    v <- gsub("(^.*)(\\|.*$)", "\\1", v)
-    v <- sprintf("dv ~ %s", v)
-    terms(as.formula(v))
-  })
-  re.labs <- lapply(re.terms, labels)
-  re.intercept <- lapply(re.terms, function(x) {
-    if(identical(attr(x, "intercept"), 1L)) "1" else "0"
-  })
-
-  ## all terms from fixed and random effects
-  all.labs <- unique(c(fe.labs, unlist(re.labs)))
-  tmp <- vector("character")
-  for (i in seq_along(all.labs)) {
-    tmp <- c(
-      tmp,
-      all.labs[match(TRUE, all.labs %flipIn% all.labs[i])])
-  }
-  all.labs <- unique(tmp)
-
-  labs.levels <- data.table(
-    Terms = all.labs,
-    FE = as.integer(vapply(all.labs,
-      function(v) any(unlist(fe.labs) %flipIn% v),
-      FUN.VALUE = NA)),
-    RE = as.integer(vapply(all.labs,
-      function(v) any(unlist(re.labs) %flipIn% v),
-      FUN.VALUE = NA)))
-  labs.levels[, Type := paste0(FE, RE)]
-  labs.levels <- labs.levels[,
-    .(Type = if(Type == "11") c("11", "01") else Type),
-    by = Terms]
-  labs.levels[, FE := substr(Type, 1, 1) == "1"]
-  labs.levels[, RE := substr(Type, 2, 2) == "1"]
-
-  ## formula from reduced models, dropping one term at a time
-  out.f <- unlist(lapply(seq_along(labs.levels$Terms), function(i) {
-    use.fe.labs <- fe.labs[!((fe.labs %flipIn% labs.levels$Terms[i]) & labs.levels$FE[i])]
-    use.re.labs <- lapply(re.labs, function(x) {
-      if (length(x)) {
-        x[!((x %flipIn%  labs.levels$Terms[i]) & labs.levels$RE[i])]
-      } else {
-        x
-      }
-    })
-
-    fe.built <- sprintf("%s ~ %s%s%s",
-                        as.character(f)[2],
-                        fe.intercept,
-                        if (length(use.fe.labs)) " + " else "",
-                        paste(use.fe.labs, collapse = " + "))
-
-    re.built <- lapply(seq_along(re), function(i) {
-      if (re.intercept[[i]] == "0" && !length(use.re.labs[[i]])) {
-        vector("character", 0L)
-      } else {
-        sprintf("(%s%s%s |%s)",
-                re.intercept[[i]],
-                if (length(use.re.labs[[i]])) " + " else "",
-                paste(use.re.labs[[i]], collapse = " + "),
-                re.group[[i]])
-      }
-    })
-
-    re.built <- paste(unlist(re.built), collapse = " + ")
-
-    if (nzchar(re.built)) {
-      all.built <- paste(c(fe.built, re.built), collapse = " + ")
-    } else {
-      all.built <- NA_character_
-    }
-    return(all.built)
-  }))
-
-  labs.levels[, Formula := out.f]
-
-  testm <- lapply(out.f, function(f) {
-    if (!is.na(f)) {
-      if (isLMM(obj)) {
-        lmer(as.formula(f), data = model.frame(obj), REML = FALSE)
-      } else if (isGLMM(obj)) {
-        glmer(as.formula(f), data = model.frame(obj),
-              family = family(obj))
-      }
-    } else {
-      NA
-    }
-  })
-
-  out.tests <- do.call(rbind, lapply(seq_along(testm), function(i) {
-    objreduced <- testm[[i]]
-    v <- labs.levels$Terms[[i]]
-
-    if (!isTRUE(inherits(objreduced, "merMod"))) {
-      tmp <- data.table(
-        Variable = v,
-        AIC = NA_real_,
-        BIC = NA_real_,
-        DF = NA_integer_,
-        logLik = NA_real_,
-        MarginalR2 = NA_real_,
-        MarginalF2 = NA_real_,
-        ConditionalR2 = NA_real_,
-        ConditionalF2 = NA_real_,
-        Chi2 = NA_real_,
-        P = NA_real_)
-    } else {
-      tmp <- compareLMER(obj, objreduced)[3]
-      setnames(tmp, old = "Model", new = "Variable")
-      tmp$Variable <- v
-    }
-    return(tmp)
-  }))
-
-  out.tests <- cbind(out.tests, labs.levels[, -(1:2)])
-  out.tests[, Type := factor(paste0(FE, RE),
-                             levels = c("FALSETRUE", "TRUEFALSE", "TRUETRUE"),
-                             labels = c("Random", "Fixed", "Fixed + Random"))]
-
-  list(
-    FixedEffects = out.fes,
-    RandomEffects = out.res,
-    EffectSizes = out.tests,
-    OverallModel = out.misc)
+  as.modelCompare(out)
 }
 
 
-#' Calculates all pairwise contrasts and omnibus tests for multinomial regression
+#' Detailed Tests on Models
 #'
 #' TODO: make me!
 #'
-#' @param obj A \code{vglm} class object, the fitted result of
-#'   \code{vglm()}. At the moment only handles the multinomial
+#' @param object A fitted model object.
+#' @param ... Additional arguments passed to specific methods.
+#' @return Depends on the method dispatch.
+#' @rdname modelTest
+#' @export
+modelTest <- function(object, ...) {
+  UseMethod("modelTest", object)
+}
+
+
+#' @export
+#' @rdname modelTest
+is.modelTest <- function(x) {
+  inherits(x, "modelTest")
+}
+
+#' @param x A object (e.g., list or a modelTest object) to
+#'   test or attempt coercing to a modelTest object.
+#' @importFrom data.table is.data.table as.data.table
+#' @export
+#' @rdname modelTest
+as.modelTest <- function(x) {
+  if (!is.modelTest(x)) {
+    if(!is.list(x)) {
+      stop("Input must be a list or a modelTest object")
+    }
+    augmentClass <- attr(x, "augmentClass")
+
+    x <- list(
+      FixedEffects = x[[1]],
+      RandomEffects = x[[2]],
+      EffectSizes = x[[3]],
+      OverallModel = x[[4]])
+    if(is.null(augmentClass)) {
+      class(x) <- "modelTest"
+    } else {
+      class(x) <- c(paste0("modelTest.", augmentClass), "modelTest")
+    }
+  }
+
+  stopifnot(is.modelTest(x))
+  stopifnot(identical(length(x), 4L))
+  stopifnot(identical(names(x),
+                      c("FixedEffects",
+                        "RandomEffects",
+                        "EffectSizes",
+                        "OverallModel")))
+  return(x)
+}
+
+
+#' At the moment, \code{modelTest.vglm} method only handles the multinomial
 #'   family, although this may get expanded in the future.
+#'
 #' @param OR a logical value whether to report odds ratios and
 #'   95 percent confidence intervals, if \code{TRUE}, or
 #'   regression coefficients on the logit scale with standard
@@ -619,18 +325,18 @@ if(getRversion() >= "2.15.1") utils::globalVariables(c("var1", "var2", "sdcor", 
 #' @return A list with two elements.
 #'   \code{Results} contains a data table of the actual estimates.
 #'   \code{Table} contains a nicely formatted character matrix.
-#'
+#' @method modelTest vglm
+#' @rdname modelTest
 #' @export
-#' @importFrom stats model.matrix vcov
-#' @importFrom VGAM vglm multinomial summary
+#' @importFrom stats model.matrix vcov formula terms update anova
+#' @importFrom VGAM vglm multinomial summary anova.vglm vlm
 #' @importMethodsFrom VGAM vcov lrtest
 #' @importFrom data.table data.table
 #' @examples
-#'
 #' mtcars$cyl <- factor(mtcars$cyl)
 #' m <- VGAM::vglm(cyl ~ qsec,
 #'   family = VGAM::multinomial(), data = mtcars)
-#' .detailedTestsVGLM(m)
+#' modelTest(m)
 #'
 #' rm(m, mtcars)
 #'
@@ -639,46 +345,43 @@ if(getRversion() >= "2.15.1") utils::globalVariables(c("var1", "var2", "sdcor", 
 #' mtcars$am <- factor(mtcars$am)
 #' m <- VGAM::vglm(cyl ~ qsec,
 #'   family = VGAM::multinomial(), data = mtcars)
-#' .detailedTestsVGLM(m)
+#' modelTest(m)
 #'
-#' .detailedTestsVGLM(m, digits = 4)$Table
-#' .detailedTestsVGLM(m, OR = FALSE)
-#' .detailedTestsVGLM(m, digits = 4, OR = FALSE)$Table
+#' modelTest(m, digits = 4)$Table
+#' modelTest(m, OR = FALSE)
+#' modelTest(m, digits = 4, OR = FALSE)$Table
 #'
 #' m <- VGAM::vglm(cyl ~ scale(qsec),
 #'   family = VGAM::multinomial(), data = mtcars)
-#' .detailedTestsVGLM(m)
+#' modelTest(m)
 #'
 #' m2 <- VGAM::vglm(cyl ~ factor(vs) * scale(qsec),
 #'   family = VGAM::multinomial(), data = mtcars)
-#' .detailedTestsVGLM(m2)
+#' modelTest(m2)
 #'
 #' m <- VGAM::vglm(Species ~ Sepal.Length,
 #'   family = VGAM::multinomial(), data = iris)
-#' .detailedTestsVGLM(m)
+#' class(m)
+#' modelTest(m)
 #' }
-.detailedTestsVGLM <- function(obj, OR = TRUE, digits = 2L, pdigits = 3L) {
+modelTest.vglm <- function(object, OR = TRUE, digits = 2L, pdigits = 3L, ...) {
 
-  if (inherits(obj, "vglm")) {
-    if ("multinomial" %in% obj@family@vfamily) {
-      "do something"
-    } else {
-      stop ("can only deal with multinomial family vglm models right now")
-    }
+  if ("multinomial" %in% object@family@vfamily) {
+    "do something"
   } else {
-    stop ("must be a vglm class object")
+    stop ("can only deal with multinomial family vglm models right now")
   }
 
-  k <- 1L:ncol(obj@y)
+  k <- 1L:ncol(object@y)
   if (length(k) < 3) stop("DV must have at least 3 levels, after omitting missing data")
 
   nk <- seq_along(k)[-length(k)]
 
-  ivterms <- attr(terms(formula(obj)), "term.labels")
+  ivterms <- attr(terms(formula(object)), "term.labels")
 
   ## models with different contrasts
   m <- lapply(nk, function(i) {
-    update(obj, family = VGAM::multinomial(refLevel = i))
+    update(object, family = VGAM::multinomial(refLevel = i))
   })
 
   m.res <- lapply(nk, function(i) {
@@ -706,14 +409,14 @@ if(getRversion() >= "2.15.1") utils::globalVariables(c("var1", "var2", "sdcor", 
     i <- ivterms.pos[[v]]
 
     if (identical(length(ivterms), 1L)) {
-    out <- VGAM::lrtest(obj, update(obj, as.formula(sprintf(". ~ . - %s", v))))
+    out <- VGAM::lrtest(object, update(object, as.formula(sprintf(". ~ . - %s", v))))
     p <- sprintf(sprintf("Chi-square (df=%%d) = %%0.%df, %%s", digits),
                  out@Body$Df[2],
                  out@Body$Chisq[2],
                  formatPval(out@Body[["Pr(>Chisq)"]][2],
                             pdigits, pdigits, includeP = TRUE))
     } else {
-    out <- anova(obj, type = "III")
+    out <- anova(object, type = "III")
     p <- sprintf(sprintf("Chi-square (df=%%d) = %%0.%df, %%s", digits),
                  out[v, "Df"],
                  out[v, "Deviance"],
@@ -785,6 +488,78 @@ if(getRversion() >= "2.15.1") utils::globalVariables(c("var1", "var2", "sdcor", 
     Table = do.call(rbind, lapply(terms.res, `[[`, "Table")))
 }
 
+
+## clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("Model", "Type"))
+
+#' @return A list with two elements.
+#'   \code{Results} contains a data table of the actual estimates.
+#'   \code{Table} contains a nicely formatted character matrix.
+#' @method modelTest lm
+#' @rdname modelTest
+#' @export
+#' @importFrom stats model.matrix vcov formula terms update anova
+#' @importFrom data.table data.table
+#' @importFrom extraoperators %s!in%
+#' @examples
+#' m1 <- lm(mpg ~ qsec * hp, data = mtcars)
+#' modelTest(m1)
+#'
+#' mtcars$cyl <- factor(mtcars$cyl)
+#' m2 <- lm(mpg ~ cyl, data = mtcars)
+#' modelTest(m2)
+#'
+#' ## cleanup
+#' rm(m1, m2, mtcars)
+modelTest.lm <- function(object, ...) {
+  cis <- confint(object)
+  msum <- summary(object)
+
+  fes <- data.table(
+    Term = rownames(cis),
+    Est = as.numeric(coef(object)),
+    LL = cis[,1],
+    UL = cis[,2],
+    Pval = coef(msum)[, "Pr(>|t|)"])
+
+  ## get formula
+  f <- formula(object)
+  fe.terms <- terms(f)
+  fe.labs <- labels(fe.terms)
+  fe.intercept <- if(identical(attr(fe.terms, "intercept"), 1L)) "1" else "0"
+
+  out.f <- lapply(fe.labs, function(v) {
+    use.fe.labs <- fe.labs %s!in% v
+    sprintf("%s ~ %s%s%s",
+            as.character(f)[2],
+            fe.intercept,
+            if (length(use.fe.labs)) " + " else "",
+            paste(use.fe.labs, collapse = " + "))
+  })
+
+  out.tests <- do.call(rbind, lapply(seq_along(out.f), function(i) {
+    out <- data.table(
+      Model = NA_character_, N_Obs = NA_real_, AIC = NA_real_,
+      BIC = NA_real_, LL = NA_real_, LLDF = NA_real_, Sigma = NA_real_,
+      R2 = NA_real_, F2 = NA_real_, AdjR2 = NA_real_, F = NA_real_,
+      FNumDF = NA_real_, FDenDF = NA_real_, P = NA_real_)
+    if (!is.na(out.f[[i]])) {
+      reduced <- lm(as.formula(out.f[[i]]), data = model.frame(object))
+      out <- modelCompare(object, reduced)$Comparison[Model=="Difference"]
+    }
+    setnames(out, old = "Model", new = "Term")
+    out$Term <- fe.labs[[i]]
+    return(out)
+  }))
+  out.tests[, Type := "Fixed"]
+
+  out <- list(fes, NA, out.tests,
+              modelPerformance(object))
+  attr(out, "augmentClass") <- "lm"
+
+  as.modelTest(out)
+}
+
 ## clear R CMD CHECK notes
 if(getRversion() >= "2.15.1") {
   utils::globalVariables(c(
@@ -793,77 +568,8 @@ if(getRversion() >= "2.15.1") {
 }
 
 
-#' Detailed Comparisons and Tests on Models
-#'
-#' TODO: make me!
-#'
-#' @param obj A fitted model object, currently either a
-#'   \code{merMod} or \code{vglm} class object.
-#' @param ... Additional arguments passed to specific methods.
-#' @return Depends on the method dispatch,
-#'  see \code{.detailedTestsLMER} and \code{.detailedTestsVGLM}.
-#' @export
-#' @examples
-#' mtcars$cyl <- factor(mtcars$cyl)
-#' m <- VGAM::vglm(cyl ~ qsec,
-#'   family = VGAM::multinomial(), data = mtcars)
-#' detailedTests(m)
-#' rm(m, mtcars)
-#'
-#' \dontrun{
-#' mtcars$cyl <- factor(mtcars$cyl)
-#' mtcars$am <- factor(mtcars$am)
-#' m <- VGAM::vglm(cyl ~ qsec,
-#'   family = VGAM::multinomial(), data = mtcars)
-#' detailedTests(m)
-#'
-#' detailedTests(m, digits = 4)$Table
-#' detailedTests(m, OR = FALSE)
-#' detailedTests(m, digits = 4, OR = FALSE)$Table
-#'
-#' m <- VGAM::vglm(cyl ~ scale(qsec),
-#'   family = VGAM::multinomial(), data = mtcars)
-#' detailedTests(m)
-#'
-#' m2 <- VGAM::vglm(cyl ~ factor(vs) * scale(qsec),
-#'   family = VGAM::multinomial(), data = mtcars)
-#' detailedTests(m2)
-#'
-#' m <- VGAM::vglm(Species ~ Sepal.Length,
-#'   family = VGAM::multinomial(), data = iris)
-#' detailedTests(m)
-#'
-#' data(aces_daily)
-#' m1 <- lme4::lmer(NegAff ~ STRESS + (1 + STRESS | UserID),
-#'   data = aces_daily)
-#' m2 <- lme4::lmer(NegAff ~ STRESS + I(STRESS^2) + (1 + STRESS | UserID),
-#'   data = aces_daily)
-#' testm1 <- detailedTests(m1, method = "profile")
-#' testm2 <- detailedTests(m2, method = "profile")
-#' testm2b <- detailedTests(m2, method = "boot", nsim = 100)
-#' }
-detailedTests <- function(obj, ...) {
-  if (inherits(obj, "merMod")) {
-    if (isLMM(obj)) {
-      .detailedTestsLMER(obj = obj, ...)
-    } else {
-      stop("can only deal with lmer() results from merMod objects")
-    }
-  } else if (inherits(obj, "vglm")) {
-    if ("multinomial" %in% obj@family@vfamily) {
-      .detailedTestsVGLM(obj = obj, ...)
-    } else {
-      stop ("can only deal with multinomial family vglm models right now")
-    }
-  } else {
-    stop ("must be a merMod from lmer() or vglm() class object")
-  }
-}
-
-
-
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("V2", "Index"))
+if(getRversion() >= "2.15.1") utils::globalVariables(c("V2", "Index", ".N"))
 
 
 ##' Function to find significant regions from an interaction
@@ -886,7 +592,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("V2", "Index"))
 ##' @return A data table with notes if no convergence or significance
 ##'   thresholds (if any).
 ##' @export
-##' @importFrom data.table .N
+##' @importFrom data.table as.data.table data.table
 ##' @importFrom rms contrast
 ##' @importFrom stats optim
 ##' @examples
@@ -993,7 +699,12 @@ if(getRversion() >= "2.15.1") {
 ##' @return A data table with notes if no convergence or significance
 ##'   thresholds (if any).
 ##' @export
+##' @importFrom data.table as.data.table
 ##' @importFrom rms Predict
+##' @importFrom ggplot2 ggplot geom_text aes scale_x_continuous theme xlab ylab coord_fixed
+##' @importFrom ggplot2 element_blank unit geom_line geom_ribbon aes_string geom_segment
+##' @importFrom grid arrow
+##' @importFrom cowplot theme_cowplot
 ##' @examples
 ##' ## make me
 intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
@@ -1212,8 +923,8 @@ internalformulaIt <- function(dv, iv, covariates) {
 ##' @param \ldots Additional arguments passed on to the internal function, \code{.runIt}.
 ##' @return A list with all the model results.
 ##' @keywords internal
-##' @import foreach
 ##' @importFrom stats na.omit get_all_vars
+##' @importFrom data.table data.table
 ##' @examples
 ##' test1 <- JWileymisc:::internalcompareIV(
 ##'   dv = "mpg", type = "normal",
@@ -1249,7 +960,10 @@ internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
   }
 
   i <- NULL; rm(i) ## make Rcmd check happy
-  results <- foreach(i = 1:nIV, .combine = list) %dopar% {
+
+  if (requireNamespace("foreach", quietly = TRUE)) {
+    `%dopar%` <- foreach::`%dopar%`
+  results <- foreach::foreach(i = 1:nIV, .combine = list) %dopar% {
     if (multivariate) {
       out <- list(
         data = data,
@@ -1268,7 +982,7 @@ internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
                           type = type, data = data,
                           ...),
         Full = m.all)
-      out$Summary <- data.frame(
+      out$Summary <- data.table(
         Type = c("Unadjusted", "Adjusted", "MultiUnique"),
         R2 = c(out$Unadjusted$r.sq,
                ifelse(is.na(out$Adjusted)[1], NA,
@@ -1306,7 +1020,7 @@ internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
                    },
         Reduced = NA,
         Full = NA)
-      out$Summary <- data.frame(
+      out$Summary <- data.table(
         Type = c("Unadjusted", "Adjusted", "MultiUnique"),
         R2 = c(out$Unadjusted$r.sq,
                ifelse(is.na(out$Adjusted)[1], NA,
@@ -1321,6 +1035,82 @@ internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
       out
     }
   }
+  } else {
+    results <- list()
+    results <- for (i in 1:nIV) {
+    if (multivariate) {
+      out <- list(
+        data = data,
+        Unadjusted = internalrunIt(internalformulaIt(dv, iv[i], ""),
+                            type = type, data = data,
+                            ...),
+        Covariate = m.all.cov,
+        Adjusted = if (!length(covariates)) {
+                     NA
+                   } else {
+                     internalrunIt(internalformulaIt(dv, iv[i], covariates),
+                            type = type, data = data,
+                            ...)
+                   },
+        Reduced =  internalrunIt(internalformulaIt(dv, iv[-i], covariates),
+                          type = type, data = data,
+                          ...),
+        Full = m.all)
+      out$Summary <- data.table(
+        Type = c("Unadjusted", "Adjusted", "MultiUnique"),
+        R2 = c(out$Unadjusted$r.sq,
+               ifelse(is.na(out$Adjusted)[1], NA,
+                      out$Adjusted$r.sq - out$Covariate$r.sq),
+               ifelse(is.na(out$Reduced)[1], NA,
+                      out$Full$r.sq - out$Reduced$r.sq)),
+        D = c(out$Unadjusted$dev.expl,
+              ifelse(is.na(out$Adjusted)[1], NA,
+                     out$Adjusted$dev.expl - out$Covariate$dev.expl),
+              ifelse(is.na(out$Reduced)[1], NA,
+                     out$Full$dev.expl - out$Reduced$dev.expl)))
+      results[[i]] <- out
+    } else {
+      tmpdata <- na.omit(get_all_vars(as.formula(
+        internalformulaIt(dv, iv[i], covariates)), data = data))
+
+      out <- list(
+        data = tmpdata,
+        Unadjusted = internalrunIt(internalformulaIt(dv, iv[i], ""),
+                            type = type, data = tmpdata,
+                            ...),
+        Covariate = if (!length(covariates)) {
+                      NA
+                    } else {
+                      internalrunIt(internalformulaIt(dv, "", covariates),
+                             type = type, data = tmpdata,
+                             ...)
+                    },
+        Adjusted = if (!length(covariates)) {
+                     NA
+                   } else {
+                     internalrunIt(internalformulaIt(dv, iv[i], covariates),
+                            type = type, data = tmpdata,
+                            ...)
+                   },
+        Reduced = NA,
+        Full = NA)
+      out$Summary <- data.table(
+        Type = c("Unadjusted", "Adjusted", "MultiUnique"),
+        R2 = c(out$Unadjusted$r.sq,
+               ifelse(is.na(out$Adjusted)[1], NA,
+                      out$Adjusted$r.sq - out$Covariate$r.sq),
+               ifelse(is.na(out$Reduced)[1], NA,
+                      out$Full$r.sq - out$Reduced$r.sq)),
+        Deviance = c(out$Unadjusted$dev.expl,
+              ifelse(is.na(out$Adjusted)[1], NA,
+                     out$Adjusted$dev.expl - out$Covariate$dev.expl),
+              ifelse(is.na(out$Reduced)[1], NA,
+                     out$Full$dev.expl - out$Reduced$dev.expl)))
+      results[[i]] <- out
+    }
+  }
+  }
+
   if (length(results) != nIV & nIV == 1) {
     results <- list(results)
   }
