@@ -1,3 +1,18 @@
+# JWileymisc 1.0.0
+
+## Changes
+
+* This version includes a significant re-write of the package that 
+  results in many of the previous user-facing functions changing 
+  names and arguments. This will likely break old code.
+  This re-write was necessary to help standardize functions and
+  arguments, and to make functions more robust.
+  Many functions are now generics with specific methods written.
+  Further, some functions previously bundled into `JWileymisc` have 
+  been separated into other packages, including the new 
+  `extraoperators` package, covering binary operators, 
+  and a package for diagnostics on mixed models.
+
 # JWileymisc 0.3.2
 
 ## New Features

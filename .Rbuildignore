@@ -3,3 +3,9 @@
 desktop.ini
 
 ^\.travis\.yml$
+
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+
+^codecov\.yml$

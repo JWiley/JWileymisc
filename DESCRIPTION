@@ -1,22 +1,23 @@
 Package: JWileymisc
-Type: Package
 Title: Miscellaneous Utilities and Functions
-Version: 0.3.2
-Date: 2019-07-23
-Author: Joshua F. Wiley <jwiley.psych@gmail.com>
-Maintainer: Joshua F. Wiley <jwiley.psych@gmail.com>
-URL: https://github.com/JWiley/JWileymisc
+Version: 1.0.0
+Date: 2019-11-01
+Authors@R: 
+    person(given = "Joshua F.",
+           family = "Wiley",
+           role = c("aut", "cre"),
+           email = "jwiley.psych@gmail.com",
+           comment = c(ORCID = "0000-0002-0271-6702"))
+URL: http://joshuawiley.com/JWileymisc, https://github.com/JWiley/JWileymisc
 BugReports: https://github.com/JWiley/JWileymisc/issues
-Description: A collection of miscellaneous tools and functions,
-    such as tools to generate descriptive statistics tables,
+Description: Miscellaneous tools and functions,
+    including: generate descriptive statistics tables,
     format output, visualize relations among variables or check
-    distributions.
+    distributions, and generic functions for residual and
+    model diagnostics. 
 License: GPL (>= 3)
 Depends:
-    R (>= 3.5.1),
-    ggplot2 (>= 2.2.0),
-    cowplot,
-    foreach
+    R (>= 3.5.0)
 Imports:
     stats,
     utils,
@@ -24,14 +25,16 @@ Imports:
     multcompView,
     emmeans,
     data.table (>= 1.10.0),
-    devtools,
     graphics,
     ggthemes,
+    ggplot2 (>= 2.2.0),
+    cowplot,
     mgcv,
     mice,
     methods,
     zoo,
     psych,
+    grid,
     rms,
     robustbase,
     quantreg,
@@ -40,9 +43,16 @@ Imports:
     nlme,
     Matrix,
     lme4,
-    lmerTest
+    extraoperators (>= 0.1.1)
 Suggests:
     scales,
-    testthat
+    foreach,
+    testthat (>= 2.1.0),
+    covr,
+    knitr,
+    rmarkdown,
+    pander
 Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
 RoxygenNote: 6.1.1
