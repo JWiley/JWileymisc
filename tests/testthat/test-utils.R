@@ -3,3 +3,90 @@ context("Utilities")
 test_that("empirical_pvalue returns correct p-values", {
   expect_that(empirical_pvalue(c(-1, 1:3))["p-value"], is_equivalent_to(.5))
 })
+
+test_that("cd changes directory", {
+  randomDIR <- paste(sample(c(letters, 0:9), 30), collapse = "")
+  while(file.exists(randomDIR)) {
+    randomDIR <- paste(sample(c(letters, 0:9), 30), collapse = "")
+  }
+
+  dir.create(randomDIR)
+  cd(randomDIR)
+  expect_true(grepl(randomDIR, getwd()))
+  setwd("../")
+  unlink(randomDIR, TRUE, TRUE)
+
+  ## cd() can create a new directory
+  cd(randomDIR)
+  expect_true(grepl(randomDIR, getwd()))
+  setwd("../")
+  unlink(randomDIR, TRUE, TRUE)
+})
+
+test_that("cor2cov is equivalent to covariance matrix", {
+  expect_that(
+    cov(mtcars[, 1:4]),
+    is_equivalent_to(
+      cor2cov(cor(mtcars[, 1:4]), sapply(mtcars[, 1:4], sd))))
+})
+
+test_that("cor2cov catches errors", {
+  expect_error(cor2cov("a"))
+  expect_error(cor2cov(cor(mtcars[, 1:4]), 1:2))
+  expect_warning(cor2cov(matrix(1:9, 3, 3), 1:3))
+})
+
+test_that("corOK removes missing values correctly", {
+  cormat <- cor(iris[, -5])
+  cormat[cbind(c(1,2), c(2,1))] <- NA
+  cormat <- corOK(cormat)
+  expect_equivalent(dim(cormat$x), c(3, 3))
+  expect_equivalent(cormat$keep.indices, c(2, 3, 4))
+})
+
+test_that("as.na converts to the correct class of missing", {
+  expect_equal(as.na(1.5), NA_real_)
+  expect_equal(as.na(TRUE), NA)
+  expect_equal(as.na(1L), NA_integer_)
+  expect_equal(as.na("x"), NA_character_)
+
+  expect_true(is.factor(as.na(factor("x"))))
+  expect_equal(class(as.na(as.POSIXct("1990-01-01 10:40:04"))), c("POSIXct", "POSIXt"))
+  expect_equal(class(as.na(as.POSIXlt("1990-01-01 10:40:04"))), c("POSIXlt", "POSIXt"))
+})
+
+test_that("naz.omit removes missing, nan, and zero length characters", {
+  expect_identical(length(naz.omit(c("test", "", NA_character_))), 1L)
+  expect_identical(length(naz.omit(c(1, NA))), 1L)
+})
+
+test_that("lagk lags by k", {
+  expect_equal(lagk(1:3, 1), c(NA, 1, 2))
+  expect_equal(lagk(1:3, 2), c(NA, NA, 1))
+  expect_equivalent(
+    lagk(1:4, 1, factor(c("a", "a", "b", "b"))),
+    c(a1 = NA, a2 = 1,
+      b1 = NA, b2 = 3))
+})
+
+test_that("timeshift works", {
+  expect_equal(
+    timeshift(c(0, 3, 6), center = 0, min = 0, max = 6),
+    c(0, 3, 6))
+
+  expect_equal(
+    timeshift(c(0, 3, 6), center = 3, min = 0, max = 6),
+    c(3, 0, 3))
+
+  expect_equivalent(
+    timeshift(c(0, .5, .9), center = .5),
+    c(.5, 0, .4))
+
+  expect_equivalent(
+    timeshift(c(.5, 0, .4), center = .5, inverse = TRUE),
+    c(0, .5, .9))
+
+  expect_error(timeshift(c(0, 3, 6), center = 0, min = 1, max = 6))
+  expect_error(timeshift(c(0, 3, 6), center = 3, min = 1, max = 6))
+  expect_error(timeshift(c(0, 3, 7), center = 3, min = 0, max = 6))
+})
