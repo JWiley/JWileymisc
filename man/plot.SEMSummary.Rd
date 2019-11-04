@@ -21,13 +21,13 @@ Plots SEMSummary object
 plot(SEMSummary(~ ., data = mtcars))
 
 # same as default
-plot(SEMSummary(~ ., data = mtcars), plot = "coverage")
+plot(SEMSummary(~ ., data = mtcars), type = "coverage")
 
 # shows p values
-plot(SEMSummary(~ ., data = mtcars), plot = "p")
+plot(SEMSummary(~ ., data = mtcars), type = "p")
 
 # shows correlations
-plot(SEMSummary(~ ., data = mtcars), plot = "cor")
+plot(SEMSummary(~ ., data = mtcars), type = "cor")
 }
 \seealso{
 \code{\link{corplot}}, \code{\link{SEMSummary}}

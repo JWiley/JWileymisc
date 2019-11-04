@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Detailed Tests on Models — modelTest • JWileymisc</title>
+<title>APAStyler method for model tests from a vglm multinomial model — APAStyler.modelTest.vglm • JWileymisc</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Detailed Tests on Models — modelTest" />
-<meta property="og:description" content="TODO: make me!" />
+<meta property="og:title" content="APAStyler method for model tests from a vglm multinomial model — APAStyler.modelTest.vglm" />
+<meta property="og:description" content="APAStyler method for model tests from a vglm multinomial model" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,102 +123,99 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Detailed Tests on Models</h1>
-    <small class="dont-index">Source: <a href='https://github.com/JWiley/JWileymisc/blob/master/R/models.R'><code>R/models.R</code></a></small>
-    <div class="hidden name"><code>modelTest.Rd</code></div>
+    <h1>APAStyler method for model tests from a vglm multinomial model</h1>
+    <small class="dont-index">Source: <a href='https://github.com/JWiley/JWileymisc/blob/master/R/styler.R'><code>R/styler.R</code></a></small>
+    <div class="hidden name"><code>APAStyler.modelTest.vglm.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>TODO: make me!</p>
+    <p>APAStyler method for model tests from a vglm multinomial model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modelTest</span>(<span class='no'>object</span>, <span class='no'>...</span>)
-
-<span class='fu'>is.modelTest</span>(<span class='no'>x</span>)
-
-<span class='fu'>as.modelTest</span>(<span class='no'>x</span>)
-
-<span class='co'># S3 method for vglm</span>
-<span class='fu'>modelTest</span>(<span class='no'>object</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for lm</span>
-<span class='fu'>modelTest</span>(<span class='no'>object</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for modelTest.vglm</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='no'>object</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>FixedEffects</span> <span class='kw'>=</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"%s%s [%s, %s]"</span>), <span class='kw'>EffectSizes</span> <span class='kw'>=</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Chi-square (df=%s) = %s, %s"</span>)), <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>pcontrol</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>stars</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>includeP</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>includeSign</span>
+  <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>dropLeadingZero</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>OR</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>A fitted model object.</p></td>
+      <td><p>A <code>modelTest.vglm</code> class object,
+results from running <code><a href='modelTest.html'>modelTest()</a></code> function on a
+class <code>vglm</code> object with a multinomial family</p></td>
+    </tr>
+    <tr>
+      <th>format</th>
+      <td><p>A list giving the formatting style to be used for
+the fixed effects and effect sizes.</p></td>
+    </tr>
+    <tr>
+      <th>digits</th>
+      <td><p>A numeric value indicating the number of digits to print.
+This is still in early implementation stages and currently does not
+change all parts of the output (which default to 2 decimals per
+APA style).</p></td>
+    </tr>
+    <tr>
+      <th>pcontrol</th>
+      <td><p>A list controlling how p values are formatted.</p></td>
+    </tr>
+    <tr>
+      <th>OR</th>
+      <td><p>a logical value whether to report odds ratios and
+95 percent confidence intervals, if <code>TRUE</code>, or
+regression coefficients on the logit scale with standard
+errors, if <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed to specific methods.</p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>A object (e.g., list or a modelTest object) to
-test or attempt coercing to a modelTest object.</p></td>
+      <td><p>Additional arguments.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Depends on the method dispatch.</p>
-<p>A list with two elements.
-  <code>Results</code> contains a data table of the actual estimates.
-  <code>Table</code> contains a nicely formatted character matrix.</p>
-<p>A list with two elements.
-  <code>Results</code> contains a data table of the actual estimates.
-  <code>Table</code> contains a nicely formatted character matrix.</p>
+    <p>Styled results.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>mtcars</span>$<span class='no'>cyl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>mtcars</span>$<span class='no'>cyl</span>)
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span>(<span class='no'>cyl</span> ~ <span class='no'>qsec</span>,
   <span class='kw'>family</span> <span class='kw'>=</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span>(), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>modelTest</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $FixedEffects
-#&gt;    Num Names Term Ref        Est        SE        Pval        LL         UL K
-#&gt; 1:   1  qsec qsec   1 -0.5795781 0.4006097 0.147969796 -1.364759  0.2056026 3
-#&gt; 2:   2  qsec qsec   1 -1.2697728 0.4560391 0.005363505 -2.163593 -0.3759525 3
-#&gt; 3:   2  qsec qsec   2 -0.6901947 0.4045653 0.088005136 -1.483128  0.1027386 3
-#&gt;    Comp  Labels
-#&gt; 1:    2 2 vs. 1
-#&gt; 2:    3 3 vs. 1
-#&gt; 3:    3 3 vs. 2
-#&gt; 
-#&gt; $RandomEffects
-#&gt; [1] NA
-#&gt; 
-#&gt; $EffectSizes
-#&gt;    Term    Chisq DF         Pval  Type
-#&gt; 1: qsec 14.21315  2 0.0008196964 Fixed
-#&gt; 
-#&gt; $OverallModel
-#&gt; [1] NA
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "modelTest.vglm" "modelTest"     </div><div class='input'>
+<span class='no'>mt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m</span>)
+
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='no'>mt</span>)</div><div class='output co'>#&gt;    Term Names           2 vs. 1             3 vs. 1           3 vs. 2
+#&gt; 1: qsec  qsec 0.56 [0.26, 1.23] 0.28** [0.11, 0.69] 0.50 [0.23, 1.11]
+#&gt;                                   Test
+#&gt; 1: Chi-square (df=2) = 14.21, p &lt; .001</div><div class='input'>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='no'>mt</span>, <span class='kw'>OR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;    Term Names              2 vs. 1                3 vs. 1              3 vs. 2
+#&gt; 1: qsec  qsec -0.58 [-1.36,  0.21] -1.27** [-2.16, -0.38] -0.69 [-1.48,  0.10]
+#&gt;                                   Test
+#&gt; 1: Chi-square (df=2) = 14.21, p &lt; .001</div><div class='input'>
 <span class='co'>## clean up</span>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>m</span>, <span class='no'>mtcars</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>m</span>, <span class='no'>mt</span>, <span class='no'>mtcars</span>)
 
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='no'>mtcars</span>$<span class='no'>cyl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>mtcars</span>$<span class='no'>cyl</span>)
 <span class='no'>mtcars</span>$<span class='no'>am</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>mtcars</span>$<span class='no'>am</span>)
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span>(<span class='no'>cyl</span> ~ <span class='no'>qsec</span>,
   <span class='kw'>family</span> <span class='kw'>=</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span>(), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>modelTest</span>(<span class='no'>m</span>)
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m</span>))
 
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span>(<span class='no'>cyl</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>qsec</span>),
   <span class='kw'>family</span> <span class='kw'>=</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span>(), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>modelTest</span>(<span class='no'>m</span>)
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m</span>))
 
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span>(<span class='no'>cyl</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>vs</span>) * <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>qsec</span>),
   <span class='kw'>family</span> <span class='kw'>=</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span>(), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>modelTest</span>(<span class='no'>m2</span>)
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m2</span>))
 
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span>(<span class='no'>Species</span> ~ <span class='no'>Sepal.Length</span>,
   <span class='kw'>family</span> <span class='kw'>=</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span>(), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>modelTest</span>(<span class='no'>m</span>)
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m</span>))
 
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1234</span>)
 <span class='no'>sampdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
@@ -228,76 +225,12 @@ test or attempt coercing to a modelTest object.</p></td>
 
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span>(<span class='no'>Outcome</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>D3</span>),
   <span class='kw'>family</span> <span class='kw'>=</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span>(), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sampdata</span>)
-<span class='fu'>modelTest</span>(<span class='no'>m</span>)
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m</span>))
 
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span>(<span class='no'>Outcome</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>D3</span>) + <span class='no'>C1</span>,
   <span class='kw'>family</span> <span class='kw'>=</span> <span class='kw pkg'>VGAM</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span>(), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sampdata</span>)
-<span class='fu'>modelTest</span>(<span class='no'>m</span>)
-}
-<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>qsec</span> * <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>modelTest</span>(<span class='no'>m1</span>)</div><div class='output co'>#&gt; $FixedEffects
-#&gt;           Term         Est           LL          UL         Pval
-#&gt; 1: (Intercept)  8.52461247 -17.15039253 34.19961746 0.5020186630
-#&gt; 2:        qsec  1.47683245   0.08321560  2.87044931 0.0385855703
-#&gt; 3:          hp  0.23587912   0.08515568  0.38660256 0.0033562173
-#&gt; 4:     qsec:hp -0.01949155  -0.02855763 -0.01042546 0.0001411028
-#&gt; 
-#&gt; $RandomEffects
-#&gt; [1] NA
-#&gt; 
-#&gt; $EffectSizes
-#&gt;       Term N_Obs        AIC        BIC       LL LLDF      Sigma         R2
-#&gt; 1:    qsec     0  -2.977231  -1.511495 2.488615    1 -0.1823263 0.03610200
-#&gt; 2:      hp     0  -8.004306  -6.538570 5.002153    1 -0.4372429 0.07873595
-#&gt; 3: qsec:hp     0 -14.841867 -13.376131 8.420933    1 -0.8177254 0.14859655
-#&gt;           F2      AdjR2         F FNumDF FDenDF            P  Type
-#&gt; 1: 0.1682869 0.03040174  4.712032      1     28 0.0385855703 Fixed
-#&gt; 2: 0.3670219 0.07597596 10.276613      1     28 0.0033562173 Fixed
-#&gt; 3: 0.6926720 0.15065453 19.394816      1     28 0.0001411028 Fixed
-#&gt; 
-#&gt; $OverallModel
-#&gt; $Performance
-#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2
-#&gt; 1:    lm    32 165.4972 172.8259 -77.74861    5 2.937243 0.7854734 3.661427
-#&gt;        AdjR2        F FNumDF FDenDF            P
-#&gt; 1: 0.7624884 34.17332      3     28 1.694676e-09
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "modelPerformance.lm" "modelPerformance"   
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "modelTest.lm" "modelTest"   </div><div class='input'>
-<span class='no'>mtcars</span>$<span class='no'>cyl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>mtcars</span>$<span class='no'>cyl</span>)
-<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>modelTest</span>(<span class='no'>m2</span>)</div><div class='output co'>#&gt; $FixedEffects
-#&gt;           Term        Est        LL        UL         Pval
-#&gt; 1: (Intercept)  26.663636  24.67608 28.651192 2.688358e-22
-#&gt; 2:        cyl6  -6.920779 -10.10796 -3.733599 1.194696e-04
-#&gt; 3:        cyl8 -11.563636 -14.21962 -8.907653 8.568209e-10
-#&gt; 
-#&gt; $RandomEffects
-#&gt; [1] NA
-#&gt; 
-#&gt; $EffectSizes
-#&gt;    Term N_Obs       AIC       BIC       LL LLDF     Sigma        R2      F2
-#&gt; 1:  cyl     0 -38.19157 -35.26009 21.09578    2 -2.803849 0.7324601 2.73776
-#&gt;       AdjR2        F FNumDF FDenDF            P  Type
-#&gt; 1: 0.714009 39.69752      2     29 4.978919e-09 Fixed
-#&gt; 
-#&gt; $OverallModel
-#&gt; $Performance
-#&gt;    Model N_Obs     AIC      BIC        LL LLDF    Sigma        R2      F2
-#&gt; 1:    lm    32 170.564 176.4269 -81.28198    4 3.223099 0.7324601 2.73776
-#&gt;       AdjR2        F FNumDF FDenDF            P
-#&gt; 1: 0.714009 39.69752      2     29 4.978919e-09
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "modelPerformance.lm" "modelPerformance"   
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "modelTest.lm" "modelTest"   </div><div class='input'>
-<span class='co'>## cleanup</span>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>mtcars</span>)</div></pre>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m</span>))
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

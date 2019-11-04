@@ -1,7 +1,7 @@
 Package: JWileymisc
 Title: Miscellaneous Utilities and Functions
 Version: 1.0.0
-Date: 2019-11-01
+Date: 2019-11-04
 Authors@R: 
     person(given = "Joshua F.",
            family = "Wiley",

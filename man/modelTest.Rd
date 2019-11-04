@@ -14,8 +14,7 @@ is.modelTest(x)
 
 as.modelTest(x)
 
-\method{modelTest}{vglm}(object, OR = TRUE, digits = 2L,
-  pdigits = 3L, ...)
+\method{modelTest}{vglm}(object, ...)
 
 \method{modelTest}{lm}(object, ...)
 }
@@ -26,17 +25,6 @@ as.modelTest(x)
 
 \item{x}{A object (e.g., list or a modelTest object) to
 test or attempt coercing to a modelTest object.}
-
-\item{OR}{a logical value whether to report odds ratios and
-95 percent confidence intervals, if \code{TRUE}, or
-regression coefficients on the logit scale with standard
-errors, if \code{FALSE}.}
-
-\item{digits}{An integer indicating the number of digits for coefficients,
-standard errors, and confidence intervals}
-
-\item{pdigits}{An integer indicating the number of digits for
-p-values.}
 }
 \value{
 Depends on the method dispatch.
@@ -58,6 +46,7 @@ m <- VGAM::vglm(cyl ~ qsec,
   family = VGAM::multinomial(), data = mtcars)
 modelTest(m)
 
+## clean up
 rm(m, mtcars)
 
 \dontrun{
@@ -66,10 +55,6 @@ mtcars$am <- factor(mtcars$am)
 m <- VGAM::vglm(cyl ~ qsec,
   family = VGAM::multinomial(), data = mtcars)
 modelTest(m)
-
-modelTest(m, digits = 4)$Table
-modelTest(m, OR = FALSE)
-modelTest(m, digits = 4, OR = FALSE)$Table
 
 m <- VGAM::vglm(cyl ~ scale(qsec),
   family = VGAM::multinomial(), data = mtcars)
@@ -81,7 +66,20 @@ modelTest(m2)
 
 m <- VGAM::vglm(Species ~ Sepal.Length,
   family = VGAM::multinomial(), data = iris)
-class(m)
+modelTest(m)
+
+set.seed(1234)
+sampdata <- data.frame(
+  Outcome = factor(sample(letters[1:3], 20 * 9, TRUE)),
+  C1 = rnorm(20 * 9),
+  D3 = sample(paste0("L", 1:3), 20 * 9, TRUE))
+
+m <- VGAM::vglm(Outcome ~ factor(D3),
+  family = VGAM::multinomial(), data = sampdata)
+modelTest(m)
+
+m <- VGAM::vglm(Outcome ~ factor(D3) + C1,
+  family = VGAM::multinomial(), data = sampdata)
 modelTest(m)
 }
 m1 <- lm(mpg ~ qsec * hp, data = mtcars)
