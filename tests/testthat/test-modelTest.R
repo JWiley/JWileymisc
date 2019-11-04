@@ -61,7 +61,6 @@ test_that("modelCompare works with linear models", {
 
 context("modelTest")
 
-
 test_that("is.modelTest and as.modelTest work.", {
   expect_false(is.modelTest(mtcars))
   expect_error(as.modelTest(1))
@@ -105,13 +104,9 @@ test_that("modelTest works with vglm objects.", {
   m <- VGAM::vglm(cyl ~ qsec,
                   family = VGAM::multinomial(), data = mtcars)
   mt <- modelTest(m)
-
-  expect_identical(length(mt), 2L)
-  expect_that(mt$Results, is_a("data.table"))
-  expect_identical(ncol(mt$Results), 10L)
-  expect_false(anyNA(mt$Results))
-
-  expect_that(mt$Table, is_a("matrix"))
+  expect_is(mt, "modelTest.vglm")
+  expect_is(APAStyler(mt), "data.table")
+  expect_is(APAStyler(mt, OR = FALSE), "data.table")
 })
 
 
@@ -121,28 +116,7 @@ test_that("modelTest works with vglm objects with multiple predictors.", {
   m <- VGAM::vglm(cyl ~ qsec + jitter(hp),
                   family = VGAM::multinomial(), data = mtcars)
   mt <- modelTest(m)
-
-  expect_identical(length(mt), 2L)
-  expect_that(mt$Results, is_a("data.table"))
-  expect_identical(ncol(mt$Results), 10L)
-  expect_false(anyNA(mt$Results))
-  expect_identical(nrow(mt$Results), 6L)
-  expect_that(mt$Table, is_a("matrix"))
-})
-
-
-test_that("modelTest digits and odds ratios work", {
-  mtcars$cyl <- factor(mtcars$cyl)
-  m <- VGAM::vglm(cyl ~ qsec,
-                  family = VGAM::multinomial(), data = mtcars)
-  mt1 <- modelTest(m, OR = TRUE)
-  mt2 <- modelTest(m, OR = FALSE)
-
-  expect_identical(mt1$Results, mt2$Results)
-  expect_false(identical(mt1$Table, mt2$Table))
-
-  mt3 <- modelTest(m, OR = TRUE, digits = 2L)
-  mt4 <- modelTest(m, OR = TRUE, digits = 4L)
-
-  expect_true(all(nchar(mt3$Table[, 2]) < nchar(mt4$Table[, 2])))
+  expect_is(mt, "modelTest.vglm")
+  expect_is(APAStyler(mt), "data.table")
+  expect_is(APAStyler(mt, OR = FALSE), "data.table")
 })
