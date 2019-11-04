@@ -310,18 +310,12 @@ as.modelTest <- function(x) {
   return(x)
 }
 
+## clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("K"))
 
 #' At the moment, \code{modelTest.vglm} method only handles the multinomial
 #'   family, although this may get expanded in the future.
 #'
-#' @param OR a logical value whether to report odds ratios and
-#'   95 percent confidence intervals, if \code{TRUE}, or
-#'   regression coefficients on the logit scale with standard
-#'   errors, if \code{FALSE}.
-#' @param digits An integer indicating the number of digits for coefficients,
-#'   standard errors, and confidence intervals
-#' @param pdigits An integer indicating the number of digits for
-#'   p-values.
 #' @return A list with two elements.
 #'   \code{Results} contains a data table of the actual estimates.
 #'   \code{Table} contains a nicely formatted character matrix.
@@ -338,6 +332,7 @@ as.modelTest <- function(x) {
 #'   family = VGAM::multinomial(), data = mtcars)
 #' modelTest(m)
 #'
+#' ## clean up
 #' rm(m, mtcars)
 #'
 #' \dontrun{
@@ -346,10 +341,6 @@ as.modelTest <- function(x) {
 #' m <- VGAM::vglm(cyl ~ qsec,
 #'   family = VGAM::multinomial(), data = mtcars)
 #' modelTest(m)
-#'
-#' modelTest(m, digits = 4)$Table
-#' modelTest(m, OR = FALSE)
-#' modelTest(m, digits = 4, OR = FALSE)$Table
 #'
 #' m <- VGAM::vglm(cyl ~ scale(qsec),
 #'   family = VGAM::multinomial(), data = mtcars)
@@ -361,10 +352,23 @@ as.modelTest <- function(x) {
 #'
 #' m <- VGAM::vglm(Species ~ Sepal.Length,
 #'   family = VGAM::multinomial(), data = iris)
-#' class(m)
+#' modelTest(m)
+#'
+#' set.seed(1234)
+#' sampdata <- data.frame(
+#'   Outcome = factor(sample(letters[1:3], 20 * 9, TRUE)),
+#'   C1 = rnorm(20 * 9),
+#'   D3 = sample(paste0("L", 1:3), 20 * 9, TRUE))
+#'
+#' m <- VGAM::vglm(Outcome ~ factor(D3),
+#'   family = VGAM::multinomial(), data = sampdata)
+#' modelTest(m)
+#'
+#' m <- VGAM::vglm(Outcome ~ factor(D3) + C1,
+#'   family = VGAM::multinomial(), data = sampdata)
 #' modelTest(m)
 #' }
-modelTest.vglm <- function(object, OR = TRUE, digits = 2L, pdigits = 3L, ...) {
+modelTest.vglm <- function(object, ...) {
 
   if ("multinomial" %in% object@family@vfamily) {
     "do something"
@@ -375,9 +379,23 @@ modelTest.vglm <- function(object, OR = TRUE, digits = 2L, pdigits = 3L, ...) {
   k <- 1L:ncol(object@y)
   if (length(k) < 3) stop("DV must have at least 3 levels, after omitting missing data")
 
+  ## k - 1 comparisons
   nk <- seq_along(k)[-length(k)]
 
+  ## what are the predictors
   ivterms <- attr(terms(formula(object)), "term.labels")
+  ## first get position of each term
+  ivterms.pos <- attr(VGAM::model.matrix(object), "assign")
+  coefNames <- names(VGAM::coef(object))
+  coefNum <- as.integer(gsub("^(.*)\\:([1-9]*)$", "\\2", coefNames))
+  coefTerm <- gsub("^(.*)\\:([1-9]*)$", "\\1", names(VGAM::coef(object)))
+
+  coefInfo <- data.table(
+    Num = coefNum,
+    Names = coefTerm)
+  for (v in seq_along(ivterms.pos)) {
+    coefInfo[ivterms.pos[[v]], Term := names(ivterms.pos)[v]]
+  }
 
   ## models with different contrasts
   m <- lapply(nk, function(i) {
@@ -387,107 +405,57 @@ modelTest.vglm <- function(object, OR = TRUE, digits = 2L, pdigits = 3L, ...) {
   m.res <- lapply(nk, function(i) {
     tab <- VGAM::coef(VGAM::summary(m[[i]]))
     ci <- VGAM::confint(m[[i]])
+    out <- copy(coefInfo)
 
-    out <- data.table(
-      Ref = k[i],
-      Num = as.integer(gsub("^(.*)\\:([1-9]*)$", "\\2", names(VGAM::coef(m[[1]])))),
-      Term = gsub("^(.*)\\:([1-9]*)$", "\\1", names(VGAM::coef(m[[1]]))),
-      B = tab[, "Estimate"],
-      SE = tab[, "Std. Error"],
-      P = tab[, "Pr(>|z|)"],
-      LL = ci[, 1],
-      UL = ci[, 2])
+    out[, Ref := k[i]]
+    out[, Est := tab[, "Estimate"]]
+    out[, SE := tab[, "Std. Error"]]
+    out[, Pval := tab[, "Pr(>|z|)"]]
+    out[, LL := ci[, 1]]
+    out[, UL := ci[, 2]]
+    out[, K := length(k)]
     out[, Comp := k[-i][Num]]
 
     return(out)
   })
 
   ## omnibus p-values
-  ivterms.pos <- attr(VGAM::model.matrix(m[[1]]), "assign")
-
   terms.res <- lapply(ivterms, function(v) {
     i <- ivterms.pos[[v]]
 
     if (identical(length(ivterms), 1L)) {
-    out <- VGAM::lrtest(object, update(object, as.formula(sprintf(". ~ . - %s", v))))
-    p <- sprintf(sprintf("Chi-square (df=%%d) = %%0.%df, %%s", digits),
-                 out@Body$Df[2],
-                 out@Body$Chisq[2],
-                 formatPval(out@Body[["Pr(>Chisq)"]][2],
-                            pdigits, pdigits, includeP = TRUE))
+      out <- VGAM::lrtest(object, update(object, as.formula(sprintf(". ~ . - %s", v))))
+      out <- data.table(
+        Term = v,
+        Chisq = out@Body$Chisq[2],
+        DF = out@Body$Df[2],
+        Pval = out@Body[["Pr(>Chisq)"]][2],
+        Type = "Fixed")
     } else {
-    out <- anova(object, type = "III")
-    p <- sprintf(sprintf("Chi-square (df=%%d) = %%0.%df, %%s", digits),
-                 out[v, "Df"],
-                 out[v, "Deviance"],
-                 formatPval(out[v, "Pr(>Chi)"],
-                            pdigits, pdigits, includeP = TRUE))
+      out <- anova(object, type = "III")
+      out <- data.table(
+        Term = v,
+        Chisq = out[v, "Deviance"],
+        DF = out[v, "Df"],
+        Pval = out[v, "Pr(>Chi)"],
+        Type = "Fixed")
     }
 
     est <- do.call(rbind, lapply(nk, function(j) m.res[[j]][i][Num >= j]))
-    est[, Labels := sprintf("%s vs.\n%s", Comp, Ref)]
+    est[, Labels := sprintf("%s vs. %s", Comp, Ref)]
 
-    ulabels <- unique(est$Labels)
-    uterms <- unique(est$Term)
-
-    if (length(uterms) > 1) {
-      est[, Term := gsub(sprintf("^(%s)(.*)$", v), "\\2", Term)]
-      uterms <- unique(est$Term)
-
-      finaltab <- matrix("",
-                         nrow = length(uterms) + 1,
-                         ncol = choose(length(k), 2) + 2,
-                         dimnames = list(NULL, c("Variable", ulabels, "PValue")))
-
-      finaltab[1, "Variable"] <- v
-      finaltab[1, "PValue"] <- p
-
-      for (index in seq_along(uterms)) {
-        finaltab[index + 1, "Variable"] <- uterms[index]
-        finaltab[index + 1, "PValue"] <- ""
-        if (OR) {
-          for (i2 in ulabels) {
-            finaltab[index + 1, i2] <- est[Term == uterms[index] & Labels == i2, .(
-            resf = sprintf(sprintf("%%0.%df%%s\n[%%0.%df, %%0.%df]", digits, digits, digits),
-                           exp(B), star(P), exp(LL), exp(UL)))]$resf
-          }
-        } else {
-          for (i2 in ulabels) {
-            finaltab[index + 1, i2] <- est[Term == uterms[index] & Labels == i2, .(
-              resf = sprintf(sprintf("%%0.%df%%s (%%0.%df)", digits, digits), B, star(P), SE))]$resf
-          }
-        }
-      }
-    } else {
-      finaltab <- matrix("",
-                         nrow = 1,
-                         ncol = choose(length(k), 2) + 2,
-                         dimnames = list(NULL, c("Variable", ulabels, "PValue")))
-
-      finaltab[1, "Variable"] <- v
-      finaltab[1, "PValue"] <- p
-      if (OR) {
-        for (i2 in ulabels) {
-          finaltab[1, i2] <- est[Labels == i2, .(
-            resf = sprintf(sprintf("%%0.%df%%s\n[%%0.%df, %%0.%df]", digits, digits, digits),
-                           exp(B), star(P), exp(LL), exp(UL)))]$resf
-        }
-      } else {
-        for (i2 in ulabels) {
-          finaltab[1, i2] <- est[Labels == i2, .(
-              resf = sprintf(sprintf("%%0.%df%%s (%%0.%df)", digits, digits), B, star(P), SE))]$resf
-        }
-      }
-    }
-
-    return(list(Results = est, Table = finaltab))
+    return(list(Coefs = est,  ES = out))
   })
 
-  list(
-    Results = do.call(rbind, lapply(terms.res, `[[`, "Results")),
-    Table = do.call(rbind, lapply(terms.res, `[[`, "Table")))
-}
+  out <- list(
+    do.call(rbind, lapply(terms.res, `[[`, "Coefs")),
+    NA,
+    do.call(rbind, lapply(terms.res, `[[`, "ES")),
+    NA)
+  attr(out, "augmentClass") <- "vglm"
 
+  as.modelTest(out)
+}
 
 ## clear R CMD CHECK notes
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("Model", "Type"))

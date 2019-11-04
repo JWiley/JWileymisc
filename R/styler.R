@@ -137,6 +137,166 @@ APAStyler.modelTest.lm <- function(object,
 }
 
 
+## clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("Names", ".SD", "Count", "DF", "Chisq", "Test"))
+
+#' APAStyler method for model tests from a vglm multinomial model
+#'
+#' @param object A \code{modelTest.vglm} class object,
+#'   results from running \code{modelTest()} function on a
+#'   class \code{vglm} object with a multinomial family
+#' @param format A list giving the formatting style to be used for
+#'   the fixed effects and effect sizes.
+#' @param digits A numeric value indicating the number of digits to print.
+#'   This is still in early implementation stages and currently does not
+#'   change all parts of the output (which default to 2 decimals per
+#'   APA style).
+#' @param pcontrol A list controlling how p values are formatted.
+#' @param OR a logical value whether to report odds ratios and
+#'   95 percent confidence intervals, if \code{TRUE}, or
+#'   regression coefficients on the logit scale with standard
+#'   errors, if \code{FALSE}.
+#' @param ... Additional arguments.
+#' @return Styled results.
+#' @method APAStyler modelTest.vglm
+#' @export
+#' @importFrom stats reshape
+#' @importFrom data.table data.table setnames copy
+#' @importFrom extraoperators %ain%
+#' @examples
+#' mtcars$cyl <- factor(mtcars$cyl)
+#' m <- VGAM::vglm(cyl ~ qsec,
+#'   family = VGAM::multinomial(), data = mtcars)
+#' mt <- modelTest(m)
+#'
+#' APAStyler(mt)
+#'
+#' APAStyler(mt, OR = FALSE)
+#'
+#' ## clean up
+#' rm(m, mt, mtcars)
+#'
+#' \dontrun{
+#' mtcars$cyl <- factor(mtcars$cyl)
+#' mtcars$am <- factor(mtcars$am)
+#' m <- VGAM::vglm(cyl ~ qsec,
+#'   family = VGAM::multinomial(), data = mtcars)
+#' APAStyler(modelTest(m))
+#'
+#' m <- VGAM::vglm(cyl ~ scale(qsec),
+#'   family = VGAM::multinomial(), data = mtcars)
+#' APAStyler(modelTest(m))
+#'
+#' m2 <- VGAM::vglm(cyl ~ factor(vs) * scale(qsec),
+#'   family = VGAM::multinomial(), data = mtcars)
+#' APAStyler(modelTest(m2))
+#'
+#' m <- VGAM::vglm(Species ~ Sepal.Length,
+#'   family = VGAM::multinomial(), data = iris)
+#' APAStyler(modelTest(m))
+#'
+#' set.seed(1234)
+#' sampdata <- data.frame(
+#'   Outcome = factor(sample(letters[1:3], 20 * 9, TRUE)),
+#'   C1 = rnorm(20 * 9),
+#'   D3 = sample(paste0("L", 1:3), 20 * 9, TRUE))
+#'
+#' m <- VGAM::vglm(Outcome ~ factor(D3),
+#'   family = VGAM::multinomial(), data = sampdata)
+#' APAStyler(modelTest(m))
+#'
+#' m <- VGAM::vglm(Outcome ~ factor(D3) + C1,
+#'   family = VGAM::multinomial(), data = sampdata)
+#' APAStyler(modelTest(m))
+#' }
+APAStyler.modelTest.vglm <- function(object,
+  format = list(
+    FixedEffects = c("%s%s [%s, %s]"),
+    EffectSizes = c("Chi-square (df=%s) = %s, %s")),
+  digits = 2,
+  pcontrol = list(
+    digits = 3, stars = TRUE,
+    includeP = FALSE, includeSign = FALSE,
+    dropLeadingZero = TRUE),
+  OR = TRUE, ...) {
+
+  FE <- copy(object$FixedEffects)
+  if (OR) {
+    FE[, Est := exp(Est)]
+    FE[, LL := exp(LL)]
+    FE[, UL := exp(UL)]
+  }
+
+  FE <- FE[, .(
+    Names = Names,
+    Term = Term,
+    Labels = Labels,
+    Est = .fround(Est, digits),
+    LL = ifelse(is.na(LL), "", .fround(LL, digits)),
+    UL = ifelse(is.na(UL), "", .fround(UL, digits)),
+    P = if (pcontrol$stars) {
+          star(Pval)
+        } else {
+          formatPval(Pval,
+                     d = pcontrol$digits,
+                     sd = pcontrol$digits,
+                     includeP = pcontrol$includeP,
+                     includeSign = pcontrol$includeSign,
+                     dropLeadingZero = pcontrol$dropLeadingZero)
+        })]
+  FE <- FE[, .(
+    Term = Term,
+    Names = Names,
+    Labels = Labels,
+    Est = sprintf(format$FixedEffects, Est, P, LL, UL),
+    Type = "Fixed Effects")]
+
+  FE <- reshape(FE, v.names = "Est",
+          idvar = c("Names", "Term"),
+          timevar = "Labels",
+          direction = "wide",
+          sep = "_")
+  setnames(FE, names(FE), gsub("^Est_", "", names(FE)))
+
+  ## deal with cases where due to dummy coding
+  ## there are multiple rows for one term
+  FE <- do.call(rbind, lapply(unique(FE$Term), function(v) {
+    temp <- FE[Term == v]
+    if (nrow(temp) > 1) {
+      tempO <- copy(temp[1])
+      tempO[, (names(tempO)) := lapply(.SD, as.na)]
+      tempO[, Term := temp[1, Term]]
+      tempO[, Names := "Overall"]
+      tempO[, Type := "Fixed Effects"]
+      rbind(tempO, temp)
+    } else {
+      temp
+    }}))
+  FE[, Count := .N, by = Term]
+
+  EFFECT <- copy(object$EffectSizes[, .(
+      Term = Term,
+      Test = sprintf(format$EffectSizes,
+                     as.character(DF),
+                     .fround(Chisq, digits = digits),
+                     formatPval(Pval, d = pcontrol$digits, sd = pcontrol$digits,
+                                includeP = TRUE, includeSign = TRUE)))])
+
+  stopifnot(FE$Term %ain% EFFECT$Term && EFFECT$Term %ain% FE$Term)
+
+  out <- merge(
+    FE, EFFECT,
+    by = "Term")
+  out[Count > 1 & Names != "Overall", Test := as.na(Test)]
+  ## "delete" columns
+  out[, Count := NULL]
+  out[, Type := NULL]
+
+  return(out)
+}
+
+
+
 
 #' APAStyler method for linear models
 #'

@@ -12,13 +12,13 @@
 #' plot(SEMSummary(~ ., data = mtcars))
 #'
 #' # same as default
-#' plot(SEMSummary(~ ., data = mtcars), plot = "coverage")
+#' plot(SEMSummary(~ ., data = mtcars), type = "coverage")
 #'
 #' # shows p values
-#' plot(SEMSummary(~ ., data = mtcars), plot = "p")
+#' plot(SEMSummary(~ ., data = mtcars), type = "p")
 #'
 #' # shows correlations
-#' plot(SEMSummary(~ ., data = mtcars), plot = "cor")
+#' plot(SEMSummary(~ ., data = mtcars), type = "cor")
 plot.SEMSummary <- function(x, y, ...) {
   corplot(x = x$sSigma, coverage = x$coverage, pvalues = x$pvalue, ...)
 }
