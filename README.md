@@ -5,6 +5,9 @@ JWileymisc
 [![Build
 Status](https://travis-ci.com/JWiley/JWileymisc.svg?branch=master)](https://travis-ci.com/JWiley/JWileymisc)
 [![Codecov test coverage](https://codecov.io/gh/JWiley/JWileymisc/branch/master/graph/badge.svg)](https://codecov.io/gh/JWiley/JWileymisc?branch=master)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/JWileymisc)](https://cran.r-project.org/package=JWileymisc)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+
 <!-- badges: end -->
 
 

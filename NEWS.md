@@ -11,7 +11,9 @@
   Further, some functions previously bundled into `JWileymisc` have 
   been separated into other packages, including the new 
   `extraoperators` package, covering binary operators, 
-  and a package for diagnostics on mixed models.
+  and a package for diagnostics on mixed models. See the new vignettes 
+  added to the package for examples of current practice in using
+  `JWileymisc`.
 
 # JWileymisc 0.3.2
 

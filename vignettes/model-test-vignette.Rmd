@@ -1,0 +1,88 @@
+---
+title: "Model Performance and Tests"
+author: "Joshua F. Wiley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{diagnostics-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+To start, load the package.
+
+```{r setup}
+library(JWileymisc)
+```
+
+# Model Performance
+
+`modelPerformance()` is a generic function that can be used to 
+calculate performance metrics for a model. `JWileymisc` implements 
+methods for `lm` class objects. The output is a named list, 
+with a data table containing results. For linear models, current
+performance metrics include:
+
+* AIC (Akaike Information Criterion)
+* BIC (Bayesian Information Criterion)
+* LL (Log Likelihood)
+* LLDF (degrees of freedom for log likelihood)
+* Sigma (residual standard deviation)
+* R2 ($R^2$ variance accounted for in the sample)
+* F2 (Cohen's $f^2$ effect size, calculated as 
+  $\frac{R^{2}}{1 - R^{2}}$)
+* AdjR2 (Sample size adjusted $R^2$, a better estimate of population
+  variance accounted for)
+* F (model F test)
+* FNumDF (numerator degrees of freedom for model F test)
+* FDenDF (denominator degrees of freedom for model F test)
+* P (p value for model F test)
+
+```{r}
+
+mtcars$cyl <- factor(mtcars$cyl)
+m <- stats::lm(mpg ~ hp + cyl, data = mtcars)
+
+mp <- modelPerformance(m)
+print(mp)
+
+``` 
+
+If only certain metrics are desired, these can be found by extracting
+the "Performance" list element and then the correct column from the
+data table.
+
+```{r}
+
+## Cohen's f^2 effect size
+mp$Performance[, F2]
+
+``` 
+
+Another function, `modelTest()` is a generic providing a 
+comprehensive series of tests for a model. Currently methods are
+implemented for both `lm` class models and `vglm` class models from
+the `VGAM` package with a multinomial family.
+
+`modelTest()` 
+
+```{r}
+
+mt <- modelTest(m)
+print(mt)
+
+``` 
+
+
+```{r}
+
+APAStyler(mt)
+
+``` 
