@@ -4,4 +4,5 @@ pkgdown_sha: ~
 articles:
   diagnostics-vignette: diagnostics-vignette.html
   exploratory-vignette: exploratory-vignette.html
+  model-test-vignette: model-test-vignette.html
 
