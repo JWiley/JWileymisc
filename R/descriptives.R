@@ -468,9 +468,32 @@ SEMSummary.fit <- function(formula, data,
 #' egltable(c("mpg", "hp"), "vs", tmp)
 #' egltable(c("mpg", "hp"), "am", tmp)
 #' egltable(c("am", "cyl"), "vs", tmp)
+#'
+#' tests <- with(sleep,
+#'     wilcox.test(extra[group == 1],
+#'            extra[group == 2], paired = TRUE))
+#' str(tests)
+#'
+#' ## example with paired data
+#' egltable(c("extra"), g = "group", data = sleep, idvar = "ID", paired = TRUE)
+#'
+#' ## what happens when ignoring pairing (p-value off)
+#' # egltable(c("extra"), g = "group", data = sleep, idvar = "ID")
+#'
+#' ## paired categorical data example
+#' ## using data on chick weights to create categorical data
+#' tmp <- subset(ChickWeight, Time %in% c(0, 20))
+#' tmp$WeightTertile <- cut(tmp$weight,
+#'   breaks = quantile(tmp$weight, c(0, 1/3, 2/3, 1), na.rm = TRUE),
+#'   include.lowest = TRUE)
+#'
+#' egltable(c("weight", "WeightTertile"), g = "Time",
+#'   data = tmp,
+#'   idvar = "Chick", paired = TRUE)
+#'
 #' rm(tmp)
 egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
-                     simChisq = FALSE, sims = 1e6) {
+                     paired = FALSE, simChisq = FALSE, sims = 1e6) {
   if (!missing(data)) {
     if (is.data.table(data)) {
       dat <- data[, vars, with=FALSE]
@@ -484,6 +507,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
     }
     if (!missing(idvar)) {
       ids <- data[[idvar]]
+      if (anyNA(ids)) stop("cannot have missing IDs")
     }
   } else {
     dat <- as.data.table(vars)
@@ -494,6 +518,11 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
   }
 
   g <- droplevels(as.factor(g))
+
+  if (isTRUE(paired)) {
+    stopifnot(identical(length(unique(g)), 2L))
+    stopifnot(isFALSE(missing(idvar)))
+  }
 
   if (identical(length(parametric), 1L)) {
     if (isTRUE(parametric)) {
@@ -531,7 +560,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
     tmpres <- NULL
     reslab <- ""
 
-    if (length(contvars.index)) {
+    if (isTRUE(length(contvars.index) > 0)) {
       tmpcont <- lapply(contvars.index, function(v) {
         n <- vnames[v]
         if (parametric[v]) {
@@ -554,7 +583,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
                                         "M (SD)", "Mdn (IQR)"), "See Rows")[multi+1])
     }
 
-    if (length(catvars.index)) {
+    if (isTRUE(length(catvars.index)>0)) {
       tmpcat <- lapply(vnames[catvars.index], function(n) {
          x <- table(d[[n]])
         data.table(
@@ -578,22 +607,23 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
   })
 
 
-  if (length(levels(g)) > 1) {
+  if (isTRUE(length(levels(g)) > 1)) {
     tmpout <- lapply(seq_along(vnames), function(v) {
+
       out <- do.call(cbind, lapply(1:length(levels(g)), function(i) {
         d <- tmpout[[i]][[v]]
         setnames(d, old = names(d)[2], paste(levels(g)[i], names(d)[2], sep = " "))
-        if (i == 1) {
+        if (isTRUE(i == 1)) {
           return(d)
         } else {
           return(d[, -1, with = FALSE])
         }
       }))
 
-      if (length(contvars.index)) {
-        if (v %in% contvars.index) {
-          if (parametric[v]) {
-            if (length(levels(g)) > 2) {
+      if (isTRUE(length(contvars.index) > 0)) {
+        if (isTRUE(v %in% contvars.index)) {
+          if (isTRUE(parametric[v])) {
+            if (isTRUE(length(levels(g)) > 2)) {
               tests <- summary(aov(dv ~ g, data = data.table(dv = dat[[v]], g = g)))[[1]]
               es <- tests[1, "Sum Sq"] / sum(tests[, "Sum Sq"])
               out <- cbind(out,
@@ -602,7 +632,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
                                             formatPval(tests[1, "Pr(>F)"], 3, 3, includeP=TRUE),
                                             es),
                                     rep("", nrow(out) - 1)))
-            } else if (length(levels(g)) == 2) {
+            } else if (isTRUE(length(levels(g)) == 2) && isFALSE(paired)) {
 
               tests <- t.test(dv ~ g, data = data.table(dv = dat[[v]], g = g),
                               var.equal=TRUE)
@@ -615,20 +645,63 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
                                             formatPval(tests$p.value, 3, 3, includeP=TRUE),
                                             es),
                                     rep("", nrow(out) - 1)))
+            } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
+              ## paired t-test and cohen's D on difference scores
+              widedat <- copy(reshape(data.table(
+                dv = dat[[v]],
+                g = as.integer(factor(g)),
+                ID = ids),
+                v.names = "dv",
+                timevar = "g",
+                idvar = "ID",
+                direction = "wide", sep = ""))
+              widedat[, diff := dv2 - dv1]
+
+              tests <- t.test(widedat$dv2, widedat$dv1, paired = TRUE)
+              es <- mean(widedat$diff, na.rm = TRUE) / sd(widedat$diff, na.rm = TRUE)
+              out <- cbind(out,
+                           Test = c(sprintf("t(df=%0.0f) = %0.2f, %s, d = %0.2f",
+                                            tests$parameter[["df"]],
+                                            tests$statistic[["t"]],
+                                            formatPval(tests$p.value, 3, 3, includeP=TRUE),
+                                            es),
+                                    rep("", nrow(out) - 1)))
+
             }
           } else {
+            if (isFALSE(paired)) {
             tests <- kruskal.test(dv ~ g, data = data.frame(dv = dat[[v]], g = g))
             out <- cbind(out,
                          Test = c(sprintf("KW chi-square = %0.2f, df = %d, %s",
                                           tests$statistic, tests$parameter,
                                           formatPval(tests$p.value, 3, 3, includeP=TRUE)),
                                   rep("", nrow(out) - 1)))
+            } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
+              ## non parametric paired wilcoxon test
+              widedat <- copy(reshape(data.table(
+                dv = dat[[v]],
+                g = as.integer(factor(g)),
+                ID = ids),
+                v.names = "dv",
+                timevar = "g",
+                idvar = "ID",
+                direction = "wide", sep = ""))
+
+              tests <- wilcox.test(widedat$dv2, widedat$dv1, paired = TRUE)
+              out <- cbind(out,
+                           Test = c(sprintf("Wilcoxon Paired V = %0.2f, %s",
+                                            tests$statistic,
+                                            formatPval(tests$p.value, 3, 3, includeP=TRUE)),
+                                    rep("", nrow(out) - 1)))
+            }
           }
         }
       }
 
-      if (length(catvars.index)) {
-        if (v %in% catvars.index) {
+      if (isTRUE(length(catvars.index) > 0)) {
+        if (isTRUE(v %in% catvars.index)) {
+
+          if (isFALSE(paired)) {
 
           tabs <- xtabs(~ dv + g, data = data.frame(dv = dat[[v]], g = g))
           es <- cramerV(tabs)
@@ -644,6 +717,25 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
                                         sprintf("%s = %0.2f", names(es), es)
                                         ),
                                 rep("", nrow(out) - 1)))
+          } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
+            ## mcnemar test for paired data
+            widedat <- copy(reshape(data.table(
+              dv = factor(dat[[v]], levels = unique(dat[[v]])),
+              g = as.integer(factor(g)),
+              ID = ids),
+              v.names = "dv",
+              timevar = "g",
+              idvar = "ID",
+              direction = "wide", sep = ""))
+            tab <- xtabs(~ dv1 + dv2, data = widedat)
+
+              tests <- mcnemar.test(tab)
+              out <- cbind(out,
+                           Test = c(sprintf("McNemar's Chi-square = %0.2f, df = %d, %s",
+                                            tests$statistic, tests$parameter,
+                                            formatPval(tests$p.value, 3, 3, includeP=TRUE)),
+                                    rep("", nrow(out) - 1)))
+          }
         }
       }
 

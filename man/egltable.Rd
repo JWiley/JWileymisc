@@ -5,7 +5,7 @@
 \title{Function makes nice tables}
 \usage{
 egltable(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
-  simChisq = FALSE, sims = 1e+06)
+  paired = FALSE, simChisq = FALSE, sims = 1e+06)
 }
 \arguments{
 \item{vars}{Either an index (numeric or character) of
@@ -71,6 +71,29 @@ tmp$am <- factor(tmp$am, levels = 0:1)
 egltable(c("mpg", "hp"), "vs", tmp)
 egltable(c("mpg", "hp"), "am", tmp)
 egltable(c("am", "cyl"), "vs", tmp)
+
+tests <- with(sleep,
+    wilcox.test(extra[group == 1],
+           extra[group == 2], paired = TRUE))
+str(tests)
+
+## example with paired data
+egltable(c("extra"), g = "group", data = sleep, idvar = "ID", paired = TRUE)
+
+## what happens when ignoring pairing (p-value off)
+# egltable(c("extra"), g = "group", data = sleep, idvar = "ID")
+
+## paired categorical data example
+## using data on chick weights to create categorical data
+tmp <- subset(ChickWeight, Time \%in\% c(0, 20))
+tmp$WeightTertile <- cut(tmp$weight,
+  breaks = quantile(tmp$weight, c(0, 1/3, 2/3, 1), na.rm = TRUE),
+  include.lowest = TRUE)
+
+egltable(c("weight", "WeightTertile"), g = "Time",
+  data = tmp,
+  idvar = "Chick", paired = TRUE)
+
 rm(tmp)
 }
 \keyword{utils}

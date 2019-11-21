@@ -15,6 +15,11 @@
   added to the package for examples of current practice in using
   `JWileymisc`.
 
+## New Features
+* `egltable()` has added statistical tests for paired data. For
+  continuous, parametric paired data, a pseudo Cohen's d is calculated
+  on the change scores.
+
 # JWileymisc 0.3.2
 
 ## New Features
