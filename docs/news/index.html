@@ -139,14 +139,22 @@
 <li>This version includes a significant re-write of the package that results in many of the previous user-facing functions changing names and arguments. This will likely break old code. This re-write was necessary to help standardize functions and arguments, and to make functions more robust. Many functions are now generics with specific methods written. Further, some functions previously bundled into <code>JWileymisc</code> have been separated into other packages, including the new <code>extraoperators</code> package, covering binary operators, and a package for diagnostics on mixed models. See the new vignettes added to the package for examples of current practice in using <code>JWileymisc</code>.</li>
 </ul>
 </div>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New Features</h2>
+<ul>
+<li>
+<code><a href="../reference/egltable.html">egltable()</a></code> has added statistical tests for paired data. For continuous, parametric paired data, a pseudo Cohen’s d is calculated on the change scores.</li>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-032" class="section level1">
 <h1 class="page-header">
 <a href="#jwileymisc-032" class="anchor"></a>JWileymisc 0.3.2<small> Unreleased </small>
 </h1>
-<div id="new-features" class="section level2">
+<div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New Features</h2>
+<a href="#new-features-1" class="anchor"></a>New Features</h2>
 <ul>
 <li><p><code>omegaSEM()</code> Function that calculates coefficient omega for measuring internal consistency reliability. Works for two level models and returns within and between level omega values.</p></li>
 <li><p><code><a href="../reference/egltable.html">egltable()</a></code> Function has added effect sizes when multiple groups are compared including Cohen’s d for two groups, eta-squared for multiple groups, and phi for categorical variables.</p></li>
@@ -192,9 +200,9 @@
 <h1 class="page-header">
 <a href="#jwileymisc-030" class="anchor"></a>JWileymisc 0.3.0<small> 2018-08-26 </small>
 </h1>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New Features</h2>
+<a href="#new-features-2" class="anchor"></a>New Features</h2>
 <ul>
 <li><p><code>R2LMER()</code> A simple function to calculate the marginal and conditional variance accounted for by a model estimated by <code>lmer()</code>.</p></li>
 <li><p><code>compareLMER()</code> A function to compare two models estimated by <code>lmer()</code> include significance tests and effect sizes for estimates of the variance explained.</p></li>
@@ -228,9 +236,9 @@
 <h1 class="page-header">
 <a href="#jwileymisc-021" class="anchor"></a>JWileymisc 0.2.1<small> 2016-09-01 </small>
 </h1>
-<div id="new-features-2" class="section level2">
+<div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>New Features</h2>
+<a href="#new-features-3" class="anchor"></a>New Features</h2>
 <ul>
 <li><p><code>testdistr()</code> function to plot data against different theoretical distributions using <code>ggplot2</code>. A sort of generalized <code><a href="https://rdrr.io/r/stats/qqnorm.html">qqnorm()</a></code> allowing other distributions besides the normal distribution.</p></li>
 <li><p><code><a href="../reference/winsorizor.html">winsorizor()</a></code> Function moved from <code>pscore</code> package. Sets any values beyond specific quantiles of the empirical data to the specified quantiles. Can work on vectors, data frames, or matrices.</p></li>

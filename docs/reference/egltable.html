@@ -142,7 +142,7 @@ statistics optionally by group levels.</p>
     </div>
 
     <pre class="usage"><span class='fu'>egltable</span>(<span class='no'>vars</span>, <span class='no'>g</span>, <span class='no'>data</span>, <span class='no'>idvar</span>, <span class='kw'>strict</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>parametric</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>simChisq</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>sims</span> <span class='kw'>=</span> <span class='fl'>1e+06</span>)</pre>
+  <span class='kw'>paired</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>simChisq</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>sims</span> <span class='kw'>=</span> <span class='fl'>1e+06</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -287,7 +287,48 @@ there are multiple groups.</p></td>
 #&gt; 4: Chi-square = 21.34, df = 2, p &lt; .001, Cramer's V = 0.82
 #&gt; 5:                                                        
 #&gt; 6:                                                        
-#&gt; 7:                                                        </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>tmp</span>)</div></pre>
+#&gt; 7:                                                        </div><div class='input'>
+<span class='no'>tests</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>sleep</span>,
+    <span class='fu'><a href='https://rdrr.io/r/stats/wilcox.test.html'>wilcox.test</a></span>(<span class='no'>extra</span>[<span class='no'>group</span> <span class='kw'>==</span> <span class='fl'>1</span>],
+           <span class='no'>extra</span>[<span class='no'>group</span> <span class='kw'>==</span> <span class='fl'>2</span>], <span class='kw'>paired</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: cannot compute exact p-value with ties</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot compute exact p-value with zeroes</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>tests</span>)</div><div class='output co'>#&gt; List of 7
+#&gt;  $ statistic  : Named num 0
+#&gt;   ..- attr(*, "names")= chr "V"
+#&gt;  $ parameter  : NULL
+#&gt;  $ p.value    : num 0.00909
+#&gt;  $ null.value : Named num 0
+#&gt;   ..- attr(*, "names")= chr "location shift"
+#&gt;  $ alternative: chr "two.sided"
+#&gt;  $ method     : chr "Wilcoxon signed rank test with continuity correction"
+#&gt;  $ data.name  : chr "extra[group == 1] and extra[group == 2]"
+#&gt;  - attr(*, "class")= chr "htest"</div><div class='input'>
+<span class='co'>## example with paired data</span>
+<span class='fu'>egltable</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"extra"</span>), <span class='kw'>g</span> <span class='kw'>=</span> <span class='st'>"group"</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleep</span>, <span class='kw'>idvar</span> <span class='kw'>=</span> <span class='st'>"ID"</span>, <span class='kw'>paired</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;             1 M (SD)    2 M (SD)                               Test
+#&gt; 1: extra 0.75 (1.79) 2.33 (2.00) t(df=9) = 4.06, p = .003, d = 1.28</div><div class='input'>
+<span class='co'>## what happens when ignoring pairing (p-value off)</span>
+<span class='co'># egltable(c("extra"), g = "group", data = sleep, idvar = "ID")</span>
+
+<span class='co'>## paired categorical data example</span>
+<span class='co'>## using data on chick weights to create categorical data</span>
+<span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>ChickWeight</span>, <span class='no'>Time</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>20</span>))
+<span class='no'>tmp</span>$<span class='no'>WeightTertile</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span>(<span class='no'>tmp</span>$<span class='no'>weight</span>,
+  <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span>(<span class='no'>tmp</span>$<span class='no'>weight</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>2</span>/<span class='fl'>3</span>, <span class='fl'>1</span>), <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+  <span class='kw'>include.lowest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>egltable</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"weight"</span>, <span class='st'>"WeightTertile"</span>), <span class='kw'>g</span> <span class='kw'>=</span> <span class='st'>"Time"</span>,
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>tmp</span>,
+  <span class='kw'>idvar</span> <span class='kw'>=</span> <span class='st'>"Chick"</span>, <span class='kw'>paired</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;                  0 M (SD)/N (%) 20 M (SD)/N (%)
+#&gt; 1:        weight   41.06 (1.13)  209.72 (66.51)
+#&gt; 2: WeightTertile                               
+#&gt; 3:     [39,41.7]      32 (64.0)         0 (0.0)
+#&gt; 4:    (41.7,169]      18 (36.0)       14 (30.4)
+#&gt; 5:     (169,361]        0 (0.0)       32 (69.6)
+#&gt;                                              Test
+#&gt; 1:           t(df=45) = 17.10, p &lt; .001, d = 2.52
+#&gt; 2: McNemar's Chi-square = 39.00, df = 3, p &lt; .001
+#&gt; 3:                                               
+#&gt; 4:                                               
+#&gt; 5:                                               </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>tmp</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

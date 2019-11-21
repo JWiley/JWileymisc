@@ -26,7 +26,7 @@ library(data.table)
 
 The `egltable()` function calculates basic descriptive statistics.
 
-```{r, evaluate = FALSE, echo = TRUE, results = "hide"}
+```{r, eval = FALSE, echo = TRUE, results = "hide"}
 
 egltable(c("mpg", "hp", "qsec", "wt", "vs"),
          data = mtcars)
@@ -50,7 +50,7 @@ not coded as factors. In this case, `vs` has two levels: 0 and 1 and
 the frequency and percentage of each are shown instead of the mean and
 standard deviation.
 
-```{r, evaluate = FALSE, echo = TRUE, results = "hide"}
+```{r, eval = FALSE, echo = TRUE, results = "hide"}
 
 egltable(c("mpg", "hp", "qsec", "wt", "vs"),
          data = mtcars, strict=FALSE)
@@ -75,7 +75,7 @@ differences between groups and effect sizes. For example, t-tests for
 continuous variables and two groups or chi-square tests for
 categorical variables. For more than two groups, ANOVAs are used. 
 
-```{r, evaluate = FALSE, echo = TRUE, results = "hide"}
+```{r, eval = FALSE, echo = TRUE, results = "hide"}
 
 egltable(c("mpg", "hp", "qsec", "wt", "vs"), 
   g = "am", data = mtcars, strict = FALSE)
@@ -98,13 +98,25 @@ tests may be more appropriate. These can be generated using the
 `parametric` argument. For chi-square tests with small cell sizes,
 simulated p-values also can be generated.
 
-```{r, results = "hide"}
+```{r, eval = FALSE, echo = TRUE, results = "hide"}
 
 egltable(c("mpg", "hp", "qsec", "wt", "vs"), 
          g = "am", data = mtcars, strict = FALSE,
          parametric = FALSE)
 
 ```
+
+```{r, echo = FALSE, results = "asis"}
+
+pander::pandoc.table(
+          egltable(c("mpg", "hp", "qsec", "wt", "vs"), 
+                   g = "am", data = mtcars, strict = FALSE,
+                   parametric = FALSE),
+          caption = "Example descriptive statistics table by group.",
+          justify = "left")
+
+```
+
 
 ## Paired Data
 
@@ -124,7 +136,7 @@ its possible that the mean difference will be different than the
 difference in means as the means are calculated on all available data,
 but the effect size can only be calculated on complete cases.
 
-```{r, evaluate = FALSE, echo = TRUE, results = "hide"}
+```{r, eval = FALSE, echo = TRUE, results = "hide"}
 ## example with paired data
 egltable(
   vars = "extra",
@@ -151,9 +163,13 @@ justify = "left")
 
 If we do not want to make parametric assumptions with continuous
 variables, we can set `parametric = FALSE`. In this case the
-descriptives are medians and a paired Wilcoxon test is used.
+descriptives are medians and a paired Wilcoxon test is used. In this
+dataset there are ties and a warning is generated about ties and
+zeroes. This warning is generally ignorable, but if these were central 
+hypothesis tests, it may warrant further testing using, for example,
+simulations which are more precise in the case of ties.
 
-```{r, evaluate = FALSE, echo = TRUE, results = "hide"}
+```{r, eval = FALSE, echo = TRUE, results = "hide"}
 egltable(
   vars = "extra",
   g = "group",
@@ -204,7 +220,7 @@ significant result suggests that over time chicks' weights change
 preferentially one way and the descriptive statistics show us that
 there is an increase in weight tertile from time 0 to time 20.
 
-```{r, evaluate = FALSE, echo = TRUE, results = "hide"}
+```{r, eval = FALSE, echo = TRUE, results = "hide"}
 egltable(c("weight", "WeightTertile"), g = "Time",
   data = tmp,
   idvar = "Chick", paired = TRUE)
