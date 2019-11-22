@@ -183,6 +183,15 @@ continuous variables. If <code>TRUE</code>, the default, uses one-way ANOVA,
 and a F test. If <code>FALSE</code>, uses the Kruskal-Wallis test.</p></td>
     </tr>
     <tr>
+      <th>paired</th>
+      <td><p>Logical whether the data are paired or not. Defaults to
+<code>FALSE</code>. If <code>TRUE</code>, the grouping variable, <code>g</code>,
+must have two levels and <code>idvar</code> must be specified. When used
+a paired t-test is used for parametric, continuous data and a
+Wilcoxon test for paired  non parametric, continuous data and a McNemar
+chi square test is used for categorical data.</p></td>
+    </tr>
+    <tr>
       <th>simChisq</th>
       <td><p>Logical whether to estimate p-values for chi-square test
 for categorical data when there are multiple groups, by simulation.

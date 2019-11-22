@@ -31,6 +31,13 @@ case of multiple groups to test for differences.  Only applies to
 continuous variables. If \code{TRUE}, the default, uses one-way ANOVA,
 and a F test. If \code{FALSE}, uses the Kruskal-Wallis test.}
 
+\item{paired}{Logical whether the data are paired or not. Defaults to
+\code{FALSE}. If \code{TRUE}, the grouping variable, \code{g},
+must have two levels and \code{idvar} must be specified. When used
+a paired t-test is used for parametric, continuous data and a
+Wilcoxon test for paired  non parametric, continuous data and a McNemar
+chi square test is used for categorical data.}
+
 \item{simChisq}{Logical whether to estimate p-values for chi-square test
 for categorical data when there are multiple groups, by simulation.
 Defaults to \code{FALSE}. Useful when there are small cells as will

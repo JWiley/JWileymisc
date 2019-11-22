@@ -409,6 +409,8 @@ SEMSummary.fit <- function(formula, data,
 }
 
 
+## clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
 
 #' Function makes nice tables
 #'
@@ -434,6 +436,12 @@ SEMSummary.fit <- function(formula, data,
 #'   case of multiple groups to test for differences.  Only applies to
 #'   continuous variables. If \code{TRUE}, the default, uses one-way ANOVA,
 #'   and a F test. If \code{FALSE}, uses the Kruskal-Wallis test.
+#' @param paired Logical whether the data are paired or not. Defaults to
+#'   \code{FALSE}. If \code{TRUE}, the grouping variable, \code{g},
+#'   must have two levels and \code{idvar} must be specified. When used
+#'   a paired t-test is used for parametric, continuous data and a
+#'   Wilcoxon test for paired  non parametric, continuous data and a McNemar
+#'   chi square test is used for categorical data.
 #' @param simChisq Logical whether to estimate p-values for chi-square test
 #'   for categorical data when there are multiple groups, by simulation.
 #'   Defaults to \code{FALSE}. Useful when there are small cells as will
@@ -446,6 +454,7 @@ SEMSummary.fit <- function(formula, data,
 #' @keywords utils
 #' @export
 #' @importFrom stats sd aov chisq.test kruskal.test quantile xtabs t.test
+#' @importFrom stats wilcox.test mcnemar.test
 #' @importFrom data.table is.data.table as.data.table setnames
 #' @examples
 #' egltable(iris)
