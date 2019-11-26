@@ -71,7 +71,7 @@ Expected predicted and residual data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -139,7 +139,7 @@ or linear quantiles as a fall back. Not intended for general use.
 Expected predicted and residual data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.quantilePercentiles</span>(<span class='no'>data</span>, <span class='kw'>LL</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>UL</span> <span class='kw'>=</span> <span class='fl'>0.9</span>)</pre>
+    <pre class="usage"><span class='fu'>.quantilePercentiles</span>(<span class='no'>data</span>, <span class='kw'>LL</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>UL</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,6 +158,11 @@ Assumed from some sort of (probably parametric) model.</p></td>
       <th>UL</th>
       <td><p>The upper limit for prediction. Defaults to
 <code>.9</code> to give the 90th percentile.</p></td>
+    </tr>
+    <tr>
+      <th>na.rm</th>
+      <td><p>A logical whether to remove missing values.
+Defaults to <code>TRUE</code></p></td>
     </tr>
     </table>
 
