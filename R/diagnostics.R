@@ -483,6 +483,9 @@ is.residualDiagnostics <- function(x) {
   inherits(x, "residualDiagnostics")
 }
 
+## clear R CMD CHECK notes
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("originalindex"))
+
 #' @importFrom stats rstandard residuals fitted coef predict model.frame
 #' @importFrom data.table data.table :=
 #' @method residualDiagnostics lm
