@@ -471,7 +471,7 @@ as.residualDiagnostics <- function(x) {
   stopifnot(is.data.table(x$Frame))
   stopifnot(is.testDistribution(x$testDistribution))
   stopifnot(identical(nrow(x$Residuals), nrow(x$Frame)))
-  stopifnot(identical(ncol(x$Residuals), 3L))
+  stopifnot(identical(ncol(x$Residuals), 4L))
   stopifnot(x$Outcome %in% names(x$Frame))
 
   return(x)
@@ -499,10 +499,45 @@ is.residualDiagnostics <- function(x) {
 #'
 #' ## clean up
 #' rm(testm, resm)
+#' \dontrun{
+#'
+#' testdat <- data.frame(
+#'   y = c(1, 2, 2, 3, 3, NA, 9000000, 2, 2, 1),
+#'   x = c(1, 2, 3, 4, 5, 6, 5, 4, 3, 2))
+#'
+#' residualDiagnostics(
+#'   lm(y ~ x, data = testdat, na.action = "na.omit"),
+#'   ev.perc = .1)$Residuals
+#'
+#' residualDiagnostics(
+#'   lm(y ~ x, data = testdat, na.action = "na.exclude"),
+#'   ev.perc = .1)$Residuals
+#'
+#' residualDiagnostics(
+#'   lm(mpg ~ hp, data = mtcars, na.action = "na.omit"),
+#'   ev.perc = .1)$Residuals
+#' }
 residualDiagnostics.lm <- function(object, ev.perc = .001,
                                    robust = FALSE, distr = "normal",
                                    standardized = TRUE, ...) {
-  d.frame <- as.data.table(model.frame(object))
+  d.frame <- model.frame(object)
+  naaction <- attr(d.frame, "na.action")
+  if (isFALSE(is.null(naaction))) {
+    if (isTRUE(inherits(naaction, "omit"))) {
+      origindex <- index <- 1:(nrow(d.frame) + length(naaction))
+      index[naaction] <- NA
+      index[-naaction] <- 1:nrow(d.frame)
+      key <- data.table(
+        originalindex = origindex,
+        index = index)[!is.na(index)]
+    }
+  } else {
+    key <- data.table(
+      originalindex = 1:nrow(d.frame),
+      index = 1:nrow(d.frame))[!is.na(index)]
+  }
+
+  d.frame <- as.data.table(d.frame)
   dv <- names(d.frame)[1]
 
   d.res <- data.table(
@@ -522,9 +557,18 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
     use = "complete.obs",
     robust = robust)
 
-  d.res[, isEV := d.dist$Data[order(OriginalOrder), isEV]]
+  d.res[!is.na(Residuals), isEV := d.dist$Data[order(OriginalOrder), isEV]]
+  d.res[, Index := 1:.N]
 
-  out <- list(d.res, d.frame, d.hat, d.dist, dv)
+  ## fix the index to match original data if missing data existed and were omitted
+  if (isFALSE(is.null(naaction))) {
+    if (isTRUE(inherits(naaction, "omit"))) {
+      d.res[, Index := key[, originalindex]]
+      d.dist$Data[, OriginalOrder := key[match(OriginalOrder, index), originalindex]]
+    }
+  }
+
+  out <- list(na.omit(d.res), d.frame, d.hat, d.dist, dv)
   attr(out, "augmentClass") <- "lm"
 
   as.residualDiagnostics(out)
@@ -542,16 +586,18 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
 #'   \code{.1} to give the 10th percentile.
 #' @param UL The upper limit for prediction. Defaults to
 #'   \code{.9} to give the 90th percentile.
+#' @param na.rm A logical whether to remove missing values.
+#'   Defaults to \code{TRUE}
 #' @return A data.table with the scores and predicted LL and UL,
 #'   possibly missing if quantile regression models do not
 #'   converge.
 #' @importFrom quantreg qss rq rqss
 #' @importFrom data.table data.table :=
-.quantilePercentiles <- function(data, LL = .1, UL = .9) {
+.quantilePercentiles <- function(data, LL = .1, UL = .9, na.rm = TRUE) {
   d.hat <- data.table(
     Predicted = seq(
-      min(data$Predicted),
-      max(data$Predicted),
+      min(data$Predicted, na.rm = na.rm),
+      max(data$Predicted, na.rm = na.rm),
       length.out = 1000))
 
   tau.LL <- tryCatch(

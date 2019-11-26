@@ -1,3 +1,11 @@
+# JWileymisc 1.0.1
+
+## Bug Fixes
+* `residualDiagnostics.lm()` would return the index of extreme values
+  based on the complete data used for modelling, not of the original 
+  input dataset. This made it difficult to identify and remove extreme
+  values in subsequent model runs.
+
 # JWileymisc 1.0.0
 
 ## Changes

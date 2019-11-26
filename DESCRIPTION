@@ -1,7 +1,7 @@
 Package: JWileymisc
 Title: Miscellaneous Utilities and Functions
-Version: 1.0.0
-Date: 2019-11-06
+Version: 1.0.1
+Date: 2019-11-26
 Authors@R: 
     person(given = "Joshua F.",
            family = "Wiley",
@@ -24,7 +24,7 @@ Imports:
     MASS,
     multcompView,
     emmeans,
-    data.table (>= 1.10.0),
+    data.table (>= 1.12.0),
     graphics,
     ggthemes,
     ggplot2 (>= 2.2.0),

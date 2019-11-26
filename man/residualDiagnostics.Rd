@@ -63,4 +63,22 @@ plot(resm$testDistribution)
 
 ## clean up
 rm(testm, resm)
+\dontrun{
+
+testdat <- data.frame(
+  y = c(1, 2, 2, 3, 3, NA, 9000000, 2, 2, 1),
+  x = c(1, 2, 3, 4, 5, 6, 5, 4, 3, 2))
+
+residualDiagnostics(
+  lm(y ~ x, data = testdat, na.action = "na.omit"),
+  ev.perc = .1)$Residuals
+
+residualDiagnostics(
+  lm(y ~ x, data = testdat, na.action = "na.exclude"),
+  ev.perc = .1)$Residuals
+
+residualDiagnostics(
+  lm(mpg ~ hp, data = mtcars, na.action = "na.omit"),
+  ev.perc = .1)$Residuals
+}
 }
