@@ -582,6 +582,7 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
 #' Function calculates smoothing spline quantiles
 #' or linear quantiles as a fall back. Not intended for general use.
 #' Expected predicted and residual data.
+#' Exported to support related packages.
 #'
 #' @param data A dataset of predicted and residual values.
 #'   Assumed from some sort of (probably parametric) model.
@@ -596,6 +597,7 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
 #'   converge.
 #' @importFrom quantreg qss rq rqss
 #' @importFrom data.table data.table :=
+#' @export
 .quantilePercentiles <- function(data, LL = .1, UL = .9, na.rm = TRUE) {
   d.hat <- data.table(
     Predicted = seq(

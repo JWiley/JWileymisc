@@ -28,4 +28,5 @@ A data.table with the scores and predicted LL and UL,
 Function calculates smoothing spline quantiles
 or linear quantiles as a fall back. Not intended for general use.
 Expected predicted and residual data.
+Exported to support related packages.
 }
