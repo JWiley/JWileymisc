@@ -732,8 +732,20 @@ is.modelDiagnostics <- function(x) {
 #' md$extremeValues
 #' plot(md, ncol = 2)
 #'
+#' testdat <- data.frame(
+#'   y = c(1, 2, 2, 3, 3, NA, 9000000, 2, 2, 1),
+#'   x = c(1, 2, 3, 4, 5, 6, 5, 4, 3, 2))
+#'
+#' modelDiagnostics(
+#'   lm(y ~ x, data = testdat, na.action = "na.omit"),
+#'   ev.perc = .1)$extremeValues
+#'
+#' modelDiagnostics(
+#'   lm(y ~ x, data = testdat, na.action = "na.exclude"),
+#'   ev.perc = .1)$extremeValues
+#'
 #' ## clean up
-#' rm(testm, md)
+#' rm(testm, md, testdat)
 modelDiagnostics.lm <- function(object, ev.perc = .001,
                                    robust = FALSE, distr = "normal",
                                    standardized = TRUE, ...) {
@@ -753,14 +765,24 @@ modelDiagnostics.lm <- function(object, ev.perc = .001,
     stop("EffectType is used internally and cannot be a variable in the model")
   }
 
-  if (any(x$testDistribution$Data[, isEV] == "Yes")) {
-    d.extreme <- rbind(d.extreme,
-                       data.table(
-                         x$Frame[x$testDistribution$Data[isEV == "Yes", OriginalOrder],
-                                 c(x$Outcome), with = FALSE],
-                         Index = x$testDistribution$Data[isEV == "Yes", OriginalOrder],
-                         EffectType = "Residuals"))
+  x$Frame <- cbind(
+    x$Frame, x$testDistribution$Data[order(OriginalOrder), .(isEV, OriginalOrder)])
+  setnames(x$Frame, "OriginalOrder", "Index")
+  x$Frame[, EffectType := "Residuals"]
+
+  if (isTRUE(any(x$Frame[, isEV] == "Yes"))) {
+    d.extreme <- rbind(
+      d.extreme,
+      x$Frame[isEV == "Yes",
+              c(x$Outcome, "Index", "EffectType"),
+              with = FALSE])
+
   }
+
+  ## fix the frame to remove extra information
+  x$Frame[, isEV := NULL]
+  x$Frame[, Index := NULL]
+  x$Frame[, EffectType := NULL]
 
   out <- list(x, NA_real_, na.omit(d.extreme))
   attr(out, "augmentClass") <- "lm"

@@ -65,6 +65,18 @@ md <- modelDiagnostics(testm, ev.perc = .1)
 md$extremeValues
 plot(md, ncol = 2)
 
+testdat <- data.frame(
+  y = c(1, 2, 2, 3, 3, NA, 9000000, 2, 2, 1),
+  x = c(1, 2, 3, 4, 5, 6, 5, 4, 3, 2))
+
+modelDiagnostics(
+  lm(y ~ x, data = testdat, na.action = "na.omit"),
+  ev.perc = .1)$extremeValues
+
+modelDiagnostics(
+  lm(y ~ x, data = testdat, na.action = "na.exclude"),
+  ev.perc = .1)$extremeValues
+
 ## clean up
-rm(testm, md)
+rm(testm, md, testdat)
 }

@@ -209,12 +209,24 @@ method.</p></td>
 #&gt; 1: 24.4     8  Residuals
 #&gt; 2: 10.4    15  Residuals
 #&gt; 3: 10.4    16  Residuals
-#&gt; 4: 21.5    21  Residuals
-#&gt; 5: 32.4    18  Residuals
-#&gt; 6: 33.9    20  Residuals
+#&gt; 4: 32.4    18  Residuals
+#&gt; 5: 33.9    20  Residuals
+#&gt; 6: 21.5    21  Residuals
 #&gt; 7: 30.4    28  Residuals</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>md</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='modelDiagnostics-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='no'>testdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>NA</span>, <span class='fl'>9000000</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>),
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>5</span>, <span class='fl'>4</span>, <span class='fl'>3</span>, <span class='fl'>2</span>))
+
+<span class='fu'>modelDiagnostics</span>(
+  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>y</span> ~ <span class='no'>x</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>testdat</span>, <span class='kw'>na.action</span> <span class='kw'>=</span> <span class='st'>"na.omit"</span>),
+  <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>.1</span>)$<span class='no'>extremeValues</span></div><div class='output co'>#&gt; <span class='warning'>Warning: tiny diagonals replaced with Inf when calling blkfct</span></div><div class='output co'>#&gt; <span class='warning'>Warning: tiny diagonals replaced with Inf when calling blkfct</span></div><div class='output co'>#&gt;        y Index EffectType
+#&gt; 1: 9e+06     7  Residuals</div><div class='input'>
+<span class='fu'>modelDiagnostics</span>(
+  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>y</span> ~ <span class='no'>x</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>testdat</span>, <span class='kw'>na.action</span> <span class='kw'>=</span> <span class='st'>"na.exclude"</span>),
+  <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>.1</span>)$<span class='no'>extremeValues</span></div><div class='output co'>#&gt;        y Index EffectType
+#&gt; 1: 9e+06     7  Residuals</div><div class='input'>
 <span class='co'>## clean up</span>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>testm</span>, <span class='no'>md</span>)</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>testm</span>, <span class='no'>md</span>, <span class='no'>testdat</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
