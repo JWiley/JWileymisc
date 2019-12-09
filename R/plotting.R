@@ -650,16 +650,15 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals"
                                                         "LL", "UL"))
 
 
-#' Plot Diagnostics for an lm model
+#' Plot Residual Diagnostics Default Method
 #'
 #' This function creates a number of diagnostic plots
-#' from lm models. It relies heavily on the \code{testdistr}
-#' function.
+#' from residuals. It is a default method.
 #'
-#' @param x A fitted model object from lm.
+#' @param x A \code{residualDiagnostics} class object.
 #' @param y Included to match the generic. Not used.
 #' @param plot A logical value whether or not to plot the results or
-#'   simply return the graaphical  objects.
+#'   simply return the graphical objects.
 #' @param ask A logical whether to ask before changing plots.
 #'   Only applies to interactive environments.
 #' @param ncol The number of columns to use for plots.
@@ -667,10 +666,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals"
 #'   If specified, plots are put together in a grid.
 #' @param ... Included to match the generic. Not used.
 #' @return a list including plots of the residuals,
-#'   residuals versus fitted values, and one list for
-#'   plots of all random effects and finally a data table with
-#'   any extreme values identified
-#'
+#'   residuals versus fitted values
 #' @importFrom grDevices dev.interactive devAskNewPage
 #' @importFrom ggplot2 ggtitle theme geom_quantile stat_smooth
 #' @importFrom ggplot2 geom_point geom_bin2d scale_fill_gradient scale_x_continuous scale_y_continuous
@@ -678,25 +674,25 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals"
 #' @importFrom ggthemes geom_rangeframe theme_tufte
 #' @importFrom cowplot plot_grid
 #' @keywords plot
-#' @method plot modelDiagnostics.lm
+#' @method plot residualDiagnostics
 #' @export
 #' @examples
 #' testm <- stats::lm(mpg ~ hp * factor(cyl), data = mtcars)
 #'
-#' md <- modelDiagnostics(testm, ev.perc = .1)
+#' md <- residualDiagnostics(testm, ev.perc = .1)
 #'
 #' plot(md)
 #' plot(md, ncol = 2)
 #'
 #' ## clean up
 #' rm(testm, md)
-plot.modelDiagnostics.lm <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
+plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
   ## residuals versus fitted
-  p.resfit <- ggplot(x$residualDiagnostics$Residuals, aes(Predicted, Residuals))
-  if (x$residualDiagnostics$N < 500) {
+  p.resfit <- ggplot(x$Residuals, aes(Predicted, Residuals))
+  if (x$N < 500) {
     p.resfit <- p.resfit +
       geom_point(aes(colour = isEV),
-        alpha = pmin(1 / sqrt(log10(x$residualDiagnostics$N)), 1)) +
+        alpha = pmin(1 / sqrt(log10(x$N)), 1)) +
       scale_colour_manual(values = c("No" = "grey50", "Yes" = "black")) +
       guides(colour = "none")
   } else {
@@ -708,33 +704,33 @@ plot.modelDiagnostics.lm <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
   p.resfit <- p.resfit +
     stat_smooth(method = "loess", se = FALSE, size = 1, colour = "blue") +
     geom_rangeframe() +
-    scale_x_continuous(breaks = roundedfivenum(x$residualDiagnostics$Residuals$Predicted)) +
-    scale_y_continuous(breaks = roundedfivenum(x$residualDiagnostics$Residuals$Residuals)) +
+    scale_x_continuous(breaks = roundedfivenum(x$Residuals$Predicted)) +
+    scale_y_continuous(breaks = roundedfivenum(x$Residuals$Residuals)) +
     theme_tufte(base_family = "sans") +
     theme(
       legend.position = "bottom",
       axis.text = element_text(colour = "black"),
       axis.ticks.x = element_line(colour = "white", size = 2)) +
-    ggtitle(x$residualDiagnostics$Outcome)
+    ggtitle(x$Outcome)
 
-  if (any(!is.na(x$residualDiagnostics$Hat$LL) |
-          !is.na(x$residualDiagnostics$Hat$UL))) {
+  if (any(!is.na(x$Hat$LL) |
+          !is.na(x$Hat$UL))) {
     p.resfit <- p.resfit +
       geom_line(mapping = aes(x = Predicted, y = LL),
-                data = x$residualDiagnostics$Hat,
+                data = x$Hat,
                 colour = "blue", size = 1, linetype = 2) +
       geom_line(mapping = aes(x = Predicted, y = UL),
-                data = x$residualDiagnostics$Hat,
+                data = x$Hat,
                 colour = "blue", size = 1, linetype = 2)
   }
 
   ## distributions of residuals
-  p.tmpres <- plot(x$residualDiagnostics$testDistribution,
+  p.tmpres <- plot(x$testDistribution,
                    varlab = "Residuals",
                    plot = FALSE)
 
   p.res <- plot_grid(
-    p.tmpres$DensityPlot + ggtitle(x$residualDiagnostics$Outcome),
+    p.tmpres$DensityPlot + ggtitle(x$Outcome),
     p.tmpres$QQDeviatesPlot, ncol = 1,
     rel_heights = c(3, 1), align = "v")
 
@@ -758,5 +754,58 @@ plot.modelDiagnostics.lm <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
   return(invisible(list(
     ResPlot = p.res,
     ResFittedPlot = p.resfit)))
+}
+
+#' Plot Diagnostics for an lm model
+#'
+#' This function creates a number of diagnostic plots
+#' from lm models.
+#'
+#' @param x A \code{modelDiagnostics} class object from lm.
+#' @param y Included to match the generic. Not used.
+#' @param plot A logical value whether or not to plot the results or
+#'   simply return the graaphical  objects.
+#' @param ask A logical whether to ask before changing plots.
+#'   Only applies to interactive environments.
+#' @param ncol The number of columns to use for plots.
+#'   Missing by default which means individual plots are created.
+#'   If specified, plots are put together in a grid.
+#' @param ... Included to match the generic. Not used.
+#' @return a list including plots of the residuals,
+#'   residuals versus fitted values
+#' @importFrom grDevices dev.interactive devAskNewPage
+#' @importFrom cowplot plot_grid
+#' @keywords plot
+#' @method plot modelDiagnostics.lm
+#' @export
+#' @examples
+#' testm <- stats::lm(mpg ~ hp * factor(cyl), data = mtcars)
+#'
+#' md <- modelDiagnostics(testm, ev.perc = .1)
+#'
+#' plot(md)
+#' plot(md, ncol = 2)
+#'
+#' ## clean up
+#' rm(testm, md)
+plot.modelDiagnostics.lm <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
+  p <- plot(x$residualDiagnostics, plot = FALSE)
+  if (plot) {
+    if (ask && dev.interactive()) {
+        oask <- devAskNewPage(TRUE)
+        on.exit(devAskNewPage(oask))
+    }
+    if (!missing(ncol)) {
+      print(plot_grid(
+        p$ResPlot,
+        p$ResFittedPlot,
+        ncol = ncol))
+    } else {
+      print(p$ResPlot)
+      print(p$ResFittedPlot)
+    }
+  }
+
+  return(invisible(p))
 }
 
