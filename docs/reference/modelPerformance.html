@@ -170,16 +170,24 @@ test or attempt coercing to a modelPerformance object.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>data.table</code> with results.</p>
-<p>A list with a <code>data.table</code> with the following elements:
-  Model, N_Obs (number of observations), AIC (Akaike Information Criterion),
-  BIC (Bayesian Information Criterion), LL (log likelihood),
-  LLDF (log likelihood degrees of freedom), Sigma (residual),
-  R2 (in sample variance explained),
-  F2 (Cohen's F2 effect size R2 / (1 - R2),
-  AdjR2 (adjusted variance explained),
-  F (F value for overall model significance test),
-  FNumDF and FDenDF (numerator and denominator degrees of freedom for F test),
-  P (p-value for overall model F test).</p>
+<p>A list with a <code>data.table</code> with the following elements:</p><dl class='dl-horizontal'>
+  <dt>Model</dt><dd><p>A character string indicating the model type, here lm</p></dd>
+  <dt>N_Obs</dt><dd><p>The number of observations</p></dd>
+  <dt>AIC</dt><dd><p>Akaike Information Criterion</p></dd>
+  <dt>BIC</dt><dd><p>Bayesian Information Criterion</p></dd>
+  <dt>LL</dt><dd><p>log likelihood</p></dd>
+  <dt>LLDF</dt><dd><p>log likelihood degrees of freedom</p></dd>
+  <dt>Sigma</dt><dd><p>Residual variability</p></dd>
+  <dt>R2</dt><dd><p>in sample variance explained</p></dd>
+  <dt>F2</dt><dd><p>Cohen's F2 effect size R2 / (1 - R2)</p></dd>
+  <dt>AdjR2</dt><dd><p>adjusted variance explained</p></dd>
+  <dt>F</dt><dd><p>F value for overall model significance test</p></dd>
+  <dt>FNumDF</dt><dd><p>numerator degrees of freedom for F test</p></dd>
+  <dt>FDenDF</dt><dd><p>denominator degrees of freedom for F test</p></dd>
+  <dt>P</dt><dd><p>p-value for overall model F test</p></dd>
+  
+</dl>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For <code>lm</code> class objects, return number of observations,

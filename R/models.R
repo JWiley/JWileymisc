@@ -56,15 +56,22 @@ is.modelPerformance <- function(x) {
 #' @export
 #' @method modelPerformance lm
 #' @return A list with a \code{data.table} with the following elements:
-#'   Model, N_Obs (number of observations), AIC (Akaike Information Criterion),
-#'   BIC (Bayesian Information Criterion), LL (log likelihood),
-#'   LLDF (log likelihood degrees of freedom), Sigma (residual),
-#'   R2 (in sample variance explained),
-#'   F2 (Cohen's F2 effect size R2 / (1 - R2),
-#'   AdjR2 (adjusted variance explained),
-#'   F (F value for overall model significance test),
-#'   FNumDF and FDenDF (numerator and denominator degrees of freedom for F test),
-#'   P (p-value for overall model F test).
+#'   \describe{
+#'   \item{Model}{A character string indicating the model type, here lm}
+#'   \item{N_Obs}{The number of observations}
+#'   \item{AIC}{Akaike Information Criterion}
+#'   \item{BIC}{Bayesian Information Criterion}
+#'   \item{LL}{log likelihood}
+#'   \item{LLDF}{log likelihood degrees of freedom}
+#'   \item{Sigma}{Residual variability}
+#'   \item{R2}{in sample variance explained}
+#'   \item{F2}{Cohen's F2 effect size R2 / (1 - R2)}
+#'   \item{AdjR2}{adjusted variance explained}
+#'   \item{F}{F value for overall model significance test}
+#'   \item{FNumDF}{numerator degrees of freedom for F test}
+#'   \item{FDenDF}{denominator degrees of freedom for F test}
+#'   \item{P}{p-value for overall model F test}
+#'   }
 #' @examples
 #' modelPerformance(lm(mpg ~ qsec * hp, data = mtcars))
 #'

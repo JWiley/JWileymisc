@@ -1,7 +1,7 @@
 Package: JWileymisc
 Title: Miscellaneous Utilities and Functions
 Version: 1.0.1
-Date: 2019-12-02
+Date: 2019-12-11
 Authors@R: 
     person(given = "Joshua F.",
            family = "Wiley",
@@ -32,7 +32,6 @@ Imports:
     mgcv,
     mice,
     methods,
-    zoo,
     psych,
     grid,
     rms,
@@ -40,8 +39,6 @@ Imports:
     quantreg,
     lavaan (>= 0.6-3),
     VGAM (>= 1.0-6),
-    nlme,
-    Matrix,
     lme4,
     extraoperators (>= 0.1.1)
 Suggests:

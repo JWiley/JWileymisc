@@ -110,8 +110,11 @@ context(".scorePANAS and scaleScore")
 test_that(".scorePANAS and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(1:5, size = 20 * 5, TRUE), ncol = 20)
-  expect_warning(xc <- .scorePANAS(x))
-  expect_is(xc, "list")
+  if (isTRUE(capabilities("long.double"))) {
+    expect_warning(xc <- .scorePANAS(x))
+    expect_is(xc, "list")
+    expect_match(names(xc), "score|reliability")
+  }
 
   expect_is(.scorePANAS(x, reliability = FALSE), "list")
 
@@ -119,7 +122,6 @@ test_that(".scorePANAS and scaleScore work", {
 
   expect_is(scaleScore(data.table::as.data.table(x),
                        type = "PANAS", reliability = FALSE), "list")
-  expect_match(names(xc), "score|reliability")
 })
 
 context(".scoreRSES and scaleScore")
