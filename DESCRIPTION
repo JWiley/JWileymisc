@@ -1,7 +1,7 @@
 Package: JWileymisc
 Title: Miscellaneous Utilities and Functions
-Version: 1.0.1
-Date: 2019-12-11
+Version: 1.1.0
+Date: 2020-01-21
 Authors@R: 
     person(given = "Joshua F.",
            family = "Wiley",
@@ -53,4 +53,4 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

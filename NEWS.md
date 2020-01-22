@@ -1,3 +1,8 @@
+# JWileymisc 1.1.0
+
+## Changes
+* Polished methods for functions, including `APAStyler()` methods.
+
 # JWileymisc 1.0.1
 
 ## Bug Fixes

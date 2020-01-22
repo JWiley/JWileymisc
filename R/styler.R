@@ -20,21 +20,81 @@ APAStyler <- function(object, ...) {
 #' @method APAStyler list
 #' @export
 #' @examples
+#' \dontrun{
 #' m1 <- lm(mpg ~ qsec * hp, data = mtcars)
 #' m2 <- lm(mpg ~ qsec + hp, data = mtcars)
+#' m3 <- lm(mpg ~ am + vs, data = mtcars)
 #' mt1 <- modelTest(m1)
 #' mt2 <- modelTest(m2)
+#' mt3 <- modelTest(m3)
+#'
+#' ## styling regression models
 #' APAStyler(list(m1, m2))
+#'
+#' ## modelTest objects get merged
 #' APAStyler(list(mt1, mt2))
 #'
+#' ## the models can be named by passing a named list
+#' ## including "special" characters using backticks, like spaces
+#' APAStyler(list(Full = mt1, Reduced = mt2))
+#' APAStyler(list(Full = mt1, Reduced = mt2, `Alternate Model` = mt3))
+#'
+#' ## you can customize the way output is presented
 #' APAStyler(list(mt1, mt2), format = list(
 #'   FixedEffects = "%s, %s\n(%s, %s)",
 #'   EffectSizes = "Cohen's f2 = %s (%s)"))
 #'
 #' ## clean up
-#' rm(m1, m2, mt1, mt2)
+#' rm(m1, m2, m3, mt1, mt2, mt3)
+#' }
 APAStyler.list <- function(object, ...) {
+
   out <- lapply(object, APAStyler, ...)
+
+  ## are all model test results that can be merged?
+  OK <- sapply(object, inherits, what = "modelTest")
+  if (isTRUE(all(OK, na.rm = TRUE))) {
+    object <- object[OK]
+    out <- out[OK]
+
+    for (i in seq_along(out)) {
+      out[[i]] <- out[[i]][, Rank := 1:.N]
+      setnames(out[[i]],
+               old = c("Est", "Rank"),
+               new = paste0(c("Est", "Rank"), i))
+    }
+
+    if (length(out) > 1) {
+      mout <- out[[1]]
+      for (i in 2:length(out)) {
+        mout <- merge(mout, out[[i]], by = c("Term", "Type"), all = TRUE)
+      }
+    }
+
+    mout[, ._FinalRank := apply(
+             mout[, grep("^Rank[0-9]+$", names(mout), value=TRUE), with = FALSE],
+             1, function(x) na.omit(unlist(x))[[1]])]
+    mout[, ._WhichModel := apply(
+             mout[, grep("^Rank[0-9]+$", names(mout), value=TRUE), with = FALSE],
+             1, function(x) min(which(!is.na(x))))]
+    mout[, Type := factor(Type, levels = c(
+                                  "Fixed Effects", "Random Effects",
+                                  "Overall Model", "Effect Sizes"))]
+
+    out <- mout[order(Type, ._WhichModel, ._FinalRank),
+         c("Term", grep("^Est[0-9]+$", names(mout), value = TRUE), "Type"),
+         with = FALSE]
+    out[, Type := as.character(Type)]
+
+    if (isFALSE(is.null(names(object[OK])))) {
+      setnames(out,
+               old = paste0("Est", 1:sum(OK)),
+               new = names(object[OK]))
+    }
+
+    out <- out[, lapply(.SD, function(x) fifelse(is.na(x), "", x))]
+  }
+
   return(out)
 }
 
