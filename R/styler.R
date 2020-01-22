@@ -18,6 +18,7 @@ APAStyler <- function(object, ...) {
 #' @param ... Additional arguments.
 #' @return Styled results.
 #' @method APAStyler list
+#' @importFrom data.table fifelse
 #' @export
 #' @examples
 #' \dontrun{
