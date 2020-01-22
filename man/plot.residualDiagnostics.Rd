@@ -4,8 +4,7 @@
 \alias{plot.residualDiagnostics}
 \title{Plot Residual Diagnostics Default Method}
 \usage{
-\method{plot}{residualDiagnostics}(x, y, plot = TRUE, ask = TRUE, ncol,
-  ...)
+\method{plot}{residualDiagnostics}(x, y, plot = TRUE, ask = TRUE, ncol, ...)
 }
 \arguments{
 \item{x}{A \code{residualDiagnostics} class object.}

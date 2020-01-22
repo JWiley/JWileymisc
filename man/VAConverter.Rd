@@ -4,8 +4,14 @@
 \alias{VAConverter}
 \title{Visual Acuity Converter}
 \usage{
-VAConverter(OS, OD, chart.values = NULL, chart.nletters = NULL,
-  datatype = c("snellen", "decimal", "logMAR"), zero = 3)
+VAConverter(
+  OS,
+  OD,
+  chart.values = NULL,
+  chart.nletters = NULL,
+  datatype = c("snellen", "decimal", "logMAR"),
+  zero = 3
+)
 }
 \arguments{
 \item{OS}{The values to be converted for the left eye

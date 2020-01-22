@@ -4,8 +4,11 @@
 \alias{formatHtest}
 \title{Function to format the reuslts of a hypothesis test as text}
 \usage{
-formatHtest(x, type = c("t", "F", "chisq", "kw", "mh", "r_pearson",
-  "r_kendall", "r_spearman"), ...)
+formatHtest(
+  x,
+  type = c("t", "F", "chisq", "kw", "mh", "r_pearson", "r_kendall", "r_spearman"),
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{htest} class object}

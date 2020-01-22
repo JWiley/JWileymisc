@@ -4,8 +4,14 @@
 \alias{formatPval}
 \title{Function to simplify formatting p-values for easy viewing / publication}
 \usage{
-formatPval(x, d = 3, sd, includeP = FALSE, includeSign = FALSE,
-  dropLeadingZero = TRUE)
+formatPval(
+  x,
+  d = 3,
+  sd,
+  includeP = FALSE,
+  includeSign = FALSE,
+  dropLeadingZero = TRUE
+)
 }
 \arguments{
 \item{x}{p values to convert}

@@ -4,11 +4,16 @@
 \alias{APAStyler.modelTest.vglm}
 \title{APAStyler method for model tests from a vglm multinomial model}
 \usage{
-\method{APAStyler}{modelTest.vglm}(object, format = list(FixedEffects =
-  c("\%s\%s [\%s, \%s]"), EffectSizes =
-  c("Chi-square (df=\%s) = \%s, \%s")), digits = 2,
-  pcontrol = list(digits = 3, stars = TRUE, includeP = FALSE, includeSign
-  = FALSE, dropLeadingZero = TRUE), OR = TRUE, ...)
+\method{APAStyler}{modelTest.vglm}(
+  object,
+  format = list(FixedEffects = c("\%s\%s [\%s, \%s]"), EffectSizes =
+    c("Chi-square (df=\%s) = \%s, \%s")),
+  digits = 2,
+  pcontrol = list(digits = 3, stars = TRUE, includeP = FALSE, includeSign = FALSE,
+    dropLeadingZero = TRUE),
+  OR = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{A \code{modelTest.vglm} class object,

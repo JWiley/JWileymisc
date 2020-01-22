@@ -4,8 +4,17 @@
 \alias{plot.testDistribution}
 \title{Plot method for testDistribution objects}
 \usage{
-\method{plot}{testDistribution}(x, y, xlim = NULL, varlab = "X",
-  plot = TRUE, rugthreshold = 500, seed = 1234, factor = 1, ...)
+\method{plot}{testDistribution}(
+  x,
+  y,
+  xlim = NULL,
+  varlab = "X",
+  plot = TRUE,
+  rugthreshold = 500,
+  seed = 1234,
+  factor = 1,
+  ...
+)
 }
 \arguments{
 \item{x}{A list of class \dQuote{testDistribution}.}

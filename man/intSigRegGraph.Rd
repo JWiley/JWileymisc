@@ -4,10 +4,24 @@
 \alias{intSigRegGraph}
 \title{Function to find significant regions from an interaction}
 \usage{
-intSigRegGraph(object, predList, contrastList, xvar, varyvar,
-  varyvar.levels, xlab = xvar, ylab = "Predicted Values", ratio = 1,
-  xlim, ylim, xbreaks, xlabels = xbreaks, scale.x = c(m = 0, s = 1),
-  scale.y = c(m = 0, s = 1), starts = 50)
+intSigRegGraph(
+  object,
+  predList,
+  contrastList,
+  xvar,
+  varyvar,
+  varyvar.levels,
+  xlab = xvar,
+  ylab = "Predicted Values",
+  ratio = 1,
+  xlim,
+  ylim,
+  xbreaks,
+  xlabels = xbreaks,
+  scale.x = c(m = 0, s = 1),
+  scale.y = c(m = 0, s = 1),
+  starts = 50
+)
 }
 \arguments{
 \item{object}{A fitted rms object}

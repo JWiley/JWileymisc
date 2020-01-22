@@ -4,8 +4,15 @@
 \alias{compareIVs}
 \title{Compares the effects of various independent variables on dependent variables}
 \usage{
-compareIVs(dv, type, iv, covariates = character(), data,
-  multivariate = FALSE, ...)
+compareIVs(
+  dv,
+  type,
+  iv,
+  covariates = character(),
+  data,
+  multivariate = FALSE,
+  ...
+)
 }
 \arguments{
 \item{dv}{A character string or vector of the depentent variable(s)}

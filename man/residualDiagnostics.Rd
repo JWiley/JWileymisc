@@ -13,8 +13,14 @@ as.residualDiagnostics(x)
 
 is.residualDiagnostics(x)
 
-\method{residualDiagnostics}{lm}(object, ev.perc = 0.001,
-  robust = FALSE, distr = "normal", standardized = TRUE, ...)
+\method{residualDiagnostics}{lm}(
+  object,
+  ev.perc = 0.001,
+  robust = FALSE,
+  distr = "normal",
+  standardized = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{A fitted model object, with methods for

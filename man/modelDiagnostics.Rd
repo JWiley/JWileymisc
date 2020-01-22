@@ -13,8 +13,14 @@ as.modelDiagnostics(x)
 
 is.modelDiagnostics(x)
 
-\method{modelDiagnostics}{lm}(object, ev.perc = 0.001, robust = FALSE,
-  distr = "normal", standardized = TRUE, ...)
+\method{modelDiagnostics}{lm}(
+  object,
+  ev.perc = 0.001,
+  robust = FALSE,
+  distr = "normal",
+  standardized = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{A fitted model object, with methods for

@@ -4,8 +4,18 @@
 \alias{gglikert}
 \title{Creates a plot for likert scale}
 \usage{
-gglikert(x, y, leftLab, rightLab, colour, data, xlim, title, shape = 18,
-  size = 7)
+gglikert(
+  x,
+  y,
+  leftLab,
+  rightLab,
+  colour,
+  data,
+  xlim,
+  title,
+  shape = 18,
+  size = 7
+)
 }
 \arguments{
 \item{x}{Variable to plot on the x axis (the likert scale responses or averages)}

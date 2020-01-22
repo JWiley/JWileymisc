@@ -16,8 +16,7 @@
 
 \S4method{show}{VAObject}(object)
 
-\S4method{summary}{VAObject}(object, weightbest = TRUE, w = c(0.75,
-  0.25))
+\S4method{summary}{VAObject}(object, weightbest = TRUE, w = c(0.75, 0.25))
 }
 \arguments{
 \item{x}{the object to subset}

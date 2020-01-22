@@ -4,8 +4,15 @@
 \alias{internalcompareIV}
 \title{Compares the effects of various independent variables}
 \usage{
-internalcompareIV(dv, type = c("normal", "binary", "count"), iv,
-  covariates = character(), data, multivariate = FALSE, ...)
+internalcompareIV(
+  dv,
+  type = c("normal", "binary", "count"),
+  iv,
+  covariates = character(),
+  data,
+  multivariate = FALSE,
+  ...
+)
 }
 \arguments{
 \item{dv}{A character string of the depentent variable}

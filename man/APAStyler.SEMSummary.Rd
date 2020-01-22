@@ -4,9 +4,15 @@
 \alias{APAStyler.SEMSummary}
 \title{A generic function for pretty printing in (semi) APA Style}
 \usage{
-\method{APAStyler}{SEMSummary}(object, digits = 2, type = c("cov",
-  "cor", "both"), stars = FALSE, file = ifelse(.Platform$OS.type ==
-  "windows", "clipboard", FALSE), sep = "\\t", ...)
+\method{APAStyler}{SEMSummary}(
+  object,
+  digits = 2,
+  type = c("cov", "cor", "both"),
+  stars = FALSE,
+  file = ifelse(.Platform$OS.type == "windows", "clipboard", FALSE),
+  sep = "\\t",
+  ...
+)
 }
 \arguments{
 \item{object}{\code{SEMSummary} object}

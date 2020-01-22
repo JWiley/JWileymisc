@@ -4,9 +4,16 @@
 \alias{corplot}
 \title{Heatmap of a Correlation Matrix}
 \usage{
-corplot(x, coverage, pvalues, type = c("cor", "p", "coverage"),
-  digits = 2, order = c("cluster", "asis"), ...,
-  control.grobs = list())
+corplot(
+  x,
+  coverage,
+  pvalues,
+  type = c("cor", "p", "coverage"),
+  digits = 2,
+  order = c("cluster", "asis"),
+  ...,
+  control.grobs = list()
+)
 }
 \arguments{
 \item{x}{A correlation matrix or some other square symmetric matrix.}

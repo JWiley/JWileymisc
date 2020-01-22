@@ -4,8 +4,7 @@
 \alias{plot.modelDiagnostics.lm}
 \title{Plot Diagnostics for an lm model}
 \usage{
-\method{plot}{modelDiagnostics.lm}(x, y, plot = TRUE, ask = TRUE, ncol,
-  ...)
+\method{plot}{modelDiagnostics.lm}(x, y, plot = TRUE, ask = TRUE, ncol, ...)
 }
 \arguments{
 \item{x}{A \code{modelDiagnostics} class object from lm.}

@@ -4,10 +4,14 @@
 \alias{APAStyler.modelTest.lm}
 \title{APAStyler method for model tests from a linear model}
 \usage{
-\method{APAStyler}{modelTest.lm}(object, format = list(FixedEffects =
-  c("\%s\%s [\%s, \%s]"), EffectSizes = c("f2 = \%s, \%s")), digits = 2,
-  pcontrol = list(digits = 3, stars = TRUE, includeP = FALSE, includeSign
-  = FALSE, dropLeadingZero = TRUE), ...)
+\method{APAStyler}{modelTest.lm}(
+  object,
+  format = list(FixedEffects = c("\%s\%s [\%s, \%s]"), EffectSizes = c("f2 = \%s, \%s")),
+  digits = 2,
+  pcontrol = list(digits = 3, stars = TRUE, includeP = FALSE, includeSign = FALSE,
+    dropLeadingZero = TRUE),
+  ...
+)
 }
 \arguments{
 \item{object}{A \code{modelTest.lm} class object,
@@ -38,7 +42,7 @@ APAStyler(modelTest(m1))
 
 APAStyler(modelTest(m1),
 format = list(
-  FixedEffects = "\%s, \%s\\n(\%s, \%s)",
+  FixedEffects = "\%s, \%s\n(\%s, \%s)",
   EffectSizes = "Cohen's f2 = \%s (\%s)"),
 pcontrol = list(digits = 4,
   stars = FALSE, includeP = TRUE,

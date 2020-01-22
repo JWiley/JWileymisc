@@ -4,8 +4,16 @@
 \alias{findSigRegions}
 \title{Function to find significant regions from an interaction}
 \usage{
-findSigRegions(object, l1, l2, name.vary, lower, upper, alpha = 0.05,
-  starts = 50)
+findSigRegions(
+  object,
+  l1,
+  l2,
+  name.vary,
+  lower,
+  upper,
+  alpha = 0.05,
+  starts = 50
+)
 }
 \arguments{
 \item{object}{A fitted rms object}

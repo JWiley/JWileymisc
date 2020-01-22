@@ -4,8 +4,17 @@
 \alias{egltable}
 \title{Function makes nice tables}
 \usage{
-egltable(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
-  paired = FALSE, simChisq = FALSE, sims = 1e+06)
+egltable(
+  vars,
+  g,
+  data,
+  idvar,
+  strict = TRUE,
+  parametric = TRUE,
+  paired = FALSE,
+  simChisq = FALSE,
+  sims = 1e+06
+)
 }
 \arguments{
 \item{vars}{Either an index (numeric or character) of

@@ -4,8 +4,11 @@
 \alias{SEMSummary.fit}
 \title{Summary Statistics for a SEM Analysis}
 \usage{
-SEMSummary.fit(formula, data, use = c("fiml", "pairwise.complete.obs",
-  "complete.obs"))
+SEMSummary.fit(
+  formula,
+  data,
+  use = c("fiml", "pairwise.complete.obs", "complete.obs")
+)
 }
 \arguments{
 \item{formula}{A formula of the variables to be used in the analysis.

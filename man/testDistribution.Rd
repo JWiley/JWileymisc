@@ -13,11 +13,17 @@ as.testDistribution(x)
 
 is.testDistribution(x)
 
-\method{testDistribution}{default}(x, distr = c("normal", "beta",
-  "chisq", "f", "gamma", "nbinom", "poisson", "mvnormal"), na.rm = TRUE,
-  starts, extremevalues = c("no", "theoretical", "empirical"),
-  ev.perc = 0.005, use = c("complete.obs", "pairwise.complete.obs",
-  "fiml"), robust = FALSE, ...)
+\method{testDistribution}{default}(
+  x,
+  distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom", "poisson", "mvnormal"),
+  na.rm = TRUE,
+  starts,
+  extremevalues = c("no", "theoretical", "empirical"),
+  ev.perc = 0.005,
+  use = c("complete.obs", "pairwise.complete.obs", "fiml"),
+  robust = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{The data as a single variable or vector to check the distribution unless
