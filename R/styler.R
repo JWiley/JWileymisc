@@ -7,6 +7,8 @@ APAStyler <- function(object, ...) {
   UseMethod("APAStyler")
 }
 
+# clear R CMD CHECK notes
+if(getRversion() >= "2.15.1") utils::globalVariables(c("Rank", "._FinalRank", "._WhichModel"))
 
 #' APAStyler method for lists
 #'

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -91,9 +91,9 @@
       <h1>Model Performance and Tests</h1>
                         <h4 class="author">Joshua F. Wiley</h4>
             
-            <h4 class="date">2019-12-11</h4>
+            <h4 class="date">2020-01-23</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/tests/testthat/vignettes/model-test-vignette.Rmd"><code>tests/testthat/vignettes/model-test-vignette.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/R/vignettes/model-test-vignette.Rmd"><code>R/vignettes/model-test-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>model-test-vignette.Rmd</code></div>
 
     </div>
@@ -127,10 +127,10 @@
 <span id="cb2-5"><a href="#cb2-5"></a>mp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/modelPerformance.html">modelPerformance</a></span>(m)</span>
 <span id="cb2-6"><a href="#cb2-6"></a><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(mp)</span>
 <span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; $Performance</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt;          F2     AdjR2        F FNumDF FDenDF           P</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 1: 3.062692 0.7274854 28.58513      3     28 1.13969e-08</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578 3.062692</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt;        AdjR2        F FNumDF FDenDF           P</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 1: 0.7274854 28.58513      3     28 1.13969e-08</span></span>
 <span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; </span></span>
 <span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt; attr(,"class")</span></span>
 <span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; [1] "modelPerformance.lm" "modelPerformance"</span></span></code></pre></div>
@@ -164,10 +164,10 @@
 <span id="cb4-21"><a href="#cb4-21"></a><span class="co">#&gt; </span></span>
 <span id="cb4-22"><a href="#cb4-22"></a><span class="co">#&gt; $OverallModel</span></span>
 <span id="cb4-23"><a href="#cb4-23"></a><span class="co">#&gt; $Performance</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a><span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a><span class="co">#&gt;          F2     AdjR2        F FNumDF FDenDF           P</span></span>
-<span id="cb4-27"><a href="#cb4-27"></a><span class="co">#&gt; 1: 3.062692 0.7274854 28.58513      3     28 1.13969e-08</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578 3.062692</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="co">#&gt;        AdjR2        F FNumDF FDenDF           P</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="co">#&gt; 1: 0.7274854 28.58513      3     28 1.13969e-08</span></span>
 <span id="cb4-28"><a href="#cb4-28"></a><span class="co">#&gt; </span></span>
 <span id="cb4-29"><a href="#cb4-29"></a><span class="co">#&gt; attr(,"class")</span></span>
 <span id="cb4-30"><a href="#cb4-30"></a><span class="co">#&gt; [1] "modelPerformance.lm" "modelPerformance"   </span></span>

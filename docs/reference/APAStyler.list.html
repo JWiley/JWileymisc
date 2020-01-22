@@ -70,7 +70,7 @@ and that an APAStyler method exists for that class." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -159,110 +159,33 @@ is another known class.</p></td>
     <p>Styled results.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>qsec</span> * <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>qsec</span> * <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>qsec</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>am</span> + <span class='no'>vs</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='no'>mt1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m1</span>)
 <span class='no'>mt2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m2</span>)
-<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>m1</span>, <span class='no'>m2</span>))</div><div class='output co'>#&gt;          B (SE)                  95% CI          
-#&gt; Constant  8.52 (12.53)           [-17.15,  34.20]
-#&gt; qsec      1.48* ( 0.68)          [  0.08,   2.87]
-#&gt; hp        0.24** ( 0.07)         [  0.09,   0.39]
-#&gt; qsec:hp  -0.02*** ( 0.00)        [ -0.03,  -0.01]
-#&gt; R^2      0.79***                                 
-#&gt; F        F( 3.00, 28.00) = 34.17 p &lt; .001        
-#&gt;          B (SE)                  95% CI        
-#&gt; Constant 48.32*** (11.10)        [25.61, 71.03]
-#&gt; qsec     -0.89 ( 0.53)           [-1.98,  0.21]
-#&gt; hp       -0.08*** ( 0.01)        [-0.11, -0.06]
-#&gt; R^2      0.64***                               
-#&gt; F        F( 2.00, 29.00) = 25.43 p &lt; .001      </div><div class='output co'>#&gt; [[1]]
-#&gt;          B (SE)                    95% CI            
-#&gt; Constant " 8.52 (12.53)"           "[-17.15,  34.20]"
-#&gt; qsec     " 1.48* ( 0.68)"          "[  0.08,   2.87]"
-#&gt; hp       " 0.24** ( 0.07)"         "[  0.09,   0.39]"
-#&gt; qsec:hp  "-0.02*** ( 0.00)"        "[ -0.03,  -0.01]"
-#&gt; R^2      "0.79***"                 ""                
-#&gt; F        "F( 3.00, 28.00) = 34.17" "p &lt; .001"        
-#&gt; 
-#&gt; [[2]]
-#&gt;          B (SE)                    95% CI          
-#&gt; Constant "48.32*** (11.10)"        "[25.61, 71.03]"
-#&gt; qsec     "-0.89 ( 0.53)"           "[-1.98,  0.21]"
-#&gt; hp       "-0.08*** ( 0.01)"        "[-0.11, -0.06]"
-#&gt; R^2      "0.64***"                 ""              
-#&gt; F        "F( 2.00, 29.00) = 25.43" "p &lt; .001"      
-#&gt; </div><div class='input'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>mt1</span>, <span class='no'>mt2</span>))</div><div class='output co'>#&gt; [[1]]
-#&gt;                 Term                      Est          Type
-#&gt;  1:      (Intercept)     8.52 [-17.15, 34.20] Fixed Effects
-#&gt;  2:             qsec    1.48* [  0.08,  2.87] Fixed Effects
-#&gt;  3:               hp   0.24** [  0.09,  0.39] Fixed Effects
-#&gt;  4:          qsec:hp -0.02*** [ -0.03, -0.01] Fixed Effects
-#&gt;  5: N (Observations)                       32 Overall Model
-#&gt;  6:        logLik DF                        5 Overall Model
-#&gt;  7:           logLik                   -77.75 Overall Model
-#&gt;  8:              AIC                   165.50 Overall Model
-#&gt;  9:              BIC                   172.83 Overall Model
-#&gt; 10:               F2                     3.66 Overall Model
-#&gt; 11:               R2                     0.79 Overall Model
-#&gt; 12:           Adj R2                     0.76 Overall Model
-#&gt; 13:             qsec      f2 = 0.17, p = .039  Effect Sizes
-#&gt; 14:               hp      f2 = 0.37, p = .003  Effect Sizes
-#&gt; 15:          qsec:hp      f2 = 0.69, p &lt; .001  Effect Sizes
-#&gt; 
-#&gt; [[2]]
-#&gt;                 Term                     Est          Type
-#&gt;  1:      (Intercept) 48.32*** [25.61, 71.03] Fixed Effects
-#&gt;  2:             qsec    -0.89 [-1.98,  0.21] Fixed Effects
-#&gt;  3:               hp -0.08*** [-0.11, -0.06] Fixed Effects
-#&gt;  4: N (Observations)                      32 Overall Model
-#&gt;  5:        logLik DF                       4 Overall Model
-#&gt;  6:           logLik                  -86.17 Overall Model
-#&gt;  7:              AIC                  180.34 Overall Model
-#&gt;  8:              BIC                  186.20 Overall Model
-#&gt;  9:               F2                    1.75 Overall Model
-#&gt; 10:               R2                    0.64 Overall Model
-#&gt; 11:           Adj R2                    0.61 Overall Model
-#&gt; 12:             qsec     f2 = 0.09, p = .108  Effect Sizes
-#&gt; 13:               hp     f2 = 1.27, p &lt; .001  Effect Sizes
-#&gt; </div><div class='input'>
+<span class='no'>mt3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='modelTest.html'>modelTest</a></span>(<span class='no'>m3</span>)
+
+<span class='co'>## styling regression models</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>m1</span>, <span class='no'>m2</span>))
+
+<span class='co'>## modelTest objects get merged</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>mt1</span>, <span class='no'>mt2</span>))
+
+<span class='co'>## the models can be named by passing a named list</span>
+<span class='co'>## including "special" characters using backticks, like spaces</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>Full</span> <span class='kw'>=</span> <span class='no'>mt1</span>, <span class='kw'>Reduced</span> <span class='kw'>=</span> <span class='no'>mt2</span>))
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>Full</span> <span class='kw'>=</span> <span class='no'>mt1</span>, <span class='kw'>Reduced</span> <span class='kw'>=</span> <span class='no'>mt2</span>, <span class='kw'>`Alternate Model`</span> <span class='kw'>=</span> <span class='no'>mt3</span>))
+
+<span class='co'>## you can customize the way output is presented</span>
 <span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>mt1</span>, <span class='no'>mt2</span>), <span class='kw'>format</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
   <span class='kw'>FixedEffects</span> <span class='kw'>=</span> <span class='st'>"%s, %s\n(%s, %s)"</span>,
-  <span class='kw'>EffectSizes</span> <span class='kw'>=</span> <span class='st'>"Cohen's f2 = %s (%s)"</span>))</div><div class='output co'>#&gt; [[1]]
-#&gt;                 Term                          Est          Type
-#&gt;  1:      (Intercept)      8.52, \n(-17.15, 34.20) Fixed Effects
-#&gt;  2:             qsec     1.48, *\n(  0.08,  2.87) Fixed Effects
-#&gt;  3:               hp    0.24, **\n(  0.09,  0.39) Fixed Effects
-#&gt;  4:          qsec:hp  -0.02, ***\n( -0.03, -0.01) Fixed Effects
-#&gt;  5: N (Observations)                           32 Overall Model
-#&gt;  6:        logLik DF                            5 Overall Model
-#&gt;  7:           logLik                       -77.75 Overall Model
-#&gt;  8:              AIC                       165.50 Overall Model
-#&gt;  9:              BIC                       172.83 Overall Model
-#&gt; 10:               F2                         3.66 Overall Model
-#&gt; 11:               R2                         0.79 Overall Model
-#&gt; 12:           Adj R2                         0.76 Overall Model
-#&gt; 13:             qsec Cohen's f2 = 0.17 (p = .039)  Effect Sizes
-#&gt; 14:               hp Cohen's f2 = 0.37 (p = .003)  Effect Sizes
-#&gt; 15:          qsec:hp Cohen's f2 = 0.69 (p &lt; .001)  Effect Sizes
-#&gt; 
-#&gt; [[2]]
-#&gt;                 Term                          Est          Type
-#&gt;  1:      (Intercept)   48.32, ***\n(25.61, 71.03) Fixed Effects
-#&gt;  2:             qsec      -0.89, \n(-1.98,  0.21) Fixed Effects
-#&gt;  3:               hp   -0.08, ***\n(-0.11, -0.06) Fixed Effects
-#&gt;  4: N (Observations)                           32 Overall Model
-#&gt;  5:        logLik DF                            4 Overall Model
-#&gt;  6:           logLik                       -86.17 Overall Model
-#&gt;  7:              AIC                       180.34 Overall Model
-#&gt;  8:              BIC                       186.20 Overall Model
-#&gt;  9:               F2                         1.75 Overall Model
-#&gt; 10:               R2                         0.64 Overall Model
-#&gt; 11:           Adj R2                         0.61 Overall Model
-#&gt; 12:             qsec Cohen's f2 = 0.09 (p = .108)  Effect Sizes
-#&gt; 13:               hp Cohen's f2 = 1.27 (p &lt; .001)  Effect Sizes
-#&gt; </div><div class='input'>
+  <span class='kw'>EffectSizes</span> <span class='kw'>=</span> <span class='st'>"Cohen's f2 = %s (%s)"</span>))
+
 <span class='co'>## clean up</span>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>mt1</span>, <span class='no'>mt2</span>)</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>m3</span>, <span class='no'>mt1</span>, <span class='no'>mt2</span>, <span class='no'>mt3</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

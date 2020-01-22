@@ -90,7 +90,7 @@ will be used based on covMcd from the robustbase package." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -184,11 +184,17 @@ will be used based on <code>covMcd</code> from the <span class="pkg">robustbase<
 <span class='fu'>is.testDistribution</span>(<span class='no'>x</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>testDistribution</span>(<span class='no'>x</span>, <span class='kw'>distr</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"normal"</span>, <span class='st'>"beta"</span>,
-  <span class='st'>"chisq"</span>, <span class='st'>"f"</span>, <span class='st'>"gamma"</span>, <span class='st'>"nbinom"</span>, <span class='st'>"poisson"</span>, <span class='st'>"mvnormal"</span>), <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>starts</span>, <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"no"</span>, <span class='st'>"theoretical"</span>, <span class='st'>"empirical"</span>),
-  <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>0.005</span>, <span class='kw'>use</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"complete.obs"</span>, <span class='st'>"pairwise.complete.obs"</span>,
-  <span class='st'>"fiml"</span>), <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>testDistribution</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>distr</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"normal"</span>, <span class='st'>"beta"</span>, <span class='st'>"chisq"</span>, <span class='st'>"f"</span>, <span class='st'>"gamma"</span>, <span class='st'>"nbinom"</span>, <span class='st'>"poisson"</span>, <span class='st'>"mvnormal"</span>),
+  <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>starts</span>,
+  <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"no"</span>, <span class='st'>"theoretical"</span>, <span class='st'>"empirical"</span>),
+  <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>0.005</span>,
+  <span class='kw'>use</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"complete.obs"</span>, <span class='st'>"pairwise.complete.obs"</span>, <span class='st'>"fiml"</span>),
+  <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -273,7 +279,7 @@ See details.</p></td>
 
 <span class='co'>## example data</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1234</span>)
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>data.table</span><span class='kw ns'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span>(
+<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>data.table</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/data.table/man/data.table.html'>data.table</a></span>(
   <span class='kw'>Ynorm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>200</span>),
   <span class='kw'>Ybeta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Beta.html'>rbeta</a></span>(<span class='fl'>200</span>, <span class='fl'>1</span>, <span class='fl'>4</span>),
   <span class='kw'>Ychisq</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Chisquare.html'>rchisq</a></span>(<span class='fl'>200</span>, <span class='fl'>8</span>),
