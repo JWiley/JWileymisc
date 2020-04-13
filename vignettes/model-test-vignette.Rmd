@@ -86,3 +86,14 @@ print(mt)
 APAStyler(mt)
 
 ``` 
+
+
+The model tests can also be used with interactions.
+
+```{r}
+
+m2 <- stats::lm(mpg ~ hp * cyl, data = mtcars)
+
+APAStyler(modelTest(m2))
+
+``` 

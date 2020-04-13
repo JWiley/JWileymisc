@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -85,13 +85,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="model-test-vignette_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Model Performance and Tests</h1>
                         <h4 class="author">Joshua F. Wiley</h4>
             
-            <h4 class="date">2020-01-23</h4>
+            <h4 class="date">2020-04-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/R/vignettes/model-test-vignette.Rmd"><code>R/vignettes/model-test-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>model-test-vignette.Rmd</code></div>
@@ -191,6 +191,29 @@
 <span id="cb5-15"><a href="#cb5-15"></a><span class="co">#&gt; 12:           Adj R2                     0.73 Overall Model</span></span>
 <span id="cb5-16"><a href="#cb5-16"></a><span class="co">#&gt; 13:               hp      f2 = 0.09, p = .130  Effect Sizes</span></span>
 <span id="cb5-17"><a href="#cb5-17"></a><span class="co">#&gt; 14:              cyl      f2 = 0.62, p = .001  Effect Sizes</span></span></code></pre></div>
+<p>The model tests can also be used with interactions.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2"></a>m2 &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>hp <span class="op">*</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="kw"><a href="../reference/APAStyler.html">APAStyler</a></span>(<span class="kw"><a href="../reference/modelTest.html">modelTest</a></span>(m2))</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt;                 Term                       Est          Type</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt;  1:      (Intercept)  35.98*** [ 27.99, 43.98] Fixed Effects</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt;  2:               hp    -0.11* [ -0.21, -0.02] Fixed Effects</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt;  3:             cyl6   -15.31* [-30.59, -0.03] Fixed Effects</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt;  4:             cyl8  -17.90** [-28.71, -7.09] Fixed Effects</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt;  5:          hp:cyl6      0.11 [ -0.04,  0.25] Fixed Effects</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt;  6:          hp:cyl8      0.10 [  0.00,  0.20] Fixed Effects</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt;  7: N (Observations)                        32 Overall Model</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt;  8:        logLik DF                         7 Overall Model</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co">#&gt;  9:           logLik                    -77.54 Overall Model</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="co">#&gt; 10:              AIC                    169.08 Overall Model</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co">#&gt; 11:              BIC                    179.34 Overall Model</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="co">#&gt; 12:               F2                      3.72 Overall Model</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">#&gt; 13:               R2                      0.79 Overall Model</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt; 14:           Adj R2                      0.75 Overall Model</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="co">#&gt; 15:               hp       f2 = 0.23, p = .021  Effect Sizes</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co">#&gt; 16:              cyl       f2 = 0.47, p = .007  Effect Sizes</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="co">#&gt; 17:           hp:cyl       f2 = 0.16, p = .142  Effect Sizes</span></span></code></pre></div>
 </div>
   </div>
 

@@ -467,6 +467,117 @@ modelTest.vglm <- function(object, ...) {
 ## clear R CMD CHECK notes
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("Model", "Type"))
 
+#' Modified lm() to use a specified design matrix
+#'
+#' This function is a minor modification of the lm() function
+#' to allow the use of a pre-specified design matrix. It is not intended for
+#' public use but only to support \code{modelTest.lm}.
+#'
+#' @param formula An object of class "formula" although it is only minimally used
+#' @param data the dataset
+#' @param subset subset
+#' @param weights any weights
+#' @param na.action Defaults to \code{na.omit}
+#' @param method defaults to \dQuote{qr}
+#' @param model defaults to \code{TRUE}
+#' @param x defaults to \code{FALSE}
+#' @param y defaults to \code{FALSE}
+#' @param qr defaults to \code{TRUE}
+#' @param singular.ok defaults to \code{TRUE}
+#' @param contrasts defaults to \code{NULL}
+#' @param offset missing by default
+#' @param designMatrix a model matrix / design matrix (all numeric, pre coded if applicable for discrete variables)
+#' @param yObserved the observed y values
+#' @param ... additional arguments
+#' @return an lm class object
+#' @importFrom stats .getXlevels is.empty.model lm.fit lm.wfit model.offset model.weights
+#' @seealso \code{lm}
+#' @examples
+#' mtcars$cyl <- factor(mtcars$cyl)
+#' m <- lm(mpg ~ hp * cyl, data = mtcars)
+#'
+#' x <- model.matrix(m)
+#' y <- mtcars$mpg
+#' m2 <- JWileymisc:::lm2(mpg ~ 1 + cyl + hp:cyl, data = mtcars,
+#'   designMatrix = x[, -2, drop = FALSE],
+#'   yObserved = y)
+#'
+#' anova(m, m2)
+#'
+#' rm(m, m2, x, y)
+lm2 <- function (formula, data, subset, weights, na.action, method = "qr",
+    model = TRUE, x = FALSE, y = FALSE, qr = TRUE, singular.ok = TRUE,
+    contrasts = NULL, offset, designMatrix, yObserved, ...) {
+    ret.x <- x
+    ret.y <- y
+    cl <- match.call()
+    mf <- match.call(expand.dots = FALSE)
+    m <- match(c("formula", "data", "subset", "weights", "na.action",
+        "offset"), names(mf), 0L)
+    mf <- mf[c(1L, m)]
+    mf$drop.unused.levels <- TRUE
+    mf[[1L]] <- quote(stats::model.frame)
+    mf <- eval(mf, parent.frame())
+    if (method == "model.frame")
+        return(mf)
+    else if (method != "qr")
+        warning(gettextf("method = '%s' is not supported. Using 'qr'",
+            method), domain = NA)
+    mt <- attr(mf, "terms")
+    y <- yObserved
+    w <- as.vector(model.weights(mf))
+    if (!is.null(w) && !is.numeric(w))
+        stop("'weights' must be a numeric vector")
+    offset <- model.offset(mf)
+    mlm <- is.matrix(y)
+    ny <- if (mlm)
+        nrow(y)
+    else length(y)
+    if (!is.null(offset)) {
+        if (!mlm)
+            offset <- as.vector(offset)
+        if (NROW(offset) != ny)
+            stop(gettextf("number of offsets is %d, should equal %d (number of observations)",
+                NROW(offset), ny), domain = NA)
+    }
+    if (is.empty.model(mt)) {
+        x <- NULL
+        z <- list(coefficients = if (mlm) matrix(NA_real_, 0,
+            ncol(y)) else numeric(), residuals = y, fitted.values = 0 *
+            y, weights = w, rank = 0L, df.residual = if (!is.null(w)) sum(w !=
+            0) else ny)
+        if (!is.null(offset)) {
+            z$fitted.values <- offset
+            z$residuals <- y - offset
+        }
+    }
+    else {
+        x <- designMatrix
+        z <- if (is.null(w))
+            lm.fit(x, y, offset = offset, singular.ok = singular.ok,
+                ...)
+        else lm.wfit(x, y, w, offset = offset, singular.ok = singular.ok,
+            ...)
+    }
+    class(z) <- c(if (mlm) "mlm", "lm")
+    z$na.action <- attr(mf, "na.action")
+    z$offset <- offset
+    z$contrasts <- attr(x, "contrasts")
+    z$xlevels <- .getXlevels(mt, mf)
+    z$call <- cl
+    z$terms <- mt
+    if (model)
+        z$model <- mf
+    if (ret.x)
+        z$x <- x
+    if (ret.y)
+        z$y <- y
+    if (!qr)
+        z$qr <- NULL
+    z
+}
+
+
 #' @return A list with two elements.
 #'   \code{Results} contains a data table of the actual estimates.
 #'   \code{Table} contains a nicely formatted character matrix.
@@ -475,7 +586,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Model", "Type"))
 #' @export
 #' @importFrom stats model.matrix vcov formula terms update anova
 #' @importFrom data.table data.table
-#' @importFrom extraoperators %s!in%
+#' @importFrom extraoperators %s!in% %?!in%
 #' @examples
 #' m1 <- lm(mpg ~ qsec * hp, data = mtcars)
 #' modelTest(m1)
@@ -484,9 +595,40 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Model", "Type"))
 #' m2 <- lm(mpg ~ cyl, data = mtcars)
 #' modelTest(m2)
 #'
+#' m3 <- lm(mpg ~ hp * cyl, data = mtcars)
+#' modelTest(m3)
+#'
+#' m4 <- lm(sqrt(mpg) ~ hp * cyl, data = mtcars)
+#' modelTest(m4)
+#'
+#' m5 <- lm(mpg ~ sqrt(hp) * cyl, data = mtcars)
+#' modelTest(m5)
+#'
 #' ## cleanup
-#' rm(m1, m2, mtcars)
+#' rm(m1, m2, m3, m4, m5, mtcars)
 modelTest.lm <- function(object, ...) {
+  ## get formula
+  f <- formula(object)
+  fe.terms <- terms(f)
+  fe.labs <- labels(fe.terms)
+  fe.intercept <- if(identical(attr(fe.terms, "intercept"), 1L)) "1" else "0"
+
+  mf <- model.frame(object)
+  vnames <- all.vars(formula(object))
+  if (identical(ncol(mf), length(vnames))) {
+    names(mf) <- vnames
+  } else {
+    stop(sprintf(
+      "There are %d columns in the model frame [%s],\n  but %d variable names in the formula [%s].\n  If an on-the-fly transformation was applied,\n  try creating the variable / transformation as a new variable in the dataset and re-running.",
+      ncol(mf),
+      paste(names(mf), collapse = ", "),
+      length(vnames),
+      paste(vnames, collapse = ", " )))
+  }
+  x <- model.matrix(object)
+  y <- object$residuals + object$fitted.values
+
+
   cis <- confint(object)
   msum <- summary(object)
 
@@ -497,29 +639,26 @@ modelTest.lm <- function(object, ...) {
     UL = cis[,2],
     Pval = coef(msum)[, "Pr(>|t|)"])
 
-  ## get formula
-  f <- formula(object)
-  fe.terms <- terms(f)
-  fe.labs <- labels(fe.terms)
-  fe.intercept <- if(identical(attr(fe.terms, "intercept"), 1L)) "1" else "0"
 
-  out.f <- lapply(fe.labs, function(v) {
-    use.fe.labs <- fe.labs %s!in% v
-    sprintf("%s ~ %s%s%s",
-            as.character(f)[2],
-            fe.intercept,
-            if (length(use.fe.labs)) " + " else "",
-            paste(use.fe.labs, collapse = " + "))
-  })
-
-  out.tests <- do.call(rbind, lapply(seq_along(out.f), function(i) {
+  out.tests <- do.call(rbind, lapply(seq_along(fe.labs), function(i) {
     out <- data.table(
       Model = NA_character_, N_Obs = NA_real_, AIC = NA_real_,
       BIC = NA_real_, LL = NA_real_, LLDF = NA_real_, Sigma = NA_real_,
       R2 = NA_real_, F2 = NA_real_, AdjR2 = NA_real_, F = NA_real_,
       FNumDF = NA_real_, FDenDF = NA_real_, P = NA_real_)
-    if (!is.na(out.f[[i]])) {
-      reduced <- lm(as.formula(out.f[[i]]), data = model.frame(object))
+    if (!is.na(fe.labs[[i]])) {
+      use.fe.labs <- fe.labs %s!in% fe.labs[[i]]
+      out.f <- sprintf("%s ~ %s%s%s",
+              as.character(f)[2],
+              fe.intercept,
+              if (length(use.fe.labs)) " + " else "",
+              paste(use.fe.labs, collapse = " + "))
+
+      use <- attr(x, "assign") %?!in% i
+      reduced <- lm2(as.formula(out.f),
+                      data = mf,
+                      designMatrix = x[, use, drop = FALSE], yObserved = y)
+
       out <- modelCompare(object, reduced)$Comparison[Model=="Difference"]
     }
     setnames(out, old = "Model", new = "Term")

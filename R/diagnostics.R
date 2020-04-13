@@ -517,7 +517,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("originalindex"))
 #'   ev.perc = .1)$Residuals
 #'
 #' residualDiagnostics(
-#'   lm(mpg ~ hp, data = mtcars, na.action = "na.omit"),
+#'   lm(sqrt(mpg) ~ hp, data = mtcars, na.action = "na.omit"),
 #'   ev.perc = .1)$Residuals
 #' }
 residualDiagnostics.lm <- function(object, ev.perc = .001,

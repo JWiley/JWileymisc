@@ -89,6 +89,15 @@ mtcars$cyl <- factor(mtcars$cyl)
 m2 <- lm(mpg ~ cyl, data = mtcars)
 modelTest(m2)
 
+m3 <- lm(mpg ~ hp * cyl, data = mtcars)
+modelTest(m3)
+
+m4 <- lm(sqrt(mpg) ~ hp * cyl, data = mtcars)
+modelTest(m4)
+
+m5 <- lm(mpg ~ sqrt(hp) * cyl, data = mtcars)
+modelTest(m5)
+
 ## cleanup
-rm(m1, m2, mtcars)
+rm(m1, m2, m3, m4, m5, mtcars)
 }

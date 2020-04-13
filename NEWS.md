@@ -1,3 +1,15 @@
+# JWileymisc 1.1.1
+
+## Bug Fixes
+* `modelTest()` now works correctly when there are interaction terms
+  with categorical variables and when most "on-the-fly" transformations are
+  performed, such as `log()` etc. Does not work when new variables
+  that are a composite of multiple variables are created, e.g.,
+  `I(hp + wt)`, but a more informative error message is given.
+* Added the correct version requirements for `data.table` to the
+  DESCRIPTION and dependencies.
+
+
 # JWileymisc 1.1.0
 
 ## Changes

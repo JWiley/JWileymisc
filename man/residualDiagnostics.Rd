@@ -84,7 +84,7 @@ residualDiagnostics(
   ev.perc = .1)$Residuals
 
 residualDiagnostics(
-  lm(mpg ~ hp, data = mtcars, na.action = "na.omit"),
+  lm(sqrt(mpg) ~ hp, data = mtcars, na.action = "na.omit"),
   ev.perc = .1)$Residuals
 }
 }

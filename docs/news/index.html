@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -128,9 +128,23 @@
       <small>Source: <a href='https://github.com/JWiley/JWileymisc/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="jwileymisc-111" class="section level1">
+<h1 class="page-header">
+<a href="#jwileymisc-111" class="anchor"></a>JWileymisc 1.1.1<small> Unreleased </small>
+</h1>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li>
+<code><a href="../reference/modelTest.html">modelTest()</a></code> now works correctly when there are interaction terms with categorical variables and when most “on-the-fly” transformations are performed, such as <code><a href="https://rdrr.io/r/base/Log.html">log()</a></code> etc. Does not work when new variables that are a composite of multiple variables are created, e.g., <code><a href="https://rdrr.io/r/base/AsIs.html">I(hp + wt)</a></code>, but a more informative error message is given.</li>
+<li>Added the correct version requirements for <code>data.table</code> to the DESCRIPTION and dependencies.</li>
+</ul>
+</div>
+</div>
     <div id="jwileymisc-110" class="section level1">
 <h1 class="page-header">
-<a href="#jwileymisc-110" class="anchor"></a>JWileymisc 1.1.0<small> Unreleased </small>
+<a href="#jwileymisc-110" class="anchor"></a>JWileymisc 1.1.0<small> 2020-01-22 </small>
 </h1>
 <div id="changes" class="section level2">
 <h2 class="hasAnchor">
@@ -144,9 +158,9 @@
 <h1 class="page-header">
 <a href="#jwileymisc-101" class="anchor"></a>JWileymisc 1.0.1<small> 2019-12-11 </small>
 </h1>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>
 <code><a href="../reference/residualDiagnostics.html">residualDiagnostics.lm()</a></code> and so too <code>modelDiagnostics.lm</code> would return the index of extreme values based on the complete data used for modelling, not of the original input dataset. This made it difficult to identify and remove extreme values in subsequent model runs. This is now corrected.</li>
@@ -185,9 +199,9 @@
 <li><p><code><a href="../reference/egltable.html">egltable()</a></code> Function has added effect sizes when multiple groups are compared including Cohen’s d for two groups, eta-squared for multiple groups, and phi for categorical variables.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>
 <code>testdistr()</code> now only finds extreme values for the right tail of a chi-square distribution.</li>
@@ -210,9 +224,9 @@
 <code>ezMULTINOM()</code> is now deprecated in favor of the new, more generic <code>detailedTests()</code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug Fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li><p><code>testdistr()</code> now creates more appropriate plots for discrete distributions including the Poisson and Negative Binomial.</p></li>
 <li><p><code><a href="../reference/moments.html">moments()</a></code> now updated to accomodate changes in the lavaan package (thanks to Yves Rosseel)</p></li>
@@ -248,9 +262,9 @@
 <li><p><code>logicals</code> A series of support functions for findings values in a particular range, such as <code>%gele%</code> for values greater than or equal to the min and less than or equal to the max as well as to automatically subset the data when prefixed with an s, <code>%sgele%</code> <code>%sin%</code> etc.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug Fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li><p><code><a href="../reference/winsorizor.html">winsorizor()</a></code> now properly handles atomic data. Fixes an issue where variables in a data table would be atomic after calling the <code><a href="https://rdrr.io/r/base/scale.html">scale()</a></code> function and <code><a href="../reference/winsorizor.html">winsorizor()</a></code> would fail.</p></li>
 <li><p><code><a href="../reference/egltable.html">egltable()</a></code> now works with data.tables</p></li>
@@ -282,6 +296,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#jwileymisc-111">1.1.1</a></li>
         <li><a href="#jwileymisc-110">1.1.0</a></li>
         <li><a href="#jwileymisc-101">1.0.1</a></li>
         <li><a href="#jwileymisc-100">1.0.0</a></li>
