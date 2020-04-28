@@ -4,7 +4,8 @@
 \name{aces_daily}
 \alias{aces_daily}
 \title{Multilevel Daily Data Example}
-\format{A data frame containing 19 variables.
+\format{
+A data frame containing 19 variables.
 \describe{
   \item{UserID}{A unique identifier for each individual}
   \item{SurveyDay}{The date each observation occured on}
@@ -25,7 +26,8 @@
   \item{COPEPrc}{Emotional processing coping on a 1--4 scale, repeated 1x daily at the evening survey}
   \item{COPEExp}{Emotional exprsesion coping on a 1--4 scale, repeated 1x daily at the evening survey}
   \item{COPEDis}{Mental disengagement coping on a 1--4 scale, repeated 1x daily at the evening survey}
-}}
+}
+}
 \usage{
 aces_daily
 }

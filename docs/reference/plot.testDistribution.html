@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,7 +42,6 @@
 <meta property="og:title" content="Plot method for testDistribution objects — plot.testDistribution" />
 <meta property="og:description" content="Make plots of testDistribution objects, including
 density and QQ plots." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -56,7 +59,7 @@ density and QQ plots." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -109,7 +112,7 @@ density and QQ plots." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/JWiley/JWileymisc">
+  <a href="https://github.com/JWiley/JWileymisc/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -138,7 +141,7 @@ density and QQ plots.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for testDistribution</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(
   <span class='no'>x</span>,
   <span class='no'>y</span>,
   <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -225,54 +228,49 @@ This results in 1 * smallest distance between points / 5 being used.</p></td>
   <span class='kw'>Ypois</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span>(<span class='fl'>200</span>, <span class='fl'>4</span>))
 
 <span class='co'>## testing and graphing</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ybeta</span>, <span class='st'>"beta"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>shape1</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>shape2</span> <span class='kw'>=</span> <span class='fl'>4</span>)))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ychisq</span>, <span class='st'>"chisq"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>8</span>)))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ybeta</span>, <span class='st'>"beta"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>shape1</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>shape2</span> <span class='kw'>=</span> <span class='fl'>4</span>)))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ychisq</span>, <span class='st'>"chisq"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>8</span>)))
 
 <span class='co'>## for chi-square distribution, extreme values only on</span>
 <span class='co'>## the right tail</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ychisq</span>, <span class='st'>"chisq"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>8</span>),
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ychisq</span>, <span class='st'>"chisq"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>8</span>),
   <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='st'>"empirical"</span>, <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>.1</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ychisq</span>, <span class='st'>"chisq"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>8</span>),
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ychisq</span>, <span class='st'>"chisq"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>8</span>),
   <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='st'>"theoretical"</span>, <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>.1</span>))
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Yf</span>, <span class='st'>"f"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>df1</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>df2</span> <span class='kw'>=</span> <span class='fl'>10</span>)))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ygamma</span>, <span class='st'>"gamma"</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ynbinom</span>, <span class='st'>"poisson"</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ynbinom</span>, <span class='st'>"nbinom"</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ypois</span>, <span class='st'>"poisson"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Yf</span>, <span class='st'>"f"</span>, <span class='kw'>starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>df1</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>df2</span> <span class='kw'>=</span> <span class='fl'>10</span>)))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ygamma</span>, <span class='st'>"gamma"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ynbinom</span>, <span class='st'>"poisson"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ynbinom</span>, <span class='st'>"nbinom"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ypois</span>, <span class='st'>"poisson"</span>))
 
 <span class='co'>## compare log likelihood of two different distributions</span>
 <span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ygamma</span>, <span class='st'>"normal"</span>)$<span class='no'>Distribution</span>$<span class='no'>LL</span>
 <span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ygamma</span>, <span class='st'>"gamma"</span>)$<span class='no'>Distribution</span>$<span class='no'>LL</span>
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ynorm</span>, <span class='st'>"normal"</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>d</span>$<span class='no'>Ynorm</span>, <span class='fl'>10</span>, <span class='fl'>1000</span>), <span class='st'>"normal"</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>d</span>$<span class='no'>Ynorm</span>, <span class='st'>"normal"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>d</span>$<span class='no'>Ynorm</span>, <span class='fl'>10</span>, <span class='fl'>1000</span>), <span class='st'>"normal"</span>,
   <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='st'>"theoretical"</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>d</span>$<span class='no'>Ynorm</span>, <span class='fl'>10</span>, <span class='fl'>1000</span>), <span class='st'>"normal"</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>d</span>$<span class='no'>Ynorm</span>, <span class='fl'>10</span>, <span class='fl'>1000</span>), <span class='st'>"normal"</span>,
   <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='st'>"theoretical"</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>mtcars</span>, <span class='st'>"mvnormal"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>mtcars</span>, <span class='st'>"mvnormal"</span>))
 
 <span class='co'>## for multivariate normal mahalanobis distance</span>
 <span class='co'>## which follows a chi-square distribution, extreme values only on</span>
 <span class='co'>## the right tail</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>mtcars</span>, <span class='st'>"mvnormal"</span>, <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='st'>"empirical"</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>mtcars</span>, <span class='st'>"mvnormal"</span>, <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='st'>"empirical"</span>,
   <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>.1</span>))
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>mtcars</span>, <span class='st'>"mvnormal"</span>, <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='st'>"theoretical"</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fu'><a href='testDistribution.html'>testDistribution</a></span>(<span class='no'>mtcars</span>, <span class='st'>"mvnormal"</span>, <span class='kw'>extremevalues</span> <span class='kw'>=</span> <span class='st'>"theoretical"</span>,
   <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>.1</span>))
 
 <span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>d</span>) <span class='co'>## cleanup</span>
 }</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -283,7 +281,7 @@ This results in 1 * smallest distance between points / 5 being used.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,7 +43,6 @@
 <meta property="og:description" content="This function is designed to calculate the descriptive statistics and
 summaries that are often reported on raw data when the main analyses
 use structural equation modelling." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -57,7 +60,7 @@ use structural equation modelling." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -110,7 +113,7 @@ use structural equation modelling." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/JWiley/JWileymisc">
+  <a href="https://github.com/JWiley/JWileymisc/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -472,7 +475,7 @@ algorithm, the default.</p>
 <span class='no'>Xmiss</span>[<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>Xmiss</span>), <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>Xmiss</span>) * <span class='fl'>.10</span>)] <span class='kw'>&lt;-</span> <span class='fl'>NA</span>
 <span class='no'>Xmiss</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Xmiss</span>)
 
-<span class='fu'>SEMSummary</span>(~ <span class='no'>.</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Xmiss</span>, <span class='kw'>use</span> <span class='kw'>=</span> <span class='st'>"fiml"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: lavaan WARNING: estimation of the baseline model failed.</span></div><div class='output co'>#&gt; $names
+<span class='fu'>SEMSummary</span>(~ <span class='no'>.</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Xmiss</span>, <span class='kw'>use</span> <span class='kw'>=</span> <span class='st'>"fiml"</span>)</div><div class='output co'>#&gt; $names
 #&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" 
 #&gt; 
 #&gt; $n
@@ -484,25 +487,25 @@ algorithm, the default.</p>
 #&gt; 
 #&gt; $mu
 #&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
-#&gt;     5.859049     3.063777     3.744654     1.199088 
+#&gt;     5.888148     3.070423     3.824806     1.188060 
 #&gt; 
 #&gt; $stdev
 #&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
-#&gt;    0.8315349    0.4326463    1.7393949    0.7630099 
+#&gt;    0.8106614    0.4362621    1.7365569    0.7654224 
 #&gt; 
 #&gt; $Sigma
 #&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
-#&gt; Sepal.Length   0.69145033 -0.04277025     1.255776   0.5177620
-#&gt; Sepal.Width   -0.04277025  0.18718283    -0.325358  -0.1222371
-#&gt; Petal.Length   1.25577618 -0.32535800     3.025494   1.2796579
-#&gt; Petal.Width    0.51776205 -0.12223710     1.279658   0.5821840
+#&gt; Sepal.Length   0.65717192 -0.06546432    1.1950000   0.4816835
+#&gt; Sepal.Width   -0.06546432  0.19032464   -0.3128783  -0.1441473
+#&gt; Petal.Length   1.19500000 -0.31287831    3.0156298   1.2808190
+#&gt; Petal.Width    0.48168347 -0.14414730    1.2808190   0.5858714
 #&gt; 
 #&gt; $sSigma
 #&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
-#&gt; Sepal.Length    1.0000000  -0.1188853    0.8682276   0.8160553
-#&gt; Sepal.Width    -0.1188853   1.0000000   -0.4323449  -0.3702882
-#&gt; Petal.Length    0.8682276  -0.4323449    1.0000000   0.9641965
-#&gt; Petal.Width     0.8160553  -0.3702882    0.9641965   1.0000000
+#&gt; Sepal.Length    1.0000000  -0.1851048    0.8488665   0.7762848
+#&gt; Sepal.Width    -0.1851048   1.0000000   -0.4129894  -0.4316760
+#&gt; Petal.Length    0.8488665  -0.4129894    1.0000000   0.9636018
+#&gt; Petal.Width     0.7762848  -0.4316760    0.9636018   1.0000000
 #&gt; 
 #&gt; $coverage
 #&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
@@ -513,26 +516,20 @@ algorithm, the default.</p>
 #&gt; 
 #&gt; $pvalue
 #&gt;              Sepal.Length  Sepal.Width Petal.Length  Petal.Width
-#&gt; Sepal.Length           NA 1.831070e-01 0.000000e+00 0.000000e+00
-#&gt; Sepal.Width      0.183107           NA 5.321074e-07 1.974387e-05
-#&gt; Petal.Length     0.000000 5.321074e-07           NA 0.000000e+00
-#&gt; Petal.Width      0.000000 1.974387e-05 0.000000e+00           NA
+#&gt; Sepal.Length           NA 3.721115e-02 0.000000e+00 0.000000e+00
+#&gt; Sepal.Width    0.03721115           NA 1.871406e-06 4.493449e-07
+#&gt; Petal.Length   0.00000000 1.871406e-06           NA 0.000000e+00
+#&gt; Petal.Width    0.00000000 4.493449e-07 0.000000e+00           NA
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "SEMSummary"</div><div class='input'>
 <span class='co'>## clean up</span>
 <span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>Xmiss</span>)</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -543,7 +540,7 @@ algorithm, the default.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

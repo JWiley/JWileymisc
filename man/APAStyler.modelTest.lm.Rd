@@ -6,7 +6,8 @@
 \usage{
 \method{APAStyler}{modelTest.lm}(
   object,
-  format = list(FixedEffects = c("\%s\%s [\%s, \%s]"), EffectSizes = c("f2 = \%s, \%s")),
+  format = list(FixedEffects = c("\%s\%s [\%s, \%s]"), EffectSizes =
+    c("f2 = \%s, \%s")),
   digits = 2,
   pcontrol = list(digits = 3, stars = TRUE, includeP = FALSE, includeSign = FALSE,
     dropLeadingZero = TRUE),
