@@ -113,9 +113,10 @@ test_that("modelTest works with vglm objects.", {
 test_that("modelTest works with vglm objects with multiple predictors.", {
   mtcars$cyl <- factor(mtcars$cyl)
   set.seed(1234)
-  m <- VGAM::vglm(cyl ~ qsec + jitter(hp),
-                  family = VGAM::multinomial(), data = mtcars)
-  mt <- modelTest(m)
+  expect_warning(
+    m <- VGAM::vglm(cyl ~ jitter(qsec) + jitter(hp, 2),
+                    family = VGAM::multinomial(), data = mtcars))
+  expect_warning(mt <- modelTest(m))
   expect_is(mt, "modelTest.vglm")
   expect_is(APAStyler(mt), "data.table")
   expect_is(APAStyler(mt, OR = FALSE), "data.table")

@@ -139,3 +139,4 @@ test_that("testDistribution works with a negative binomial distribution", {
   expect_that(m$Data, is_a("data.table"))
 
 })
+
