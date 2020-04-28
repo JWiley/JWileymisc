@@ -64,13 +64,6 @@ test_that("testDistribution works with a multivariate normal distribution", {
 
   x <- as.data.frame(scale(mtcars[, 1:3]))
   x[1, 1] <- NA
-  expect_warning(m <- testDistribution(x, distr = "mvnormal", use = "fiml"))
-  expect_is(m, "testDistribution")
-
-  expect_invisible(td <- plot(m, plot = FALSE))
-  expect_length(td, 4)
-  expect_is(td$testDistribution, "testDistribution")
-  expect_invisible(plot(m, plot = TRUE))
 
   expect_is(
     testDistribution(x, distr = "mvnormal", use = "pairwise.complete.obs"),
@@ -81,6 +74,19 @@ test_that("testDistribution works with a multivariate normal distribution", {
       matrix(c(1:8, NA), 3), distr = "mvnormal",
       mu = c(1, 2, 3), sigma = diag(0, 3, 3)),
     "testDistribution")
+})
+
+test_that("testDistribution works with a multivariate normal distribution and missing data", {
+  skip_on_cran()
+  x <- as.data.frame(scale(mtcars[, 1:3]))
+  x[1, 1] <- NA
+  m <- testDistribution(x, distr = "mvnormal", use = "fiml")
+  expect_is(m, "testDistribution")
+
+  expect_invisible(td <- plot(m, plot = FALSE))
+  expect_length(td, 4)
+  expect_is(td$testDistribution, "testDistribution")
+  expect_invisible(plot(m, plot = TRUE))
 })
 
 test_that("testDistribution works with a beta distribution", {
