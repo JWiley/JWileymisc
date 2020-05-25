@@ -26,6 +26,18 @@ test_that("meanCircular works", {
     meanCircular(c(23, 1, NA), max = 24, na.rm = TRUE),
     0)
   expect_equivalent(
+    meanCircular(1:3, max = 24, na.rm = TRUE),
+    2)
+  expect_equivalent(
+    meanCircular(21:23, max = 24, na.rm = TRUE),
+    22)
+  expect_equivalent(
+    meanCircular(c(6, 21), max = 24),
+    1.5)
+  expect_equivalent(
+    meanCircular(c(6, 23), max = 24),
+    2.5)
+  expect_equivalent(
     meanCircular(c(NA_real_), max = 24, na.rm = TRUE),
     NA_real_)
   expect_equivalent(
@@ -34,6 +46,9 @@ test_that("meanCircular works", {
   expect_equivalent(
     meanCircular(24, max = 24),
     0)
+  expect_equivalent(
+    meanCircular(c(355, 5, 15), max = 360),
+    5)
   expect_error(meanCircular("a"))
   expect_error(meanCircular(99, max = 24))
   expect_error(meanCircular(-1, max = 24))

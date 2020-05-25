@@ -132,17 +132,20 @@ plot.SEMSummary.list <- function(x, y, which, plot = TRUE, ...) {
 #' # randomly set 25% of the data to missing
 #' set.seed(10)
 #' dat[sample(length(dat), length(dat) * .25)] <- NA
+#' cor(dat, use = "pair")
+#' cor(dat, use = "complete")
 #'
 #' # create a summary of the data (including coverage matrix)
-#' sdat <- SEMSummary(~ ., data = dat)
+#' sdat <- SEMSummary(~ ., data = dat, use = "pair")
+#' str(sdat)
 #' # using the plot method for SEMSummary (which basically just calls corplot)
 #' plot(sdat)
 #'
 #' ## getting p values instaed of coverage
-#' # plot(sdat, type = "p")
+#' plot(sdat, type = "p")
 #'
 #' ## showing correlations instead of coverage
-#' # plot(sdat, type = "cor")
+#' plot(sdat, type = "cor")
 #'
 #' # use the control.grobs argument to adjust the coverage scaling
 #' # to go from 0 to 1 rather than the range of coverage
@@ -205,9 +208,10 @@ corplot <- function(x, coverage, pvalues,
 
   mx <- reshape2.melt.matrix(x, value.name = "r")
   mx$Var1 <- factor(mx[, "Var1"], levels = n)
-  mx$Var2 <- factor(mx[, "Var2"], levels = n)
+  mx$Var2 <- factor(mx[, "Var2"], levels = rev(n))
   mx$correlation <- gsub(".+\\.", ".", format(round(mx[, "r"],
     digits = digits), digits = digits, nsmall = digits))
+  mx$correlation <- ifelse(mx$r < 0, paste0("-", mx$correlation), mx$correlation)
   ## deal with cases where correlations are 1
   mx$correlation[mx$r == 1] <- "1"
   ## set diagonals to blank
@@ -226,15 +230,19 @@ corplot <- function(x, coverage, pvalues,
     mx$p[mx[, "Var1"] == mx[, "Var2"]] <- ""
   }
 
+  mx$both <- mx$correlation
+  ## mx$both[which(upper.tri(x))] <-   mx$p[which(upper.tri(x))]
+
   defaults <- list(
     main = quote(ggplot(mx, aes_string(x = "Var1", y = "Var2", fill = "r"))),
     tiles = quote(geom_tile()),
     gradient = quote(scale_fill_gradientn(name = "Correlation",
       guide = guide_colorbar(),
-      colours = c("blue", "white", "red"), limits = c(-1, 1),
+      ## default colours from: https://colorbrewer2.org/#type=diverging&scheme=PuOr&n=3
+      colours = c("#998ec3", "#f7f7f7", "#f1a340"), limits = c(-1, 1),
       breaks = c(-.99, -.5, 0, .5, .99), labels = c("-1", "-.5", "0", "+.5", "+1"))),
     area = quote(scale_size_area()),
-    text = quote(geom_text(aes(label = correlation), size = 3, vjust = 0)),
+    text = quote(geom_text(aes(label = both), size = 3, vjust = 0)),
     theme = quote(theme(axis.title = element_blank())))
 
   i <- names(defaults)[!names(defaults) %in% names(control.grobs)]

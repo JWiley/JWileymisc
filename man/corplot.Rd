@@ -78,17 +78,20 @@ dat <- as.matrix(iris[, 1:4])
 # randomly set 25\% of the data to missing
 set.seed(10)
 dat[sample(length(dat), length(dat) * .25)] <- NA
+cor(dat, use = "pair")
+cor(dat, use = "complete")
 
 # create a summary of the data (including coverage matrix)
-sdat <- SEMSummary(~ ., data = dat)
+sdat <- SEMSummary(~ ., data = dat, use = "pair")
+str(sdat)
 # using the plot method for SEMSummary (which basically just calls corplot)
 plot(sdat)
 
 ## getting p values instaed of coverage
-# plot(sdat, type = "p")
+plot(sdat, type = "p")
 
 ## showing correlations instead of coverage
-# plot(sdat, type = "cor")
+plot(sdat, type = "cor")
 
 # use the control.grobs argument to adjust the coverage scaling
 # to go from 0 to 1 rather than the range of coverage

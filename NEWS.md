@@ -1,3 +1,9 @@
+# JWileymisc 1.1.2
+
+## Bug Fixes
+* `meanCircular()` would be off by pi in some circumstances. This has
+  been corrected and more test cases added.
+
 # JWileymisc 1.1.1
 
 ## Bug Fixes

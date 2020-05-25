@@ -28,5 +28,10 @@ meanCircular(c(6, 7, 21), max = 24)
 meanCircular(c(6, 21), max = 24)
 meanCircular(c(6, 23), max = 24)
 meanCircular(c(.91, .96, .05, .16), max = 1)
+meanCircular(c(6, 7, 8, 9), max = 24)
+meanCircular(1:3, max = 24)
+meanCircular(21:23, max = 24)
+meanCircular(c(16, 17, 18, 19), max = 24)
+meanCircular(c(355, 5, 15), max = 360)
 
 }

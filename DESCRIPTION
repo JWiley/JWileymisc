@@ -1,6 +1,6 @@
 Package: JWileymisc
 Title: Miscellaneous Utilities and Functions
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: 
     person(given = "Joshua F.",
            family = "Wiley",
