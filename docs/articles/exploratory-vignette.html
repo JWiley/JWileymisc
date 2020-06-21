@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
       <h1 data-toc-skip>Exploratory and Descriptive Statistics and Plots</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/vignettes/exploratory-vignette.Rmd"><code>vignettes/exploratory-vignette.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/R/vignettes/exploratory-vignette.Rmd"><code>R/vignettes/exploratory-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>exploratory-vignette.Rmd</code></div>
 
     </div>
@@ -529,13 +529,13 @@
 </tr>
 </tbody>
 </table>
-<p>Plot methods exist for <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> objects. Numbers can be p-values or correlations. By default, another useful feature is that hierarchical clustering is used to group similar variables together in clusters, provided a more useful sorting of the data than many “default” correlation matrices. If a specific order is desired, you can use the <code>order = "asis"</code> option to keep the variable order the same as written in <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code>.</p>
+<p>Plot methods exist for <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> objects. By default, above the diagonal are correlations and below the diagonal are p-values. However, the type argument can be set (see <code><a href="../reference/corplot.html">?corplot</a></code>) to get all values to be either correlations or p-values. By default, another useful feature is that hierarchical clustering is used to group similar variables together in clusters, provided a more useful sorting of the data than many “default” correlation matrices. If a specific order is desired, you can use the <code>order = "asis"</code> option to keep the variable order the same as written in <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code>.</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r">
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">m</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"cor"</span>) +
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">m</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Order by hierarchical clustering"</span>)</pre></body></html></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r">
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">m</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"cor"</span>, <span class="kw">order</span> <span class="kw">=</span> <span class="st">"asis"</span>) +
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">m</span>, <span class="kw">order</span> <span class="kw">=</span> <span class="st">"asis"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Order as written"</span>)</pre></body></html></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-19-2.png" width="700"></p>
 <div class="sourceCode" id="cb14"><html><body><pre class="r">

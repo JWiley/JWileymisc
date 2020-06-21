@@ -15,7 +15,8 @@ is.testDistribution(x)
 
 \method{testDistribution}{default}(
   x,
-  distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom", "poisson", "mvnormal"),
+  distr = c("normal", "beta", "chisq", "f", "gamma", "geometric", "nbinom", "poisson",
+    "uniform", "mvnormal"),
   na.rm = TRUE,
   starts,
   extremevalues = c("no", "theoretical", "empirical"),
@@ -36,8 +37,8 @@ the mean and covariances of the data.}
 
 \item{distr}{A character string indicating the distribution to be tested.
 Currently one of: \dQuote{normal}, \dQuote{beta}, \dQuote{chisq} (chi-squared),
-\dQuote{f}, \dQuote{gamma}, \dQuote{nbinom} (negative binomial),
-\dQuote{poisson}, or \dQuote{mvnormal} for multivariate normal where Mahalanobis
+\dQuote{f}, \dQuote{gamma}, \dQuote{geometric}, \dQuote{nbinom} (negative binomial),
+\dQuote{poisson}, \dQuote{uniform}, or \dQuote{mvnormal} for multivariate normal where Mahalanobis
 distances are calculated and compared against a Chi-squared distribution with
 degrees of freedom equal to the number of variables.}
 
@@ -106,8 +107,6 @@ will be used based on \code{covMcd} from the \pkg{robustbase} package.
 }
 \examples{
 
-\dontrun{
-
 ## example data
 set.seed(1234)
 d <- data.table::data.table(
@@ -129,6 +128,11 @@ testDistribution(d$Ychisq, "chisq", starts = list(df = 8),
   extremevalues = "empirical", ev.perc = .1)
 testDistribution(d$Ychisq, "chisq", starts = list(df = 8),
   extremevalues = "theoretical", ev.perc = .1)
+
+\dontrun{
+
+testDistribution(d$Yf, "uniform")
+testDistribution(d$Ypois, "geometric")
 
 testDistribution(d$Yf, "f", starts = list(df1 = 5, df2 = 10))
 testDistribution(d$Ygamma, "gamma")

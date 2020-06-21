@@ -93,6 +93,17 @@ Xmiss <- as.data.frame(Xmiss)
 
 SEMSummary(~ ., data = Xmiss, use = "fiml")
 
+
+## pairwise
+APAStyler(SEMSummary(~ ., data = Xmiss, use = "pair"),
+  type = "cor")
+
+## same as cor()
+cor(Xmiss, use = "pairwise.complete.obs")
+
+## complete cases only
+SEMSummary(~ ., data = Xmiss, use = "comp")
+
 ## clean up
 rm(Xmiss)
 }

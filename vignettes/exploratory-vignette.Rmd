@@ -271,8 +271,11 @@ pander::pandoc.table(
 ```
 
 
-Plot methods exist for `SEMSummary()` objects. Numbers can be p-values
-or correlations. By default, another useful feature is that
+Plot methods exist for `SEMSummary()` objects. 
+By default, above the diagonal are correlations and below the diagonal
+are p-values. However, the type argument can be set (see `?corplot`)
+to get all values to be either correlations or p-values. 
+By default, another useful feature is that
 hierarchical clustering is used to group similar variables together in
 clusters, provided a more useful sorting of the data than many
 "default" correlation matrices. If a specific order is desired, you
@@ -281,10 +284,10 @@ same as written in `SEMSummary()`.
 
 ```{r}
 
-plot(m, type = "cor") +
+plot(m) +
   ggtitle("Order by hierarchical clustering")
 
-plot(m, type = "cor", order = "asis") +
+plot(m, order = "asis") +
   ggtitle("Order as written")
 
 ``` 

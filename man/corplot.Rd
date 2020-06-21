@@ -8,7 +8,7 @@ corplot(
   x,
   coverage,
   pvalues,
-  type = c("cor", "p", "coverage"),
+  type = c("both", "cor", "p", "coverage"),
   digits = 2,
   order = c("cluster", "asis"),
   ...,
@@ -28,8 +28,9 @@ useful when the correlation matrix is a pairwise present.}
 
 \item{type}{A character string indicating what to show on top of the heatmap. Can be
 \sQuote{coverage}, in which case bubble points show coverage;
-\sQuote{p}, in which case p values are shown, or
-\sQuote{cor}, in which case correlations are shown.
+\sQuote{p}, in which case p values are shown;
+\sQuote{cor}, in which case correlations are shown; or
+\sQuote{both}, in which case both correlations and p-values are shown.
 Only has an effect if a coverage (or pvalue) matrix is passed
 also. Defaults to \code{cor}.}
 
@@ -85,22 +86,26 @@ cor(dat, use = "complete")
 sdat <- SEMSummary(~ ., data = dat, use = "pair")
 str(sdat)
 # using the plot method for SEMSummary (which basically just calls corplot)
+## getting correlations above diagonal and p values below diagonal#'
 plot(sdat)
 
-## getting p values instaed of coverage
-plot(sdat, type = "p")
-
-## showing correlations instead of coverage
+## get correlations only
 plot(sdat, type = "cor")
+
+## showing coverage
+plot(sdat, type = "coverage")
 
 # use the control.grobs argument to adjust the coverage scaling
 # to go from 0 to 1 rather than the range of coverage
 corplot(x = sdat$sSigma, coverage = sdat$coverage,
+  type = "coverage",
   control.grobs = list(area = quote(scale_size_area(limits = c(0, 1))))
 )
 
 # also works with plot() on a SEMSummary
-plot(x = sdat, control.grobs = list(area = quote(scale_size_area(limits = c(0, 1)))))
+plot(x = sdat, type = "coverage",
+  control.grobs = list(area = quote(scale_size_area(limits = c(0, 1))))
+)
 
 rm(dat, sdat)
 }

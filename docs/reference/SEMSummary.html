@@ -74,7 +74,7 @@ use structural equation modelling." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -520,6 +520,77 @@ algorithm, the default.</p>
 #&gt; Sepal.Width    0.03721115           NA 1.871406e-06 4.493449e-07
 #&gt; Petal.Length   0.00000000 1.871406e-06           NA 0.000000e+00
 #&gt; Petal.Width    0.00000000 4.493449e-07 0.000000e+00           NA
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "SEMSummary"</div><div class='input'>
+
+<span class='co'>## pairwise</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span>(<span class='fu'>SEMSummary</span>(~ <span class='no'>.</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Xmiss</span>, <span class='kw'>use</span> <span class='kw'>=</span> <span class='st'>"pair"</span>),
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"cor"</span>)</div><div class='output co'>#&gt;                 N   M    SD   1.  2.    3.    4.   
+#&gt; 1. Sepal.Length 135 5.89 0.81  -  -0.18  0.86  0.81
+#&gt; 2. Sepal.Width  142 3.07 0.44      -    -0.43 -0.43
+#&gt; 3. Petal.Length 129 3.82 1.74            -     0.97
+#&gt; 4. Petal.Width  134 1.19 0.77                  -   
+#&gt; 
+#&gt; Percentage of coverage for each pairwise covariance or correlation
+#&gt; 
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length 0.9          0.85        0.77         0.8        
+#&gt; Sepal.Width               0.95        0.83         0.84       
+#&gt; Petal.Length                          0.86         0.76       
+#&gt; Petal.Width                                        0.89       </div><div class='input'>
+<span class='co'>## same as cor()</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span>(<span class='no'>Xmiss</span>, <span class='kw'>use</span> <span class='kw'>=</span> <span class='st'>"pairwise.complete.obs"</span>)</div><div class='output co'>#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length    1.0000000  -0.1832230    0.8646983   0.8119316
+#&gt; Sepal.Width    -0.1832230   1.0000000   -0.4291999  -0.4293565
+#&gt; Petal.Length    0.8646983  -0.4291999    1.0000000   0.9650212
+#&gt; Petal.Width     0.8119316  -0.4293565    0.9650212   1.0000000</div><div class='input'>
+<span class='co'>## complete cases only</span>
+<span class='fu'>SEMSummary</span>(~ <span class='no'>.</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Xmiss</span>, <span class='kw'>use</span> <span class='kw'>=</span> <span class='st'>"comp"</span>)</div><div class='output co'>#&gt; $names
+#&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" 
+#&gt; 
+#&gt; $n
+#&gt; [1] 150
+#&gt; 
+#&gt; $nmissing
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#&gt;           15            8           21           16 
+#&gt; 
+#&gt; $mu
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#&gt;     5.853608     3.037113     3.802062     1.229897 
+#&gt; 
+#&gt; $stdev
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#&gt;    0.7987049    0.4194042    1.7165845    0.7479367 
+#&gt; 
+#&gt; $Sigma
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length   0.63792955 -0.05919781    1.1747841   0.4824431
+#&gt; Sepal.Width   -0.05919781  0.17589991   -0.3682023  -0.1415378
+#&gt; Petal.Length   1.17478415 -0.36820232    2.9466624   1.2399377
+#&gt; Petal.Width    0.48244308 -0.14153780    1.2399377   0.5594094
+#&gt; 
+#&gt; $sSigma
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length    1.0000000  -0.1767203    0.8568534   0.8075973
+#&gt; Sepal.Width    -0.1767203   1.0000000   -0.5114327  -0.4512059
+#&gt; Petal.Length    0.8568534  -0.5114327    1.0000000   0.9657613
+#&gt; Petal.Width     0.8075973  -0.4512059    0.9657613   1.0000000
+#&gt; 
+#&gt; $coverage
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length    0.9000000   0.8466667    0.7733333   0.8000000
+#&gt; Sepal.Width     0.8466667   0.9466667    0.8266667   0.8400000
+#&gt; Petal.Length    0.7733333   0.8266667    0.8600000   0.7600000
+#&gt; Petal.Width     0.8000000   0.8400000    0.7600000   0.8933333
+#&gt; 
+#&gt; $pvalue
+#&gt;              Sepal.Length  Sepal.Width Petal.Length  Petal.Width
+#&gt; Sepal.Length           NA 4.686510e-02 0.000000e+00 0.000000e+00
+#&gt; Sepal.Width     0.0468651           NA 1.278788e-09 1.142829e-07
+#&gt; Petal.Length    0.0000000 1.278788e-09           NA 0.000000e+00
+#&gt; Petal.Width     0.0000000 1.142829e-07 0.000000e+00           NA
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "SEMSummary"</div><div class='input'>
