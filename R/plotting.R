@@ -98,8 +98,9 @@ plot.SEMSummary.list <- function(x, y, which, plot = TRUE, ...) {
 #'   \code{plot = "p"}.
 #' @param type A character string indicating what to show on top of the heatmap. Can be
 #'   \sQuote{coverage}, in which case bubble points show coverage;
-#'   \sQuote{p}, in which case p values are shown, or
-#'   \sQuote{cor}, in which case correlations are shown.
+#'   \sQuote{p}, in which case p values are shown;
+#'   \sQuote{cor}, in which case correlations are shown; or
+#'   \sQuote{both}, in which case both correlations and p-values are shown.
 #'   Only has an effect if a coverage (or pvalue) matrix is passed
 #'   also. Defaults to \code{cor}.
 #' @param digits The number of digits to round to when printing the
@@ -139,26 +140,30 @@ plot.SEMSummary.list <- function(x, y, which, plot = TRUE, ...) {
 #' sdat <- SEMSummary(~ ., data = dat, use = "pair")
 #' str(sdat)
 #' # using the plot method for SEMSummary (which basically just calls corplot)
+#' ## getting correlations above diagonal and p values below diagonal#'
 #' plot(sdat)
 #'
-#' ## getting p values instaed of coverage
-#' plot(sdat, type = "p")
-#'
-#' ## showing correlations instead of coverage
+#' ## get correlations only
 #' plot(sdat, type = "cor")
+#'
+#' ## showing coverage
+#' plot(sdat, type = "coverage")
 #'
 #' # use the control.grobs argument to adjust the coverage scaling
 #' # to go from 0 to 1 rather than the range of coverage
 #' corplot(x = sdat$sSigma, coverage = sdat$coverage,
+#'   type = "coverage",
 #'   control.grobs = list(area = quote(scale_size_area(limits = c(0, 1))))
 #' )
 #'
 #' # also works with plot() on a SEMSummary
-#' plot(x = sdat, control.grobs = list(area = quote(scale_size_area(limits = c(0, 1)))))
+#' plot(x = sdat, type = "coverage",
+#'   control.grobs = list(area = quote(scale_size_area(limits = c(0, 1))))
+#' )
 #'
 #' rm(dat, sdat)
 corplot <- function(x, coverage, pvalues,
-  type = c("cor", "p", "coverage"),
+  type = c("both", "cor", "p", "coverage"),
   digits = 2, order = c("cluster", "asis"), ..., control.grobs = list()) {
 
   ## copied and revised from reshape2 as otherwise creates clashes with depending on data.table package
@@ -204,7 +209,14 @@ corplot <- function(x, coverage, pvalues,
       n
     },
     asis = colnames(x)
-  )
+    )
+  x <- x[n, n]
+  if (!missing(coverage)) {
+    coverage <- coverage[n, n]
+  }
+  if (!missing(pvalues)) {
+    pvalues <- pvalues[n, n]
+  }
 
   mx <- reshape2.melt.matrix(x, value.name = "r")
   mx$Var1 <- factor(mx[, "Var1"], levels = n)
@@ -212,6 +224,7 @@ corplot <- function(x, coverage, pvalues,
   mx$correlation <- gsub(".+\\.", ".", format(round(mx[, "r"],
     digits = digits), digits = digits, nsmall = digits))
   mx$correlation <- ifelse(mx$r < 0, paste0("-", mx$correlation), mx$correlation)
+  mx$correlation <- ifelse(mx$r > 0, paste0("+", mx$correlation), mx$correlation)
   ## deal with cases where correlations are 1
   mx$correlation[mx$r == 1] <- "1"
   ## set diagonals to blank
@@ -222,16 +235,20 @@ corplot <- function(x, coverage, pvalues,
 
   if (!missing(pvalues)) {
     mx$pvalues <- reshape2.melt.matrix(pvalues, value.name = "p")[, "p"]
-    ## mx$p <- gsub(".+\\.", ".", format.pval(round(mx[, "pvalues"],
-    ##   digits = digits), digits = digits, nsmall = digits))
-    mx$p <- gsub(".+\\.", ".", format.pval(mx[, "pvalues"],
-      digits = digits, nsmall = digits))
-
+    mx$p <- formatPval(mx[, "pvalues"], d = digits + 1L, sd = digits + 1L)
     mx$p[mx[, "Var1"] == mx[, "Var2"]] <- ""
   }
 
-  mx$both <- mx$correlation
-  ## mx$both[which(upper.tri(x))] <-   mx$p[which(upper.tri(x))]
+  if (identical(type, "both") & !missing(pvalues)) {
+    topx <- x
+    topx[] <- FALSE
+    topx[which(upper.tri(topx))] <- TRUE
+
+    mx$Top <- reshape2.melt.matrix(topx)$value
+
+    mx$both <- mx$correlation
+    mx$both[mx$Top == 1] <- mx$p[mx$Top == 1]
+  }
 
   defaults <- list(
     main = quote(ggplot(mx, aes_string(x = "Var1", y = "Var2", fill = "r"))),
@@ -242,7 +259,8 @@ corplot <- function(x, coverage, pvalues,
       colours = c("#998ec3", "#f7f7f7", "#f1a340"), limits = c(-1, 1),
       breaks = c(-.99, -.5, 0, .5, .99), labels = c("-1", "-.5", "0", "+.5", "+1"))),
     area = quote(scale_size_area()),
-    text = quote(geom_text(aes(label = both), size = 3, vjust = 0)),
+    scale = quote(scale_x_discrete(position = "top") ),
+    text = quote(geom_text(aes(label = correlation), size = 3, vjust = 0)),
     theme = quote(theme(axis.title = element_blank())))
 
   i <- names(defaults)[!names(defaults) %in% names(control.grobs)]
@@ -252,12 +270,15 @@ corplot <- function(x, coverage, pvalues,
 
   if (identical(type, "coverage") & !missing(coverage)) {
     control.grobs$points = quote(geom_point(aes(size = coverage)))
-    p <- substitute(main + tiles + gradient + points + area + theme, control.grobs)
+    p <- substitute(main + tiles + gradient + points + area + scale + theme, control.grobs)
   } else if (identical(type, "p") & !missing(pvalues)) {
     control.grobs$text = quote(geom_text(aes(label = p), size = 3, vjust = 0))
-    p <- substitute(main + tiles + gradient + text + theme, control.grobs)
+    p <- substitute(main + tiles + gradient + text + scale + theme, control.grobs)
+  } else if (identical(type, "both") & !missing(pvalues)) {
+    control.grobs$text = quote(geom_text(aes(label = both), size = 3, vjust = 0))
+    p <- substitute(main + tiles + gradient + text + scale + theme, control.grobs)
   } else {
-    p <- substitute(main + tiles + gradient + text + theme, control.grobs)
+    p <- substitute(main + tiles + gradient + text + scale + theme, control.grobs)
   }
 
   eval(p)
@@ -453,7 +474,7 @@ if(getRversion() >= "2.15.1") {
 plot.testDistribution <- function(x, y, xlim = NULL, varlab = "X", plot = TRUE,
                                   rugthreshold = 500, seed = 1234, factor = 1, ...) {
 
-  if (x$distr %in% c("poisson", "nbinom")) {
+  if (x$distr %in% c("poisson", "nbinom", "geometric")) {
     tmpd <- as.data.table(prop.table(table(x$Data$Y)))
     tmpd[, V1 := as.numeric(V1)]
     tmpd$Density <- do.call(x$Distribution$d,

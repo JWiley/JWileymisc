@@ -98,8 +98,8 @@ is.testDistribution <- function(x) {
 
 #' @param distr A character string indicating the distribution to be tested.
 #'   Currently one of: \dQuote{normal}, \dQuote{beta}, \dQuote{chisq} (chi-squared),
-#'   \dQuote{f}, \dQuote{gamma}, \dQuote{nbinom} (negative binomial),
-#'   \dQuote{poisson}, or \dQuote{mvnormal} for multivariate normal where Mahalanobis
+#'   \dQuote{f}, \dQuote{gamma}, \dQuote{geometric}, \dQuote{nbinom} (negative binomial),
+#'   \dQuote{poisson}, \dQuote{uniform}, or \dQuote{mvnormal} for multivariate normal where Mahalanobis
 #'   distances are calculated and compared against a Chi-squared distribution with
 #'   degrees of freedom equal to the number of variables.
 #' @param na.rm A logical value whether to omit missing values. Defaults to \code{TRUE}.
@@ -131,7 +131,7 @@ is.testDistribution <- function(x) {
 #'   name, log likelihood (useful for comparing the fit of different distributions
 #'   to the data), and a dataset with the sorted data and theoretical quantiles.
 #' @importFrom MASS fitdistr
-#' @importFrom stats dnorm qnorm dbeta qbeta dchisq qchisq
+#' @importFrom stats dnorm qnorm dbeta qbeta dchisq qchisq dunif qunif dgeom qgeom
 #' @importFrom stats df qf dgamma qgamma dnbinom qnbinom dpois qpois
 #' @importFrom stats logLik ppoints
 #' @importFrom stats mahalanobis qchisq ppoints
@@ -143,8 +143,6 @@ is.testDistribution <- function(x) {
 #' @export
 #' @rdname testDistribution
 #' @examples
-#'
-#' \dontrun{
 #'
 #' ## example data
 #' set.seed(1234)
@@ -167,6 +165,11 @@ is.testDistribution <- function(x) {
 #'   extremevalues = "empirical", ev.perc = .1)
 #' testDistribution(d$Ychisq, "chisq", starts = list(df = 8),
 #'   extremevalues = "theoretical", ev.perc = .1)
+#'
+#' \dontrun{
+#'
+#' testDistribution(d$Yf, "uniform")
+#' testDistribution(d$Ypois, "geometric")
 #'
 #' testDistribution(d$Yf, "f", starts = list(df1 = 5, df2 = 10))
 #' testDistribution(d$Ygamma, "gamma")
@@ -197,7 +200,7 @@ is.testDistribution <- function(x) {
 #' rm(d) ## cleanup
 #' }
 testDistribution.default <- function(x,
-  distr = c("normal", "beta", "chisq", "f", "gamma", "nbinom", "poisson", "mvnormal"),
+  distr = c("normal", "beta", "chisq", "f", "gamma", "geometric", "nbinom", "poisson", "uniform", "mvnormal"),
   na.rm = TRUE, starts,
   extremevalues = c("no", "theoretical", "empirical"),
   ev.perc = .005,
@@ -335,6 +338,11 @@ testDistribution.default <- function(x,
         q = qgamma,
         Name = "Gamma",
         fit = fitdistr(x, "gamma", lower = c(.001, .001))),
+      geometric = list(
+        d = dgeom,
+        q = qgeom,
+        Name = "Geometric",
+        fit = fitdistr(x, "geometric")),
       nbinom = list(
         d = dnbinom,
         q = qnbinom,
@@ -345,6 +353,19 @@ testDistribution.default <- function(x,
         q = qpois,
         Name = "Poisson",
         fit = fitdistr(x, "poisson")),
+      uniform = list(
+        d = dunif,
+        q = qunif,
+        Name = "Uniform",
+        fit = structure(list(
+          estimate = c(min = min(x), max = max(x)),
+          sd = c(min = NA_real_, max = NA_real_),
+          vcov = structure(c(NA_real_, NA_real_, NA_real_, NA_real_), .Dim = c(2L, 2L),
+                           .Dimnames = list(
+                             c("min", "max"), c("min", "max"))),
+          n = length(x),
+          loglik = NA_real_),
+          class = "fitdistr")),
       mvnormal = list(
         d = dchisq,
         q = qchisq,

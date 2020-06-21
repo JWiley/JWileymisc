@@ -3,6 +3,13 @@
 ## Bug Fixes
 * `meanCircular()` would be off by pi in some circumstances. This has
   been corrected and more test cases added.
+* `SEMSummary()` pairwise correlations were based on the standardized
+  pairwise covariance matrix, which used the same standard deviation
+  for a variable regardless of the pair. This has now been fixed.
+  
+## Changes
+* `corplot()` uses a more color blind friendly palette and defaults to
+  showing correlations and p-values.
 
 # JWileymisc 1.1.1
 
