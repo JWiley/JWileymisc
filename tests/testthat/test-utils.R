@@ -21,6 +21,17 @@ test_that("cd changes directory", {
   expect_true(grepl(randomDIR, getwd()))
   setwd("../")
   unlink(randomDIR, TRUE, TRUE)
+
+  curdir <- getwd()
+  tdir <- tempdir()
+  setwd(tdir)
+  newdir <- file.path(tdir, paste0("abc", 2))
+  cd(tdir, "abc", 2)
+  expect_equivalent(
+    normalizePath(newdir, mustWork = FALSE),
+    normalizePath(getwd(), mustWork = FALSE))
+  unlink(newdir, TRUE, TRUE)
+  setwd(curdir)
 })
 
 test_that("cor2cov is equivalent to covariance matrix", {
@@ -42,6 +53,10 @@ test_that("corOK removes missing values correctly", {
   cormat <- corOK(cormat)
   expect_equivalent(dim(cormat$x), c(3, 3))
   expect_equivalent(cormat$keep.indices, c(2, 3, 4))
+
+  cormat <- cor(iris[, -5])
+  cormat[cbind(c(1,2), c(2,1))] <- NA  
+  expect_warning(corOK(cormat, 1))  
 })
 
 test_that("as.na converts to the correct class of missing", {
@@ -53,6 +68,23 @@ test_that("as.na converts to the correct class of missing", {
   expect_true(is.factor(as.na(factor("x"))))
   expect_equal(class(as.na(as.POSIXct("1990-01-01 10:40:04"))), c("POSIXct", "POSIXt"))
   expect_equal(class(as.na(as.POSIXlt("1990-01-01 10:40:04"))), c("POSIXlt", "POSIXt"))
+
+  ## check times (from chron package) convert properly
+  x <- structure(0.819513888888889, format = "h:m:s", class = "times")
+  expect_true(all(is.na(as.na(x))))
+  expect_equal(class(as.na(x)), class(x))
+
+  ## check dates convert
+  expect_equal(class(as.na(as.Date("2020-01-01"))), class(as.Date("2020-01-01")))
+
+  ## check zoo converts properly
+  x <- structure(1:3, index = 1:3, class = "zoo")
+  expect_true(all(is.na(as.na(x))))
+  expect_equal(class(as.na(x)), class(x))
+
+  ## check error if unknown class
+  x <- structure(1, class = "whoknows")
+  expect_error(as.na(x))  
 })
 
 test_that("naz.omit removes missing, nan, and zero length characters", {
@@ -67,6 +99,8 @@ test_that("lagk lags by k", {
     lagk(1:4, 1, factor(c("a", "a", "b", "b"))),
     c(a1 = NA, a2 = 1,
       b1 = NA, b2 = 3))
+
+  expect_true(all(is.na(lagk(1:3, k = 10))))
 })
 
 test_that("timeshift works", {
@@ -89,4 +123,7 @@ test_that("timeshift works", {
   expect_error(timeshift(c(0, 3, 6), center = 0, min = 1, max = 6))
   expect_error(timeshift(c(0, 3, 6), center = 3, min = 1, max = 6))
   expect_error(timeshift(c(0, 3, 7), center = 3, min = 0, max = 6))
+
+  expect_error(timeshift(c(0, 3, 5), center = 0, min = 0, max = 6, inverse = "what?"))
+
 })

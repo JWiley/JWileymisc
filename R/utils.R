@@ -327,7 +327,7 @@ timeshift <- function(x, center = 0, min = 0, max = 1, inverse = FALSE) {
     ifelse(x >= (max - center),
            (x + center) - max,
            x + center)
-  } else if (identical(inverse, FALSE)) {
+  } else if (isFALSE(inverse)) {
     ifelse(x < center,
            (max - (center - x)),
            x - center)

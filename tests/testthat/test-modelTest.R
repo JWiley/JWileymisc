@@ -96,7 +96,11 @@ test_that("modelTest works with lm objects.", {
                                 digits = 3, stars = FALSE,
                                 includeP = TRUE, includeSign = TRUE,
                                 dropLeadingZero = TRUE)),
-    "data.table")
+    "data.table") 
+})
+
+test_that("modelTest errors with on the fly variable creation", {
+  expect_error(modelTest(lm(mpg ~ I(wt * am), data = mtcars)))
 })
 
 test_that("modelTest works with vglm objects.", {

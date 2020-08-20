@@ -149,6 +149,32 @@ test_that("egltable works", {
   expect_equal(dim(t13), c(3L, 5L))
 
 
+  tmp <- subset(ChickWeight, Time %in% c(0, 20))
+  tmp$WeightTertile <- cut(tmp$weight,
+                           breaks = quantile(tmp$weight, c(0, 1/3, 2/3, 1), na.rm = TRUE),
+                           include.lowest = TRUE)
+  t14 <- egltable(c("weight", "WeightTertile"), g = "Time",
+                  data = tmp,
+                  idvar = "Chick", paired = TRUE)
+
+  expect_is(t14, "data.table")
+  expect_true(any(grepl("McNemar", t14$Test)))
+  expect_true(any(grepl("p < .001", t14$Test)))
+
+  expect_warning(t15 <- egltable(c("weight", "WeightTertile"), g = "Time",
+                  data = tmp,
+                  idvar = "Chick", paired = TRUE,
+                  parametric = FALSE))
+
+  expect_is(t15, "data.table")
+  expect_true(any(grepl("Wilcoxon", t15$Test)))  
+  expect_true(any(grepl("McNemar", t15$Test)))
+  expect_true(any(grepl("p < .001", t15$Test)))
+
+  tmp$Chick[1] <- NA
+  expect_error(t16 <- egltable(c("weight", "WeightTertile"), g = "Time",
+                  data = tmp,
+                  idvar = "Chick", paired = TRUE))  
 })
 
 context("winsorizor")

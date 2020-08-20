@@ -16,6 +16,7 @@ test_that("compareIVs works correctly for different numbers of DVs, IVs, Covaria
   res <- vector("list", nrow(grid))
 
   for (i in 1:2) {
+    foreach::registerDoSEQ() ## only needed to remove warning about sequential running
     res[[i]] <- compareIVs(
       dv = dv[1:grid$DV[i]],
       type = c("normal", "normal")[1:grid$DV[i]],

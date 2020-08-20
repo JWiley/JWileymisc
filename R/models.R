@@ -478,7 +478,6 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Model", "Type"))
 #' @param subset subset
 #' @param weights any weights
 #' @param na.action Defaults to \code{na.omit}
-#' @param method defaults to \dQuote{qr}
 #' @param model defaults to \code{TRUE}
 #' @param x defaults to \code{FALSE}
 #' @param y defaults to \code{FALSE}
@@ -505,7 +504,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Model", "Type"))
 #' anova(m, m2)
 #'
 #' rm(m, m2, x, y)
-lm2 <- function (formula, data, subset, weights, na.action, method = "qr",
+lm2 <- function (formula, data, subset, weights, na.action,## method = "qr",
     model = TRUE, x = FALSE, y = FALSE, qr = TRUE, singular.ok = TRUE,
     contrasts = NULL, offset, designMatrix, yObserved, ...) {
     ret.x <- x
@@ -518,11 +517,13 @@ lm2 <- function (formula, data, subset, weights, na.action, method = "qr",
     mf$drop.unused.levels <- TRUE
     mf[[1L]] <- quote(stats::model.frame)
     mf <- eval(mf, parent.frame())
-    if (method == "model.frame")
-        return(mf)
-    else if (method != "qr")
-        warning(gettextf("method = '%s' is not supported. Using 'qr'",
-            method), domain = NA)
+    ## ## currently removed as not applicable for current use
+    ## ## but may be needed if modelTest() ever expands / changes
+    ## if (method == "model.frame")
+    ##     return(mf)
+    ## else if (method != "qr")
+    ##     warning(gettextf("method = '%s' is not supported. Using 'qr'",
+    ##         method), domain = NA)
     mt <- attr(mf, "terms")
     y <- yObserved
     w <- as.vector(model.weights(mf))
