@@ -818,7 +818,7 @@ if(getRversion() >= "2.15.1") {
 ##' @importFrom ggplot2 ggplot geom_text aes scale_x_continuous theme xlab ylab coord_fixed
 ##' @importFrom ggplot2 element_blank unit geom_line geom_ribbon aes_string geom_segment
 ##' @importFrom grid arrow
-##' @importFrom cowplot theme_cowplot
+##' @importFrom ggpubr theme_pubr
 ##' @examples
 ##' ## make me
 intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
@@ -918,7 +918,7 @@ intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
     geom_text(aes(x = xz, y = yz + ', (.05 * diff(ylim)), ', label = reglab, angle = ContrastAngleZ),
               data = simpleSlopes, hjust = ', use.xmax, ') +
     scale_x_continuous(breaks = ', deparse(xbreaks), ', labels = ', deparse(xlabels), ') +
-    theme_cowplot() +
+    theme_ggpubr() +
     theme(
       legend.key.width = unit(2, "cm"),
       legend.title = element_blank(),
@@ -941,29 +941,6 @@ intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
   }
 
   p <- with(finalOut, eval(parse(text = p.code)))
-
-  ## p <- ggplot(finalOut$Predictions, aes(xz, y = yhat)) +
-  ##   geom_ribbon(aes_string(ymin = "lower", ymax = "upper", group = varyvar), alpha = .1) +
-  ##   geom_line(aes_string(linetype = varyvar), size = 2) +
-  ##   geom_text(aes(x = xz, y = yz + (.05 * diff(ylim)), label = reglab, angle = ContrastAngleZ),
-  ##             data = simpleSlopes, hjust = use.xmax) +
-  ##   scale_x_continuous(breaks = xbreaks, labels = xlabels) +
-  ##   theme_cowplot() +
-  ##   theme(
-  ##     legend.key.width = unit(2, "cm"),
-  ##     legend.title = element_blank(),
-  ##     legend.position = "bottom") +
-  ##   xlab(xlab) +
-  ##   ylab(ylab) +
-  ##   coord_fixed(ratio = ratio,
-  ##               xlim = xlim,
-  ##               ylim = ylim,
-  ##               expand = FALSE)
-  ## if (anysig) {
-  ##   for (i in length(arrow.geoms)) {
-  ##     p <- p + arrow.geoms[[i]]
-  ##   }
-  ## }
 
   finalOut$Graph <- p
   finalOut$GraphCode <- p.code

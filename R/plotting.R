@@ -35,8 +35,12 @@ plot.SEMSummary <- function(x, y, ...) {
 #' @param \dots Additional arguments passed on to the real workhorse, \code{corplot}.
 #' @method plot SEMSummary.list
 #' @seealso \code{\link{corplot}}, \code{\link{SEMSummary}}
-#' @importFrom cowplot plot_grid
+#' @importFrom ggpubr ggarrange
 #' @export
+#' @examples
+#'
+#' ## correlation matrix by am level
+#' plot(SEMSummary(~ . | am, data = mtcars))
 plot.SEMSummary.list <- function(x, y, which, plot = TRUE, ...) {
 
   n <- names(x)
@@ -46,7 +50,9 @@ plot.SEMSummary.list <- function(x, y, which, plot = TRUE, ...) {
   if (!missing(which)) {
     n <- n[which]
     if (length(n) == 1) {
-      p <- corplot(x = x[[n]]$sSigma, coverage = x[[n]]$coverage, pvalues = x[[n]]$pvalue, ...) + ggtitle(n)
+      p <- corplot(x = x[[n]]$sSigma, coverage = x[[n]]$coverage,
+                   pvalues = x[[n]]$pvalue, ...) +
+        ggtitle(n)
       print(p)
       return(invisible(p))
     }
@@ -58,14 +64,10 @@ plot.SEMSummary.list <- function(x, y, which, plot = TRUE, ...) {
   })
   names(p) <- n
 
-
   if (plot) {
     if (length(p) > 1) {
-      glegend <- get_legend(p[[1]])
-      pnolegend <- lapply(p, function(x) x + theme(legend.position = "none"))
       nc <- ceiling(sqrt(length(p)))
-      widths <- c(rep(1, length(p)), .3)
-      print(do.call(plot_grid, c(pnolegend, list(glegend), list(ncol = nc, rel_widths = widths))))
+      print(do.call(ggarrange, c(p, list(ncol = nc, common.legend = TRUE))))
     } else {
       print(p[[1]])
     }
@@ -300,10 +302,13 @@ corplot <- function(x, coverage, pvalues,
 #' @param size  A number indicating the size of points, passed to \code{\link{geom_point}}
 #' @importFrom ggplot2 ggplot aes_string geom_point scale_y_reverse dup_axis
 #' @importFrom ggplot2 theme element_line element_blank element_text coord_cartesian ggtitle
-#' @importFrom cowplot theme_cowplot plot_grid get_legend
+#' @importFrom ggpubr theme_pubr
 #' @export
 #' @examples
 #'
+#' library(JWileymisc)
+#' library(ggplot2)
+#' library(ggpubr)
 #' testdat <- data.table::data.table(
 #'   Var = 1:4,
 #'   Mean = c(1.5, 3, 2.2, 4.6),
@@ -358,7 +363,7 @@ gglikert <- function(x, y, leftLab, rightLab, colour, data, xlim, title,
       sec.axis = dup_axis(
         breaks = databreaks,
         labels = data[[rightLab]][index])) +
-    theme_cowplot() +
+    theme_pubr() +
     theme(
       panel.grid.major.y = element_line(size = 1),
       axis.line = element_blank(),
@@ -413,12 +418,16 @@ if(getRversion() >= "2.15.1") {
 #' @importFrom ggthemes geom_rangeframe theme_tufte
 #' @importFrom data.table melt as.data.table setnames
 #' @importFrom robustbase covMcd
+#' @importFrom ggpubr ggarrange
 #' @seealso \code{\link{testDistribution}}
 #' @method plot testDistribution
 #' @export
 #' @keywords hplot multivariate
 #' @examples
 #'
+#' ## evaluate mpg against a normal distribution
+#' plot(testDistribution(mtcars$mpg))
+#' 
 #' \dontrun{
 #'
 #' ## example data
@@ -573,9 +582,9 @@ plot.testDistribution <- function(x, y, xlim = NULL, varlab = "X", plot = TRUE,
           legend.position = "none")
 
   if (plot) {
-    print(plot_grid(p.density, p.qqdeviates,
+    print(ggarrange(p.density, p.qqdeviates,
                     ncol = 1, align = "v",
-                    rel_heights = c(3, 1)))
+                    heights = c(3, 1)))
   }
 
   return(invisible(list(
@@ -701,7 +710,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals"
 #' @importFrom ggplot2 geom_point geom_bin2d scale_fill_gradient scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 element_text element_line
 #' @importFrom ggthemes geom_rangeframe theme_tufte
-#' @importFrom cowplot plot_grid
+#' @importFrom ggpubr ggarrange
 #' @keywords plot
 #' @method plot residualDiagnostics
 #' @export
@@ -758,11 +767,10 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
                    varlab = "Residuals",
                    plot = FALSE)
 
-  p.res <- plot_grid(
+  p.res <- ggarrange(
     p.tmpres$DensityPlot + ggtitle(x$Outcome),
     p.tmpres$QQDeviatesPlot, ncol = 1,
-    rel_heights = c(3, 1), align = "v")
-
+    heights = c(3, 1), align = "v")
 
   if (plot) {
     if (ask && dev.interactive()) {
@@ -770,7 +778,7 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
         on.exit(devAskNewPage(oask))
     }
     if (!missing(ncol)) {
-      print(plot_grid(
+      print(ggarrange(
         p.res,
         p.resfit,
         ncol = ncol))
@@ -803,7 +811,7 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
 #' @return a list including plots of the residuals,
 #'   residuals versus fitted values
 #' @importFrom grDevices dev.interactive devAskNewPage
-#' @importFrom cowplot plot_grid
+#' @importFrom ggpubr ggarrange
 #' @keywords plot
 #' @method plot modelDiagnostics.lm
 #' @export
@@ -825,7 +833,7 @@ plot.modelDiagnostics.lm <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
         on.exit(devAskNewPage(oask))
     }
     if (!missing(ncol)) {
-      print(plot_grid(
+      print(ggarrange(
         p$ResPlot,
         p$ResFittedPlot,
         ncol = ncol))
