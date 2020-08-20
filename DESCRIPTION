@@ -1,6 +1,6 @@
 Package: JWileymisc
 Title: Miscellaneous Utilities and Functions
-Version: 1.1.2
+Version: 1.2.0
 Authors@R: 
     person(given = "Joshua F.",
            family = "Wiley",
@@ -16,7 +16,7 @@ Description: Miscellaneous tools and functions,
     model diagnostics. 
 License: GPL (>= 3)
 Depends:
-    R (>= 3.5.0)
+    R (>= 3.6.0)
 Imports:
     stats,
     utils,
@@ -27,7 +27,7 @@ Imports:
     graphics,
     ggthemes,
     ggplot2 (>= 2.2.0),
-    cowplot,
+    ggpubr,
     mgcv,
     mice,
     methods,
@@ -52,4 +52,4 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

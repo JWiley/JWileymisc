@@ -1,4 +1,4 @@
-# JWileymisc 1.1.2
+# JWileymisc 1.2.0
 
 ## Bug Fixes
 * `meanCircular()` would be off by pi in some circumstances. This has
@@ -10,6 +10,10 @@
 ## Changes
 * `corplot()` uses a more color blind friendly palette and defaults to
   showing correlations and p-values.
+* Switched to using `ggpubr` instead of `cowplot` for themes and 
+  arranging multiple plots.
+* Bumped minimum version of `R` required.
+* Further unit testing.
 
 # JWileymisc 1.1.1
 
