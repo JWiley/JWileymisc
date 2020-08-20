@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -85,15 +85,15 @@
 
       
 
-      </header><script src="diagnostics-vignette_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
+      </header><script src="diagnostics-vignette_files/header-attrs-2.3/header-attrs.js"></script><script src="diagnostics-vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Diagnostics</h1>
                         <h4 class="author">Joshua F. Wiley</h4>
             
-            <h4 class="date">2020-06-21</h4>
+            <h4 class="date">2020-08-20</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/R/vignettes/diagnostics-vignette.Rmd"><code>R/vignettes/diagnostics-vignette.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/tests/testthat/vignettes/diagnostics-vignette.Rmd"><code>tests/testthat/vignettes/diagnostics-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>diagnostics-vignette.Rmd</code></div>
 
     </div>
@@ -101,7 +101,13 @@
     
     
 <p>To start, load the package.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">JWileymisc</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">JWileymisc</span>)
+<span class="co">#&gt; Registered S3 methods overwritten by 'lme4':</span>
+<span class="co">#&gt;   method                          from</span>
+<span class="co">#&gt;   cooks.distance.influence.merMod car </span>
+<span class="co">#&gt;   influence.merMod                car </span>
+<span class="co">#&gt;   dfbeta.influence.merMod         car </span>
+<span class="co">#&gt;   dfbetas.influence.merMod        car</span></pre></body></html></div>
 <div id="univariate-diagnostics" class="section level1">
 <h1 class="hasAnchor">
 <a href="#univariate-diagnostics" class="anchor"></a>Univariate Diagnostics</h1>

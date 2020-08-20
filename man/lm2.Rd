@@ -10,7 +10,6 @@ lm2(
   subset,
   weights,
   na.action,
-  method = "qr",
   model = TRUE,
   x = FALSE,
   y = FALSE,
@@ -33,8 +32,6 @@ lm2(
 \item{weights}{any weights}
 
 \item{na.action}{Defaults to \code{na.omit}}
-
-\item{method}{defaults to \dQuote{qr}}
 
 \item{model}{defaults to \code{TRUE}}
 

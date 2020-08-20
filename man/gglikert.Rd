@@ -44,6 +44,9 @@ Creates a plot for likert scale
 }
 \examples{
 
+library(JWileymisc)
+library(ggplot2)
+library(ggpubr)
 testdat <- data.table::data.table(
   Var = 1:4,
   Mean = c(1.5, 3, 2.2, 4.6),

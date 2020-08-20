@@ -23,6 +23,11 @@ Defaults to \code{TRUE}.}
 \description{
 Plots SEMSummary.list object
 }
+\examples{
+
+## correlation matrix by am level
+plot(SEMSummary(~ . | am, data = mtcars))
+}
 \seealso{
 \code{\link{corplot}}, \code{\link{SEMSummary}}
 }

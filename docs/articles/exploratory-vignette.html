@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -85,13 +85,13 @@
 
       
 
-      </header><script src="exploratory-vignette_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
+      </header><script src="exploratory-vignette_files/header-attrs-2.3/header-attrs.js"></script><script src="exploratory-vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Exploratory and Descriptive Statistics and Plots</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/R/vignettes/exploratory-vignette.Rmd"><code>R/vignettes/exploratory-vignette.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/tests/testthat/vignettes/exploratory-vignette.Rmd"><code>tests/testthat/vignettes/exploratory-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>exploratory-vignette.Rmd</code></div>
 
     </div>
@@ -100,6 +100,12 @@
     
 <p>To start, load the package.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">JWileymisc</span>)
+<span class="co">#&gt; Registered S3 methods overwritten by 'lme4':</span>
+<span class="co">#&gt;   method                          from</span>
+<span class="co">#&gt;   cooks.distance.influence.merMod car </span>
+<span class="co">#&gt;   influence.merMod                car </span>
+<span class="co">#&gt;   dfbeta.influence.merMod         car </span>
+<span class="co">#&gt;   dfbetas.influence.merMod        car</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">data.table</span>)</pre></body></html></div>
 <div id="descriptive-statistics" class="section level1">
@@ -551,8 +557,15 @@
                   <span class="no">Sepal.Width</span> + <span class="no">Petal.Width</span> <span class="kw">|</span> <span class="no">Species</span>,
                  <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mg</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mg</span>)
+<span class="co">#&gt; $`1`</span></pre></body></html></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<pre><code>#&gt; 
+#&gt; $`2`</code></pre>
+<p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-21-2.png" width="700"></p>
+<pre><code>#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "list"      "ggarrange"</code></pre>
 </div>
 </div>
 <div id="likert-scale-plots" class="section level1">
@@ -560,7 +573,7 @@
 <a href="#likert-scale-plots" class="anchor"></a>Likert Scale Plots</h1>
 <p>In much of psychological and consumer/market research, likert rating scales are used. For example, rating a question/item from “Strongly DISagree” to “Strongly Agree” or rating satisfaction from “Not at all” to “Very Satisfied” or adjectives that capture mood/affect from “Not at all” to “Extremely”. Likert plots aim to show these results clearly and aid interpretation by presenting the anchors as well.</p>
 <p>The following code creates some simulated data, summarizes it, adds the necessary labels/anchors, and creates a nice plot.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r">
+<div class="sourceCode" id="cb18"><html><body><pre class="r">
 <span class="co">## simulate some likert style data</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1234</span>)
 <span class="no">d</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(
@@ -592,7 +605,7 @@
          <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">5</span>),
          <span class="kw">title</span> <span class="kw">=</span> <span class="st">"Average Affect Ratings"</span>)</pre></body></html></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r">
+<div class="sourceCode" id="cb19"><html><body><pre class="r">
 <span class="co">## create a grouping variable</span>
 <span class="no">dg</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">d</span>, <span class="kw">Group</span> <span class="kw">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span>(
                  <span class="no">d</span>$<span class="no">Happy</span> <span class="kw">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">d</span>$<span class="no">Happy</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>),

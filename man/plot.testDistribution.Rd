@@ -55,6 +55,9 @@ density and QQ plots.
 }
 \examples{
 
+## evaluate mpg against a normal distribution
+plot(testDistribution(mtcars$mpg))
+
 \dontrun{
 
 ## example data
