@@ -33,10 +33,11 @@ from residuals. It is a default method.
 }
 \examples{
 testm <- stats::lm(mpg ~ hp * factor(cyl), data = mtcars)
+testm <- stats::lm(mpg ~ factor(cyl), data = mtcars)
 
 md <- residualDiagnostics(testm, ev.perc = .1)
 
-plot(md)
+plot(md, plot = FALSE)$ResFittedPlot
 plot(md, ncol = 2)
 
 ## clean up

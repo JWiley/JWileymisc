@@ -91,9 +91,9 @@
       <h1 data-toc-skip>Diagnostics</h1>
                         <h4 class="author">Joshua F. Wiley</h4>
             
-            <h4 class="date">2020-08-20</h4>
+            <h4 class="date">2020-08-31</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/tests/testthat/vignettes/diagnostics-vignette.Rmd"><code>tests/testthat/vignettes/diagnostics-vignette.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/R/vignettes/diagnostics-vignette.Rmd"><code>R/vignettes/diagnostics-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>diagnostics-vignette.Rmd</code></div>
 
     </div>
@@ -238,8 +238,7 @@
 <span class="co">#&gt; Warning in .local(x, ...): singularity problem</span>
 <span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">md</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">1</span>)
-<span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span></pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">md</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>Finally, given that there are a few extreme values, we may want to identify and exclude them. We can view the extreme values. Here we extract these by effect type and with the outcome score associated with each. The index shows the index, from the residuals where the extreme values occurred. Note that this may not match up to the original data if there are missing values. In those cases, the easiest approach is to remove missing values on model variables first, then fit the model and then calculate diagnostics.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co">## show extreme values</span>
@@ -329,8 +328,7 @@
 <span class="co">#&gt; Warning in .local(x, ...): singularity problem</span>
 <span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">md2</span>, <span class="kw">ask</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">1</span>)
-<span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span></pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">md2</span>, <span class="kw">ask</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r">
 <span class="co">## show (new) extreme values</span>

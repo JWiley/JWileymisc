@@ -132,9 +132,9 @@
       <small>Source: <a href='https://github.com/JWiley/JWileymisc/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="jwileymisc-112" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.2">
-<a href="#jwileymisc-112" class="anchor"></a>JWileymisc 1.1.2<small> Unreleased </small>
+    <div id="jwileymisc-120" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.0">
+<a href="#jwileymisc-120" class="anchor"></a>JWileymisc 1.2.0<small> Unreleased </small>
 </h1>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
@@ -144,6 +144,7 @@
 <code><a href="../reference/meanCircular.html">meanCircular()</a></code> would be off by pi in some circumstances. This has been corrected and more test cases added.</li>
 <li>
 <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> pairwise correlations were based on the standardized pairwise covariance matrix, which used the same standard deviation for a variable regardless of the pair. This has now been fixed.</li>
+<li>Formula has been specified in calls to <code>stat_smooth()</code> to reduce messages about this.</li>
 </ul>
 </div>
 <div id="changes" class="section level2">
@@ -152,6 +153,10 @@
 <ul>
 <li>
 <code><a href="../reference/corplot.html">corplot()</a></code> uses a more color blind friendly palette and defaults to showing correlations and p-values.</li>
+<li>Model diagnostics are smarter about linear regressions with essentially discrete model predictions and no longer try to run quantile regression to examine homogeneity of variance in these cases.</li>
+<li>Switched to using <code>ggpubr</code> instead of <code>cowplot</code> for themes and arranging multiple plots.</li>
+<li>Bumped minimum version of <code>R</code> required.</li>
+<li>Further unit testing.</li>
 </ul>
 </div>
 </div>

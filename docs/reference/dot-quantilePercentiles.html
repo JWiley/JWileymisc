@@ -144,7 +144,7 @@ Expected predicted and residual data.
 Exported to support related packages.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.quantilePercentiles</span>(<span class='no'>data</span>, <span class='kw'>LL</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>UL</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>.quantilePercentiles</span>(<span class='no'>data</span>, <span class='kw'>LL</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>UL</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cut</span> <span class='kw'>=</span> <span class='fl'>4L</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,6 +168,13 @@ Assumed from some sort of (probably parametric) model.</p></td>
       <th>na.rm</th>
       <td><p>A logical whether to remove missing values.
 Defaults to <code>TRUE</code></p></td>
+    </tr>
+    <tr>
+      <th>cut</th>
+      <td><p>An integer, how many unique predicted values
+there have to be at least for it to use quantile regression
+or treat the predicted values as discrete.
+Defaults to 4.</p></td>
     </tr>
     </table>
 

@@ -19,6 +19,7 @@ is.residualDiagnostics(x)
   robust = FALSE,
   distr = "normal",
   standardized = TRUE,
+  cut = 4L,
   ...
 )
 }
@@ -46,6 +47,11 @@ Defaults to \dQuote{normal}.}
 \item{standardized}{A logical whether to use standardized residuals.
 Defaults to \code{TRUE} generally where possible but may depend on
 method.}
+
+\item{cut}{An integer, how many unique predicted values
+there have to be at least for predicted values to be
+treated continuously, otherwise they are treated as discrete values.
+Defaults to 4.}
 }
 \value{
 A logical (\code{is.residualDiagnostics}) or

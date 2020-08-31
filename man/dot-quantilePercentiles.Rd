@@ -4,7 +4,7 @@
 \alias{.quantilePercentiles}
 \title{Internal Function to Calculate Quantiles}
 \usage{
-.quantilePercentiles(data, LL = 0.1, UL = 0.9, na.rm = TRUE)
+.quantilePercentiles(data, LL = 0.1, UL = 0.9, na.rm = TRUE, cut = 4L)
 }
 \arguments{
 \item{data}{A dataset of predicted and residual values.
@@ -18,6 +18,11 @@ Assumed from some sort of (probably parametric) model.}
 
 \item{na.rm}{A logical whether to remove missing values.
 Defaults to \code{TRUE}}
+
+\item{cut}{An integer, how many unique predicted values
+there have to be at least for it to use quantile regression
+or treat the predicted values as discrete.
+Defaults to 4.}
 }
 \value{
 A data.table with the scores and predicted LL and UL,

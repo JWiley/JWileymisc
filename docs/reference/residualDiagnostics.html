@@ -157,6 +157,7 @@
   <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>distr</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,
   <span class='kw'>standardized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>cut</span> <span class='kw'>=</span> <span class='fl'>4L</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -200,6 +201,13 @@ Defaults to &#8220;normal&#8221;.</p></td>
       <td><p>A logical whether to use standardized residuals.
 Defaults to <code>TRUE</code> generally where possible but may depend on
 method.</p></td>
+    </tr>
+    <tr>
+      <th>cut</th>
+      <td><p>An integer, how many unique predicted values
+there have to be at least for predicted values to be
+treated continuously, otherwise they are treated as discrete values.
+Defaults to 4.</p></td>
     </tr>
     </table>
 
