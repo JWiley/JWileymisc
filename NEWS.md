@@ -6,10 +6,15 @@
 * `SEMSummary()` pairwise correlations were based on the standardized
   pairwise covariance matrix, which used the same standard deviation
   for a variable regardless of the pair. This has now been fixed.
+* Formula has been specified in calls to `stat_smooth()` to reduce 
+  messages about this.
   
 ## Changes
 * `corplot()` uses a more color blind friendly palette and defaults to
   showing correlations and p-values.
+* Model diagnostics are smarter about linear regressions with essentially 
+  discrete model predictions and no longer try to run quantile regression 
+  to examine homogeneity of variance in these cases.
 * Switched to using `ggpubr` instead of `cowplot` for themes and 
   arranging multiple plots.
 * Bumped minimum version of `R` required.

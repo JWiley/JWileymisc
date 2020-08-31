@@ -716,10 +716,11 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals"
 #' @export
 #' @examples
 #' testm <- stats::lm(mpg ~ hp * factor(cyl), data = mtcars)
+#' testm <- stats::lm(mpg ~ factor(cyl), data = mtcars)
 #'
 #' md <- residualDiagnostics(testm, ev.perc = .1)
 #'
-#' plot(md)
+#' plot(md, plot = FALSE)$ResFittedPlot
 #' plot(md, ncol = 2)
 #'
 #' ## clean up
@@ -738,9 +739,7 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
       geom_bin2d(aes(fill = ..count..), bins = 80) +
       scale_fill_gradient(low = "grey70", high = "black")
   }
-
   p.resfit <- p.resfit +
-    stat_smooth(method = "loess", se = FALSE, size = 1, colour = "blue") +
     geom_rangeframe() +
     scale_x_continuous(breaks = roundedfivenum(x$Residuals$Predicted)) +
     scale_y_continuous(breaks = roundedfivenum(x$Residuals$Residuals)) +
@@ -750,16 +749,33 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
       axis.text = element_text(colour = "black"),
       axis.ticks.x = element_line(colour = "white", size = 2)) +
     ggtitle(x$Outcome)
-
-  if (any(!is.na(x$Hat$LL) |
-          !is.na(x$Hat$UL))) {
+  
+  if ( isTRUE(x$Hat$cut[1]) ) {
     p.resfit <- p.resfit +
-      geom_line(mapping = aes(x = Predicted, y = LL),
-                data = x$Hat,
-                colour = "blue", size = 1, linetype = 2) +
-      geom_line(mapping = aes(x = Predicted, y = UL),
-                data = x$Hat,
-                colour = "blue", size = 1, linetype = 2)
+      geom_point(aes(x = Predicted, y = LL),
+                    data = x$Hat,
+                 colour = "blue", size = 4,
+                 shape = 23, fill = "blue") + 
+      geom_point(aes(x = Predicted, y = UL),
+                    data = x$Hat,
+                 colour = "blue", size = 4,
+                 shape = 23, fill = "blue")
+  } else {
+    p.resfit <- p.resfit +
+      stat_smooth(method = "loess",
+                  formula = y ~ x,
+                  se = FALSE, size = 1, colour = "blue")
+
+    if (any(!is.na(x$Hat$LL) |
+              !is.na(x$Hat$UL))) {
+      p.resfit <- p.resfit +
+        geom_line(mapping = aes(x = Predicted, y = LL),
+                  data = x$Hat,
+                  colour = "blue", size = 1, linetype = 2) +
+        geom_line(mapping = aes(x = Predicted, y = UL),
+                  data = x$Hat,
+                  colour = "blue", size = 1, linetype = 2)
+    }
   }
 
   ## distributions of residuals
