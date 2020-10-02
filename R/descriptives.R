@@ -66,12 +66,49 @@ meanCircular <- function(x, max, na.rm = TRUE) {
   ## radians to degrees and unscale to the inputs
   out <- out * (180 / pi) / scale
   if (out == max) {
-    0
-  } else {
-    out
+    out <- 0
   }
-
+  return(out)
 }
+
+#' Calculate the Circular Difference
+#'
+#' @param x Numeric or integer values
+#' @param y Numeric or integer values
+#' @param max the theoretical maximum (e.g., if degrees, 360; if hours, 24; etc.).
+#' @return A value with the circular difference. This will always be positive if defined.
+#' @export
+#' @examples
+#' diffCircular(330, 30, max = 360)
+#' diffCircular(22, 1, max = 24)
+#' diffCircular(c(22, 23, 21, 22), c(1, 1, 23, 14), max = 24)
+diffCircular <- function(x, y, max) {
+    if (!(is.integer(x) || is.numeric(x))) {
+        stop(sprintf("x must be class integer or numeric but was %s", 
+            paste(class(x), collapse = "; ")))
+    }
+    if (!(is.integer(y) || is.numeric(y))) {
+        stop(sprintf("y must be class integer or numeric but was %s", 
+            paste(class(y), collapse = "; ")))
+    }
+
+    stopifnot(identical(length(x), length(y)))
+    
+    if (any(x < 0 | y < 0, na.rm = TRUE)) {
+      stop("For cicular means, cannot have negative numbers")
+    }
+    if (any(x > max | y > max, na.rm = TRUE)) {
+      stop("For cicular means, cannot have values above the theoretical maximum")
+    }
+
+    scale <- 360/max
+    torad <- scale * (pi / 180)
+    toorig <- (180 / pi) / scale
+    radx <- x * torad
+    rady <- y * torad
+    acos(cos(radx - rady)) * toorig 
+}
+
 
 #' Estimate the first and second moments
 #'

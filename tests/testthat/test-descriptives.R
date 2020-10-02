@@ -54,6 +54,35 @@ test_that("meanCircular works", {
   expect_error(meanCircular(-1, max = 24))
 })
 
+test_that("diffCircular works", {
+  expect_equivalent(
+    diffCircular(23, 1, max = 24),
+    2)
+  expect_equivalent(
+    diffCircular(22, 1, max = 24),
+    3)
+  expect_equivalent(
+    diffCircular(1, 1, max = 24),
+    0)
+  expect_equivalent(
+    diffCircular(24, 24, max = 24),
+    0)
+  expect_equivalent(
+    diffCircular(0, 0, max = 24),
+    0)
+  expect_equivalent(
+    diffCircular(1, 3, max = 24),
+    2)
+  expect_error(
+    diffCircular(1, 33, max = 24))
+  expect_error(
+    diffCircular("a", 3, max = 24))
+  expect_error(
+    diffCircular(3, "b", max = 24))
+  expect_error(
+    diffCircular(-3, 3, max = 24))
+})
+
 test_that("cramerV works", {
   expect_error(cramerV(xtabs(~ am + vs + cyl, data = mtcars)))
   expect_equivalent(

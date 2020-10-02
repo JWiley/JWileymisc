@@ -1,3 +1,9 @@
+# JWileymisc 1.2.1
+
+## New Features
+* `diffCircular()` calculates the circular difference 
+	between two vectors.
+
 # JWileymisc 1.2.0
 
 ## Bug Fixes

@@ -7,8 +7,8 @@ Authors@R:
            role = c("aut", "cre"),
            email = "jwiley.psych@gmail.com",
            comment = c(ORCID = "0000-0002-0271-6702"))
-URL: http://joshuawiley.com/JWileymisc, https://github.com/JWiley/JWileymisc
-BugReports: https://github.com/JWiley/JWileymisc/issues
+URL: http://joshuawiley.com/JWileymisc/, https://github.com/JWiley/JWileymisc/
+BugReports: https://github.com/JWiley/JWileymisc/issues/
 Description: Miscellaneous tools and functions,
     including: generate descriptive statistics tables,
     format output, visualize relations among variables or check
