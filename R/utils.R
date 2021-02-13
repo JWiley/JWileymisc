@@ -335,3 +335,57 @@ timeshift <- function(x, center = 0, min = 0, max = 1, inverse = FALSE) {
     stop("invalid inverse option, must be TRUE/FALSE")
   }
 }
+
+#' Create a character vector or file hash of a dataset and each variable
+#'
+#' Given a \code{data.frame} or \code{data.table}, create a character vector
+#' MD5 hash of the overall dataset and each variable. The goal of this is to create
+#' a secure vector / text file that can be tracked using version control
+#' (e.g., GitHub) without requiring commiting sensitive datasets.
+#' The tracking will make it possible to evaluate whether two datasets are the
+#' same, such as when sending data or when datasets may change over time
+#' to know which variable(s) changed, if any.
+#'
+#' @param x A \code{data.frame} or \code{data.table} to be hashed.
+#' @param file An optional character string. If given, assumed to be the path/name of a
+#'   file to write the character string hash out to, for convenience. When
+#'   non missing, the character vector is returned invisibly and a file written.
+#'   When missing (default), the character vector is returned directly.
+#' @return A (possibly invisible) character vector. Also (optionally) a text file
+#'   written version of the character string.
+#' @export
+#' @importFrom digest digest
+#' @importFrom data.table is.data.table
+#' @examples
+#'
+#' hashDataset(mtcars)
+#'
+#' ## if a file is specified it will write the results to the text file
+#' ## nicely formatted, along these lines
+#'
+#' cat(hashDataset(cars), sep = "\n")
+#' 
+hashDataset <- function(x, file) {
+  stopifnot(isTRUE(is.data.frame(x)) || isTRUE(is.data.table(x)))
+  
+  textcall <- match.call()
+  textcall <- deparse(textcall$x)
+
+  hash <- c(
+    sprintf("dataset: '%s', MD5: %s", textcall, digest(x, "md5")),
+    unlist(lapply(names(x), function(y) {
+      sprintf("'%s' (%s), %s, %s (sorted)",
+              y, paste(class(x[[y]]), collapse = "; "),
+              digest(x[[y]], "md5"), digest(sort(x[[y]]), "md5"))
+              
+    })))
+
+  if (!missing(file)) {
+    write(x = hash,
+          file = file,
+          sep = "\n")
+    return(invisible(hash))
+  } else {
+    return(hash)
+  }
+}
