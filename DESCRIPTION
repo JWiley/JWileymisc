@@ -1,6 +1,6 @@
 Package: JWileymisc
 Title: Miscellaneous Utilities and Functions
-Version: 1.2.0
+Version: 1.2.1
 Authors@R: 
     person(given = "Joshua F.",
            family = "Wiley",
@@ -39,7 +39,8 @@ Imports:
     lavaan (>= 0.6-5),
     VGAM (>= 1.1-2),
     lme4,
-    extraoperators (>= 0.1.1)
+    extraoperators (>= 0.1.1),
+    digest
 Suggests:
     scales,
     foreach,
