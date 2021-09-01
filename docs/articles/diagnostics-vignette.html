@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -70,8 +66,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/JWiley/JWileymisc/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -85,15 +81,15 @@
 
       
 
-      </header><script src="diagnostics-vignette_files/header-attrs-2.3/header-attrs.js"></script><script src="diagnostics-vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="diagnostics-vignette_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Diagnostics</h1>
-                        <h4 class="author">Joshua F. Wiley</h4>
+                        <h4 data-toc-skip class="author">Joshua F. Wiley</h4>
             
-            <h4 class="date">2020-10-02</h4>
+            <h4 data-toc-skip class="date">2021-09-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/tests/testthat/vignettes/diagnostics-vignette.Rmd"><code>tests/testthat/vignettes/diagnostics-vignette.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/vignettes/diagnostics-vignette.Rmd" class="external-link"><code>vignettes/diagnostics-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>diagnostics-vignette.Rmd</code></div>
 
     </div>
@@ -101,16 +97,11 @@
     
     
 <p>To start, load the package.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">JWileymisc</span>)
-<span class="co">#&gt; Registered S3 methods overwritten by 'lme4':</span>
-<span class="co">#&gt;   method                          from</span>
-<span class="co">#&gt;   cooks.distance.influence.merMod car </span>
-<span class="co">#&gt;   influence.merMod                car </span>
-<span class="co">#&gt;   dfbeta.influence.merMod         car </span>
-<span class="co">#&gt;   dfbetas.influence.merMod        car</span></pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://joshuawiley.com/JWileymisc/" class="external-link">JWileymisc</a></span><span class="op">)</span></code></pre></div>
 <div id="univariate-diagnostics" class="section level1">
 <h1 class="hasAnchor">
-<a href="#univariate-diagnostics" class="anchor"></a>Univariate Diagnostics</h1>
+<a href="#univariate-diagnostics" class="anchor" aria-hidden="true"></a>Univariate Diagnostics</h1>
 <p>The <code><a href="../reference/testDistribution.html">testDistribution()</a></code> function can be used to evaluate whether a variable comes from a specific, known parametric distribution. By default, no outliers or “extreme values” are shown. These can be used directly through the data output or plotted. The plot includes both the empirical density, the density of the assumed parametric distribution, a rug plot showing actual values, if not too many data points, and a Quantile-Quantile plot (QQ Plot). The QQ Plot is rotated to save space, by removing the diagonal and rotating to be horizontal, which we call a QQ Deviates plot.</p>
 <p>One other unique feature of the density plot is the x axis. It follows Tufte’s principles about presenting data. To make the x axis more informative, it is a “range frame”, meaning it is only plotted over the range of the actual data. Secondly, the breaks are a five number summary of the data. These five numbers are:</p>
 <ul>
@@ -121,9 +112,10 @@
 <li>Maximum (100th percentile)</li>
 </ul>
 <p>Most plots use breaks that are evenly spaced. These do not convey information about the data. Using a five number summary the breaks themselves are effectively like a boxplot with specific values provided so you can immediately read what values the min and max are, the median, etc.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r">
-<span class="no">test</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span>(<span class="no">mtcars</span>$<span class="no">mpg</span>, <span class="st">"normal"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">test</span>$<span class="no">Data</span>)
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"normal"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span>
 <span class="co">#&gt;            X    Y OriginalOrder isEV YDeviates</span>
 <span class="co">#&gt; 1:  7.313777 10.4            15   No 3.0862233</span>
 <span class="co">#&gt; 2: 10.148901 10.4            16   No 0.2510990</span>
@@ -131,19 +123,20 @@
 <span class="co">#&gt; 4: 12.795066 14.3             7   No 1.5049335</span>
 <span class="co">#&gt; 5: 13.698771 14.7            17   No 1.0012292</span>
 <span class="co">#&gt; 6: 14.474288 15.0            31   No 0.5257124</span>
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">test</span>$<span class="no">Data</span>$<span class="no">isEV</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">$</span><span class="va">isEV</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  No Yes </span>
 <span class="co">#&gt;  32   0</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">test</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>It is possible to have extreme values automatically identified either based on a theoretical distribution or empirically identified (e.g., the top or bottom XX percent are classified as extreme). We say that .10 (10%) of data points are “extreme” just to illustrate. Extreme values are shown in black with non extreme values shown in light grey, both in the rug plot and in the QQ plot. Although 10% is higher than typically would be chosen, given the small dataset, it is necessary to have extreme values at both ends of the distribution for illustration.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">test</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span>(<span class="no">mtcars</span>$<span class="no">mpg</span>, <span class="st">"normal"</span>,
-                         <span class="kw">extremevalues</span> <span class="kw">=</span> <span class="st">"theoretical"</span>,
-                         <span class="kw">ev.perc</span> <span class="kw">=</span> <span class="fl">.10</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"normal"</span>,
+                         extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>,
+                         ev.perc <span class="op">=</span> <span class="fl">.10</span><span class="op">)</span>
 <span class="co">## view the data with extreme values</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">test</span>$<span class="no">Data</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span>
 <span class="co">#&gt;            X    Y OriginalOrder isEV YDeviates</span>
 <span class="co">#&gt; 1:  7.313777 10.4            15  Yes 3.0862233</span>
 <span class="co">#&gt; 2: 10.148901 10.4            16  Yes 0.2510990</span>
@@ -153,18 +146,19 @@
 <span class="co">#&gt; 6: 14.474288 15.0            31   No 0.5257124</span>
 
 <span class="co">## count how many extreme values there are</span>
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">test</span>$<span class="no">Data</span>$<span class="no">isEV</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">$</span><span class="va">isEV</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  No Yes </span>
 <span class="co">#&gt;  26   6</span>
 
 <span class="co">## plot the distribution</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">test</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 
 <span class="co">## show which values are extreme</span>
-<span class="no">test</span>$<span class="no">Data</span>[<span class="no">isEV</span> <span class="kw">==</span> <span class="st">"Yes"</span>]
+<span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">[</span><span class="va">isEV</span> <span class="op">==</span> <span class="st">"Yes"</span><span class="op">]</span>
 <span class="co">#&gt;            X    Y OriginalOrder isEV YDeviates</span>
 <span class="co">#&gt; 1:  7.313777 10.4            15  Yes  3.086223</span>
 <span class="co">#&gt; 2: 10.148901 10.4            16  Yes  0.251099</span>
@@ -176,19 +170,20 @@
 <span class="co">## view extreme values on mpg in the original dataset</span>
 <span class="co">## by use the original order, the original rows to select</span>
 <span class="co">## the correct rows from the original dataset</span>
-<span class="no">mtcars</span>[<span class="no">test</span>$<span class="no">Data</span>[<span class="no">isEV</span> <span class="kw">==</span> <span class="st">"Yes"</span>, <span class="no">OriginalOrder</span>], ]
+<span class="va">mtcars</span><span class="op">[</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">[</span><span class="va">isEV</span> <span class="op">==</span> <span class="st">"Yes"</span>, <span class="va">OriginalOrder</span><span class="op">]</span>, <span class="op">]</span>
 <span class="co">#&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="co">#&gt; Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4</span>
 <span class="co">#&gt; Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4</span>
 <span class="co">#&gt; Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2</span>
 <span class="co">#&gt; Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2</span>
 <span class="co">#&gt; Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1</span>
-<span class="co">#&gt; Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1</span></pre></body></html></div>
+<span class="co">#&gt; Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1</span></code></pre></div>
 <p>Extreme values taken off the empirical percentiles can be chosen as well.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">test</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span>(<span class="no">mtcars</span>$<span class="no">mpg</span>, <span class="st">"normal"</span>,
-                         <span class="kw">extremevalues</span> <span class="kw">=</span> <span class="st">"empirical"</span>,
-                         <span class="kw">ev.perc</span> <span class="kw">=</span> <span class="fl">.10</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">test</span>$<span class="no">Data</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"normal"</span>,
+                         extremevalues <span class="op">=</span> <span class="st">"empirical"</span>,
+                         ev.perc <span class="op">=</span> <span class="fl">.10</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span>
 <span class="co">#&gt;            X    Y OriginalOrder isEV YDeviates</span>
 <span class="co">#&gt; 1:  7.313777 10.4            15  Yes 3.0862233</span>
 <span class="co">#&gt; 2: 10.148901 10.4            16  Yes 0.2510990</span>
@@ -196,53 +191,57 @@
 <span class="co">#&gt; 4: 12.795066 14.3             7  Yes 1.5049335</span>
 <span class="co">#&gt; 5: 13.698771 14.7            17   No 1.0012292</span>
 <span class="co">#&gt; 6: 14.474288 15.0            31   No 0.5257124</span>
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">test</span>$<span class="no">Data</span>$<span class="no">isEV</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">$</span><span class="va">isEV</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  No Yes </span>
 <span class="co">#&gt;  24   8</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">test</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>Many distributions beyond normal are possible. These can be compared visually or based on log likelihoods. Here we compare results between a normal and gamma distribution. The log likelihood values show that the <code>mpg</code> variable is better fit by the gamma distribution than the normal, although they are quite close.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">testN</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span>(<span class="no">mtcars</span>$<span class="no">mpg</span>, <span class="st">"normal"</span>,
-                          <span class="kw">extremevalues</span> <span class="kw">=</span> <span class="st">"theoretical"</span>,
-                          <span class="kw">ev.perc</span> <span class="kw">=</span> <span class="fl">.05</span>)
-<span class="no">testG</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span>(<span class="no">mtcars</span>$<span class="no">mpg</span>, <span class="st">"gamma"</span>,
-                          <span class="kw">extremevalues</span> <span class="kw">=</span> <span class="st">"theoretical"</span>,
-                          <span class="kw">ev.perc</span> <span class="kw">=</span> <span class="fl">.05</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">testN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"normal"</span>,
+                          extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>,
+                          ev.perc <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
+<span class="va">testG</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"gamma"</span>,
+                          extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>,
+                          ev.perc <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
 
 <span class="co">## compare the log likelihood assuming a normal or gamma distribution</span>
-<span class="no">testN</span>$<span class="no">Distribution</span>$<span class="no">LL</span>
+<span class="va">testN</span><span class="op">$</span><span class="va">Distribution</span><span class="op">$</span><span class="va">LL</span>
 <span class="co">#&gt; 'log Lik.' -102.3778 (df=2)</span>
-<span class="no">testG</span>$<span class="no">Distribution</span>$<span class="no">LL</span>
+<span class="va">testG</span><span class="op">$</span><span class="va">Distribution</span><span class="op">$</span><span class="va">LL</span>
 <span class="co">#&gt; 'log Lik.' -100.9208 (df=2)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">testN</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">testN</span><span class="op">)</span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">testG</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">testG</span><span class="op">)</span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
 </div>
 <div id="model-diagnostics" class="section level1">
 <h1 class="hasAnchor">
-<a href="#model-diagnostics" class="anchor"></a>Model Diagnostics</h1>
+<a href="#model-diagnostics" class="anchor" aria-hidden="true"></a>Model Diagnostics</h1>
 <p><code>JWileymisc</code> has features to support standard parametric model diagnostics. The generic function <code><a href="../reference/modelDiagnostics.html">modelDiagnostics()</a></code> has a method implemented for linear models.</p>
-<p>In the code that follows, we use the <code><a href="../reference/modelDiagnostics.html">modelDiagnostics()</a></code> function to calculate some diagnostics which are plotted using the matching <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> method. The result is a plot of the standardized residuals against the expected (normal) distribution, the same QQ deviates plot we saw with <code><a href="../reference/testDistribution.html">testDistribution()</a></code>. Together, these provide information about whether the model assumption of normality is likely met, or not. In addition, block dots and the black rug lines indicate relatively extreme residual values. The label in the top left is the outcome variable name.</p>
+<p>In the code that follows, we use the <code><a href="../reference/modelDiagnostics.html">modelDiagnostics()</a></code> function to calculate some diagnostics which are plotted using the matching <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method. The result is a plot of the standardized residuals against the expected (normal) distribution, the same QQ deviates plot we saw with <code><a href="../reference/testDistribution.html">testDistribution()</a></code>. Together, these provide information about whether the model assumption of normality is likely met, or not. In addition, block dots and the black rug lines indicate relatively extreme residual values. The label in the top left is the outcome variable name.</p>
 <p>Another plot is a scatter plot of predicted values (x axis) against the standardized residuals (y axis). Again a five number summary is used for the x and y axis. To assess whether there are any systematic trends in the residuals, a loess line is added as a solid blue line. To assess heterogeneity/heteroscedasticity of residuals, quantile regression lines are added as dashed blue lines. These lines are for the 10th and 90th percentile of the distribution. Depending on the model and data, these quantile regression lines may use smoothing splines to allow non-linear patterns. For the assumption that residual variance is homogenous, you would expect the two lines to be approximately parallel and flat, with equal distance between them, across the range of predicted values.</p>
 <p><strong>Note</strong> it is uncommon to decide that 5 percent of values are extreme. This high value was chosen to illustrate only. More common values in practice are <code>ev.perc = .001</code>, <code>ev.perc = .005</code> or <code>ev.perc = .01</code>, which capture 0.1%, 0.5%, and 1% of values, respectively. However, in this small dataset, those would not give many “extreme values” for illustration, so a higher value was used.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r">
-<span class="no">m</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">mpg</span> ~ <span class="no">hp</span> * <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">cyl</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>)
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
 
-<span class="no">md</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelDiagnostics.html">modelDiagnostics</a></span>(<span class="no">m</span>, <span class="kw">ev.perc</span> <span class="kw">=</span> <span class="fl">.05</span>)
+<span class="va">md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelDiagnostics.html">modelDiagnostics</a></span><span class="op">(</span><span class="va">m</span>, ev.perc <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
 <span class="co">#&gt; Warning in .local(x, ...): singularity problem</span>
 <span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span>
 <span class="co">#&gt; Warning in .local(x, ...): singularity problem</span>
 <span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">md</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">md</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>Finally, given that there are a few extreme values, we may want to identify and exclude them. We can view the extreme values. Here we extract these by effect type and with the outcome score associated with each. The index shows the index, from the residuals where the extreme values occurred. Note that this may not match up to the original data if there are missing values. In those cases, the easiest approach is to remove missing values on model variables first, then fit the model and then calculate diagnostics.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co">## show extreme values</span>
-<span class="no">md</span>$<span class="no">extremeValues</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## show extreme values</span>
+<span class="va">md</span><span class="op">$</span><span class="va">extremeValues</span>
 <span class="co">#&gt;     mpg Index EffectType</span>
 <span class="co">#&gt; 1: 24.4     8  Residuals</span>
 <span class="co">#&gt; 2: 10.4    15  Residuals</span>
@@ -250,24 +249,25 @@
 <span class="co">#&gt; 4: 30.4    28  Residuals</span>
 
 <span class="co">## show extreme values in overall dataset</span>
-<span class="no">mtcars</span>[<span class="no">md</span>$<span class="no">extremeValues</span>$<span class="no">Index</span>, <span class="fl">1</span>:<span class="fl">4</span>]
+<span class="va">mtcars</span><span class="op">[</span><span class="va">md</span><span class="op">$</span><span class="va">extremeValues</span><span class="op">$</span><span class="va">Index</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>
 <span class="co">#&gt;                     mpg cyl  disp  hp</span>
 <span class="co">#&gt; Merc 240D          24.4   4 146.7  62</span>
 <span class="co">#&gt; Cadillac Fleetwood 10.4   8 472.0 205</span>
 <span class="co">#&gt; Toyota Corolla     33.9   4  71.1  65</span>
-<span class="co">#&gt; Lotus Europa       30.4   4  95.1 113</span></pre></body></html></div>
+<span class="co">#&gt; Lotus Europa       30.4   4  95.1 113</span></code></pre></div>
 <p>Using the extreme values index, we can exclude these and re-fit the model to see if it changes. We can show a summary of coefficients from each model and how much they change.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## exclude extreme values</span>
-<span class="no">m2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">mpg</span> ~ <span class="no">hp</span> * <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">cyl</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>[-<span class="no">md</span>$<span class="no">extremeValues</span>$<span class="no">Index</span>, ])
+<span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">[</span><span class="op">-</span><span class="va">md</span><span class="op">$</span><span class="va">extremeValues</span><span class="op">$</span><span class="va">Index</span>, <span class="op">]</span><span class="op">)</span>
 
 <span class="co">## show a summary of coefficients from both models</span>
 <span class="co">## and the percent change</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-  <span class="kw">M1</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span>(<span class="no">m</span>),
-  <span class="kw">M2</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span>(<span class="no">m2</span>),
-  <span class="kw">PercentChange</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span>(<span class="no">m2</span>) / <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span>(<span class="no">m</span>) * <span class="fl">100</span> - <span class="fl">100</span>), <span class="fl">2</span>)</pre></body></html></div>
-<table class="table">
+<span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
+  M1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>,
+  M2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span>,
+  PercentChange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span> <span class="op">-</span> <span class="fl">100</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<table style="width:78%;" class="table">
 <colgroup>
 <col width="30%">
 <col width="12%">
@@ -320,23 +320,25 @@
 </tbody>
 </table>
 <p>Once some values are removed, new values may be extreme. Although additional passes are not that common, they can be done. In the following code, we conduct new diagnostics on the model that had extreme values from the first model removed.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## diagnostics after removing outliers from first model</span>
-<span class="no">md2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelDiagnostics.html">modelDiagnostics</a></span>(<span class="no">m2</span>, <span class="kw">ev.perc</span> <span class="kw">=</span> <span class="fl">.05</span>)
+<span class="va">md2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelDiagnostics.html">modelDiagnostics</a></span><span class="op">(</span><span class="va">m2</span>, ev.perc <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
 <span class="co">#&gt; Warning in .local(x, ...): singularity problem</span>
 <span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span>
 <span class="co">#&gt; Warning in .local(x, ...): singularity problem</span>
 <span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">md2</span>, <span class="kw">ask</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">md2</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## show (new) extreme values</span>
-<span class="no">md2</span>$<span class="no">extremeValues</span>
+<span class="va">md2</span><span class="op">$</span><span class="va">extremeValues</span>
 <span class="co">#&gt;     mpg Index EffectType</span>
 <span class="co">#&gt; 1: 10.4    14  Residuals</span>
 <span class="co">#&gt; 2: 32.4    16  Residuals</span>
-<span class="co">#&gt; 3: 19.2    22  Residuals</span></pre></body></html></div>
+<span class="co">#&gt; 3: 19.2    22  Residuals</span></code></pre></div>
 </div>
   </div>
 
@@ -351,11 +353,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p></p>
+<p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
@@ -363,6 +367,8 @@
 
   
 
+
+  
 
   </body>
 </html>

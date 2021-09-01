@@ -47,6 +47,8 @@ function." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -58,9 +60,15 @@ function." />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -74,19 +82,13 @@ function." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -114,7 +116,7 @@ function." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -142,7 +144,7 @@ statistics and is designed to be used with the param_summary()
 function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>param_summary_format</span>(<span class='no'>d</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"digits"</span>), <span class='kw'>pretty</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>param_summary_format</span><span class='op'>(</span><span class='va'>d</span>, digits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"digits"</span><span class='op'>)</span>, pretty <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,41 +170,46 @@ Defaults to <code>FALSE</code>.</p></td>
 vector (if <code>pretty = TRUE</code>).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1234</span>)
-<span class='no'>xsum</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='no'>rbind</span>, <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>*<span class='fl'>10</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>),
-  <span class='fl'>2</span>, <span class='no'>param_summary</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>xsum</span>) <span class='kw'>&lt;-</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>10</span>]
-<span class='fu'>param_summary_format</span>(<span class='no'>xsum</span>)</div><div class='output co'>#&gt;           Mean     Median        SE      LL2.5    UL97.5 pvalue
-#&gt;  1: -0.1567617 -0.3846280 1.0044053 -1.7219858 2.0969651   .700
-#&gt;  2:  0.0412432  0.0328033 1.0321873 -2.0164916 2.0228078   .980
-#&gt;  3:  0.1546037  0.2778768 0.9601544 -1.6890724 1.9511068   .740
-#&gt;  4: -0.0081051 -0.0431601 1.0503090 -2.3309867 1.9026890   .940
-#&gt;  5: -0.0217859 -0.0085302 1.1166766 -1.9308186 2.1481116  1.000
-#&gt;  6: -0.1368770 -0.0672109 0.9289288 -2.0963626 1.4303246   .920
-#&gt;  7: -0.0878618 -0.0504099 0.9190978 -1.8120791 1.5856680   .960
-#&gt;  8: -0.0008372 -0.1044569 0.9849230 -1.7962415 1.7617463   .920
-#&gt;  9:  0.0181244 -0.0518836 0.9235805 -1.7336758 1.8020527   .940
-#&gt; 10: -0.0677146 -0.0353446 1.0413951 -2.3707526 1.9937100  1.000</div><div class='input'><span class='fu'>param_summary_format</span>(<span class='no'>xsum</span>, <span class='kw'>pretty</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;                                               a 
-#&gt;  "-0.1567617 [-1.7219858, 2.0969651], p = .700" 
-#&gt;                                               b 
-#&gt;   "0.0412432 [-2.0164916, 2.0228078], p = .980" 
-#&gt;                                               c 
-#&gt;   "0.1546037 [-1.6890724, 1.9511068], p = .740" 
-#&gt;                                               d 
-#&gt;  "-0.0081051 [-2.3309867, 1.9026890], p = .940" 
-#&gt;                                               e 
-#&gt; "-0.0217859 [-1.9308186, 2.1481116], p = 1.000" 
-#&gt;                                               f 
-#&gt;  "-0.1368770 [-2.0963626, 1.4303246], p = .920" 
-#&gt;                                               g 
-#&gt;  "-0.0878618 [-1.8120791, 1.5856680], p = .960" 
-#&gt;                                               h 
-#&gt;  "-0.0008372 [-1.7962415, 1.7617463], p = .920" 
-#&gt;                                               i 
-#&gt;   "0.0181244 [-1.7336758, 1.8020527], p = .940" 
-#&gt;                                               j 
-#&gt; "-0.0677146 [-2.3707526, 1.9937100], p = 1.000" </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>xsum</span>)</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xsum</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>rbind</span>, <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>*</span><span class='fl'>10</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fl'>2</span>, <span class='va'>param_summary</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>xsum</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span></span>
+<span class='r-in'><span class='fu'>param_summary_format</span><span class='op'>(</span><span class='va'>xsum</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Mean     Median        SE      LL2.5    UL97.5 pvalue</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1: -0.1567617 -0.3846280 1.0044053 -1.7219858 2.0969651   .700</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:  0.0412432  0.0328033 1.0321873 -2.0164916 2.0228078   .980</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:  0.1546037  0.2778768 0.9601544 -1.6890724 1.9511068   .740</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4: -0.0081051 -0.0431601 1.0503090 -2.3309867 1.9026890   .940</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5: -0.0217859 -0.0085302 1.1166766 -1.9308186 2.1481116  1.000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6: -0.1368770 -0.0672109 0.9289288 -2.0963626 1.4303246   .920</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7: -0.0878618 -0.0504099 0.9190978 -1.8120791 1.5856680   .960</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8: -0.0008372 -0.1044569 0.9849230 -1.7962415 1.7617463   .920</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:  0.0181244 -0.0518836 0.9235805 -1.7336758 1.8020527   .940</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10: -0.0677146 -0.0353446 1.0413951 -2.3707526 1.9937100  1.000</span>
+<span class='r-in'><span class='fu'>param_summary_format</span><span class='op'>(</span><span class='va'>xsum</span>, pretty <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               a </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  "-0.1567617 [-1.7219858, 2.0969651], p = .700" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               b </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   "0.0412432 [-2.0164916, 2.0228078], p = .980" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               c </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   "0.1546037 [-1.6890724, 1.9511068], p = .740" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               d </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  "-0.0081051 [-2.3309867, 1.9026890], p = .940" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               e </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> "-0.0217859 [-1.9308186, 2.1481116], p = 1.000" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               f </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  "-0.1368770 [-2.0963626, 1.4303246], p = .920" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               g </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  "-0.0878618 [-1.8120791, 1.5856680], p = .960" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               h </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  "-0.0008372 [-1.7962415, 1.7617463], p = .920" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               i </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   "0.0181244 [-1.7336758, 1.8020527], p = .940" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                               j </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> "-0.0677146 [-2.3707526, 1.9937100], p = 1.000" </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>xsum</span><span class='op'>)</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -214,11 +221,11 @@ vector (if <code>pretty = TRUE</code>).</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p><p>Developed by Joshua F. Wiley.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -226,6 +233,8 @@ vector (if <code>pretty = TRUE</code>).</p>
 
   
 
+
+  
 
   </body>
 </html>

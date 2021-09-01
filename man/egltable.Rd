@@ -13,7 +13,7 @@ egltable(
   parametric = TRUE,
   paired = FALSE,
   simChisq = FALSE,
-  sims = 1e+06
+  sims = 1000000L
 )
 }
 \arguments{
@@ -55,7 +55,7 @@ Test but generalizing to large dimension of tables.}
 
 \item{sims}{Integer for the number of simulations to be used to estimate
 p-values for the chi-square tests for categorical variables when
-there are multiple groups.}
+there are multiple groups. Defaults to one million (\code{1e6L}).}
 }
 \value{
 A data frame of the table.

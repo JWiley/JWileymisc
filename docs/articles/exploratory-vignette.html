@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -70,8 +66,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/JWiley/JWileymisc/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -85,13 +81,13 @@
 
       
 
-      </header><script src="exploratory-vignette_files/header-attrs-2.3/header-attrs.js"></script><script src="exploratory-vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="exploratory-vignette_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Exploratory and Descriptive Statistics and Plots</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/tests/testthat/vignettes/exploratory-vignette.Rmd"><code>tests/testthat/vignettes/exploratory-vignette.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/vignettes/exploratory-vignette.Rmd" class="external-link"><code>vignettes/exploratory-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>exploratory-vignette.Rmd</code></div>
 
     </div>
@@ -99,23 +95,19 @@
     
     
 <p>To start, load the package.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">JWileymisc</span>)
-<span class="co">#&gt; Registered S3 methods overwritten by 'lme4':</span>
-<span class="co">#&gt;   method                          from</span>
-<span class="co">#&gt;   cooks.distance.influence.merMod car </span>
-<span class="co">#&gt;   influence.merMod                car </span>
-<span class="co">#&gt;   dfbeta.influence.merMod         car </span>
-<span class="co">#&gt;   dfbetas.influence.merMod        car</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">data.table</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://joshuawiley.com/JWileymisc/" class="external-link">JWileymisc</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></code></pre></div>
 <div id="descriptive-statistics" class="section level1">
 <h1 class="hasAnchor">
-<a href="#descriptive-statistics" class="anchor"></a>Descriptive Statistics</h1>
+<a href="#descriptive-statistics" class="anchor" aria-hidden="true"></a>Descriptive Statistics</h1>
 <p>The <code><a href="../reference/egltable.html">egltable()</a></code> function calculates basic descriptive statistics.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r">
-<span class="fu"><a href="../reference/egltable.html">egltable</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span>),
-         <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>)</pre></body></html></div>
-<table class="table">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span><span class="op">)</span>,
+         data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></code></pre></div>
+<table style="width:36%;" class="table">
 <caption>Example descriptive statistics table.</caption>
 <colgroup>
 <col width="12%">
@@ -149,10 +141,11 @@
 </tbody>
 </table>
 <p>The <code>strict</code> argument can be used if variables are categorical but are not coded as factors. In this case, <code>vs</code> has two levels: 0 and 1 and the frequency and percentage of each are shown instead of the mean and standard deviation.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r">
-<span class="fu"><a href="../reference/egltable.html">egltable</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span>),
-         <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>, <span class="kw">strict</span><span class="kw">=</span><span class="fl">FALSE</span>)</pre></body></html></div>
-<table class="table">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span><span class="op">)</span>,
+         data <span class="op">=</span> <span class="va">mtcars</span>, strict<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<table style="width:36%;" class="table">
 <caption>Example descriptive statistics table with automatic categorical variables.</caption>
 <colgroup>
 <col width="12%">
@@ -194,9 +187,10 @@
 </tbody>
 </table>
 <p><code><a href="../reference/egltable.html">egltable()</a></code> also allows descriptive statistics to be broken down by another variable by using the <code>g</code> argument. This not only separates results by group but also calculates bivariate tests of the differences between groups and effect sizes. For example, t-tests for continuous variables and two groups or chi-square tests for categorical variables. For more than two groups, ANOVAs are used.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r">
-<span class="fu"><a href="../reference/egltable.html">egltable</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span>),
-  <span class="kw">g</span> <span class="kw">=</span> <span class="st">"am"</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>, <span class="kw">strict</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span><span class="op">)</span>, 
+  g <span class="op">=</span> <span class="st">"am"</span>, data <span class="op">=</span> <span class="va">mtcars</span>, strict <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <caption>Example descriptive statistics table by group.</caption>
 <colgroup>
@@ -257,10 +251,11 @@
 </tbody>
 </table>
 <p>For very skewed continuous variables, non-parametric statistics and tests may be more appropriate. These can be generated using the <code>parametric</code> argument. For chi-square tests with small cell sizes, simulated p-values also can be generated.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r">
-<span class="fu"><a href="../reference/egltable.html">egltable</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span>),
-         <span class="kw">g</span> <span class="kw">=</span> <span class="st">"am"</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>, <span class="kw">strict</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
-         <span class="kw">parametric</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span><span class="op">)</span>, 
+         g <span class="op">=</span> <span class="st">"am"</span>, data <span class="op">=</span> <span class="va">mtcars</span>, strict <span class="op">=</span> <span class="cn">FALSE</span>,
+         parametric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <caption>Example descriptive statistics table by group.</caption>
 <colgroup>
@@ -322,17 +317,18 @@
 </table>
 <div id="paired-data" class="section level2">
 <h2 class="hasAnchor">
-<a href="#paired-data" class="anchor"></a>Paired Data</h2>
+<a href="#paired-data" class="anchor" aria-hidden="true"></a>Paired Data</h2>
 <p>We have already seen how to compare descriptives across groups when the groups were independent. <code><a href="../reference/egltable.html">egltable()</a></code> also supports using groups to test paired samples. To use this, the variable passed to the grouping argument, <code>g</code> must have exactly two levels and you must also pass a variable that is a unique ID per unit and specify <code>paired =  TRUE</code>.</p>
 <p>By default for continuous, paired data, mean and standard deviations are presented and a paired samples t-test is used. A pseudo Cohen’s d effect size is calculated as the mean of the change score divided by the standard deviation of the change score. If there are missing data, its possible that the mean difference will be different than the difference in means as the means are calculated on all available data, but the effect size can only be calculated on complete cases.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co">## example with paired data</span>
-<span class="fu"><a href="../reference/egltable.html">egltable</a></span>(
-  <span class="kw">vars</span> <span class="kw">=</span> <span class="st">"extra"</span>,
-  <span class="kw">g</span> <span class="kw">=</span> <span class="st">"group"</span>,
-  <span class="kw">data</span> <span class="kw">=</span> <span class="no">sleep</span>,
-  <span class="kw">idvar</span> <span class="kw">=</span> <span class="st">"ID"</span>,
-  <span class="kw">paired</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
-<table class="table">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## example with paired data</span>
+<span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span>
+  vars <span class="op">=</span> <span class="st">"extra"</span>,
+  g <span class="op">=</span> <span class="st">"group"</span>,
+  data <span class="op">=</span> <span class="va">sleep</span>,
+  idvar <span class="op">=</span> <span class="st">"ID"</span>,
+  paired <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<table style="width:96%;" class="table">
 <caption>Example parametric descriptive statistics for paired data.</caption>
 <colgroup>
 <col width="12%">
@@ -354,18 +350,19 @@
 </tr></tbody>
 </table>
 <p>If we do not want to make parametric assumptions with continuous variables, we can set <code>parametric = FALSE</code>. In this case the descriptives are medians and a paired Wilcoxon test is used. In this dataset there are ties and a warning is generated about ties and zeroes. This warning is generally ignorable, but if these were central hypothesis tests, it may warrant further testing using, for example, simulations which are more precise in the case of ties.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/egltable.html">egltable</a></span>(
-  <span class="kw">vars</span> <span class="kw">=</span> <span class="st">"extra"</span>,
-  <span class="kw">g</span> <span class="kw">=</span> <span class="st">"group"</span>,
-  <span class="kw">data</span> <span class="kw">=</span> <span class="no">sleep</span>,
-  <span class="kw">idvar</span> <span class="kw">=</span> <span class="st">"ID"</span>,
-  <span class="kw">paired</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-  <span class="kw">parametric</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span>
+  vars <span class="op">=</span> <span class="st">"extra"</span>,
+  g <span class="op">=</span> <span class="st">"group"</span>,
+  data <span class="op">=</span> <span class="va">sleep</span>,
+  idvar <span class="op">=</span> <span class="st">"ID"</span>,
+  paired <span class="op">=</span> <span class="cn">TRUE</span>,
+  parametric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; Warning in wilcox.test.default(widedat$dv2, widedat$dv1, paired = TRUE): cannot
 #&gt; compute exact p-value with ties
 #&gt; Warning in wilcox.test.default(widedat$dv2, widedat$dv1, paired = TRUE): cannot
 #&gt; compute exact p-value with zeroes</code></pre>
-<table class="table">
+<table style="width:97%;" class="table">
 <caption>Example non parametric descriptive statistics for paired data.</caption>
 <colgroup>
 <col width="12%">
@@ -387,17 +384,19 @@
 </tr></tbody>
 </table>
 <p>We can also work with categorical paired data. The following code creates a categorical variable, the tertiles of chick weights measured over time. The chick weight dataset has many time points, but we will just use two.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## paired categorical data example</span>
 <span class="co">## using data on chick weights to create categorical data</span>
-<span class="no">tmp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span>(<span class="no">ChickWeight</span>, <span class="no">Time</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">20</span>))
-<span class="no">tmp</span>$<span class="no">WeightTertile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span>(<span class="no">tmp</span>$<span class="no">weight</span>,
-  <span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span>(<span class="no">tmp</span>$<span class="no">weight</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>/<span class="fl">3</span>, <span class="fl">2</span>/<span class="fl">3</span>, <span class="fl">1</span>), <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-  <span class="kw">include.lowest</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">ChickWeight</span>, <span class="va">Time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span>
+<span class="va">tmp</span><span class="op">$</span><span class="va">WeightTertile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">$</span><span class="va">weight</span>,
+  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">$</span><span class="va">weight</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+  include.lowest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>No special code is needed to work with categorical variables. <code><a href="../reference/egltable.html">egltable()</a></code> recognises categorical variables and uses McNemar’s test, which is a chi-square of the off diagonals, which tests whether people (or chicks in this case) change groups equally over time or preferentially move one direction. In this case, a significant result suggests that over time chicks’ weights change preferentially one way and the descriptive statistics show us that there is an increase in weight tertile from time 0 to time 20.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/egltable.html">egltable</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"weight"</span>, <span class="st">"WeightTertile"</span>), <span class="kw">g</span> <span class="kw">=</span> <span class="st">"Time"</span>,
-  <span class="kw">data</span> <span class="kw">=</span> <span class="no">tmp</span>,
-  <span class="kw">idvar</span> <span class="kw">=</span> <span class="st">"Chick"</span>, <span class="kw">paired</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"weight"</span>, <span class="st">"WeightTertile"</span><span class="op">)</span>, g <span class="op">=</span> <span class="st">"Time"</span>,
+  data <span class="op">=</span> <span class="va">tmp</span>,
+  idvar <span class="op">=</span> <span class="st">"Chick"</span>, paired <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <caption>Continuous and categorical paired data.</caption>
 <colgroup>
@@ -449,13 +448,14 @@
 </div>
 <div id="correlation-summaries" class="section level1">
 <h1 class="hasAnchor">
-<a href="#correlation-summaries" class="anchor"></a>Correlation Summaries</h1>
+<a href="#correlation-summaries" class="anchor" aria-hidden="true"></a>Correlation Summaries</h1>
 <p>For continuous variables, correlation matrices are commonly examined. This is especially true for structural equation models or path analyses.</p>
-<p>The <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> function provides a simple way to generate these under various options. There is a formula interface, similar to <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> or other regression models. Missing data can be handled using listwise deletion, pairwise present data, or full information maximum likelihood (FIML). When assumptions are met, FIML is less biased and uses all available data, and is the default.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r">
-<span class="no">m</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/SEMSummary.html">SEMSummary</a></span>(~ <span class="no">mpg</span> + <span class="no">hp</span> + <span class="no">qsec</span> + <span class="no">wt</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>)
+<p>The <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> function provides a simple way to generate these under various options. There is a formula interface, similar to <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or other regression models. Missing data can be handled using listwise deletion, pairwise present data, or full information maximum likelihood (FIML). When assumptions are met, FIML is less biased and uses all available data, and is the default.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SEMSummary.html">SEMSummary</a></span><span class="op">(</span><span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">qsec</span> <span class="op">+</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
 
-<span class="no">corTab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/APAStyler.html">APAStyler</a></span>(<span class="no">m</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"cor"</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="va">corTab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="va">m</span>, type <span class="op">=</span> <span class="st">"cor"</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt;         N  M      SD    1.  2.       3.       4.      </span>
 <span class="co">#&gt; 1. mpg  32  20.09  6.03  -  -0.78***  0.42*   -0.87***</span>
 <span class="co">#&gt; 2. hp   32 146.69 68.56      -       -0.71***  0.66***</span>
@@ -468,7 +468,7 @@
 <span class="co">#&gt; mpg  1   1  1    1 </span>
 <span class="co">#&gt; hp       1  1    1 </span>
 <span class="co">#&gt; qsec        1    1 </span>
-<span class="co">#&gt; wt               1</span></pre></body></html></div>
+<span class="co">#&gt; wt               1</span></code></pre></div>
 <p>These correlations can be nicely formatted into a table.</p>
 <table class="table">
 <caption>Example correlation table.</caption>
@@ -536,29 +536,33 @@
 </tbody>
 </table>
 <p>Plot methods exist for <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> objects. By default, above the diagonal are correlations and below the diagonal are p-values. However, the type argument can be set (see <code><a href="../reference/corplot.html">?corplot</a></code>) to get all values to be either correlations or p-values. By default, another useful feature is that hierarchical clustering is used to group similar variables together in clusters, provided a more useful sorting of the data than many “default” correlation matrices. If a specific order is desired, you can use the <code>order = "asis"</code> option to keep the variable order the same as written in <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code>.</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r">
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">m</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Order by hierarchical clustering"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Order by hierarchical clustering"</span><span class="op">)</span></code></pre></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r">
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">m</span>, <span class="kw">order</span> <span class="kw">=</span> <span class="st">"asis"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Order as written"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">m</span>, order <span class="op">=</span> <span class="st">"asis"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Order as written"</span><span class="op">)</span></code></pre></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-19-2.png" width="700"></p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r">
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">m</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"p"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Numbers are p-values"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">m</span>, type <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Numbers are p-values"</span><span class="op">)</span></code></pre></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <div id="grouped-correlations" class="section level2">
 <h2 class="hasAnchor">
-<a href="#grouped-correlations" class="anchor"></a>Grouped Correlations</h2>
+<a href="#grouped-correlations" class="anchor" aria-hidden="true"></a>Grouped Correlations</h2>
 <p>Correlations also can be broken down by group. Here results are separated by species which are automaticaly used as the title of each graph.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r">
-<span class="no">mg</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/SEMSummary.html">SEMSummary</a></span>(~ <span class="no">Sepal.Length</span> + <span class="no">Petal.Length</span> +
-                  <span class="no">Sepal.Width</span> + <span class="no">Petal.Width</span> <span class="kw">|</span> <span class="no">Species</span>,
-                 <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">mg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SEMSummary.html">SEMSummary</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="va">Petal.Length</span> <span class="op">+</span>
+                  <span class="va">Sepal.Width</span> <span class="op">+</span> <span class="va">Petal.Width</span> <span class="op">|</span> <span class="va">Species</span>,
+                 data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">mg</span>)
-<span class="co">#&gt; $`1`</span></pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mg</span><span class="op">)</span>
+<span class="co">#&gt; $`1`</span></code></pre></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 <pre><code>#&gt; 
 #&gt; $`2`</code></pre>
@@ -570,29 +574,30 @@
 </div>
 <div id="likert-scale-plots" class="section level1">
 <h1 class="hasAnchor">
-<a href="#likert-scale-plots" class="anchor"></a>Likert Scale Plots</h1>
+<a href="#likert-scale-plots" class="anchor" aria-hidden="true"></a>Likert Scale Plots</h1>
 <p>In much of psychological and consumer/market research, likert rating scales are used. For example, rating a question/item from “Strongly DISagree” to “Strongly Agree” or rating satisfaction from “Not at all” to “Very Satisfied” or adjectives that capture mood/affect from “Not at all” to “Extremely”. Likert plots aim to show these results clearly and aid interpretation by presenting the anchors as well.</p>
 <p>The following code creates some simulated data, summarizes it, adds the necessary labels/anchors, and creates a nice plot.</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## simulate some likert style data</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1234</span>)
-<span class="no">d</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span>(
-  <span class="kw">Happy</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">5</span>, <span class="fl">200</span>, <span class="fl">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.2</span>, <span class="fl">.1</span>)),
-  <span class="kw">Cheerful</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">5</span>, <span class="fl">200</span>, <span class="fl">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.1</span>)),
-  <span class="kw">Peaceful</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">5</span>, <span class="fl">200</span>, <span class="fl">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.2</span>)),
-  <span class="kw">Sad</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">5</span>, <span class="fl">200</span>, <span class="fl">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">.3</span>, <span class="fl">.3</span>, <span class="fl">.2</span>, <span class="fl">.1</span>)),
-  <span class="kw">Hopeless</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">5</span>, <span class="fl">200</span>, <span class="fl">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.3</span>, <span class="fl">.3</span>, <span class="fl">.2</span>, <span class="fl">.2</span>, <span class="fl">0</span>)),
-  <span class="kw">Angry</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fl">5</span>, <span class="fl">200</span>, <span class="fl">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.4</span>, <span class="fl">.3</span>, <span class="fl">.2</span>, <span class="fl">.08</span>, <span class="fl">.02</span>)))
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
+<span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>
+  Happy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">200</span>, <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span>,
+  Cheerful <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">200</span>, <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span>,
+  Peaceful <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">200</span>, <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span>,
+  Sad <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">200</span>, <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.3</span>, <span class="fl">.3</span>, <span class="fl">.2</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span>,
+  Hopeless <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">200</span>, <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.3</span>, <span class="fl">.2</span>, <span class="fl">.2</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,  
+  Angry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">200</span>, <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.3</span>, <span class="fl">.2</span>, <span class="fl">.08</span>, <span class="fl">.02</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">dmeans</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html">melt</a></span>(<span class="no">d</span>, <span class="kw">measure.vars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">d</span>))[,
-  <span class="fu">.</span>(<span class="kw">Mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">value</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>)), <span class="kw">by</span> <span class="kw">=</span> <span class="no">variable</span>]
+<span class="va">dmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">d</span>, measure.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>,
+  <span class="fu">.</span><span class="op">(</span>Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">variable</span><span class="op">]</span>
 
-<span class="no">dmeans</span>[, <span class="no">Low</span> <span class="kw">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="no">variable</span>, <span class="st">"\nNot at all"</span>)]
-<span class="no">dmeans</span>[, <span class="no">High</span> <span class="kw">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="no">variable</span>, <span class="st">"\nExtremely"</span>)]
-<span class="no">dmeans</span>[, <span class="no">variable</span> <span class="kw">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">variable</span>))]
+<span class="va">dmeans</span><span class="op">[</span>, <span class="va">Low</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">variable</span>, <span class="st">"\nNot at all"</span><span class="op">)</span><span class="op">]</span>
+<span class="va">dmeans</span><span class="op">[</span>, <span class="va">High</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">variable</span>, <span class="st">"\nExtremely"</span><span class="op">)</span><span class="op">]</span>
+<span class="va">dmeans</span><span class="op">[</span>, <span class="va">variable</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">variable</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
 
 <span class="co">## view the summarised data</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">dmeans</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dmeans</span><span class="op">)</span>
 <span class="co">#&gt;    variable  Mean                  Low                High</span>
 <span class="co">#&gt; 1:        1 2.945    Happy\nNot at all    Happy\nExtremely</span>
 <span class="co">#&gt; 2:        2 3.060 Cheerful\nNot at all Cheerful\nExtremely</span>
@@ -601,25 +606,26 @@
 <span class="co">#&gt; 5:        5 2.280 Hopeless\nNot at all Hopeless\nExtremely</span>
 <span class="co">#&gt; 6:        6 1.880    Angry\nNot at all    Angry\nExtremely</span>
 
-<span class="fu"><a href="../reference/gglikert.html">gglikert</a></span>(<span class="st">"Mean"</span>, <span class="st">"variable"</span>, <span class="st">"Low"</span>, <span class="st">"High"</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dmeans</span>,
-         <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">5</span>),
-         <span class="kw">title</span> <span class="kw">=</span> <span class="st">"Average Affect Ratings"</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/gglikert.html">gglikert</a></span><span class="op">(</span><span class="st">"Mean"</span>, <span class="st">"variable"</span>, <span class="st">"Low"</span>, <span class="st">"High"</span>, data <span class="op">=</span> <span class="va">dmeans</span>,
+         xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span>,
+         title <span class="op">=</span> <span class="st">"Average Affect Ratings"</span><span class="op">)</span></code></pre></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co">## create a grouping variable</span>
-<span class="no">dg</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">d</span>, <span class="kw">Group</span> <span class="kw">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span>(
-                 <span class="no">d</span>$<span class="no">Happy</span> <span class="kw">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">d</span>$<span class="no">Happy</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                 <span class="st">"General Population"</span>, <span class="st">"Depressed"</span>))
+<span class="va">dg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">d</span>, Group <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html" class="external-link">ifelse</a></span><span class="op">(</span>
+                 <span class="va">d</span><span class="op">$</span><span class="va">Happy</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Happy</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+                 <span class="st">"General Population"</span>, <span class="st">"Depressed"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">dgmeans</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html">melt</a></span>(<span class="no">dg</span>, <span class="kw">measure.vars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">d</span>), <span class="kw">id.vars</span> <span class="kw">=</span> <span class="st">"Group"</span>)[,
-  <span class="fu">.</span>(<span class="kw">Mean</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">value</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>)), <span class="kw">by</span> <span class="kw">=</span> <span class="fu">.</span>(<span class="no">variable</span>, <span class="no">Group</span>)]
+<span class="va">dgmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">dg</span>, measure.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, id.vars <span class="op">=</span> <span class="st">"Group"</span><span class="op">)</span><span class="op">[</span>,
+  <span class="fu">.</span><span class="op">(</span>Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">variable</span>, <span class="va">Group</span><span class="op">)</span><span class="op">]</span>
 
-<span class="no">dgmeans</span>[, <span class="no">Low</span> <span class="kw">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="no">variable</span>, <span class="st">"\nNot at all"</span>)]
-<span class="no">dgmeans</span>[, <span class="no">High</span> <span class="kw">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="no">variable</span>, <span class="st">"\nExtremely"</span>)]
-<span class="no">dgmeans</span>[, <span class="no">variable</span> <span class="kw">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">variable</span>))]
+<span class="va">dgmeans</span><span class="op">[</span>, <span class="va">Low</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">variable</span>, <span class="st">"\nNot at all"</span><span class="op">)</span><span class="op">]</span>
+<span class="va">dgmeans</span><span class="op">[</span>, <span class="va">High</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">variable</span>, <span class="st">"\nExtremely"</span><span class="op">)</span><span class="op">]</span>
+<span class="va">dgmeans</span><span class="op">[</span>, <span class="va">variable</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">variable</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>
 
 <span class="co">## view the summarised data</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">dgmeans</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dgmeans</span><span class="op">)</span>
 <span class="co">#&gt;     variable              Group     Mean                  Low</span>
 <span class="co">#&gt;  1:        1 General Population 3.510791    Happy\nNot at all</span>
 <span class="co">#&gt;  2:        1          Depressed 1.655738    Happy\nNot at all</span>
@@ -647,14 +653,14 @@
 <span class="co">#&gt; 11:    Angry\nExtremely</span>
 <span class="co">#&gt; 12:    Angry\nExtremely</span>
 
-<span class="fu"><a href="../reference/gglikert.html">gglikert</a></span>(<span class="st">"Mean"</span>, <span class="st">"variable"</span>, <span class="st">"Low"</span>, <span class="st">"High"</span>,
-         <span class="kw">colour</span> <span class="kw">=</span> <span class="st">"Group"</span>,
-         <span class="kw">data</span> <span class="kw">=</span> <span class="no">dgmeans</span>,
-         <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">5</span>),
-         <span class="kw">title</span> <span class="kw">=</span> <span class="st">"Average Affect Ratings"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_colour_manual</a></span>(
-    <span class="kw">values</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Depressed"</span> <span class="kw">=</span> <span class="st">"black"</span>,
-               <span class="st">"General Population"</span> <span class="kw">=</span> <span class="st">"grey70"</span>))</pre></body></html></div>
+<span class="fu"><a href="../reference/gglikert.html">gglikert</a></span><span class="op">(</span><span class="st">"Mean"</span>, <span class="st">"variable"</span>, <span class="st">"Low"</span>, <span class="st">"High"</span>,
+         colour <span class="op">=</span> <span class="st">"Group"</span>,
+         data <span class="op">=</span> <span class="va">dgmeans</span>,
+         xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span>,
+         title <span class="op">=</span> <span class="st">"Average Affect Ratings"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span>
+    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Depressed"</span> <span class="op">=</span> <span class="st">"black"</span>,
+               <span class="st">"General Population"</span> <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="exploratory-vignette_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 </div>
   </div>
@@ -670,11 +676,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p></p>
+<p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
@@ -682,6 +690,8 @@
 
   
 
+
+  
 
   </body>
 </html>

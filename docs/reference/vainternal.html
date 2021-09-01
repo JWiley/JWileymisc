@@ -53,6 +53,8 @@ called directly." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -64,9 +66,15 @@ called directly." />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -80,19 +88,13 @@ called directly." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -120,7 +122,7 @@ called directly." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -154,11 +156,11 @@ This is an internal function and is not  meant to be
 called directly.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>logmar</span>(<span class='no'>x</span>, <span class='kw'>snell.numerator</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>inverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>logmar</span><span class='op'>(</span><span class='va'>x</span>, snell.numerator <span class='op'>=</span> <span class='fl'>20</span>, inverse <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>CFHM</span>(<span class='no'>x</span>, <span class='no'>zero</span>)
+<span class='fu'>CFHM</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>zero</span><span class='op'>)</span>
 
-<span class='fu'>snellen</span>(<span class='no'>snellenvalue</span>, <span class='no'>chart.values</span>, <span class='no'>chart.nletters</span>)</pre>
+<span class='fu'>snellen</span><span class='op'>(</span><span class='va'>snellenvalue</span>, <span class='va'>chart.values</span>, <span class='va'>chart.nletters</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -248,16 +250,26 @@ be called.</p>
   called</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## logMAR value for "perfect" 20/20 vision</span>
-<span class='kw pkg'>JWileymisc</span><span class='kw ns'>:::</span><span class='fu'>logmar</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='output co'>#&gt; [1] 0</div><div class='input'>
-<span class='co'>## Go to and from logMAR value, should return "20"</span>
-<span class='co'>## there may be slight error due to floating point arithmetic</span>
-<span class='kw pkg'>JWileymisc</span><span class='kw ns'>:::</span><span class='fu'>logmar</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='kw pkg'>JWileymisc</span><span class='kw ns'>:::</span><span class='fu'>logmar</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>20</span>), <span class='kw'>inverse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] 20</div><div class='input'>
-<span class='co'>## logMAR value for 20/40 vision</span>
-<span class='kw pkg'>JWileymisc</span><span class='kw ns'>:::</span><span class='fu'>logmar</span>(<span class='fl'>40</span>)</div><div class='output co'>#&gt; [1] 0.30103</div><div class='input'><span class='co'>## logMAR approximations, note "HM" is just the zero value</span>
-<span class='kw pkg'>JWileymisc</span><span class='kw ns'>:::</span><span class='fu'>CFHM</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"HM 20"</span>, <span class='st'>"HM"</span>, <span class='st'>"CF 20"</span>, <span class='st'>"CF 12"</span>, <span class='st'>"CF"</span>), <span class='kw'>zero</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] 2.000000 3.000000 1.000000 1.221849 3.000000</div><div class='input'><span class='co'>## In cases where there is insufficient data, rather than choose</span>
-<span class='co'>## an arbitrary value, you can may just use NA</span>
-<span class='kw pkg'>JWileymisc</span><span class='kw ns'>:::</span><span class='fu'>CFHM</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"HM 20"</span>, <span class='st'>"HM"</span>, <span class='st'>"CF 20"</span>, <span class='st'>"CF 12"</span>, <span class='st'>"CF"</span>), <span class='kw'>zero</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</div><div class='output co'>#&gt; [1] 2.000000       NA 1.000000 1.221849       NA</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'>## logMAR value for "perfect" 20/20 vision</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## Go to and from logMAR value, should return "20"</span></span>
+<span class='r-in'><span class='co'>## there may be slight error due to floating point arithmetic</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>, inverse <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 20</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## logMAR value for 20/40 vision</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span><span class='fl'>40</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.30103</span>
+<span class='r-in'><span class='co'>## logMAR approximations, note "HM" is just the zero value</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>CFHM</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HM 20"</span>, <span class='st'>"HM"</span>, <span class='st'>"CF 20"</span>, <span class='st'>"CF 12"</span>, <span class='st'>"CF"</span><span class='op'>)</span>, zero <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2.000000 3.000000 1.000000 1.221849 3.000000</span>
+<span class='r-in'><span class='co'>## In cases where there is insufficient data, rather than choose</span></span>
+<span class='r-in'><span class='co'>## an arbitrary value, you can may just use NA</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>CFHM</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HM 20"</span>, <span class='st'>"HM"</span>, <span class='st'>"CF 20"</span>, <span class='st'>"CF 12"</span>, <span class='st'>"CF"</span><span class='op'>)</span>, zero <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2.000000       NA 1.000000 1.221849       NA</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -269,11 +281,11 @@ be called.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p><p>Developed by Joshua F. Wiley.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -281,6 +293,8 @@ be called.</p>
 
   
 
+
+  
 
   </body>
 </html>

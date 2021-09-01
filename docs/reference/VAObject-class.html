@@ -46,6 +46,8 @@ and oculus dexter (OD; right eye)" />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -57,9 +59,15 @@ and oculus dexter (OD; right eye)" />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -73,19 +81,13 @@ and oculus dexter (OD; right eye)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -113,7 +115,7 @@ and oculus dexter (OD; right eye)" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -140,7 +142,7 @@ and oculus dexter (OD; right eye)" />
 and oculus dexter (OD; right eye)</p>
     </div>
 
-    <pre class="usage"># S4 method for VAObject,ANY,ANY,ANY
+    <div class="ref-usage sourceCode"><pre><code># S4 method for VAObject,ANY,ANY,ANY
 [(x, i, j, ..., drop = TRUE)
 
 # S4 method for VAObject
@@ -150,7 +152,7 @@ print(x, ...)
 show(object)
 
 # S4 method for VAObject
-summary(object, weightbest = TRUE, w = c(0.75, 0.25))</pre>
+summary(object, weightbest = TRUE, w = c(0.75, 0.25))</code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -187,7 +189,7 @@ Defaults to <code>TRUE</code>.</p></td>
     <tr>
       <th>w</th>
       <td><p>A numeric vector of the weights, first for the best seeing
-then the worst seeing eye. Defaults to <code><a href='https://rdrr.io/r/base/c.html'>c(.75, .25)</a></code>.</p></td>
+then the worst seeing eye. Defaults to <code>c(.75, .25)</code>.</p></td>
     </tr>
     </table>
 
@@ -204,7 +206,7 @@ then the worst seeing eye. Defaults to <code><a href='https://rdrr.io/r/base/c.h
 
     
 
-<dl'>
+<dl>
 <dt><code>originalOS</code></dt><dd><p>the original visual acuity data for the left (ocular sinister) eye</p></dd>
 
 <dt><code>originalOD</code></dt><dd><p>the original visual acuity data for the right (ocular dexter) eye</p></dd>
@@ -240,11 +242,11 @@ the arithmetic mean.</p></dd>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p><p>Developed by Joshua F. Wiley.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -252,6 +254,8 @@ the arithmetic mean.</p></dd>
 
   
 
+
+  
 
   </body>
 </html>

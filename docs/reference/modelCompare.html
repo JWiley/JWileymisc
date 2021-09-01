@@ -45,6 +45,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -56,9 +58,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -72,19 +80,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -112,7 +114,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -138,14 +140,14 @@
     <p>Generic function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modelCompare</span>(<span class='no'>model1</span>, <span class='no'>model2</span>, <span class='no'>...</span>)
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>modelCompare</span><span class='op'>(</span><span class='va'>model1</span>, <span class='va'>model2</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>as.modelCompare</span>(<span class='no'>x</span>)
+<span class='fu'>as.modelCompare</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='fu'>is.modelCompare</span>(<span class='no'>x</span>)
+<span class='fu'>is.modelCompare</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lm</span>
-<span class='fu'>modelCompare</span>(<span class='no'>model1</span>, <span class='no'>model2</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>modelCompare</span><span class='op'>(</span><span class='va'>model1</span>, <span class='va'>model2</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,33 +176,36 @@ test or attempt coercing to a modelCompare object.</p></td>
     <p>Depends on the method dispatch.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>qsec</span> * <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-
-<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>am</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-
-<span class='fu'>modelCompare</span>(<span class='no'>m1</span>, <span class='no'>m2</span>)</div><div class='output co'>#&gt; $Comparison
-#&gt;         Model N_Obs       AIC       BIC        LL LLDF     Sigma        R2
-#&gt; 1:    Reduced    32 196.48438 200.88159 -95.24219    3  4.902029 0.3597989
-#&gt; 2:       Full    32 165.49722 172.82590 -77.74861    5  2.937243 0.7854734
-#&gt; 3: Difference     0 -30.98716 -28.05569  17.49358    2 -1.964786 0.4256745
-#&gt;           F2     AdjR2        F FNumDF FDenDF            P
-#&gt; 1: 0.5620093 0.3384589 16.86028      1     30 2.850207e-04
-#&gt; 2: 3.6614271 0.7624884 34.17332      3     28 1.694676e-09
-#&gt; 3: 1.9842506 0.4240295 27.77951      2     28 2.250640e-07
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "modelCompare.lm" "modelCompare"   </div><div class='input'>
-<span class='co'>## cleanup</span>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>m1</span>, <span class='no'>m2</span>)
-
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='no'>m4</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='fl'>0</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>modelCompare</span>(<span class='no'>m3</span>, <span class='no'>m4</span>)
-
-<span class='co'>## cleanup</span>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>m3</span>, <span class='no'>m4</span>)
-}</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>qsec</span> <span class='op'>*</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>modelCompare</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $Comparison</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         Model N_Obs       AIC       BIC        LL LLDF     Sigma        R2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    Reduced    32 196.48438 200.88159 -95.24219    3  4.902029 0.3597989</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:       Full    32 165.49722 172.82590 -77.74861    5  2.937243 0.7854734</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Difference     0 -30.98716 -28.05569  17.49358    2 -1.964786 0.4256745</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           F2     AdjR2        F FNumDF FDenDF            P</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.5620093 0.3384589 16.86028      1     30 2.850207e-04</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: 3.6614271 0.7624884 34.17332      3     28 1.694676e-09</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: 1.9842506 0.4240295 27.77951      2     28 2.250640e-07</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelCompare.lm" "modelCompare"   </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## cleanup</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>1</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>m4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>0</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>modelCompare</span><span class='op'>(</span><span class='va'>m3</span>, <span class='va'>m4</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## cleanup</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m3</span>, <span class='va'>m4</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -212,11 +217,11 @@ test or attempt coercing to a modelCompare object.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p><p>Developed by Joshua F. Wiley.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -224,6 +229,8 @@ test or attempt coercing to a modelCompare object.</p></td>
 
   
 
+
+  
 
   </body>
 </html>

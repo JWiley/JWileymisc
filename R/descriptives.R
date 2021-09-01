@@ -515,7 +515,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
 #'   Test but generalizing to large dimension of tables.
 #' @param sims Integer for the number of simulations to be used to estimate
 #'   p-values for the chi-square tests for categorical variables when
-#'   there are multiple groups.
+#'   there are multiple groups. Defaults to one million (\code{1e6L}).
 #' @return A data frame of the table.
 #' @keywords utils
 #' @export
@@ -568,7 +568,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
 #'
 #' rm(tmp)
 egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
-                     paired = FALSE, simChisq = FALSE, sims = 1e6) {
+                     paired = FALSE, simChisq = FALSE, sims = 1e6L) {
   if (!missing(data)) {
     if (is.data.table(data)) {
       dat <- data[, vars, with=FALSE]
@@ -629,6 +629,13 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
     multi <- FALSE
   }
 
+  if (isTRUE(length(catvars.index)>0)) {
+    for (n in vnames[catvars.index]) {
+      if (isFALSE(is.factor(dat[[n]]))) {
+        dat[[n]] <- factor(dat[[n]])
+      }
+    }
+  }
 
   tmpout <- lapply(levels(g), function(gd) {
     d <- dat[which(g == gd)]
@@ -660,7 +667,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
 
     if (isTRUE(length(catvars.index)>0)) {
       tmpcat <- lapply(vnames[catvars.index], function(n) {
-         x <- table(d[[n]])
+        x <- table(d[[n]])
         data.table(
           Variable = c(n, paste0("  ", names(x))),
           Res = c("", sprintf("%d (%2.1f)", x, prop.table(x) * 100)))

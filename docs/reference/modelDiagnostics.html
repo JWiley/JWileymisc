@@ -48,6 +48,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -59,9 +61,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,19 +83,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -115,7 +117,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -144,21 +146,21 @@
   <code>modelDiagnostics</code> class, and methods.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modelDiagnostics</span>(<span class='no'>object</span>, <span class='no'>...</span>)
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>modelDiagnostics</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>as.modelDiagnostics</span>(<span class='no'>x</span>)
+<span class='fu'>as.modelDiagnostics</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='fu'>is.modelDiagnostics</span>(<span class='no'>x</span>)
+<span class='fu'>is.modelDiagnostics</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lm</span>
-<span class='fu'>modelDiagnostics</span>(
-  <span class='no'>object</span>,
-  <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
-  <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>distr</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,
-  <span class='kw'>standardized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>
-)</pre>
+<span class='fu'>modelDiagnostics</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  ev.perc <span class='op'>=</span> <span class='fl'>0.001</span>,
+  robust <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  distr <span class='op'>=</span> <span class='st'>"normal"</span>,
+  standardized <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -210,32 +212,62 @@ method.</p></td>
   <code>as.modelDiagnostics</code> and <code>modelDiagnostics</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>testm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>hp</span> * <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-
-<span class='no'>md</span> <span class='kw'>&lt;-</span> <span class='fu'>modelDiagnostics</span>(<span class='no'>testm</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: singularity problem</span></div><div class='output co'>#&gt; <span class='warning'>Warning: tiny diagonals replaced with Inf when calling blkfct</span></div><div class='output co'>#&gt; <span class='warning'>Warning: singularity problem</span></div><div class='output co'>#&gt; <span class='warning'>Warning: tiny diagonals replaced with Inf when calling blkfct</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>md</span>$<span class='no'>residualDiagnostics</span>$<span class='no'>testDistribution</span>)</div><div class='img'><img src='modelDiagnostics-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>md</span>$<span class='no'>extremeValues</span></div><div class='output co'>#&gt; Empty data.table (0 rows and 3 cols): mpg,Index,EffectType</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>md</span>)</div><div class='img'><img src='modelDiagnostics-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='modelDiagnostics-3.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='no'>md</span> <span class='kw'>&lt;-</span> <span class='fu'>modelDiagnostics</span>(<span class='no'>testm</span>, <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>.1</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: singularity problem</span></div><div class='output co'>#&gt; <span class='warning'>Warning: tiny diagonals replaced with Inf when calling blkfct</span></div><div class='output co'>#&gt; <span class='warning'>Warning: singularity problem</span></div><div class='output co'>#&gt; <span class='warning'>Warning: tiny diagonals replaced with Inf when calling blkfct</span></div><div class='input'><span class='no'>md</span>$<span class='no'>extremeValues</span></div><div class='output co'>#&gt;     mpg Index EffectType
-#&gt; 1: 24.4     8  Residuals
-#&gt; 2: 10.4    15  Residuals
-#&gt; 3: 10.4    16  Residuals
-#&gt; 4: 32.4    18  Residuals
-#&gt; 5: 33.9    20  Residuals
-#&gt; 6: 21.5    21  Residuals
-#&gt; 7: 30.4    28  Residuals</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>md</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='modelDiagnostics-4.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='no'>testdat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-  <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>NA</span>, <span class='fl'>9000000</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>),
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>5</span>, <span class='fl'>4</span>, <span class='fl'>3</span>, <span class='fl'>2</span>))
-
-<span class='fu'>modelDiagnostics</span>(
-  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>y</span> ~ <span class='no'>x</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>testdat</span>, <span class='kw'>na.action</span> <span class='kw'>=</span> <span class='st'>"na.omit"</span>),
-  <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>.1</span>)$<span class='no'>extremeValues</span></div><div class='output co'>#&gt; <span class='warning'>Warning: tiny diagonals replaced with Inf when calling blkfct</span></div><div class='output co'>#&gt; <span class='warning'>Warning: tiny diagonals replaced with Inf when calling blkfct</span></div><div class='output co'>#&gt;        y Index EffectType
-#&gt; 1: 9e+06     7  Residuals</div><div class='input'>
-<span class='fu'>modelDiagnostics</span>(
-  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>y</span> ~ <span class='no'>x</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>testdat</span>, <span class='kw'>na.action</span> <span class='kw'>=</span> <span class='st'>"na.exclude"</span>),
-  <span class='kw'>ev.perc</span> <span class='kw'>=</span> <span class='fl'>.1</span>)$<span class='no'>extremeValues</span></div><div class='output co'>#&gt;        y Index EffectType
-#&gt; 1: 9e+06     7  Residuals</div><div class='input'>
-<span class='co'>## clean up</span>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>testm</span>, <span class='no'>md</span>, <span class='no'>testdat</span>)</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>testm</span> <span class='op'>&lt;-</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>md</span> <span class='op'>&lt;-</span> <span class='fu'>modelDiagnostics</span><span class='op'>(</span><span class='va'>testm</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>singularity problem</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>singularity problem</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>md</span><span class='op'>$</span><span class='va'>residualDiagnostics</span><span class='op'>$</span><span class='va'>testDistribution</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='modelDiagnostics-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='va'>md</span><span class='op'>$</span><span class='va'>extremeValues</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Empty data.table (0 rows and 3 cols): mpg,Index,EffectType</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>md</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='modelDiagnostics-2.png' alt='' width='700' height='433' /></span>
+<span class='r-plt'><img src='modelDiagnostics-3.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>md</span> <span class='op'>&lt;-</span> <span class='fu'>modelDiagnostics</span><span class='op'>(</span><span class='va'>testm</span>, ev.perc <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>singularity problem</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>singularity problem</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
+<span class='r-in'><span class='va'>md</span><span class='op'>$</span><span class='va'>extremeValues</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     mpg Index EffectType</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 24.4     8  Residuals</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: 10.4    15  Residuals</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: 10.4    16  Residuals</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4: 32.4    18  Residuals</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5: 33.9    20  Residuals</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6: 21.5    21  Residuals</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7: 30.4    28  Residuals</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>md</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='modelDiagnostics-4.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>testdat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
+<span class='r-in'>  y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>3</span>, <span class='cn'>NA</span>, <span class='fl'>9000000</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span>,</span>
+<span class='r-in'>  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>5</span>, <span class='fl'>4</span>, <span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>modelDiagnostics</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span>, data <span class='op'>=</span> <span class='va'>testdat</span>, na.action <span class='op'>=</span> <span class='st'>"na.omit"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  ev.perc <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>extremeValues</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        y Index EffectType</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 9e+06     7  Residuals</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>modelDiagnostics</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span>, data <span class='op'>=</span> <span class='va'>testdat</span>, na.action <span class='op'>=</span> <span class='st'>"na.exclude"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  ev.perc <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>extremeValues</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        y Index EffectType</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 9e+06     7  Residuals</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## clean up</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>testm</span>, <span class='va'>md</span>, <span class='va'>testdat</span><span class='op'>)</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -247,11 +279,11 @@ method.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p><p>Developed by Joshua F. Wiley.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -259,6 +291,8 @@ method.</p></td>
 
   
 
+
+  
 
   </body>
 </html>

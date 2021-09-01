@@ -45,6 +45,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -56,9 +58,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -72,19 +80,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -112,7 +114,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -138,7 +140,7 @@
     <p>Function to calculate circular mean</p>
     </div>
 
-    <pre class="usage"><span class='fu'>meanCircular</span>(<span class='no'>x</span>, <span class='no'>max</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>meanCircular</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>max</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,8 +165,32 @@ Defaults to <code>TRUE</code>.</p></td>
     <p>A numeric value with the circular mean.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>22</span>:<span class='fl'>23</span>, <span class='fl'>1</span>:<span class='fl'>2</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 0</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 18</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>23</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 4.5</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>21</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 4.693219</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>21</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 1.5</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>23</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 2.5</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.91</span>, <span class='fl'>.96</span>, <span class='fl'>.05</span>, <span class='fl'>.16</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] 0.01771571</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>9</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 7.5</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fl'>21</span>:<span class='fl'>23</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 22</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>16</span>, <span class='fl'>17</span>, <span class='fl'>18</span>, <span class='fl'>19</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>24</span>)</div><div class='output co'>#&gt; [1] 17.5</div><div class='input'><span class='fu'>meanCircular</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>355</span>, <span class='fl'>5</span>, <span class='fl'>15</span>), <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>360</span>)</div><div class='output co'>#&gt; [1] 5</div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>22</span><span class='op'>:</span><span class='fl'>23</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 18</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>23</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 4.5</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>21</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 4.693219</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>21</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1.5</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>23</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2.5</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.91</span>, <span class='fl'>.96</span>, <span class='fl'>.05</span>, <span class='fl'>.16</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.01771571</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>7</span>, <span class='fl'>8</span>, <span class='fl'>9</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 7.5</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fl'>21</span><span class='op'>:</span><span class='fl'>23</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 22</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>16</span>, <span class='fl'>17</span>, <span class='fl'>18</span>, <span class='fl'>19</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 17.5</span>
+<span class='r-in'><span class='fu'>meanCircular</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>355</span>, <span class='fl'>5</span>, <span class='fl'>15</span><span class='op'>)</span>, max <span class='op'>=</span> <span class='fl'>360</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 5</span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -176,11 +202,11 @@ Defaults to <code>TRUE</code>.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p><p>Developed by Joshua F. Wiley.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -188,6 +214,8 @@ Defaults to <code>TRUE</code>.</p></td>
 
   
 
+
+  
 
   </body>
 </html>

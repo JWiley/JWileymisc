@@ -47,6 +47,8 @@ outcome." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -58,9 +60,15 @@ outcome." />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -74,19 +82,13 @@ outcome." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -114,7 +116,7 @@ outcome." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -142,15 +144,15 @@ unique predictive effect of different IVs with and without covariates on an
 outcome.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>internalcompareIV</span>(
-  <span class='no'>dv</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"normal"</span>, <span class='st'>"binary"</span>, <span class='st'>"count"</span>),
-  <span class='no'>iv</span>,
-  <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(),
-  <span class='no'>data</span>,
-  <span class='kw'>multivariate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>
-)</pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>internalcompareIV</span><span class='op'>(</span>
+  <span class='va'>dv</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"normal"</span>, <span class='st'>"binary"</span>, <span class='st'>"count"</span><span class='op'>)</span>,
+  <span class='va'>iv</span>,
+  covariates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>data</span>,
+  multivariate <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,12 +192,15 @@ outcome.</p>
     <p>A list with all the model results.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>test1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>JWileymisc</span><span class='kw ns'>:::</span><span class='fu'>internalcompareIV</span>(
-  <span class='kw'>dv</span> <span class='kw'>=</span> <span class='st'>"mpg"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,
-  <span class='kw'>iv</span> <span class='kw'>=</span> <span class='st'>"hp"</span>,
-  <span class='kw'>covariates</span> <span class='kw'>=</span> <span class='st'>"am"</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>multivariate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>test1</span>$<span class='no'>Summary</span></div><div class='output co'>#&gt; NULL</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span>(<span class='no'>test1</span>)</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>test1</span> <span class='op'>&lt;-</span> <span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>internalcompareIV</span><span class='op'>(</span></span>
+<span class='r-in'>  dv <span class='op'>=</span> <span class='st'>"mpg"</span>, type <span class='op'>=</span> <span class='st'>"normal"</span>,</span>
+<span class='r-in'>  iv <span class='op'>=</span> <span class='st'>"hp"</span>,</span>
+<span class='r-in'>  covariates <span class='op'>=</span> <span class='st'>"am"</span>,</span>
+<span class='r-in'>  data <span class='op'>=</span> <span class='va'>mtcars</span>, multivariate <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>test1</span><span class='op'>$</span><span class='va'>Summary</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>test1</span><span class='op'>)</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -207,11 +212,11 @@ outcome.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p><p>Developed by Joshua F. Wiley.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -219,6 +224,8 @@ outcome.</p>
 
   
 
+
+  
 
   </body>
 </html>

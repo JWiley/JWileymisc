@@ -45,6 +45,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -56,9 +58,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -72,19 +80,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">JWileymisc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -112,7 +114,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -138,11 +140,11 @@
     <p>Function to format the reuslts of a hypothesis test as text</p>
     </div>
 
-    <pre class="usage"><span class='fu'>formatHtest</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"t"</span>, <span class='st'>"F"</span>, <span class='st'>"chisq"</span>, <span class='st'>"kw"</span>, <span class='st'>"mh"</span>, <span class='st'>"r_pearson"</span>, <span class='st'>"r_kendall"</span>, <span class='st'>"r_spearman"</span>),
-  <span class='no'>...</span>
-)</pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>formatHtest</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"t"</span>, <span class='st'>"F"</span>, <span class='st'>"chisq"</span>, <span class='st'>"kw"</span>, <span class='st'>"mh"</span>, <span class='st'>"r_pearson"</span>, <span class='st'>"r_kendall"</span>, <span class='st'>"r_spearman"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,7 +172,25 @@ and spearman rho correlation, respectively.</p></td>
     <p>A character string with results</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>formatHtest</span>(<span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span>(<span class='no'>extra</span> ~ <span class='no'>group</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>sleep</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"t"</span>)</div><div class='output co'>#&gt; [1] "t(df = 17.78) = -1.86, p = .079"</div><div class='input'><span class='fu'>formatHtest</span>(<span class='fu'><a href='https://rdrr.io/r/stats/anova.html'>anova</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/aov.html'>aov</a></span>(<span class='no'>mpg</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"F"</span>)</div><div class='output co'>#&gt; [1] "F(2, 29) = 39.70, p &lt; .001"</div><div class='input'><span class='fu'>formatHtest</span>(<span class='fu'><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>A</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>C</span> <span class='kw'>=</span> <span class='fl'>25</span>)), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"chisq"</span>)</div><div class='output co'>#&gt; [1] "Chi-square(df = 2) = 2.5, p = .287"</div><div class='input'><span class='fu'>formatHtest</span>(<span class='fu'><a href='https://rdrr.io/r/stats/kruskal.test.html'>kruskal.test</a></span>(<span class='no'>Ozone</span> ~ <span class='no'>Month</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>airquality</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"kw"</span>)</div><div class='output co'>#&gt; [1] "Kruskal-Wallis chi-square(df = 4) = 29.27, p &lt; .001"</div><div class='input'><span class='fu'>formatHtest</span>(<span class='fu'><a href='https://rdrr.io/r/stats/mantelhaen.test.html'>mantelhaen.test</a></span>(<span class='no'>UCBAdmissions</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"mh"</span>)</div><div class='output co'>#&gt; [1] "Mantel-Haenszel chi-square(df = 1) = 1.43, p = .232, common odds ratio = 0.90, CI = (0.77, 1.06)."</div><div class='input'><span class='fu'>formatHtest</span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test</a></span>(~ <span class='no'>mpg</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"r_pearson"</span>)</div><div class='output co'>#&gt; [1] "r = -0.78, CI = (-0.89, -0.59), t(df = 30) = -6.74, p &lt; .001"</div><div class='input'><span class='fu'>formatHtest</span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test</a></span>(~ <span class='no'>mpg</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"kendall"</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"r_kendall"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Cannot compute exact p-value with ties</span></div><div class='output co'>#&gt; [1] "tau = -0.74, z = -5.87, p &lt; .001"</div><div class='input'><span class='fu'>formatHtest</span>(<span class='fu'><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test</a></span>(~ <span class='no'>mpg</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"spearman"</span>), <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"r_spearman"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Cannot compute exact p-value with ties</span></div><div class='output co'>#&gt; [1] "rho = -0.89, S = 10337.3, p &lt; .001"</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>formatHtest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>extra</span> <span class='op'>~</span> <span class='va'>group</span>, data <span class='op'>=</span> <span class='va'>sleep</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"t"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "t(df = 17.78) = -1.86, p = .079"</span>
+<span class='r-in'><span class='fu'>formatHtest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/anova.html'>anova</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/aov.html'>aov</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"F"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "F(2, 29) = 39.70, p &lt; .001"</span>
+<span class='r-in'><span class='fu'>formatHtest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>A <span class='op'>=</span> <span class='fl'>20</span>, B <span class='op'>=</span> <span class='fl'>15</span>, C <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"chisq"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Chi-square(df = 2) = 2.5, p = .287"</span>
+<span class='r-in'><span class='fu'>formatHtest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/kruskal.test.html'>kruskal.test</a></span><span class='op'>(</span><span class='va'>Ozone</span> <span class='op'>~</span> <span class='va'>Month</span>, data <span class='op'>=</span> <span class='va'>airquality</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"kw"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Kruskal-Wallis chi-square(df = 4) = 29.27, p &lt; .001"</span>
+<span class='r-in'><span class='fu'>formatHtest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/mantelhaen.test.html'>mantelhaen.test</a></span><span class='op'>(</span><span class='va'>UCBAdmissions</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"mh"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Mantel-Haenszel chi-square(df = 1) = 1.43, p = .232, common odds ratio = 0.90, CI = (0.77, 1.06)."</span>
+<span class='r-in'><span class='fu'>formatHtest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>mpg</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, method <span class='op'>=</span> <span class='st'>"pearson"</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"r_pearson"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "r = -0.78, CI = (-0.89, -0.59), t(df = 30) = -6.74, p &lt; .001"</span>
+<span class='r-in'><span class='fu'>formatHtest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>mpg</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, method <span class='op'>=</span> <span class='st'>"kendall"</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"r_kendall"</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Cannot compute exact p-value with ties</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "tau = -0.74, z = -5.87, p &lt; .001"</span>
+<span class='r-in'><span class='fu'>formatHtest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>mpg</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, method <span class='op'>=</span> <span class='st'>"spearman"</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"r_spearman"</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Cannot compute exact p-value with ties</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "rho = -0.89, S = 10337.3, p &lt; .001"</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -182,11 +202,11 @@ and spearman rho correlation, respectively.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joshua F. Wiley.</p>
+  <p><p>Developed by Joshua F. Wiley.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -194,6 +214,8 @@ and spearman rho correlation, respectively.</p></td>
 
   
 
+
+  
 
   </body>
 </html>

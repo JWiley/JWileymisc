@@ -4,6 +4,13 @@
 * `diffCircular()` calculates the circular difference 
 	between two vectors.
 
+## Bug Fixes
+* `egltable()` now correctly handles categorical variables by 
+   a grouping variable, when the categorical variable is not 
+   a factor class. Fixes a bug that could occur with 
+   cells with zero frequencies when the variables were not 
+   factors.
+
 # JWileymisc 1.2.0
 
 ## Bug Fixes
