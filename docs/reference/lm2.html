@@ -47,8 +47,6 @@ public use but only to support modelTest.lm." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -60,15 +58,9 @@ public use but only to support modelTest.lm." />
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -89,6 +81,12 @@ public use but only to support modelTest.lm." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -144,7 +142,7 @@ to allow the use of a pre-specified design matrix. It is not intended for
 public use but only to support <code>modelTest.lm</code>.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>lm2</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>lm2</span><span class='op'>(</span>
   <span class='va'>formula</span>,
   <span class='va'>data</span>,
   <span class='va'>subset</span>,
@@ -160,7 +158,7 @@ public use but only to support <code>modelTest.lm</code>.</p>
   <span class='va'>designMatrix</span>,
   <span class='va'>yObserved</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -235,28 +233,27 @@ public use but only to support <code>modelTest.lm</code>.</p>
     <div class='dont-index'><p><code>lm</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>*</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>mpg</span></span>
-<span class='r-in'><span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>lm2</span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>hp</span><span class='op'>:</span><span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>,</span>
-<span class='r-in'>  designMatrix <span class='op'>=</span> <span class='va'>x</span><span class='op'>[</span>, <span class='op'>-</span><span class='fl'>2</span>, drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>,</span>
-<span class='r-in'>  yObserved <span class='op'>=</span> <span class='va'>y</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/anova.html'>anova</a></span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>m2</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Analysis of Variance Table</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Model 1: mpg ~ hp * cyl</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Model 2: mpg ~ 1 + cyl + hp:cyl</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     26 238.47                              </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     27 294.20 -1   -55.739 6.0773 0.02061 *</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> ---</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>m2</span>, <span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>*</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>mpg</span>
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>lm2</span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>hp</span><span class='op'>:</span><span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>,
+  designMatrix <span class='op'>=</span> <span class='va'>x</span><span class='op'>[</span>, <span class='op'>-</span><span class='fl'>2</span>, drop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>]</span>,
+  yObserved <span class='op'>=</span> <span class='va'>y</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/stats/anova.html'>anova</a></span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>m2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Analysis of Variance Table
+#&gt; 
+#&gt; Model 1: mpg ~ hp * cyl
+#&gt; Model 2: mpg ~ 1 + cyl + hp:cyl
+#&gt;   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
+#&gt; 1     26 238.47                              
+#&gt; 2     27 294.20 -1   -55.739 6.0773 0.02061 *
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>m2</span>, <span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -268,11 +265,11 @@ public use but only to support <code>modelTest.lm</code>.</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Joshua F. Wiley.</p></p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -280,8 +277,6 @@ public use but only to support <code>modelTest.lm</code>.</p>
 
   
 
-
-  
 
   </body>
 </html>

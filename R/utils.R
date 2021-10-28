@@ -367,7 +367,7 @@ timeshift <- function(x, center = 0, min = 0, max = 1, inverse = FALSE) {
 #' 
 hashDataset <- function(x, file) {
   stopifnot(isTRUE(is.data.frame(x)) || isTRUE(is.data.table(x)))
-  
+
   textcall <- match.call()
   textcall <- deparse(textcall$x)
 
@@ -388,4 +388,99 @@ hashDataset <- function(x, file) {
   } else {
     return(hash)
   }
+}
+
+
+#' @name compressed RDS
+#' @rdname compressedrds
+#'
+#' @title  Save and read RDS functions for using multithreaded \dQuote{ZSTD} or \dQuote{LZ4} compression
+#'
+#' @details By default, \code{saveRDS()} does not have multithreaded compression
+#' built in. These functions use \dQuote{ZSTD} or \dQuote{LZ4} compression
+#' via the \code{fst} package for multithreaded compression and decompression
+#' with good performance.
+#' To save them, objects are serialized, compressed, and then saved using \code{saveRDS()}.
+#' To read them, objects are read in using \code{readRDS()}, decompressed, and then unserialized.
+#' Hashing is used to verify the results. \code{saveRDS()} is performed using \code{version = 3},
+#' so it will not work on older versions of \code{R}.
+#'
+#' @param object An R object to be saved.
+#' @param filename A character string giving the filename of the object on disk (to save to or read from)
+#' @param compression A numeric value between 0 and 100 indicating the amount of compression.
+#'   Defaults to 100, the highest level of compression. 0 gives the lowest compression.
+#' @param algorithm A character string of the type of compression to use.
+#'   Defaults to \dQuote{ZSTD} which is better compression but slower.
+#'   The only other option is \dQuote{LZ4} which is faster but may provide less compression.
+#' @return \code{saveRDSfst()} is called for its side effect of saving a file to disk.
+#'   The original \code{R} object if using \code{readRDSfst()}.
+NULL
+
+#' @rdname compressedrds
+#' @importFrom fst compress_fst
+#' @export
+#' @examples
+#'
+#' saveRDSfst(mtcars, filename = file.path(tempdir(), "mtcars.RDS"))
+saveRDSfst <- function(object, filename = "", compression = 100, algorithm = "ZSTD") {
+  if (isFALSE(is.character(filename))) {
+    stop("'filename' must be a character string")
+  }
+  if (isFALSE(identical(length(filename), 1L))) {
+    stop("'filename' must have length one, only a single filename can be specified")
+  }
+  if (isFALSE(nzchar(filename))) {
+    stop("'filename' must be a non zero character string")
+  }
+
+  if (isFALSE(is.character(algorithm))) {
+    stop("'algorithm' must be a character string of either 'ZSTD' (default) or 'LZ4' (faster)")
+  }
+  if (isFALSE(identical(length(algorithm), 1L))) {
+    stop("'algorithm' must have length one, only a single algorithm can be specified")
+  }
+  if (isFALSE(algorithm %in% c("ZSTD", "LZ4"))) {
+    stop("'algorithm' must be a character string of either 'ZSTD' (default) or 'LZ4' (faster)")
+  }
+
+  if (isFALSE(is.numeric(compression) || is.integer(compression))) {
+    badclass <- paste(class(compression), collapse = " ")
+    stop(sprintf("'compression' must be numeric or integer class but was %s", badclass))
+  }
+  if (isFALSE(identical(length(compression), 1L))) {
+    stop("'compression' must have length one, only a single compression value can be specified")
+  }
+
+  compression <- as.numeric(compression)
+  if (isFALSE(compression %gele% c(0, 100))) {
+    stop("'compression' must be between 0 and 100")
+  }
+
+  base::saveRDS(
+    compress_fst(
+      serialize(object, NULL),
+      compression = as.numeric(compression), hash = TRUE,
+      compressor = algorithm),
+    file = filename, version = 3)
+}
+
+#' @rdname compressedrds
+#' @importFrom fst decompress_fst
+#' @export
+#' @examples
+#'
+#' saveRDSfst(mtcars, filename = file.path(tempdir(), "mtcars.RDS"))
+#' readRDSfst(file.path(tempdir(), "mtcars.RDS"))
+readRDSfst <- function(filename) {
+  if (isFALSE(is.character(filename))) {
+    stop("'filename' must be a character string")
+  }
+  if (isFALSE(identical(length(filename), 1L))) {
+    stop("'filename' must have length one, only a single filename can be specified")
+  }
+  if (isFALSE(nzchar(filename))) {
+    stop("'filename' must be a non zero character string")
+  }
+  
+  unserialize(decompress_fst(base::readRDS(filename)))
 }

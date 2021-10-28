@@ -47,8 +47,6 @@ overall model significance." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -60,15 +58,9 @@ overall model significance." />
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -89,6 +81,12 @@ overall model significance." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -144,14 +142,14 @@ fit indices, absolute error metrics, tests of
 overall model significance.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>modelPerformance</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>modelPerformance</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>as.modelPerformance</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
 <span class='fu'>is.modelPerformance</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lm</span>
-<span class='fu'>modelPerformance</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
+<span class='fu'>modelPerformance</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -199,32 +197,30 @@ test or attempt coercing to a modelPerformance object.</p></td>
 AIC, BIC, log likelihood, R2, overall model F test, and p-value.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>qsec</span> <span class='op'>*</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Performance</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    lm    32 165.4972 172.8259 -77.74861    5 2.937243 0.7854734 3.661427</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>        AdjR2        F FNumDF FDenDF            P</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.7624884 34.17332      3     28 1.694676e-09</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelPerformance.lm" "modelPerformance"   </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Performance</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    lm    32 181.2386 185.6358 -87.61931    3 3.862962 0.6024373 1.515327</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>        AdjR2       F FNumDF FDenDF            P</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.5891853 45.4598      1     30 1.787835e-07</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelPerformance.lm" "modelPerformance"   </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>0</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>1</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>0</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>qsec</span> <span class='op'>*</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $Performance
+#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2
+#&gt; 1:    lm    32 165.4972 172.8259 -77.74861    5 2.937243 0.7854734 3.661427
+#&gt;        AdjR2        F FNumDF FDenDF            P
+#&gt; 1: 0.7624884 34.17332      3     28 1.694676e-09
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelPerformance.lm" "modelPerformance"   </div><div class='input'>
+<span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $Performance
+#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2
+#&gt; 1:    lm    32 181.2386 185.6358 -87.61931    3 3.862962 0.6024373 1.515327
+#&gt;        AdjR2       F FNumDF FDenDF            P
+#&gt; 1: 0.5891853 45.4598      1     30 1.787835e-07
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelPerformance.lm" "modelPerformance"   </div><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>0</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>1</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>modelPerformance</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fl'>0</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -236,11 +232,11 @@ AIC, BIC, log likelihood, R2, overall model F test, and p-value.</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Joshua F. Wiley.</p></p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -248,8 +244,6 @@ AIC, BIC, log likelihood, R2, overall model F test, and p-value.</p>
 
   
 
-
-  
 
   </body>
 </html>

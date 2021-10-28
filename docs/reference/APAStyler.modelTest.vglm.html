@@ -45,8 +45,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -58,15 +56,9 @@
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -87,6 +79,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -140,7 +138,7 @@
     <p>APAStyler method for model tests from a vglm multinomial model</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for modelTest.vglm</span>
+    <pre class="usage"><span class='co'># S3 method for modelTest.vglm</span>
 <span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span>
   <span class='va'>object</span>,
   format <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>FixedEffects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"%s%s [%s, %s]"</span><span class='op'>)</span>, EffectSizes <span class='op'>=</span>
@@ -150,7 +148,7 @@
     dropLeadingZero <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
   OR <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,60 +193,58 @@ errors, if <code>FALSE</code>.</p></td>
     <p>Styled results.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>qsec</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>mt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>mt</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Term Names           2 vs. 1             3 vs. 1           3 vs. 2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: qsec  qsec 0.56 [0.26, 1.23] 0.28** [0.11, 0.69] 0.50 [0.23, 1.11]</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                                   Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Chi-square (df=2) = 14.21, p &lt; .001</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>mt</span>, OR <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Term Names              2 vs. 1                3 vs. 1              3 vs. 2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: qsec  qsec -0.58 [-1.36,  0.21] -1.27** [-2.16, -0.38] -0.69 [-1.48,  0.10]</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                                   Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Chi-square (df=2) = 14.21, p &lt; .001</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## clean up</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>mt</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>qsec</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>qsec</span><span class='op'>)</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>vs</span><span class='op'>)</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>qsec</span><span class='op'>)</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>sampdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
-<span class='r-in'>  Outcome <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>, <span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,</span>
-<span class='r-in'>  C1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span><span class='op'>)</span>,</span>
-<span class='r-in'>  D3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"L"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>, <span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Outcome</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>D3</span><span class='op'>)</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sampdata</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Outcome</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>D3</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>C1</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sampdata</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>qsec</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='va'>mt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>mt</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Term Names           2 vs. 1             3 vs. 1           3 vs. 2
+#&gt; 1: qsec  qsec 0.56 [0.26, 1.23] 0.28** [0.11, 0.69] 0.50 [0.23, 1.11]
+#&gt;                                   Test
+#&gt; 1: Chi-square (df=2) = 14.21, p &lt; .001</div><div class='input'>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>mt</span>, OR <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Term Names              2 vs. 1                3 vs. 1              3 vs. 2
+#&gt; 1: qsec  qsec -0.58 [-1.36,  0.21] -1.27** [-2.16, -0.38] -0.69 [-1.48,  0.10]
+#&gt;                                   Test
+#&gt; 1: Chi-square (df=2) = 14.21, p &lt; .001</div><div class='input'>
+<span class='co'>## clean up</span>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>mt</span>, <span class='va'>mtcars</span><span class='op'>)</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+<span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span><span class='op'>)</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>qsec</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>qsec</span><span class='op'>)</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>vs</span><span class='op'>)</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>qsec</span><span class='op'>)</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span>
+<span class='va'>sampdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+  Outcome <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>, <span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
+  C1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span><span class='op'>)</span>,
+  D3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"L"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>, <span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Outcome</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>D3</span><span class='op'>)</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sampdata</span><span class='op'>)</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Outcome</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>D3</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>C1</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sampdata</span><span class='op'>)</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -260,11 +256,11 @@ errors, if <code>FALSE</code>.</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Joshua F. Wiley.</p></p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -272,8 +268,6 @@ errors, if <code>FALSE</code>.</p></td>
 
   
 
-
-  
 
   </body>
 </html>

@@ -47,8 +47,6 @@ It is the opposite of cov2cor." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -60,15 +58,9 @@ It is the opposite of cov2cor." />
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -89,6 +81,12 @@ It is the opposite of cov2cor." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -144,7 +142,7 @@ It is the opposite of cov2cor." />
 It is the opposite of <code>cov2cor</code>.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>cor2cov</span><span class='op'>(</span><span class='va'>V</span>, <span class='va'>sigma</span><span class='op'>)</span></code></pre></div>
+    <pre class="usage"><span class='fu'>cor2cov</span><span class='op'>(</span><span class='va'>V</span>, <span class='va'>sigma</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,46 +166,43 @@ vector must match the number of columns in the correlation matrix.</p></td>
     <div class='dont-index'><p><code><a href='https://rdrr.io/r/stats/cor.html'>cov2cor</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># using a built in dataset</span></span>
-<span class='r-in'><span class='fu'>cor2cov</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>longley</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>longley</span>, <span class='va'>sd</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              GNP.deflator       GNP Unemployed Armed.Forces Population</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GNP.deflator    116.45762 1063.6041   625.8666     349.0254   73.50300</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GNP            1063.60412 9879.3537  5612.4370    3088.0428  685.24094</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Unemployed      625.86663 5612.4370  8732.2343   -1153.7876  446.27415</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Armed.Forces    349.02537 3088.0428 -1153.7876    4843.0410  176.40981</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Population       73.50300  685.2409   446.2742     176.4098   48.38735</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Year             50.92333  470.9779   297.3033     138.2433   32.91740</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Employed         36.79666  343.3302   164.9103     111.7681   23.46197</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                   Year  Employed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GNP.deflator  50.92333  36.79666</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GNP          470.97790 343.33021</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Unemployed   297.30333 164.91027</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Armed.Forces 138.24333 111.76811</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Population    32.91740  23.46197</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Year          22.66667  16.24093</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Employed      16.24093  12.33392</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># should match the above covariance matarix</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cov</a></span><span class='op'>(</span><span class='va'>longley</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              GNP.deflator       GNP Unemployed Armed.Forces Population</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GNP.deflator    116.45763 1063.6041   625.8666     349.0254   73.50300</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GNP            1063.60412 9879.3537  5612.4370    3088.0428  685.24094</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Unemployed      625.86663 5612.4370  8732.2343   -1153.7876  446.27415</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Armed.Forces    349.02537 3088.0428 -1153.7876    4843.0410  176.40981</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Population       73.50300  685.2409   446.2742     176.4098   48.38735</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Year             50.92333  470.9779   297.3033     138.2433   32.91740</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Employed         36.79666  343.3302   164.9103     111.7681   23.46197</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                   Year  Employed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GNP.deflator  50.92333  36.79666</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GNP          470.97790 343.33021</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Unemployed   297.30333 164.91027</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Armed.Forces 138.24333 111.76811</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Population    32.91740  23.46197</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Year          22.66667  16.24093</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Employed      16.24093  12.33392</span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cov</a></span><span class='op'>(</span><span class='va'>longley</span><span class='op'>)</span>, <span class='fu'>cor2cov</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>longley</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>longley</span>, <span class='va'>sd</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='co'># using a built in dataset</span>
+<span class='fu'>cor2cov</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>longley</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>longley</span>, <span class='va'>sd</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;              GNP.deflator       GNP Unemployed Armed.Forces Population
+#&gt; GNP.deflator    116.45762 1063.6041   625.8666     349.0254   73.50300
+#&gt; GNP            1063.60412 9879.3537  5612.4370    3088.0428  685.24094
+#&gt; Unemployed      625.86663 5612.4370  8732.2343   -1153.7876  446.27415
+#&gt; Armed.Forces    349.02537 3088.0428 -1153.7876    4843.0410  176.40981
+#&gt; Population       73.50300  685.2409   446.2742     176.4098   48.38735
+#&gt; Year             50.92333  470.9779   297.3033     138.2433   32.91740
+#&gt; Employed         36.79666  343.3302   164.9103     111.7681   23.46197
+#&gt;                   Year  Employed
+#&gt; GNP.deflator  50.92333  36.79666
+#&gt; GNP          470.97790 343.33021
+#&gt; Unemployed   297.30333 164.91027
+#&gt; Armed.Forces 138.24333 111.76811
+#&gt; Population    32.91740  23.46197
+#&gt; Year          22.66667  16.24093
+#&gt; Employed      16.24093  12.33392</div><div class='input'>
+<span class='co'># should match the above covariance matarix</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cov</a></span><span class='op'>(</span><span class='va'>longley</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;              GNP.deflator       GNP Unemployed Armed.Forces Population
+#&gt; GNP.deflator    116.45763 1063.6041   625.8666     349.0254   73.50300
+#&gt; GNP            1063.60412 9879.3537  5612.4370    3088.0428  685.24094
+#&gt; Unemployed      625.86663 5612.4370  8732.2343   -1153.7876  446.27415
+#&gt; Armed.Forces    349.02537 3088.0428 -1153.7876    4843.0410  176.40981
+#&gt; Population       73.50300  685.2409   446.2742     176.4098   48.38735
+#&gt; Year             50.92333  470.9779   297.3033     138.2433   32.91740
+#&gt; Employed         36.79666  343.3302   164.9103     111.7681   23.46197
+#&gt;                   Year  Employed
+#&gt; GNP.deflator  50.92333  36.79666
+#&gt; GNP          470.97790 343.33021
+#&gt; Unemployed   297.30333 164.91027
+#&gt; Armed.Forces 138.24333 111.76811
+#&gt; Population    32.91740  23.46197
+#&gt; Year          22.66667  16.24093
+#&gt; Employed      16.24093  12.33392</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cov</a></span><span class='op'>(</span><span class='va'>longley</span><span class='op'>)</span>, <span class='fu'>cor2cov</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>longley</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>longley</span>, <span class='va'>sd</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -219,11 +214,11 @@ vector must match the number of columns in the correlation matrix.</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Joshua F. Wiley.</p></p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -231,8 +226,6 @@ vector must match the number of columns in the correlation matrix.</p></td>
 
   
 
-
-  
 
   </body>
 </html>

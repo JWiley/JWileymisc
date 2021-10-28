@@ -51,8 +51,6 @@ to know which variable(s) changed, if any." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -64,15 +62,9 @@ to know which variable(s) changed, if any." />
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -93,6 +85,12 @@ to know which variable(s) changed, if any." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -152,7 +150,7 @@ same, such as when sending data or when datasets may change over time
 to know which variable(s) changed, if any.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>file</span><span class='op'>)</span></code></pre></div>
+    <pre class="usage"><span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>file</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,30 +174,28 @@ When missing (default), the character vector is returned directly.</p></td>
   written version of the character string.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
-<span class='r-in'><span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "dataset: 'mtcars', MD5: a63c70e73b58d0823ab3bcbd3b543d6f"                                     </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [2] "'mpg' (numeric), f8e0303e137d946eec8ee06e2f152f51, 95d3087aa4b1ccb7e1ef49ba4b6ed83b (sorted)" </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [3] "'cyl' (numeric), 1b8fcb72575f2a120d77279ecf8851f9, ebfb767c78836025f7917bc845443804 (sorted)" </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4] "'disp' (numeric), 4743a496928535c54d157d145aa114e1, 46b67296541e9f9c4c4e2b70227f9673 (sorted)"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [5] "'hp' (numeric), c1d443aac7c7e1284e2d0a5a6cbe1a98, cd2e69df37f9f864e98780c5d588c95a (sorted)"  </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [6] "'drat' (numeric), 87a99a22f86d30cea74565dbad577790, f8bbcfc7e573cf1c72600683ac354d7a (sorted)"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "'wt' (numeric), 2515679118871778eb21a32575973085, 67b94c293a66443abcb0427684b5ae28 (sorted)"  </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] "'qsec' (numeric), 8632d4fe83c9a91aa2c3f5069002c870, 6875ea7f4d4a3ec56ff6fc214b69f7ff (sorted)"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] "'vs' (numeric), 34b3720888fd730d1dbb5d01c5d57ae3, e5a86583130d2649356bc9dc6060787d (sorted)"  </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [10] "'am' (numeric), 9bc5bef75a08e8812da6f8542311aaba, 3ec14454a35c411d95eedb78c176c0b4 (sorted)"  </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [11] "'gear' (numeric), 1415993e090fa6fd2078f6d907deb29f, 1cd9d9b506d3170cfeb79a869b29211f (sorted)"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [12] "'carb' (numeric), 5b570f391814e8569d81dd5e2a9f30e0, 2acb8f5f747919d7befb9bba53dd6a68 (sorted)"</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## if a file is specified it will write the results to the text file</span></span>
-<span class='r-in'><span class='co'>## nicely formatted, along these lines</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>cars</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> dataset: 'cars', MD5: f98a59010652c8e1ee062ed4c43f648e</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 'speed' (numeric), 4eb3e01aee9abbc01e91d22b651be559, 4eb3e01aee9abbc01e91d22b651be559 (sorted)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 'dist' (numeric), be6c7701fccdd59b5e47c48881a2acae, 5cf4867b5bc8dc320c7aea4513d0f557 (sorted)</span>
-<span class='r-in'></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'>
+<span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "dataset: 'mtcars', MD5: a63c70e73b58d0823ab3bcbd3b543d6f"                                     
+#&gt;  [2] "'mpg' (numeric), f8e0303e137d946eec8ee06e2f152f51, 95d3087aa4b1ccb7e1ef49ba4b6ed83b (sorted)" 
+#&gt;  [3] "'cyl' (numeric), 1b8fcb72575f2a120d77279ecf8851f9, ebfb767c78836025f7917bc845443804 (sorted)" 
+#&gt;  [4] "'disp' (numeric), 4743a496928535c54d157d145aa114e1, 46b67296541e9f9c4c4e2b70227f9673 (sorted)"
+#&gt;  [5] "'hp' (numeric), c1d443aac7c7e1284e2d0a5a6cbe1a98, cd2e69df37f9f864e98780c5d588c95a (sorted)"  
+#&gt;  [6] "'drat' (numeric), 87a99a22f86d30cea74565dbad577790, f8bbcfc7e573cf1c72600683ac354d7a (sorted)"
+#&gt;  [7] "'wt' (numeric), 2515679118871778eb21a32575973085, 67b94c293a66443abcb0427684b5ae28 (sorted)"  
+#&gt;  [8] "'qsec' (numeric), 8632d4fe83c9a91aa2c3f5069002c870, 6875ea7f4d4a3ec56ff6fc214b69f7ff (sorted)"
+#&gt;  [9] "'vs' (numeric), 34b3720888fd730d1dbb5d01c5d57ae3, e5a86583130d2649356bc9dc6060787d (sorted)"  
+#&gt; [10] "'am' (numeric), 9bc5bef75a08e8812da6f8542311aaba, 3ec14454a35c411d95eedb78c176c0b4 (sorted)"  
+#&gt; [11] "'gear' (numeric), 1415993e090fa6fd2078f6d907deb29f, 1cd9d9b506d3170cfeb79a869b29211f (sorted)"
+#&gt; [12] "'carb' (numeric), 5b570f391814e8569d81dd5e2a9f30e0, 2acb8f5f747919d7befb9bba53dd6a68 (sorted)"</div><div class='input'>
+<span class='co'>## if a file is specified it will write the results to the text file</span>
+<span class='co'>## nicely formatted, along these lines</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>cars</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; dataset: 'cars', MD5: f98a59010652c8e1ee062ed4c43f648e
+#&gt; 'speed' (numeric), 4eb3e01aee9abbc01e91d22b651be559, 4eb3e01aee9abbc01e91d22b651be559 (sorted)
+#&gt; 'dist' (numeric), be6c7701fccdd59b5e47c48881a2acae, 5cf4867b5bc8dc320c7aea4513d0f557 (sorted)</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -211,11 +207,11 @@ When missing (default), the character vector is returned directly.</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Joshua F. Wiley.</p></p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -223,8 +219,6 @@ When missing (default), the character vector is returned directly.</p></td>
 
   
 
-
-  
 
   </body>
 </html>

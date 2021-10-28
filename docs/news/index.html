@@ -44,8 +44,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -57,15 +55,9 @@
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -86,6 +78,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,135 +132,150 @@
       <small>Source: <a href='https://github.com/JWiley/JWileymisc/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="jwileymisc-121" class="section level1">
-<h1 class="page-header" data-toc-text="1.2.1">
-<a href="#jwileymisc-121" class="anchor" aria-hidden="true"></a>JWileymisc 1.2.1<small> Unreleased </small></h1>
-<div id="new-features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features" class="anchor" aria-hidden="true"></a>New Features</h2>
-<ul><li>
-<code><a href="../reference/diffCircular.html">diffCircular()</a></code> calculates the circular difference between two vectors.</li>
-</ul></div>
-<div id="bug-fixes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor" aria-hidden="true"></a>Bug Fixes</h2>
-<ul><li>
-<code><a href="../reference/egltable.html">egltable()</a></code> now correctly handles categorical variables by a grouping variable, when the categorical variable is not a factor class. Fixes a bug that could occur with cells with zero frequencies when the variables were not factors.</li>
-</ul></div>
-</div>
     <div id="jwileymisc-120" class="section level1">
 <h1 class="page-header" data-toc-text="1.2.0">
-<a href="#jwileymisc-120" class="anchor" aria-hidden="true"></a>JWileymisc 1.2.0<small> 2020-08-31 </small></h1>
+<a href="#jwileymisc-120" class="anchor"></a>JWileymisc 1.2.0<small> 2020-08-31 </small>
+</h1>
 <div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor" aria-hidden="true"></a>Bug Fixes</h2>
-<ul><li>
+<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li>
 <code><a href="../reference/meanCircular.html">meanCircular()</a></code> would be off by pi in some circumstances. This has been corrected and more test cases added.</li>
 <li>
 <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> pairwise correlations were based on the standardized pairwise covariance matrix, which used the same standard deviation for a variable regardless of the pair. This has now been fixed.</li>
-<li>Formula has been specified in calls to <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">stat_smooth()</a></code> to reduce messages about this.</li>
-</ul></div>
+<li>Formula has been specified in calls to <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">stat_smooth()</a></code> to reduce messages about this.</li>
+</ul>
+</div>
 <div id="changes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes" class="anchor" aria-hidden="true"></a>Changes</h2>
-<ul><li>
+<a href="#changes" class="anchor"></a>Changes</h2>
+<ul>
+<li>
 <code><a href="../reference/corplot.html">corplot()</a></code> uses a more color blind friendly palette and defaults to showing correlations and p-values.</li>
 <li>Model diagnostics are smarter about linear regressions with essentially discrete model predictions and no longer try to run quantile regression to examine homogeneity of variance in these cases.</li>
 <li>Switched to using <code>ggpubr</code> instead of <code>cowplot</code> for themes and arranging multiple plots.</li>
 <li>Bumped minimum version of <code>R</code> required.</li>
 <li>Further unit testing.</li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-111" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.1">
-<a href="#jwileymisc-111" class="anchor" aria-hidden="true"></a>JWileymisc 1.1.1<small> 2020-04-28 </small></h1>
+<a href="#jwileymisc-111" class="anchor"></a>JWileymisc 1.1.1<small> 2020-04-28 </small>
+</h1>
 <div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor" aria-hidden="true"></a>Bug Fixes</h2>
-<ul><li>
-<code><a href="../reference/modelTest.html">modelTest()</a></code> now works correctly when there are interaction terms with categorical variables and when most “on-the-fly” transformations are performed, such as <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code> etc. Does not work when new variables that are a composite of multiple variables are created, e.g., <code>I(hp + wt)</code>, but a more informative error message is given.</li>
+<a href="#bug-fixes-2" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li>
+<code><a href="../reference/modelTest.html">modelTest()</a></code> now works correctly when there are interaction terms with categorical variables and when most “on-the-fly” transformations are performed, such as <code><a href="https://rdrr.io/r/base/Log.html">log()</a></code> etc. Does not work when new variables that are a composite of multiple variables are created, e.g., <code><a href="https://rdrr.io/r/base/AsIs.html">I(hp + wt)</a></code>, but a more informative error message is given.</li>
 <li>Added the correct version requirements for <code>data.table</code> to the DESCRIPTION and dependencies.</li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-110" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.0">
-<a href="#jwileymisc-110" class="anchor" aria-hidden="true"></a>JWileymisc 1.1.0<small> 2020-01-22 </small></h1>
+<a href="#jwileymisc-110" class="anchor"></a>JWileymisc 1.1.0<small> 2020-01-22 </small>
+</h1>
 <div id="changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-1" class="anchor" aria-hidden="true"></a>Changes</h2>
-<ul><li>Polished methods for functions, including <code><a href="../reference/APAStyler.html">APAStyler()</a></code> methods.</li>
-</ul></div>
+<a href="#changes-1" class="anchor"></a>Changes</h2>
+<ul>
+<li>Polished methods for functions, including <code><a href="../reference/APAStyler.html">APAStyler()</a></code> methods.</li>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-101" class="section level1">
 <h1 class="page-header" data-toc-text="1.0.1">
-<a href="#jwileymisc-101" class="anchor" aria-hidden="true"></a>JWileymisc 1.0.1<small> 2019-12-11 </small></h1>
+<a href="#jwileymisc-101" class="anchor"></a>JWileymisc 1.0.1<small> 2019-12-11 </small>
+</h1>
 <div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor" aria-hidden="true"></a>Bug Fixes</h2>
-<ul><li>
+<a href="#bug-fixes-3" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li>
 <code><a href="../reference/residualDiagnostics.html">residualDiagnostics.lm()</a></code> and so too <code>modelDiagnostics.lm</code> would return the index of extreme values based on the complete data used for modelling, not of the original input dataset. This made it difficult to identify and remove extreme values in subsequent model runs. This is now corrected.</li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-100" class="section level1">
 <h1 class="page-header" data-toc-text="1.0.0">
-<a href="#jwileymisc-100" class="anchor" aria-hidden="true"></a>JWileymisc 1.0.0<small> 2019-11-22 </small></h1>
+<a href="#jwileymisc-100" class="anchor"></a>JWileymisc 1.0.0<small> 2019-11-22 </small>
+</h1>
 <div id="changes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-2" class="anchor" aria-hidden="true"></a>Changes</h2>
-<ul><li>This version includes a significant re-write of the package that results in many of the previous user-facing functions changing names and arguments. This will likely break old code. This re-write was necessary to help standardize functions and arguments, and to make functions more robust. Many functions are now generics with specific methods written. Further, some functions previously bundled into <code>JWileymisc</code> have been separated into other packages, including the new <code>extraoperators</code> package, covering binary operators, and a package for diagnostics on mixed models. See the new vignettes added to the package for examples of current practice in using <code>JWileymisc</code>.</li>
-</ul></div>
+<a href="#changes-2" class="anchor"></a>Changes</h2>
+<ul>
+<li>This version includes a significant re-write of the package that results in many of the previous user-facing functions changing names and arguments. This will likely break old code. This re-write was necessary to help standardize functions and arguments, and to make functions more robust. Many functions are now generics with specific methods written. Further, some functions previously bundled into <code>JWileymisc</code> have been separated into other packages, including the new <code>extraoperators</code> package, covering binary operators, and a package for diagnostics on mixed models. See the new vignettes added to the package for examples of current practice in using <code>JWileymisc</code>.</li>
+</ul>
+</div>
 <div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor" aria-hidden="true"></a>New Features</h2>
-<ul><li>
+<a href="#new-features-1" class="anchor"></a>New Features</h2>
+<ul>
+<li>
 <code><a href="../reference/egltable.html">egltable()</a></code> has added statistical tests for paired data. For continuous, parametric paired data, a pseudo Cohen’s d is calculated on the change scores.</li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-032" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.2">
-<a href="#jwileymisc-032" class="anchor" aria-hidden="true"></a>JWileymisc 0.3.2<small> Unreleased </small></h1>
+<a href="#jwileymisc-032" class="anchor"></a>JWileymisc 0.3.2<small> Unreleased </small>
+</h1>
 <div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor" aria-hidden="true"></a>New Features</h2>
-<ul><li><p><code>omegaSEM()</code> Function that calculates coefficient omega for measuring internal consistency reliability. Works for two level models and returns within and between level omega values.</p></li>
+<a href="#new-features-2" class="anchor"></a>New Features</h2>
+<ul>
+<li><p><code>omegaSEM()</code> Function that calculates coefficient omega for measuring internal consistency reliability. Works for two level models and returns within and between level omega values.</p></li>
 <li><p><code><a href="../reference/egltable.html">egltable()</a></code> Function has added effect sizes when multiple groups are compared including Cohen’s d for two groups, eta-squared for multiple groups, and phi for categorical variables.</p></li>
-</ul></div>
+</ul>
+</div>
 <div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor" aria-hidden="true"></a>Bug Fixes</h2>
-<ul><li>
+<a href="#bug-fixes-4" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li>
 <code>testdistr()</code> now only finds extreme values for the right tail of a chi-square distribution.</li>
 <li>
 <code>.detailedTestsVGLM()</code> now identifies levels of the outcome correctly.</li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-031" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.1">
-<a href="#jwileymisc-031" class="anchor" aria-hidden="true"></a>JWileymisc 0.3.1<small> 2018-09-15 </small></h1>
+<a href="#jwileymisc-031" class="anchor"></a>JWileymisc 0.3.1<small> 2018-09-15 </small>
+</h1>
 <div id="changes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-3" class="anchor" aria-hidden="true"></a>Changes</h2>
-<ul><li>
+<a href="#changes-3" class="anchor"></a>Changes</h2>
+<ul>
+<li>
 <code>detailedTests()</code> is now more generic and dispatches to <code>.detailedTestsLMER()</code> or <code>.detailedTestsVGLM()</code> to provide detailed tests for both linear mixed effects models and multinomial logistic regression models fit by <code>vglm()</code>.</li>
 <li>
 <code>ezMULTINOM()</code> is now deprecated in favor of the new, more generic <code>detailedTests()</code>.</li>
-</ul></div>
+</ul>
+</div>
 <div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor" aria-hidden="true"></a>Bug Fixes</h2>
-<ul><li><p><code>testdistr()</code> now creates more appropriate plots for discrete distributions including the Poisson and Negative Binomial.</p></li>
+<a href="#bug-fixes-5" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li><p><code>testdistr()</code> now creates more appropriate plots for discrete distributions including the Poisson and Negative Binomial.</p></li>
 <li><p><code><a href="../reference/moments.html">moments()</a></code> now updated to accomodate changes in the lavaan package (thanks to Yves Rosseel)</p></li>
 <li><p><code><a href="../reference/TukeyHSDgg.html">TukeyHSDgg()</a></code> updated to use the emmeans package instead of the now defunct lsmeans package.</p></li>
 <li><p><code>formatLMER()</code> returned the lower confidence interval twice instead of the lower and upper confidence interval. This is now fixed.</p></li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-030" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.0">
-<a href="#jwileymisc-030" class="anchor" aria-hidden="true"></a>JWileymisc 0.3.0<small> 2018-08-26 </small></h1>
+<a href="#jwileymisc-030" class="anchor"></a>JWileymisc 0.3.0<small> 2018-08-26 </small>
+</h1>
 <div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-3" class="anchor" aria-hidden="true"></a>New Features</h2>
-<ul><li><p><code>R2LMER()</code> A simple function to calculate the marginal and conditional variance accounted for by a model estimated by <code>lmer()</code>.</p></li>
+<a href="#new-features-3" class="anchor"></a>New Features</h2>
+<ul>
+<li><p><code>R2LMER()</code> A simple function to calculate the marginal and conditional variance accounted for by a model estimated by <code>lmer()</code>.</p></li>
 <li><p><code>compareLMER()</code> A function to compare two models estimated by <code>lmer()</code> include significance tests and effect sizes for estimates of the variance explained.</p></li>
 <li><p><code>detailedTests()</code> A function to compute detailed tests on a model estimated from <code>lmer()</code> including confidence intervals for parameters, significance tests, where possible, overall model fit, and effect sizes for the model and each variable.</p></li>
 <li><p><code>formatLMER()</code> A function to nicely format detailed model results, possibly from multiple models. Requires results from <code>detailedTests()</code> based on <code>lmer()</code> models, at the moment.</p></li>
@@ -277,29 +290,36 @@
 <li><p><code>ezMULTINOM()</code> new function added to make running multinomial logistic regression easy in R, along with all pairwise contrasts and omnibus tests of statistical significance.</p></li>
 <li><p><code>testdistr()</code> function expanded to cover multivariate normal data, and the old <code>mvqq()</code> function is now deprecated.</p></li>
 <li><p><code>testdistr()</code> includes optional robust estimates for univariate and multivariate normal data</p></li>
-<li><p><code><a href="../reference/formatHtest.html">formatHtest()</a></code> gains support for pearson, kendal, and spearman correlations from the <code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test()</a></code> function</p></li>
+<li><p><code><a href="../reference/formatHtest.html">formatHtest()</a></code> gains support for pearson, kendal, and spearman correlations from the <code><a href="https://rdrr.io/r/stats/cor.test.html">cor.test()</a></code> function</p></li>
 <li><p><code>logicals</code> A series of support functions for findings values in a particular range, such as <code>%gele%</code> for values greater than or equal to the min and less than or equal to the max as well as to automatically subset the data when prefixed with an s, <code>%sgele%</code> <code>%sin%</code> etc.</p></li>
-</ul></div>
+</ul>
+</div>
 <div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor" aria-hidden="true"></a>Bug Fixes</h2>
-<ul><li><p><code><a href="../reference/winsorizor.html">winsorizor()</a></code> now properly handles atomic data. Fixes an issue where variables in a data table would be atomic after calling the <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale()</a></code> function and <code><a href="../reference/winsorizor.html">winsorizor()</a></code> would fail.</p></li>
+<a href="#bug-fixes-6" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li><p><code><a href="../reference/winsorizor.html">winsorizor()</a></code> now properly handles atomic data. Fixes an issue where variables in a data table would be atomic after calling the <code><a href="https://rdrr.io/r/base/scale.html">scale()</a></code> function and <code><a href="../reference/winsorizor.html">winsorizor()</a></code> would fail.</p></li>
 <li><p><code><a href="../reference/egltable.html">egltable()</a></code> now works with data.tables</p></li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-021" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.1">
-<a href="#jwileymisc-021" class="anchor" aria-hidden="true"></a>JWileymisc 0.2.1<small> 2016-09-01 </small></h1>
+<a href="#jwileymisc-021" class="anchor"></a>JWileymisc 0.2.1<small> 2016-09-01 </small>
+</h1>
 <div id="new-features-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-4" class="anchor" aria-hidden="true"></a>New Features</h2>
-<ul><li><p><code>testdistr()</code> function to plot data against different theoretical distributions using <code>ggplot2</code>. A sort of generalized <code><a href="https://rdrr.io/r/stats/qqnorm.html" class="external-link">qqnorm()</a></code> allowing other distributions besides the normal distribution.</p></li>
+<a href="#new-features-4" class="anchor"></a>New Features</h2>
+<ul>
+<li><p><code>testdistr()</code> function to plot data against different theoretical distributions using <code>ggplot2</code>. A sort of generalized <code><a href="https://rdrr.io/r/stats/qqnorm.html">qqnorm()</a></code> allowing other distributions besides the normal distribution.</p></li>
 <li><p><code><a href="../reference/winsorizor.html">winsorizor()</a></code> Function moved from <code>pscore</code> package. Sets any values beyond specific quantiles of the empirical data to the specified quantiles. Can work on vectors, data frames, or matrices.</p></li>
-</ul></div>
+</ul>
+</div>
 </div>
     <div id="jwileymisc-020" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.0">
-<a href="#jwileymisc-020" class="anchor" aria-hidden="true"></a>JWileymisc 0.2.0<small> 2016-08-24 </small></h1>
+<a href="#jwileymisc-020" class="anchor"></a>JWileymisc 0.2.0<small> 2016-08-24 </small>
+</h1>
 <p>Initial release to CRAN.</p>
 </div>
   </div>
@@ -315,11 +335,11 @@
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Joshua F. Wiley.</p></p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -327,8 +347,6 @@
 
   
 
-
-  
 
   </body>
 </html>

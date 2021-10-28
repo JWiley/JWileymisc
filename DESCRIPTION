@@ -40,7 +40,8 @@ Imports:
     VGAM (>= 1.1-2),
     lme4,
     extraoperators (>= 0.1.1),
-    digest
+    digest,
+    fst
 Suggests:
     scales,
     foreach,
@@ -53,4 +54,4 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

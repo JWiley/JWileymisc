@@ -45,8 +45,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -58,15 +56,9 @@
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -87,6 +79,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -140,7 +138,7 @@
     <p>TODO: make me!</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>is.modelTest</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
@@ -150,7 +148,7 @@
 <span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lm</span>
-<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,249 +179,243 @@ test or attempt coercing to a modelTest object.</p></td>
   <code>Table</code> contains a nicely formatted character matrix.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>qsec</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $FixedEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Num Names Term Ref        Est        SE        Pval        LL         UL K</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:   1  qsec qsec   1 -0.5795781 0.4006097 0.147969796 -1.364759  0.2056026 3</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:   2  qsec qsec   1 -1.2697728 0.4560391 0.005363505 -2.163593 -0.3759525 3</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:   2  qsec qsec   2 -0.6901947 0.4045653 0.088005136 -1.483128  0.1027386 3</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Comp  Labels</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    2 2 vs. 1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    3 3 vs. 1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:    3 3 vs. 2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $RandomEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $EffectSizes</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Term    Chisq DF         Pval  Type</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: qsec 14.21315  2 0.0008196964 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $OverallModel</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelTest.vglm" "modelTest"     </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## clean up</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>qsec</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>qsec</span><span class='op'>)</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>vs</span><span class='op'>)</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>qsec</span><span class='op'>)</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>sampdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
-<span class='r-in'>  Outcome <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>, <span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,</span>
-<span class='r-in'>  C1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span><span class='op'>)</span>,</span>
-<span class='r-in'>  D3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"L"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>, <span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Outcome</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>D3</span><span class='op'>)</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sampdata</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Outcome</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>D3</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>C1</span>,</span>
-<span class='r-in'>  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sampdata</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-<span class='r-in'><span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>qsec</span> <span class='op'>*</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $FixedEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>           Term         Est           LL          UL         Pval</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: (Intercept)  8.52461247 -17.15039253 34.19961746 0.5020186630</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:        qsec  1.47683245   0.08321560  2.87044931 0.0385855703</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:          hp  0.23587912   0.08515568  0.38660256 0.0033562173</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:     qsec:hp -0.01949155  -0.02855763 -0.01042546 0.0001411028</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $RandomEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $EffectSizes</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       Term N_Obs        AIC        BIC       LL LLDF      Sigma         R2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    qsec     0  -2.977231  -1.511495 2.488615    1 -0.1823263 0.03610200</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:      hp     0  -8.004306  -6.538570 5.002153    1 -0.4372429 0.07873595</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: qsec:hp     0 -14.841867 -13.376131 8.420933    1 -0.8177254 0.14859655</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>           F2      AdjR2         F FNumDF FDenDF            P  Type</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.1682869 0.03040174  4.712032      1     28 0.0385855703 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: 0.3670219 0.07597596 10.276613      1     28 0.0033562173 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: 0.6926720 0.15065453 19.394816      1     28 0.0001411028 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $OverallModel</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Performance</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    lm    32 165.4972 172.8259 -77.74861    5 2.937243 0.7854734 3.661427</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>        AdjR2        F FNumDF FDenDF            P</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.7624884 34.17332      3     28 1.694676e-09</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelPerformance.lm" "modelPerformance"   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelTest.lm" "modelTest"   </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $FixedEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>           Term        Est        LL        UL         Pval</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: (Intercept)  26.663636  24.67608 28.651192 2.688358e-22</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:        cyl6  -6.920779 -10.10796 -3.733599 1.194696e-04</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:        cyl8 -11.563636 -14.21962 -8.907653 8.568209e-10</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $RandomEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $EffectSizes</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Term N_Obs       AIC       BIC       LL LLDF     Sigma        R2      F2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  cyl     0 -38.19157 -35.26009 21.09578    2 -2.803849 0.7324601 2.73776</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       AdjR2        F FNumDF FDenDF            P  Type</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.714009 39.69752      2     29 4.978919e-09 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $OverallModel</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Performance</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Model N_Obs     AIC      BIC        LL LLDF    Sigma        R2      F2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    lm    32 170.564 176.4269 -81.28198    4 3.223099 0.7324601 2.73776</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       AdjR2        F FNumDF FDenDF            P</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.714009 39.69752      2     29 4.978919e-09</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelPerformance.lm" "modelPerformance"   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelTest.lm" "modelTest"   </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>*</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m3</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $FixedEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>           Term          Est            LL          UL         Pval</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: (Intercept)  35.98302564  27.988911895 43.97713938 1.042337e-09</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:          hp  -0.11277589  -0.206810088 -0.01874169 2.061364e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:        cyl6 -15.30917451 -30.591135429 -0.02721358 4.962243e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:        cyl8 -17.90295193 -28.714239963 -7.09166390 2.163657e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:     hp:cyl6   0.10516262  -0.035606674  0.24593191 1.367182e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:     hp:cyl8   0.09853177  -0.001415964  0.19847950 5.309562e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $RandomEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $EffectSizes</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      Term N_Obs        AIC       BIC       LL LLDF      Sigma         R2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     hp     0 -4.7216325 -3.255897 3.360816    1 -0.2724898 0.04949968</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    cyl     0 -8.3406788 -5.409207 6.170339    2 -0.5104704 0.09965210</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: hp:cyl     0 -0.8128535  2.118618 2.406427    2 -0.1177589 0.03437072</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>           F2      AdjR2        F FNumDF FDenDF           P  Type</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.2337410 0.04748123 6.077266      1     26 0.020613638 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: 0.4705643 0.09229362 6.117336      2     26 0.006648256 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: 0.1623010 0.02001782 2.109913      2     26 0.141533090 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $OverallModel</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Performance</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Model N_Obs      AIC      BIC       LL LLDF    Sigma        R2       F2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    lm    32 169.0836 179.3437 -77.5418    7 3.028484 0.7882285 3.722071</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>        AdjR2        F FNumDF FDenDF            P</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.7475032 19.35477      5     26 5.018882e-08</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelPerformance.lm" "modelPerformance"   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelTest.lm" "modelTest"   </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>mpg</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>*</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m4</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $FixedEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>           Term          Est           LL            UL         Pval</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: (Intercept)  6.052499736  5.170711347  6.9342881254 1.070676e-13</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:          hp -0.010956546 -0.021328961 -0.0005841313 3.922162e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:        cyl6 -1.512749623 -3.198421874  0.1729226268 7.650843e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:        cyl8 -1.808475093 -3.001011071 -0.6159391140 4.419878e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:     hp:cyl6  0.010146472 -0.005381043  0.0256739883 1.908190e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:     hp:cyl8  0.009178964 -0.001845741  0.0202036696 9.891437e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $RandomEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $EffectSizes</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      Term N_Obs        AIC       BIC       LL LLDF        Sigma         R2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     hp     0 -3.3324188 -1.866683 2.666209    1 -0.022238466 0.03882660</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    cyl     0 -6.5881559 -3.656684 5.294078    2 -0.045762925 0.08397830</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: hp:cyl     0  0.4535321  3.385004 1.773234    2 -0.006189775 0.02509585</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>           F2       AdjR2        F FNumDF FDenDF          P  Type</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.1813267 0.035123021 4.714493      1     26 0.03922162 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: 0.3921925 0.074740039 5.098503      2     26 0.01354906 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: 0.1172017 0.009548751 1.523623      2     26 0.23674952 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $OverallModel</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Performance</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Model N_Obs      AIC      BIC       LL LLDF     Sigma        R2       F2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    lm    32 27.99504 38.25519 -6.99752    7 0.3340561 0.7858748 3.670165</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>        AdjR2        F FNumDF FDenDF           P</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.7446969 19.08486      5     26 5.77082e-08</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelPerformance.lm" "modelPerformance"   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelTest.lm" "modelTest"   </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>m5</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>hp</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m5</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $FixedEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>             Term        Est          LL         UL         Pval</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:   (Intercept)  45.320923  30.0821810 60.5596654 1.839533e-06</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:      sqrt(hp)  -2.067923  -3.7442683 -0.3915773 1.757488e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:          cyl6 -23.458371 -54.5954487  7.6787057 1.335616e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:          cyl8 -23.624030 -44.7466708 -2.5013883 2.979562e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5: sqrt(hp):cyl6   1.875526  -1.0975943  4.8486458 2.061304e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6: sqrt(hp):cyl8   1.608904  -0.3488383  3.5666459 1.031270e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $RandomEffects</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $EffectSizes</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>            Term N_Obs        AIC        BIC       LL LLDF       Sigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     sqrt(hp)     0 -5.0712752 -3.6055393 3.535638    1 -0.28847604</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:          cyl     0 -2.5498555  0.3816163 3.274928    2 -0.20284492</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: sqrt(hp):cyl     0  0.3345454  3.2660172 1.832727    2 -0.06140898</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>            R2        F2      AdjR2        F FNumDF FDenDF          P  Type</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.05161694 0.2472952 0.05004665 6.429675      1     26 0.01757488 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: 0.04740919 0.2271360 0.03471263 2.952768      2     26 0.06988678 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: 0.02533174 0.1213636 0.01026974 1.577727      2     26 0.22557763 Fixed</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $OverallModel</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Performance</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    Model N_Obs      AIC      BIC        LL LLDF   Sigma       R2       F2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    lm    32 168.6201 178.8802 -77.31003    7 3.00663 0.791274 3.790969</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>        AdjR2        F FNumDF FDenDF            P</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 0.7511343 19.71304      5     26 4.179396e-08</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelPerformance.lm" "modelPerformance"   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "modelTest.lm" "modelTest"   </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## cleanup</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, <span class='va'>m4</span>, <span class='va'>m5</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>qsec</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $FixedEffects
+#&gt;    Num Names Term Ref        Est        SE        Pval        LL         UL K
+#&gt; 1:   1  qsec qsec   1 -0.5795781 0.4006097 0.147969796 -1.364759  0.2056026 3
+#&gt; 2:   2  qsec qsec   1 -1.2697728 0.4560391 0.005363505 -2.163593 -0.3759525 3
+#&gt; 3:   2  qsec qsec   2 -0.6901947 0.4045653 0.088005136 -1.483128  0.1027386 3
+#&gt;    Comp  Labels
+#&gt; 1:    2 2 vs. 1
+#&gt; 2:    3 3 vs. 1
+#&gt; 3:    3 3 vs. 2
+#&gt; 
+#&gt; $RandomEffects
+#&gt; [1] NA
+#&gt; 
+#&gt; $EffectSizes
+#&gt;    Term    Chisq DF         Pval  Type
+#&gt; 1: qsec 14.21315  2 0.0008196964 Fixed
+#&gt; 
+#&gt; $OverallModel
+#&gt; [1] NA
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelTest.vglm" "modelTest"     </div><div class='input'>
+<span class='co'>## clean up</span>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m</span>, <span class='va'>mtcars</span><span class='op'>)</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+<span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span><span class='op'>)</span>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>qsec</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>qsec</span><span class='op'>)</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>vs</span><span class='op'>)</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='va'>qsec</span><span class='op'>)</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span>
+<span class='va'>sampdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+  Outcome <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>, <span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
+  C1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span><span class='op'>)</span>,
+  D3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"L"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>, <span class='fl'>20</span> <span class='op'>*</span> <span class='fl'>9</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Outcome</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>D3</span><span class='op'>)</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sampdata</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/vglm.html'>vglm</a></span><span class='op'>(</span><span class='va'>Outcome</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>D3</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>C1</span>,
+  family <span class='op'>=</span> <span class='fu'>VGAM</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/multinomial.html'>multinomial</a></span><span class='op'>(</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>sampdata</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>qsec</span> <span class='op'>*</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $FixedEffects
+#&gt;           Term         Est           LL          UL         Pval
+#&gt; 1: (Intercept)  8.52461247 -17.15039253 34.19961746 0.5020186630
+#&gt; 2:        qsec  1.47683245   0.08321560  2.87044931 0.0385855703
+#&gt; 3:          hp  0.23587912   0.08515568  0.38660256 0.0033562173
+#&gt; 4:     qsec:hp -0.01949155  -0.02855763 -0.01042546 0.0001411028
+#&gt; 
+#&gt; $RandomEffects
+#&gt; [1] NA
+#&gt; 
+#&gt; $EffectSizes
+#&gt;       Term N_Obs        AIC        BIC       LL LLDF      Sigma         R2
+#&gt; 1:    qsec     0  -2.977231  -1.511495 2.488615    1 -0.1823263 0.03610200
+#&gt; 2:      hp     0  -8.004306  -6.538570 5.002153    1 -0.4372429 0.07873595
+#&gt; 3: qsec:hp     0 -14.841867 -13.376131 8.420933    1 -0.8177254 0.14859655
+#&gt;           F2      AdjR2         F FNumDF FDenDF            P  Type
+#&gt; 1: 0.1682869 0.03040174  4.712032      1     28 0.0385855703 Fixed
+#&gt; 2: 0.3670219 0.07597596 10.276613      1     28 0.0033562173 Fixed
+#&gt; 3: 0.6926720 0.15065453 19.394816      1     28 0.0001411028 Fixed
+#&gt; 
+#&gt; $OverallModel
+#&gt; $Performance
+#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2
+#&gt; 1:    lm    32 165.4972 172.8259 -77.74861    5 2.937243 0.7854734 3.661427
+#&gt;        AdjR2        F FNumDF FDenDF            P
+#&gt; 1: 0.7624884 34.17332      3     28 1.694676e-09
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelPerformance.lm" "modelPerformance"   
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelTest.lm" "modelTest"   </div><div class='input'>
+<span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $FixedEffects
+#&gt;           Term        Est        LL        UL         Pval
+#&gt; 1: (Intercept)  26.663636  24.67608 28.651192 2.688358e-22
+#&gt; 2:        cyl6  -6.920779 -10.10796 -3.733599 1.194696e-04
+#&gt; 3:        cyl8 -11.563636 -14.21962 -8.907653 8.568209e-10
+#&gt; 
+#&gt; $RandomEffects
+#&gt; [1] NA
+#&gt; 
+#&gt; $EffectSizes
+#&gt;    Term N_Obs       AIC       BIC       LL LLDF     Sigma        R2      F2
+#&gt; 1:  cyl     0 -38.19157 -35.26009 21.09578    2 -2.803849 0.7324601 2.73776
+#&gt;       AdjR2        F FNumDF FDenDF            P  Type
+#&gt; 1: 0.714009 39.69752      2     29 4.978919e-09 Fixed
+#&gt; 
+#&gt; $OverallModel
+#&gt; $Performance
+#&gt;    Model N_Obs     AIC      BIC        LL LLDF    Sigma        R2      F2
+#&gt; 1:    lm    32 170.564 176.4269 -81.28198    4 3.223099 0.7324601 2.73776
+#&gt;       AdjR2        F FNumDF FDenDF            P
+#&gt; 1: 0.714009 39.69752      2     29 4.978919e-09
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelPerformance.lm" "modelPerformance"   
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelTest.lm" "modelTest"   </div><div class='input'>
+<span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>*</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $FixedEffects
+#&gt;           Term          Est            LL          UL         Pval
+#&gt; 1: (Intercept)  35.98302564  27.988911895 43.97713938 1.042337e-09
+#&gt; 2:          hp  -0.11277589  -0.206810088 -0.01874169 2.061364e-02
+#&gt; 3:        cyl6 -15.30917451 -30.591135429 -0.02721358 4.962243e-02
+#&gt; 4:        cyl8 -17.90295193 -28.714239963 -7.09166390 2.163657e-03
+#&gt; 5:     hp:cyl6   0.10516262  -0.035606674  0.24593191 1.367182e-01
+#&gt; 6:     hp:cyl8   0.09853177  -0.001415964  0.19847950 5.309562e-02
+#&gt; 
+#&gt; $RandomEffects
+#&gt; [1] NA
+#&gt; 
+#&gt; $EffectSizes
+#&gt;      Term N_Obs        AIC       BIC       LL LLDF      Sigma         R2
+#&gt; 1:     hp     0 -4.7216325 -3.255897 3.360816    1 -0.2724898 0.04949968
+#&gt; 2:    cyl     0 -8.3406788 -5.409207 6.170339    2 -0.5104704 0.09965210
+#&gt; 3: hp:cyl     0 -0.8128535  2.118618 2.406427    2 -0.1177589 0.03437072
+#&gt;           F2      AdjR2        F FNumDF FDenDF           P  Type
+#&gt; 1: 0.2337410 0.04748123 6.077266      1     26 0.020613638 Fixed
+#&gt; 2: 0.4705643 0.09229362 6.117336      2     26 0.006648256 Fixed
+#&gt; 3: 0.1623010 0.02001782 2.109913      2     26 0.141533090 Fixed
+#&gt; 
+#&gt; $OverallModel
+#&gt; $Performance
+#&gt;    Model N_Obs      AIC      BIC       LL LLDF    Sigma        R2       F2
+#&gt; 1:    lm    32 169.0836 179.3437 -77.5418    7 3.028484 0.7882285 3.722071
+#&gt;        AdjR2        F FNumDF FDenDF            P
+#&gt; 1: 0.7475032 19.35477      5     26 5.018882e-08
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelPerformance.lm" "modelPerformance"   
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelTest.lm" "modelTest"   </div><div class='input'>
+<span class='va'>m4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>mpg</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>*</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m4</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $FixedEffects
+#&gt;           Term          Est           LL            UL         Pval
+#&gt; 1: (Intercept)  6.052499736  5.170711347  6.9342881254 1.070676e-13
+#&gt; 2:          hp -0.010956546 -0.021328961 -0.0005841313 3.922162e-02
+#&gt; 3:        cyl6 -1.512749623 -3.198421874  0.1729226268 7.650843e-02
+#&gt; 4:        cyl8 -1.808475093 -3.001011071 -0.6159391140 4.419878e-03
+#&gt; 5:     hp:cyl6  0.010146472 -0.005381043  0.0256739883 1.908190e-01
+#&gt; 6:     hp:cyl8  0.009178964 -0.001845741  0.0202036696 9.891437e-02
+#&gt; 
+#&gt; $RandomEffects
+#&gt; [1] NA
+#&gt; 
+#&gt; $EffectSizes
+#&gt;      Term N_Obs        AIC       BIC       LL LLDF        Sigma         R2
+#&gt; 1:     hp     0 -3.3324188 -1.866683 2.666209    1 -0.022238466 0.03882660
+#&gt; 2:    cyl     0 -6.5881559 -3.656684 5.294078    2 -0.045762925 0.08397830
+#&gt; 3: hp:cyl     0  0.4535321  3.385004 1.773234    2 -0.006189775 0.02509585
+#&gt;           F2       AdjR2        F FNumDF FDenDF          P  Type
+#&gt; 1: 0.1813267 0.035123021 4.714493      1     26 0.03922162 Fixed
+#&gt; 2: 0.3921925 0.074740039 5.098503      2     26 0.01354906 Fixed
+#&gt; 3: 0.1172017 0.009548751 1.523623      2     26 0.23674952 Fixed
+#&gt; 
+#&gt; $OverallModel
+#&gt; $Performance
+#&gt;    Model N_Obs      AIC      BIC       LL LLDF     Sigma        R2       F2
+#&gt; 1:    lm    32 27.99504 38.25519 -6.99752    7 0.3340561 0.7858748 3.670165
+#&gt;        AdjR2        F FNumDF FDenDF           P
+#&gt; 1: 0.7446969 19.08486      5     26 5.77082e-08
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelPerformance.lm" "modelPerformance"   
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelTest.lm" "modelTest"   </div><div class='input'>
+<span class='va'>m5</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>hp</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>modelTest</span><span class='op'>(</span><span class='va'>m5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $FixedEffects
+#&gt;             Term        Est          LL         UL         Pval
+#&gt; 1:   (Intercept)  45.320923  30.0821810 60.5596654 1.839533e-06
+#&gt; 2:      sqrt(hp)  -2.067923  -3.7442683 -0.3915773 1.757488e-02
+#&gt; 3:          cyl6 -23.458371 -54.5954487  7.6787057 1.335616e-01
+#&gt; 4:          cyl8 -23.624030 -44.7466708 -2.5013883 2.979562e-02
+#&gt; 5: sqrt(hp):cyl6   1.875526  -1.0975943  4.8486458 2.061304e-01
+#&gt; 6: sqrt(hp):cyl8   1.608904  -0.3488383  3.5666459 1.031270e-01
+#&gt; 
+#&gt; $RandomEffects
+#&gt; [1] NA
+#&gt; 
+#&gt; $EffectSizes
+#&gt;            Term N_Obs        AIC        BIC       LL LLDF       Sigma
+#&gt; 1:     sqrt(hp)     0 -5.0712752 -3.6055393 3.535638    1 -0.28847604
+#&gt; 2:          cyl     0 -2.5498555  0.3816163 3.274928    2 -0.20284492
+#&gt; 3: sqrt(hp):cyl     0  0.3345454  3.2660172 1.832727    2 -0.06140898
+#&gt;            R2        F2      AdjR2        F FNumDF FDenDF          P  Type
+#&gt; 1: 0.05161694 0.2472952 0.05004665 6.429675      1     26 0.01757488 Fixed
+#&gt; 2: 0.04740919 0.2271360 0.03471263 2.952768      2     26 0.06988678 Fixed
+#&gt; 3: 0.02533174 0.1213636 0.01026974 1.577727      2     26 0.22557763 Fixed
+#&gt; 
+#&gt; $OverallModel
+#&gt; $Performance
+#&gt;    Model N_Obs      AIC      BIC        LL LLDF   Sigma       R2       F2
+#&gt; 1:    lm    32 168.6201 178.8802 -77.31003    7 3.00663 0.791274 3.790969
+#&gt;        AdjR2        F FNumDF FDenDF            P
+#&gt; 1: 0.7511343 19.71304      5     26 4.179396e-08
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelPerformance.lm" "modelPerformance"   
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "modelTest.lm" "modelTest"   </div><div class='input'>
+<span class='co'>## cleanup</span>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, <span class='va'>m4</span>, <span class='va'>m5</span>, <span class='va'>mtcars</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -435,11 +427,11 @@ test or attempt coercing to a modelTest object.</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Joshua F. Wiley.</p></p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -447,8 +439,6 @@ test or attempt coercing to a modelTest object.</p></td>
 
   
 
-
-  
 
   </body>
 </html>

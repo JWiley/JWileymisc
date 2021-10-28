@@ -19,8 +19,6 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -39,6 +37,12 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -66,7 +70,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/JWiley/JWileymisc/" class="external-link">
+  <a href="https://github.com/JWiley/JWileymisc/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -81,15 +85,15 @@
 
       
 
-      </header><script src="model-test-vignette_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><script src="model-test-vignette_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Model Performance and Tests</h1>
-                        <h4 data-toc-skip class="author">Joshua F. Wiley</h4>
+                        <h4 class="author">Joshua F. Wiley</h4>
             
-            <h4 data-toc-skip class="date">2021-09-01</h4>
+            <h4 class="date">2021-10-28</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/vignettes/model-test-vignette.Rmd" class="external-link"><code>vignettes/model-test-vignette.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/master/vignettes/model-test-vignette.Rmd"><code>vignettes/model-test-vignette.Rmd</code></a></small>
       <div class="hidden name"><code>model-test-vignette.Rmd</code></div>
 
     </div>
@@ -98,10 +102,10 @@
     
 <p>To start, load the package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://joshuawiley.com/JWileymisc/" class="external-link">JWileymisc</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://joshuawiley.com/JWileymisc/">JWileymisc</a></span><span class="op">)</span></code></pre></div>
 <div id="model-performance" class="section level1">
 <h1 class="hasAnchor">
-<a href="#model-performance" class="anchor" aria-hidden="true"></a>Model Performance</h1>
+<a href="#model-performance" class="anchor"></a>Model Performance</h1>
 <p><code><a href="../reference/modelPerformance.html">modelPerformance()</a></code> is a generic function that can be used to calculate performance metrics for a model. <code>JWileymisc</code> implements methods for <code>lm</code> class objects. The output is a named list, with a data table containing results. For linear models, current performance metrics include:</p>
 <ul>
 <li>AIC (Akaike Information Criterion)</li>
@@ -119,11 +123,11 @@
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span>
-<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+<span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span>
+<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
 
 <span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelPerformance.html">modelPerformance</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span>
 <span class="co">#&gt; $Performance</span>
 <span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span>
 <span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578 3.062692</span>
@@ -143,7 +147,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">mt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelTest.html">modelTest</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mt</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">mt</span><span class="op">)</span>
 <span class="co">#&gt; $FixedEffects</span>
 <span class="co">#&gt;           Term         Est           LL           UL         Pval</span>
 <span class="co">#&gt; 1: (Intercept) 28.65011816  25.39768395 31.902552374 5.921199e-17</span>
@@ -195,7 +199,7 @@
 <p>The model tests can also be used with interactions.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+<span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelTest.html">modelTest</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;                 Term                       Est          Type</span>
@@ -230,13 +234,11 @@
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by Joshua F. Wiley.</p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -244,8 +246,6 @@
 
   
 
-
-  
 
   </body>
 </html>

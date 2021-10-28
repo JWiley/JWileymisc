@@ -48,8 +48,6 @@ statistics optionally by group levels." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -61,15 +59,9 @@ statistics optionally by group levels." />
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -90,6 +82,12 @@ statistics optionally by group levels." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -146,7 +144,7 @@ variables into factors.  Provides a table of estimated descriptive
 statistics optionally by group levels.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>egltable</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>egltable</span><span class='op'>(</span>
   <span class='va'>vars</span>,
   <span class='va'>g</span>,
   <span class='va'>data</span>,
@@ -156,7 +154,7 @@ statistics optionally by group levels.</p>
   paired <span class='op'>=</span> <span class='cn'>FALSE</span>,
   simChisq <span class='op'>=</span> <span class='cn'>FALSE</span>,
   sims <span class='op'>=</span> <span class='fl'>1000000L</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -226,163 +224,147 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></td>
     <p>A data frame of the table.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                 M (SD)/N (%)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Sepal.Length  5.84 (0.83)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Sepal.Width  3.06 (0.44)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Petal.Length  3.76 (1.77)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Petal.Width  1.20 (0.76)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:      Species             </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:       setosa    50 (33.3)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:   versicolor    50 (33.3)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:    virginica    50 (33.3)</span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='st'>"Species"</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                 setosa M (SD) versicolor M (SD) virginica M (SD)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Sepal.Length   5.01 (0.35)       5.94 (0.52)      6.59 (0.64)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Sepal.Width   3.43 (0.38)       2.77 (0.31)      2.97 (0.32)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Petal.Length   1.46 (0.17)       4.26 (0.47)      5.55 (0.55)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Petal.Width   0.25 (0.11)       1.33 (0.20)      2.03 (0.27)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                 Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  F(2, 147) = 119.26, p &lt; .001, Eta-squared = 0.62</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:   F(2, 147) = 49.16, p &lt; .001, Eta-squared = 0.40</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: F(2, 147) = 1180.16, p &lt; .001, Eta-squared = 0.94</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  F(2, 147) = 960.01, p &lt; .001, Eta-squared = 0.93</span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='va'>iris</span>, parametric <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                 Mdn (IQR)/N (%)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Sepal.Length     5.80 (1.30)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Sepal.Width     3.00 (0.50)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Petal.Length     4.35 (3.50)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Petal.Width     1.30 (1.50)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:      Species                </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:       setosa       50 (33.3)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:   versicolor       50 (33.3)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:    virginica       50 (33.3)</span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='st'>"Species"</span>, <span class='va'>iris</span>,</span>
-<span class='r-in'>  parametric <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                 setosa Mdn (IQR) versicolor Mdn (IQR) virginica Mdn (IQR)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Sepal.Length      5.00 (0.40)          5.90 (0.70)         6.50 (0.67)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  Sepal.Width      3.40 (0.48)          2.80 (0.48)         3.00 (0.38)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Petal.Length      1.50 (0.18)          4.35 (0.60)         5.55 (0.78)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Petal.Width      0.20 (0.10)          1.30 (0.30)         2.00 (0.50)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                                        Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  KW chi-square = 96.94, df = 2, p &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  KW chi-square = 63.57, df = 2, p &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: KW chi-square = 130.41, df = 2, p &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4: KW chi-square = 131.19, df = 2, p &lt; .001</span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='st'>"Species"</span>, <span class='va'>iris</span>,</span>
-<span class='r-in'>  parametric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>TRUE</span>, <span class='cn'>FALSE</span>, <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                            setosa See Rows versicolor See Rows</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    Sepal.Length, M (SD)     5.01 (0.35)         5.94 (0.52)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     Sepal.Width, M (SD)     3.43 (0.38)         2.77 (0.31)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Petal.Length, Mdn (IQR)     1.50 (0.18)         4.35 (0.60)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Petal.Width, Mdn (IQR)     0.20 (0.10)         1.30 (0.30)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    virginica See Rows                                             Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:        6.59 (0.64) F(2, 147) = 119.26, p &lt; .001, Eta-squared = 0.62</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:        2.97 (0.32)  F(2, 147) = 49.16, p &lt; .001, Eta-squared = 0.40</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:        5.55 (0.78)         KW chi-square = 130.41, df = 2, p &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:        2.00 (0.50)         KW chi-square = 131.19, df = 2, p &lt; .001</span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='st'>"Species"</span>, <span class='va'>iris</span>,</span>
-<span class='r-in'>  parametric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>TRUE</span>, <span class='cn'>FALSE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>, simChisq<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                            setosa See Rows versicolor See Rows</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    Sepal.Length, M (SD)     5.01 (0.35)         5.94 (0.52)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     Sepal.Width, M (SD)     3.43 (0.38)         2.77 (0.31)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: Petal.Length, Mdn (IQR)     1.50 (0.18)         4.35 (0.60)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:  Petal.Width, Mdn (IQR)     0.20 (0.10)         1.30 (0.30)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    virginica See Rows                                             Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:        6.59 (0.64) F(2, 147) = 119.26, p &lt; .001, Eta-squared = 0.62</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:        2.97 (0.32)  F(2, 147) = 49.16, p &lt; .001, Eta-squared = 0.40</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:        5.55 (0.78)         KW chi-square = 130.41, df = 2, p &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:        2.00 (0.50)         KW chi-square = 131.19, df = 2, p &lt; .001</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>diris</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='st'>"Sepal.Length"</span>, g <span class='op'>=</span> <span class='st'>"Species"</span>, data <span class='op'>=</span> <span class='va'>diris</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                 setosa M (SD) versicolor M (SD) virginica M (SD)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: Sepal.Length   5.01 (0.35)       5.94 (0.52)      6.59 (0.64)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: F(2, 147) = 119.26, p &lt; .001, Eta-squared = 0.62</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>tmp</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span></span>
-<span class='r-in'><span class='va'>tmp</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>tmp</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>$</span><span class='va'>am</span>, levels <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mpg"</span>, <span class='st'>"hp"</span><span class='op'>)</span>, <span class='st'>"vs"</span>, <span class='va'>tmp</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              0 M (SD)      1 M (SD)                                 Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: mpg   16.62 (3.86)  24.56 (5.38) t(df=30) = -4.86, p &lt; .001, d = 1.73</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  hp 189.72 (60.28) 91.36 (24.42)  t(df=30) = 5.73, p &lt; .001, d = 2.04</span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mpg"</span>, <span class='st'>"hp"</span><span class='op'>)</span>, <span class='st'>"am"</span>, <span class='va'>tmp</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              0 M (SD)       1 M (SD)                                 Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: mpg   17.15 (3.83)   24.39 (6.17) t(df=30) = -4.11, p &lt; .001, d = 1.48</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:  hp 160.26 (53.91) 126.85 (84.06)  t(df=30) = 1.37, p = .180, d = 0.49</span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"am"</span>, <span class='st'>"cyl"</span><span class='op'>)</span>, <span class='st'>"vs"</span>, <span class='va'>tmp</span><span class='op'>)</span></span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Chi-squared approximation may be incorrect</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          0 N (%)   1 N (%)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:  am                    </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:   0 12 (66.7)  7 (50.0)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:   1  6 (33.3)  7 (50.0)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4: cyl                    </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:   4   1 (5.6) 10 (71.4)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:   6  3 (16.7)  4 (28.6)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:   8 14 (77.8)   0 (0.0)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                       Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:         Chi-square = 0.91, df = 1, p = .341, Phi = 0.17</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:                                                        </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:                                                        </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4: Chi-square = 21.34, df = 2, p &lt; .001, Cramer's V = 0.82</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:                                                        </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:                                                        </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:                                                        </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>tests</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>sleep</span>,</span>
-<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/stats/wilcox.test.html'>wilcox.test</a></span><span class='op'>(</span><span class='va'>extra</span><span class='op'>[</span><span class='va'>group</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>]</span>,</span>
-<span class='r-in'>           <span class='va'>extra</span><span class='op'>[</span><span class='va'>group</span> <span class='op'>==</span> <span class='fl'>2</span><span class='op'>]</span>, paired <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>cannot compute exact p-value with ties</span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>cannot compute exact p-value with zeroes</span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>tests</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> List of 7</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ statistic  : Named num 0</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..- attr(*, "names")= chr "V"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ parameter  : NULL</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ p.value    : num 0.00909</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ null.value : Named num 0</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..- attr(*, "names")= chr "location shift"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ alternative: chr "two.sided"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ method     : chr "Wilcoxon signed rank test with continuity correction"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ data.name  : chr "extra[group == 1] and extra[group == 2]"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  - attr(*, "class")= chr "htest"</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## example with paired data</span></span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"extra"</span><span class='op'>)</span>, g <span class='op'>=</span> <span class='st'>"group"</span>, data <span class='op'>=</span> <span class='va'>sleep</span>, idvar <span class='op'>=</span> <span class='st'>"ID"</span>, paired <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>             1 M (SD)    2 M (SD)                               Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: extra 0.75 (1.79) 2.33 (2.00) t(df=9) = 4.06, p = .003, d = 1.28</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## what happens when ignoring pairing (p-value off)</span></span>
-<span class='r-in'><span class='co'># egltable(c("extra"), g = "group", data = sleep, idvar = "ID")</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## paired categorical data example</span></span>
-<span class='r-in'><span class='co'>## using data on chick weights to create categorical data</span></span>
-<span class='r-in'><span class='va'>tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>ChickWeight</span>, <span class='va'>Time</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>tmp</span><span class='op'>$</span><span class='va'>WeightTertile</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>$</span><span class='va'>weight</span>,</span>
-<span class='r-in'>  breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>$</span><span class='va'>weight</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,</span>
-<span class='r-in'>  include.lowest <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"weight"</span>, <span class='st'>"WeightTertile"</span><span class='op'>)</span>, g <span class='op'>=</span> <span class='st'>"Time"</span>,</span>
-<span class='r-in'>  data <span class='op'>=</span> <span class='va'>tmp</span>,</span>
-<span class='r-in'>  idvar <span class='op'>=</span> <span class='st'>"Chick"</span>, paired <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                  0 M (SD)/N (%) 20 M (SD)/N (%)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:        weight   41.06 (1.13)  209.72 (66.51)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: WeightTertile                               </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:     [39,41.7]      32 (64.0)         0 (0.0)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:    (41.7,169]      18 (36.0)       14 (30.4)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:     (169,361]        0 (0.0)       32 (69.6)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                                              Test</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:           t(df=45) = 17.10, p &lt; .001, d = 2.52</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: McNemar's Chi-square = 39.00, df = 3, p &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:                                               </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:                                               </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:                                               </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>)</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='fu'>egltable</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                 M (SD)/N (%)
+#&gt; 1: Sepal.Length  5.84 (0.83)
+#&gt; 2:  Sepal.Width  3.06 (0.44)
+#&gt; 3: Petal.Length  3.76 (1.77)
+#&gt; 4:  Petal.Width  1.20 (0.76)
+#&gt; 5:      Species             
+#&gt; 6:       setosa    50 (33.3)
+#&gt; 7:   versicolor    50 (33.3)
+#&gt; 8:    virginica    50 (33.3)</div><div class='input'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='st'>"Species"</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                 setosa M (SD) versicolor M (SD) virginica M (SD)
+#&gt; 1: Sepal.Length   5.01 (0.35)       5.94 (0.52)      6.59 (0.64)
+#&gt; 2:  Sepal.Width   3.43 (0.38)       2.77 (0.31)      2.97 (0.32)
+#&gt; 3: Petal.Length   1.46 (0.17)       4.26 (0.47)      5.55 (0.55)
+#&gt; 4:  Petal.Width   0.25 (0.11)       1.33 (0.20)      2.03 (0.27)
+#&gt;                                                 Test
+#&gt; 1:  F(2, 147) = 119.26, p &lt; .001, Eta-squared = 0.62
+#&gt; 2:   F(2, 147) = 49.16, p &lt; .001, Eta-squared = 0.40
+#&gt; 3: F(2, 147) = 1180.16, p &lt; .001, Eta-squared = 0.94
+#&gt; 4:  F(2, 147) = 960.01, p &lt; .001, Eta-squared = 0.93</div><div class='input'><span class='fu'>egltable</span><span class='op'>(</span><span class='va'>iris</span>, parametric <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                 Mdn (IQR)/N (%)
+#&gt; 1: Sepal.Length     5.80 (1.30)
+#&gt; 2:  Sepal.Width     3.00 (0.50)
+#&gt; 3: Petal.Length     4.35 (3.50)
+#&gt; 4:  Petal.Width     1.30 (1.50)
+#&gt; 5:      Species                
+#&gt; 6:       setosa       50 (33.3)
+#&gt; 7:   versicolor       50 (33.3)
+#&gt; 8:    virginica       50 (33.3)</div><div class='input'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='st'>"Species"</span>, <span class='va'>iris</span>,
+  parametric <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                 setosa Mdn (IQR) versicolor Mdn (IQR) virginica Mdn (IQR)
+#&gt; 1: Sepal.Length      5.00 (0.40)          5.90 (0.70)         6.50 (0.67)
+#&gt; 2:  Sepal.Width      3.40 (0.48)          2.80 (0.48)         3.00 (0.38)
+#&gt; 3: Petal.Length      1.50 (0.18)          4.35 (0.60)         5.55 (0.78)
+#&gt; 4:  Petal.Width      0.20 (0.10)          1.30 (0.30)         2.00 (0.50)
+#&gt;                                        Test
+#&gt; 1:  KW chi-square = 96.94, df = 2, p &lt; .001
+#&gt; 2:  KW chi-square = 63.57, df = 2, p &lt; .001
+#&gt; 3: KW chi-square = 130.41, df = 2, p &lt; .001
+#&gt; 4: KW chi-square = 131.19, df = 2, p &lt; .001</div><div class='input'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='st'>"Species"</span>, <span class='va'>iris</span>,
+  parametric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>TRUE</span>, <span class='cn'>FALSE</span>, <span class='cn'>FALSE</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                            setosa See Rows versicolor See Rows
+#&gt; 1:    Sepal.Length, M (SD)     5.01 (0.35)         5.94 (0.52)
+#&gt; 2:     Sepal.Width, M (SD)     3.43 (0.38)         2.77 (0.31)
+#&gt; 3: Petal.Length, Mdn (IQR)     1.50 (0.18)         4.35 (0.60)
+#&gt; 4:  Petal.Width, Mdn (IQR)     0.20 (0.10)         1.30 (0.30)
+#&gt;    virginica See Rows                                             Test
+#&gt; 1:        6.59 (0.64) F(2, 147) = 119.26, p &lt; .001, Eta-squared = 0.62
+#&gt; 2:        2.97 (0.32)  F(2, 147) = 49.16, p &lt; .001, Eta-squared = 0.40
+#&gt; 3:        5.55 (0.78)         KW chi-square = 130.41, df = 2, p &lt; .001
+#&gt; 4:        2.00 (0.50)         KW chi-square = 131.19, df = 2, p &lt; .001</div><div class='input'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, <span class='st'>"Species"</span>, <span class='va'>iris</span>,
+  parametric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>TRUE</span>, <span class='cn'>FALSE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>, simChisq<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                            setosa See Rows versicolor See Rows
+#&gt; 1:    Sepal.Length, M (SD)     5.01 (0.35)         5.94 (0.52)
+#&gt; 2:     Sepal.Width, M (SD)     3.43 (0.38)         2.77 (0.31)
+#&gt; 3: Petal.Length, Mdn (IQR)     1.50 (0.18)         4.35 (0.60)
+#&gt; 4:  Petal.Width, Mdn (IQR)     0.20 (0.10)         1.30 (0.30)
+#&gt;    virginica See Rows                                             Test
+#&gt; 1:        6.59 (0.64) F(2, 147) = 119.26, p &lt; .001, Eta-squared = 0.62
+#&gt; 2:        2.97 (0.32)  F(2, 147) = 49.16, p &lt; .001, Eta-squared = 0.40
+#&gt; 3:        5.55 (0.78)         KW chi-square = 130.41, df = 2, p &lt; .001
+#&gt; 4:        2.00 (0.50)         KW chi-square = 131.19, df = 2, p &lt; .001</div><div class='input'>
+<span class='va'>diris</span> <span class='op'>&lt;-</span> <span class='fu'>data.table</span><span class='fu'>::</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html'>as.data.table</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
+<span class='fu'>egltable</span><span class='op'>(</span><span class='st'>"Sepal.Length"</span>, g <span class='op'>=</span> <span class='st'>"Species"</span>, data <span class='op'>=</span> <span class='va'>diris</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                 setosa M (SD) versicolor M (SD) virginica M (SD)
+#&gt; 1: Sepal.Length   5.01 (0.35)       5.94 (0.52)      6.59 (0.64)
+#&gt;                                                Test
+#&gt; 1: F(2, 147) = 119.26, p &lt; .001, Eta-squared = 0.62</div><div class='input'>
+<span class='va'>tmp</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span>
+<span class='va'>tmp</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+<span class='va'>tmp</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>$</span><span class='va'>am</span>, levels <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span><span class='op'>)</span>
+
+<span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mpg"</span>, <span class='st'>"hp"</span><span class='op'>)</span>, <span class='st'>"vs"</span>, <span class='va'>tmp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;              0 M (SD)      1 M (SD)                                 Test
+#&gt; 1: mpg   16.62 (3.86)  24.56 (5.38) t(df=30) = -4.86, p &lt; .001, d = 1.73
+#&gt; 2:  hp 189.72 (60.28) 91.36 (24.42)  t(df=30) = 5.73, p &lt; .001, d = 2.04</div><div class='input'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mpg"</span>, <span class='st'>"hp"</span><span class='op'>)</span>, <span class='st'>"am"</span>, <span class='va'>tmp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;              0 M (SD)       1 M (SD)                                 Test
+#&gt; 1: mpg   17.15 (3.83)   24.39 (6.17) t(df=30) = -4.11, p &lt; .001, d = 1.48
+#&gt; 2:  hp 160.26 (53.91) 126.85 (84.06)  t(df=30) = 1.37, p = .180, d = 0.49</div><div class='input'><span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"am"</span>, <span class='st'>"cyl"</span><span class='op'>)</span>, <span class='st'>"vs"</span>, <span class='va'>tmp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Chi-squared approximation may be incorrect</span></div><div class='output co'>#&gt;          0 N (%)   1 N (%)
+#&gt; 1:  am                    
+#&gt; 2:   0 12 (66.7)  7 (50.0)
+#&gt; 3:   1  6 (33.3)  7 (50.0)
+#&gt; 4: cyl                    
+#&gt; 5:   4   1 (5.6) 10 (71.4)
+#&gt; 6:   6  3 (16.7)  4 (28.6)
+#&gt; 7:   8 14 (77.8)   0 (0.0)
+#&gt;                                                       Test
+#&gt; 1:         Chi-square = 0.91, df = 1, p = .341, Phi = 0.17
+#&gt; 2:                                                        
+#&gt; 3:                                                        
+#&gt; 4: Chi-square = 21.34, df = 2, p &lt; .001, Cramer's V = 0.82
+#&gt; 5:                                                        
+#&gt; 6:                                                        
+#&gt; 7:                                                        </div><div class='input'>
+<span class='va'>tests</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>sleep</span>,
+    <span class='fu'><a href='https://rdrr.io/r/stats/wilcox.test.html'>wilcox.test</a></span><span class='op'>(</span><span class='va'>extra</span><span class='op'>[</span><span class='va'>group</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>]</span>,
+           <span class='va'>extra</span><span class='op'>[</span><span class='va'>group</span> <span class='op'>==</span> <span class='fl'>2</span><span class='op'>]</span>, paired <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: cannot compute exact p-value with ties</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot compute exact p-value with zeroes</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>tests</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of 7
+#&gt;  $ statistic  : Named num 0
+#&gt;   ..- attr(*, "names")= chr "V"
+#&gt;  $ parameter  : NULL
+#&gt;  $ p.value    : num 0.00909
+#&gt;  $ null.value : Named num 0
+#&gt;   ..- attr(*, "names")= chr "location shift"
+#&gt;  $ alternative: chr "two.sided"
+#&gt;  $ method     : chr "Wilcoxon signed rank test with continuity correction"
+#&gt;  $ data.name  : chr "extra[group == 1] and extra[group == 2]"
+#&gt;  - attr(*, "class")= chr "htest"</div><div class='input'>
+<span class='co'>## example with paired data</span>
+<span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"extra"</span><span class='op'>)</span>, g <span class='op'>=</span> <span class='st'>"group"</span>, data <span class='op'>=</span> <span class='va'>sleep</span>, idvar <span class='op'>=</span> <span class='st'>"ID"</span>, paired <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;             1 M (SD)    2 M (SD)                               Test
+#&gt; 1: extra 0.75 (1.79) 2.33 (2.00) t(df=9) = 4.06, p = .003, d = 1.28</div><div class='input'>
+<span class='co'>## what happens when ignoring pairing (p-value off)</span>
+<span class='co'># egltable(c("extra"), g = "group", data = sleep, idvar = "ID")</span>
+
+<span class='co'>## paired categorical data example</span>
+<span class='co'>## using data on chick weights to create categorical data</span>
+<span class='va'>tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>ChickWeight</span>, <span class='va'>Time</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>tmp</span><span class='op'>$</span><span class='va'>WeightTertile</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>$</span><span class='va'>weight</span>,
+  breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>$</span><span class='va'>weight</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+  include.lowest <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='fu'>egltable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"weight"</span>, <span class='st'>"WeightTertile"</span><span class='op'>)</span>, g <span class='op'>=</span> <span class='st'>"Time"</span>,
+  data <span class='op'>=</span> <span class='va'>tmp</span>,
+  idvar <span class='op'>=</span> <span class='st'>"Chick"</span>, paired <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                  0 M (SD)/N (%) 20 M (SD)/N (%)
+#&gt; 1:        weight   41.06 (1.13)  209.72 (66.51)
+#&gt; 2: WeightTertile                               
+#&gt; 3:     [39,41.7]      32 (64.0)         0 (0.0)
+#&gt; 4:    (41.7,169]      18 (36.0)       14 (30.4)
+#&gt; 5:     (169,361]        0 (0.0)       32 (69.6)
+#&gt;                                              Test
+#&gt; 1:           t(df=45) = 17.10, p &lt; .001, d = 2.52
+#&gt; 2: McNemar's Chi-square = 39.00, df = 3, p &lt; .001
+#&gt; 3:                                               
+#&gt; 4:                                               
+#&gt; 5:                                               </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>tmp</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -394,11 +376,11 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Joshua F. Wiley.</p></p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -406,8 +388,6 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></td>
 
   
 
-
-  
 
   </body>
 </html>

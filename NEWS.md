@@ -1,8 +1,10 @@
-# JWileymisc 1.2.1
+# JWileymisc Devel
 
 ## New Features
 * `diffCircular()` calculates the circular difference 
 	between two vectors.
+* `saveRDSfst()` saves RDS files using `fst` for multithreaded compression.
+* `readRDSfst()` reads RDS files using `fst` for multithreaded decompression.
 
 ## Bug Fixes
 * `egltable()` now correctly handles categorical variables by 

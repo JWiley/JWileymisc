@@ -47,8 +47,6 @@ use structural equation modelling." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -60,15 +58,9 @@ use structural equation modelling." />
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -89,6 +81,12 @@ use structural equation modelling." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -144,11 +142,11 @@ summaries that are often reported on raw data when the main analyses
 use structural equation modelling.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>SEMSummary</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>SEMSummary</span><span class='op'>(</span>
   <span class='va'>formula</span>,
   <span class='va'>data</span>,
   use <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fiml"</span>, <span class='st'>"pairwise.complete.obs"</span>, <span class='st'>"complete.obs"</span><span class='op'>)</span>
-<span class='op'>)</span></code></pre></div>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,410 +209,402 @@ algorithm, the default.</p>
     <div class='dont-index'><p><code><a href='APAStyler.html'>APAStyler</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'>## Example using the built in iris dataset</span></span>
-<span class='r-in'><span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>Sepal.Width</span> <span class='op'>+</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>s</span> <span class='co'># show output ... not very nice</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $names</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Sepal.Length" "Sepal.Width"  "Petal.Length"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $n</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 150</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $nmissing</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>            0            0            0 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $mu</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     5.843333     3.057333     3.758000 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $stdev</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    0.8280661    0.4358663    1.7652982 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Sigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length    0.6856935  -0.0424340    1.2743154</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width    -0.0424340   0.1899794   -0.3296564</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    1.2743154  -0.3296564    3.1162779</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $sSigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length    1.0000000  -0.1175698    0.8717538</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width    -0.1175698   1.0000000   -0.4284401</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.8717538  -0.4284401    1.0000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $coverage</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length            1           1            1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width             1           1            1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length            1           1            1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $pvalue</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length  Sepal.Width Petal.Length</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length           NA 1.518983e-01 0.000000e+00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width     0.1518983           NA 4.513314e-08</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.0000000 4.513314e-08           NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "SEMSummary"</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## Prettier output from SEMSummary</span></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                 N   M    SD   1.  2.    3.   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. Sepal.Length 150 5.84 0.83  -  -0.04  1.27</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. Sepal.Width  150 3.06 0.44      -    -0.33</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. Petal.Length 150 3.76 1.77            -   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Percentage of coverage for each pairwise covariance or correlation</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length 1            1           1           </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width               1           1           </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length                          1           </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>#### Subset the dataset and use the . expansion ####</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## summary for all variables in mtcars data set</span></span>
-<span class='r-in'><span class='co'>## with 11 variables, this could be a pain to write out</span></span>
-<span class='r-in'><span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $names</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [11] "carb"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $n</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 32</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $nmissing</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  mpg  cyl disp   hp drat   wt qsec   vs   am gear carb </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    0    0    0    0    0    0    0    0    0    0    0 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $mu</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>        mpg        cyl       disp         hp       drat         wt       qsec </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  20.090625   6.187500 230.721875 146.687500   3.596563   3.217250  17.848750 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         vs         am       gear       carb </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.437500   0.406250   3.687500   2.812500 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $stdev</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         mpg         cyl        disp          hp        drat          wt </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   6.0269481   1.7859216 123.9386938  68.5628685   0.5346787   0.9784574 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>        qsec          vs          am        gear        carb </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   1.7869432   0.5040161   0.4989909   0.7378041   1.6152000 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Sigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              mpg         cyl        disp          hp         drat          wt</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg    36.324103  -9.1723790  -633.09721 -320.732056   2.19506351  -5.1166847</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl    -9.172379   3.1895161   199.66028  101.931452  -0.66836694   1.3673710</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp -633.097208 199.6602823 15360.79983 6721.158669 -47.06401915 107.6842040</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> hp   -320.732056 101.9314516  6721.15867 4700.866935 -16.45110887  44.1926613</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> drat    2.195064  -0.6683669   -47.06402  -16.451109   0.28588135  -0.3727207</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> wt     -5.116685   1.3673710   107.68420   44.192661  -0.37272073   0.9573790</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec    4.509149  -1.8868548   -96.05168  -86.770081   0.08714073  -0.3054816</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> vs      2.017137  -0.7298387   -44.37762  -24.987903   0.11864919  -0.2736613</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am      1.803931  -0.4657258   -36.56401   -8.320565   0.19015121  -0.3381048</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear    2.135685  -0.6491935   -50.80262   -6.358871   0.27598790  -0.4210806</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb   -5.363105   1.5201613    79.06875   83.036290  -0.07840726   0.6757903</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              qsec           vs           am        gear        carb</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg    4.50914919   2.01713710   1.80393145   2.1356855 -5.36310484</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl   -1.88685484  -0.72983871  -0.46572581  -0.6491935  1.52016129</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp -96.05168145 -44.37762097 -36.56401210 -50.8026210 79.06875000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> hp   -86.77008065 -24.98790323  -8.32056452  -6.3588710 83.03629032</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> drat   0.08714073   0.11864919   0.19015121   0.2759879 -0.07840726</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> wt    -0.30548161  -0.27366129  -0.33810484  -0.4210806  0.67579032</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec   3.19316613   0.67056452  -0.20495968  -0.2804032 -1.89411290</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> vs     0.67056452   0.25403226   0.04233871   0.0766129 -0.46370968</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am    -0.20495968   0.04233871   0.24899194   0.2923387  0.04637097</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear  -0.28040323   0.07661290   0.29233871   0.5443548  0.32661290</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb  -1.89411290  -0.46370968   0.04637097   0.3266129  2.60887097</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $sSigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>             mpg        cyl       disp         hp        drat         wt</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg   1.0000000 -0.8521620 -0.8475514 -0.7761684  0.68117191 -0.8676594</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl  -0.8521620  1.0000000  0.9020329  0.8324475 -0.69993811  0.7824958</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp -0.8475514  0.9020329  1.0000000  0.7909486 -0.71021393  0.8879799</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> hp   -0.7761684  0.8324475  0.7909486  1.0000000 -0.44875912  0.6587479</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> drat  0.6811719 -0.6999381 -0.7102139 -0.4487591  1.00000000 -0.7124406</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> wt   -0.8676594  0.7824958  0.8879799  0.6587479 -0.71244065  1.0000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec  0.4186840 -0.5912421 -0.4336979 -0.7082234  0.09120476 -0.1747159</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> vs    0.6640389 -0.8108118 -0.7104159 -0.7230967  0.44027846 -0.5549157</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am    0.5998324 -0.5226070 -0.5912270 -0.2432043  0.71271113 -0.6924953</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear  0.4802848 -0.4926866 -0.5555692 -0.1257043  0.69961013 -0.5832870</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb -0.5509251  0.5269883  0.3949769  0.7498125 -0.09078980  0.4276059</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>             qsec         vs          am       gear        carb</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg   0.41868403  0.6640389  0.59983243  0.4802848 -0.55092507</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl  -0.59124207 -0.8108118 -0.52260705 -0.4926866  0.52698829</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp -0.43369788 -0.7104159 -0.59122704 -0.5555692  0.39497686</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> hp   -0.70822339 -0.7230967 -0.24320426 -0.1257043  0.74981247</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> drat  0.09120476  0.4402785  0.71271113  0.6996101 -0.09078980</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> wt   -0.17471588 -0.5549157 -0.69249526 -0.5832870  0.42760594</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec  1.00000000  0.7445354 -0.22986086 -0.2126822 -0.65624923</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> vs    0.74453544  1.0000000  0.16834512  0.2060233 -0.56960714</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am   -0.22986086  0.1683451  1.00000000  0.7940588  0.05753435</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear -0.21268223  0.2060233  0.79405876  1.0000000  0.27407284</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb -0.65624923 -0.5696071  0.05753435  0.2740728  1.00000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $coverage</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      mpg cyl disp hp drat wt qsec vs am gear carb</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg    1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl    1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp   1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> hp     1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> drat   1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> wt     1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec   1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> vs     1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am     1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear   1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb   1   1    1  1    1  1    1  1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $pvalue</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>               mpg          cyl         disp           hp         drat</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg            NA 6.112687e-10 9.380327e-10 1.787835e-07 1.776240e-05</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl  6.112687e-10           NA 1.803002e-12 3.477861e-09 8.244636e-06</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp 9.380327e-10 1.803002e-12           NA 7.142679e-08 5.282022e-06</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> hp   1.787835e-07 3.477861e-09 7.142679e-08           NA 9.988772e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> drat 1.776240e-05 8.244636e-06 5.282022e-06 9.988772e-03           NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> wt   1.293959e-10 1.217567e-07 1.222311e-11 4.145827e-05 4.784260e-06</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec 1.708199e-02 3.660533e-04 1.314404e-02 5.766253e-06 6.195826e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> vs   3.415937e-05 1.843018e-08 5.235012e-06 2.940896e-06 1.167553e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am   2.850207e-04 2.151207e-03 3.662114e-04 1.798309e-01 4.726790e-06</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear 5.400948e-03 4.173297e-03 9.635921e-04 4.930119e-01 8.360110e-06</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb 1.084446e-03 1.942340e-03 2.526789e-02 7.827810e-07 6.211834e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                wt         qsec           vs           am         gear</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg  1.293959e-10 1.708199e-02 3.415937e-05 2.850207e-04 5.400948e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl  1.217567e-07 3.660533e-04 1.843018e-08 2.151207e-03 4.173297e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp 1.222311e-11 1.314404e-02 5.235012e-06 3.662114e-04 9.635921e-04</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> hp   4.145827e-05 5.766253e-06 2.940896e-06 1.798309e-01 4.930119e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> drat 4.784260e-06 6.195826e-01 1.167553e-02 4.726790e-06 8.360110e-06</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> wt             NA 3.388683e-01 9.798492e-04 1.125440e-05 4.586601e-04</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec 3.388683e-01           NA 1.029669e-06 2.056621e-01 2.425344e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> vs   9.798492e-04 1.029669e-06           NA 3.570439e-01 2.579439e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am   1.125440e-05 2.056621e-01 3.570439e-01           NA 5.834043e-08</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear 4.586601e-04 2.425344e-01 2.579439e-01 5.834043e-08           NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb 1.463861e-02 4.536949e-05 6.670496e-04 7.544526e-01 1.290291e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              carb</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg  1.084446e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl  1.942340e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp 2.526789e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> hp   7.827810e-07</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> drat 6.211834e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> wt   1.463861e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec 4.536949e-05</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> vs   6.670496e-04</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am   7.544526e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear 1.290291e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb           NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "SEMSummary"</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## . expansion is also useful when we know column positions</span></span>
-<span class='r-in'><span class='co'>## but not necessarily names</span></span>
-<span class='r-in'><span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>9</span>, <span class='fl'>10</span>, <span class='fl'>11</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $names</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "mpg"  "cyl"  "disp" "am"   "gear" "carb"</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $n</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 32</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $nmissing</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  mpg  cyl disp   am gear carb </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    0    0    0    0    0    0 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $mu</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       mpg       cyl      disp        am      gear      carb </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  20.09062   6.18750 230.72188   0.40625   3.68750   2.81250 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $stdev</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         mpg         cyl        disp          am        gear        carb </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   6.0269481   1.7859216 123.9386938   0.4989909   0.7378041   1.6152000 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Sigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              mpg         cyl        disp           am        gear        carb</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg    36.324103  -9.1723790  -633.09721   1.80393145   2.1356855 -5.36310484</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl    -9.172379   3.1895161   199.66028  -0.46572581  -0.6491935  1.52016129</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp -633.097208 199.6602823 15360.79983 -36.56401210 -50.8026210 79.06875000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am      1.803931  -0.4657258   -36.56401   0.24899194   0.2923387  0.04637097</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear    2.135685  -0.6491935   -50.80262   0.29233871   0.5443548  0.32661290</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb   -5.363105   1.5201613    79.06875   0.04637097   0.3266129  2.60887097</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $sSigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>             mpg        cyl       disp          am       gear        carb</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg   1.0000000 -0.8521620 -0.8475514  0.59983243  0.4802848 -0.55092507</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl  -0.8521620  1.0000000  0.9020329 -0.52260705 -0.4926866  0.52698829</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp -0.8475514  0.9020329  1.0000000 -0.59122704 -0.5555692  0.39497686</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am    0.5998324 -0.5226070 -0.5912270  1.00000000  0.7940588  0.05753435</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear  0.4802848 -0.4926866 -0.5555692  0.79405876  1.0000000  0.27407284</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb -0.5509251  0.5269883  0.3949769  0.05753435  0.2740728  1.00000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $coverage</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      mpg cyl disp am gear carb</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg    1   1    1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl    1   1    1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp   1   1    1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am     1   1    1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear   1   1    1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb   1   1    1  1    1    1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $pvalue</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>               mpg          cyl         disp           am         gear</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg            NA 6.112687e-10 9.380327e-10 2.850207e-04 5.400948e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl  6.112687e-10           NA 1.803002e-12 2.151207e-03 4.173297e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp 9.380327e-10 1.803002e-12           NA 3.662114e-04 9.635921e-04</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am   2.850207e-04 2.151207e-03 3.662114e-04           NA 5.834043e-08</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear 5.400948e-03 4.173297e-03 9.635921e-04 5.834043e-08           NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb 1.084446e-03 1.942340e-03 2.526789e-02 7.544526e-01 1.290291e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>             carb</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg  0.001084446</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl  0.001942340</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> disp 0.025267886</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> am   0.754452554</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> gear 0.129029084</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> carb          NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "SEMSummary"</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## clean up</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## sample data</span></span>
-<span class='r-in'><span class='va'>Xmiss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>]</span><span class='op'>)</span></span>
-<span class='r-in'><span class='co'># make q0% missing completely at random</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>Xmiss</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>Xmiss</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>Xmiss</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>.10</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span></span>
-<span class='r-in'><span class='va'>Xmiss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>Xmiss</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>Xmiss</span>, use <span class='op'>=</span> <span class='st'>"fiml"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $names</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $n</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 150</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $nmissing</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length  Petal.Width </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>           15            8           21           16 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $mu</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length  Petal.Width </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     5.859048     3.063777     3.744655     1.199088 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $stdev</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length  Petal.Width </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    0.8315335    0.4326462    1.7393932    0.7630092 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Sigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length   0.69144798 -0.04277193     1.255775   0.5177624</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width   -0.04277193  0.18718270    -0.325356  -0.1222384</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length   1.25577465 -0.32535602     3.025489   1.2796561</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width    0.51776245 -0.12223835     1.279656   0.5821831</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $sSigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length    1.0000000  -0.1188902    0.8682288   0.8160580</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width    -0.1188902   1.0000000   -0.4323428  -0.3702924</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.8682288  -0.4323428    1.0000000   0.9641969</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width     0.8160580  -0.3702924    0.9641969   1.0000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $coverage</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length    0.9000000   0.8466667    0.7733333   0.8000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width     0.8466667   0.9466667    0.8266667   0.8400000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.7733333   0.8266667    0.8600000   0.7600000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width     0.8000000   0.8400000    0.7600000   0.8933333</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $pvalue</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length  Sepal.Width Petal.Length  Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length           NA 1.830888e-01 0.000000e+00 0.000000e+00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width     0.1830888           NA 5.321816e-07 1.973922e-05</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.0000000 5.321816e-07           NA 0.000000e+00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width     0.0000000 1.973922e-05 0.000000e+00           NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "SEMSummary"</span>
-<span class='r-in'></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## pairwise</span></span>
-<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>Xmiss</span>, use <span class='op'>=</span> <span class='st'>"pair"</span><span class='op'>)</span>,</span>
-<span class='r-in'>  type <span class='op'>=</span> <span class='st'>"cor"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>                 N   M    SD   1.  2.    3.    4.   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. Sepal.Length 135 5.89 0.81  -  -0.18  0.86  0.81</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. Sepal.Width  142 3.07 0.44      -    -0.43 -0.43</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. Petal.Length 129 3.82 1.74            -     0.97</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. Petal.Width  134 1.19 0.77                  -   </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Percentage of coverage for each pairwise covariance or correlation</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length 0.9          0.85        0.77         0.8        </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width               0.95        0.83         0.84       </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length                          0.86         0.76       </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width                                        0.89       </span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## same as cor()</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>Xmiss</span>, use <span class='op'>=</span> <span class='st'>"pairwise.complete.obs"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length    1.0000000  -0.1832230    0.8646983   0.8119316</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width    -0.1832230   1.0000000   -0.4291999  -0.4293565</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.8646983  -0.4291999    1.0000000   0.9650212</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width     0.8119316  -0.4293565    0.9650212   1.0000000</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## complete cases only</span></span>
-<span class='r-in'><span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>Xmiss</span>, use <span class='op'>=</span> <span class='st'>"comp"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $names</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $n</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 150</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $nmissing</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length  Petal.Width </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>           15            8           21           16 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $mu</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length  Petal.Width </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     5.853608     3.037113     3.802062     1.229897 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $stdev</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length  Sepal.Width Petal.Length  Petal.Width </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>    0.7987049    0.4194042    1.7165845    0.7479367 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $Sigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length   0.63792955 -0.05919781    1.1747841   0.4824431</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width   -0.05919781  0.17589991   -0.3682023  -0.1415378</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length   1.17478415 -0.36820232    2.9466624   1.2399377</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width    0.48244308 -0.14153780    1.2399377   0.5594094</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $sSigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length    1.0000000  -0.1767203    0.8568534   0.8075973</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width    -0.1767203   1.0000000   -0.5114327  -0.4512059</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.8568534  -0.5114327    1.0000000   0.9657613</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width     0.8075973  -0.4512059    0.9657613   1.0000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $coverage</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length    0.9000000   0.8466667    0.7733333   0.8000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width     0.8466667   0.9466667    0.8266667   0.8400000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.7733333   0.8266667    0.8600000   0.7600000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width     0.8000000   0.8400000    0.7600000   0.8933333</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $pvalue</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length  Sepal.Width Petal.Length  Petal.Width</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length           NA 4.686510e-02 0.000000e+00 0.000000e+00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Width     0.0468651           NA 1.278788e-09 1.142829e-07</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.0000000 1.278788e-09           NA 0.000000e+00</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Width     0.0000000 1.142829e-07 0.000000e+00           NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"class")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "SEMSummary"</span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'>## clean up</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>Xmiss</span><span class='op'>)</span></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='co'>## Example using the built in iris dataset</span>
+<span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>Sepal.Width</span> <span class='op'>+</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='va'>s</span> <span class='co'># show output ... not very nice</span>
+</div><div class='output co'>#&gt; $names
+#&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length"
+#&gt; 
+#&gt; $n
+#&gt; [1] 150
+#&gt; 
+#&gt; $nmissing
+#&gt; Sepal.Length  Sepal.Width Petal.Length 
+#&gt;            0            0            0 
+#&gt; 
+#&gt; $mu
+#&gt; Sepal.Length  Sepal.Width Petal.Length 
+#&gt;     5.843333     3.057333     3.758000 
+#&gt; 
+#&gt; $stdev
+#&gt; Sepal.Length  Sepal.Width Petal.Length 
+#&gt;    0.8280661    0.4358663    1.7652982 
+#&gt; 
+#&gt; $Sigma
+#&gt;              Sepal.Length Sepal.Width Petal.Length
+#&gt; Sepal.Length    0.6856935  -0.0424340    1.2743154
+#&gt; Sepal.Width    -0.0424340   0.1899794   -0.3296564
+#&gt; Petal.Length    1.2743154  -0.3296564    3.1162779
+#&gt; 
+#&gt; $sSigma
+#&gt;              Sepal.Length Sepal.Width Petal.Length
+#&gt; Sepal.Length    1.0000000  -0.1175698    0.8717538
+#&gt; Sepal.Width    -0.1175698   1.0000000   -0.4284401
+#&gt; Petal.Length    0.8717538  -0.4284401    1.0000000
+#&gt; 
+#&gt; $coverage
+#&gt;              Sepal.Length Sepal.Width Petal.Length
+#&gt; Sepal.Length            1           1            1
+#&gt; Sepal.Width             1           1            1
+#&gt; Petal.Length            1           1            1
+#&gt; 
+#&gt; $pvalue
+#&gt;              Sepal.Length  Sepal.Width Petal.Length
+#&gt; Sepal.Length           NA 1.518983e-01 0.000000e+00
+#&gt; Sepal.Width     0.1518983           NA 4.513314e-08
+#&gt; Petal.Length    0.0000000 4.513314e-08           NA
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "SEMSummary"</div><div class='input'>
+<span class='co'>## Prettier output from SEMSummary</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                 N   M    SD   1.  2.    3.   
+#&gt; 1. Sepal.Length 150 5.84 0.83  -  -0.04  1.27
+#&gt; 2. Sepal.Width  150 3.06 0.44      -    -0.33
+#&gt; 3. Petal.Length 150 3.76 1.77            -   
+#&gt; 
+#&gt; Percentage of coverage for each pairwise covariance or correlation
+#&gt; 
+#&gt;              Sepal.Length Sepal.Width Petal.Length
+#&gt; Sepal.Length 1            1           1           
+#&gt; Sepal.Width               1           1           
+#&gt; Petal.Length                          1           </div><div class='input'>
+<span class='co'>#### Subset the dataset and use the . expansion ####</span>
+
+<span class='co'>## summary for all variables in mtcars data set</span>
+<span class='co'>## with 11 variables, this could be a pain to write out</span>
+<span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $names
+#&gt;  [1] "mpg"  "cyl"  "disp" "hp"   "drat" "wt"   "qsec" "vs"   "am"   "gear"
+#&gt; [11] "carb"
+#&gt; 
+#&gt; $n
+#&gt; [1] 32
+#&gt; 
+#&gt; $nmissing
+#&gt;  mpg  cyl disp   hp drat   wt qsec   vs   am gear carb 
+#&gt;    0    0    0    0    0    0    0    0    0    0    0 
+#&gt; 
+#&gt; $mu
+#&gt;        mpg        cyl       disp         hp       drat         wt       qsec 
+#&gt;  20.090625   6.187500 230.721875 146.687500   3.596563   3.217250  17.848750 
+#&gt;         vs         am       gear       carb 
+#&gt;   0.437500   0.406250   3.687500   2.812500 
+#&gt; 
+#&gt; $stdev
+#&gt;         mpg         cyl        disp          hp        drat          wt 
+#&gt;   6.0269481   1.7859216 123.9386938  68.5628685   0.5346787   0.9784574 
+#&gt;        qsec          vs          am        gear        carb 
+#&gt;   1.7869432   0.5040161   0.4989909   0.7378041   1.6152000 
+#&gt; 
+#&gt; $Sigma
+#&gt;              mpg         cyl        disp          hp         drat          wt
+#&gt; mpg    36.324103  -9.1723790  -633.09721 -320.732056   2.19506351  -5.1166847
+#&gt; cyl    -9.172379   3.1895161   199.66028  101.931452  -0.66836694   1.3673710
+#&gt; disp -633.097208 199.6602823 15360.79983 6721.158669 -47.06401915 107.6842040
+#&gt; hp   -320.732056 101.9314516  6721.15867 4700.866935 -16.45110887  44.1926613
+#&gt; drat    2.195064  -0.6683669   -47.06402  -16.451109   0.28588135  -0.3727207
+#&gt; wt     -5.116685   1.3673710   107.68420   44.192661  -0.37272073   0.9573790
+#&gt; qsec    4.509149  -1.8868548   -96.05168  -86.770081   0.08714073  -0.3054816
+#&gt; vs      2.017137  -0.7298387   -44.37762  -24.987903   0.11864919  -0.2736613
+#&gt; am      1.803931  -0.4657258   -36.56401   -8.320565   0.19015121  -0.3381048
+#&gt; gear    2.135685  -0.6491935   -50.80262   -6.358871   0.27598790  -0.4210806
+#&gt; carb   -5.363105   1.5201613    79.06875   83.036290  -0.07840726   0.6757903
+#&gt;              qsec           vs           am        gear        carb
+#&gt; mpg    4.50914919   2.01713710   1.80393145   2.1356855 -5.36310484
+#&gt; cyl   -1.88685484  -0.72983871  -0.46572581  -0.6491935  1.52016129
+#&gt; disp -96.05168145 -44.37762097 -36.56401210 -50.8026210 79.06875000
+#&gt; hp   -86.77008065 -24.98790323  -8.32056452  -6.3588710 83.03629032
+#&gt; drat   0.08714073   0.11864919   0.19015121   0.2759879 -0.07840726
+#&gt; wt    -0.30548161  -0.27366129  -0.33810484  -0.4210806  0.67579032
+#&gt; qsec   3.19316613   0.67056452  -0.20495968  -0.2804032 -1.89411290
+#&gt; vs     0.67056452   0.25403226   0.04233871   0.0766129 -0.46370968
+#&gt; am    -0.20495968   0.04233871   0.24899194   0.2923387  0.04637097
+#&gt; gear  -0.28040323   0.07661290   0.29233871   0.5443548  0.32661290
+#&gt; carb  -1.89411290  -0.46370968   0.04637097   0.3266129  2.60887097
+#&gt; 
+#&gt; $sSigma
+#&gt;             mpg        cyl       disp         hp        drat         wt
+#&gt; mpg   1.0000000 -0.8521620 -0.8475514 -0.7761684  0.68117191 -0.8676594
+#&gt; cyl  -0.8521620  1.0000000  0.9020329  0.8324475 -0.69993811  0.7824958
+#&gt; disp -0.8475514  0.9020329  1.0000000  0.7909486 -0.71021393  0.8879799
+#&gt; hp   -0.7761684  0.8324475  0.7909486  1.0000000 -0.44875912  0.6587479
+#&gt; drat  0.6811719 -0.6999381 -0.7102139 -0.4487591  1.00000000 -0.7124406
+#&gt; wt   -0.8676594  0.7824958  0.8879799  0.6587479 -0.71244065  1.0000000
+#&gt; qsec  0.4186840 -0.5912421 -0.4336979 -0.7082234  0.09120476 -0.1747159
+#&gt; vs    0.6640389 -0.8108118 -0.7104159 -0.7230967  0.44027846 -0.5549157
+#&gt; am    0.5998324 -0.5226070 -0.5912270 -0.2432043  0.71271113 -0.6924953
+#&gt; gear  0.4802848 -0.4926866 -0.5555692 -0.1257043  0.69961013 -0.5832870
+#&gt; carb -0.5509251  0.5269883  0.3949769  0.7498125 -0.09078980  0.4276059
+#&gt;             qsec         vs          am       gear        carb
+#&gt; mpg   0.41868403  0.6640389  0.59983243  0.4802848 -0.55092507
+#&gt; cyl  -0.59124207 -0.8108118 -0.52260705 -0.4926866  0.52698829
+#&gt; disp -0.43369788 -0.7104159 -0.59122704 -0.5555692  0.39497686
+#&gt; hp   -0.70822339 -0.7230967 -0.24320426 -0.1257043  0.74981247
+#&gt; drat  0.09120476  0.4402785  0.71271113  0.6996101 -0.09078980
+#&gt; wt   -0.17471588 -0.5549157 -0.69249526 -0.5832870  0.42760594
+#&gt; qsec  1.00000000  0.7445354 -0.22986086 -0.2126822 -0.65624923
+#&gt; vs    0.74453544  1.0000000  0.16834512  0.2060233 -0.56960714
+#&gt; am   -0.22986086  0.1683451  1.00000000  0.7940588  0.05753435
+#&gt; gear -0.21268223  0.2060233  0.79405876  1.0000000  0.27407284
+#&gt; carb -0.65624923 -0.5696071  0.05753435  0.2740728  1.00000000
+#&gt; 
+#&gt; $coverage
+#&gt;      mpg cyl disp hp drat wt qsec vs am gear carb
+#&gt; mpg    1   1    1  1    1  1    1  1  1    1    1
+#&gt; cyl    1   1    1  1    1  1    1  1  1    1    1
+#&gt; disp   1   1    1  1    1  1    1  1  1    1    1
+#&gt; hp     1   1    1  1    1  1    1  1  1    1    1
+#&gt; drat   1   1    1  1    1  1    1  1  1    1    1
+#&gt; wt     1   1    1  1    1  1    1  1  1    1    1
+#&gt; qsec   1   1    1  1    1  1    1  1  1    1    1
+#&gt; vs     1   1    1  1    1  1    1  1  1    1    1
+#&gt; am     1   1    1  1    1  1    1  1  1    1    1
+#&gt; gear   1   1    1  1    1  1    1  1  1    1    1
+#&gt; carb   1   1    1  1    1  1    1  1  1    1    1
+#&gt; 
+#&gt; $pvalue
+#&gt;               mpg          cyl         disp           hp         drat
+#&gt; mpg            NA 6.112687e-10 9.380327e-10 1.787835e-07 1.776240e-05
+#&gt; cyl  6.112687e-10           NA 1.803002e-12 3.477861e-09 8.244636e-06
+#&gt; disp 9.380327e-10 1.803002e-12           NA 7.142679e-08 5.282022e-06
+#&gt; hp   1.787835e-07 3.477861e-09 7.142679e-08           NA 9.988772e-03
+#&gt; drat 1.776240e-05 8.244636e-06 5.282022e-06 9.988772e-03           NA
+#&gt; wt   1.293959e-10 1.217567e-07 1.222311e-11 4.145827e-05 4.784260e-06
+#&gt; qsec 1.708199e-02 3.660533e-04 1.314404e-02 5.766253e-06 6.195826e-01
+#&gt; vs   3.415937e-05 1.843018e-08 5.235012e-06 2.940896e-06 1.167553e-02
+#&gt; am   2.850207e-04 2.151207e-03 3.662114e-04 1.798309e-01 4.726790e-06
+#&gt; gear 5.400948e-03 4.173297e-03 9.635921e-04 4.930119e-01 8.360110e-06
+#&gt; carb 1.084446e-03 1.942340e-03 2.526789e-02 7.827810e-07 6.211834e-01
+#&gt;                wt         qsec           vs           am         gear
+#&gt; mpg  1.293959e-10 1.708199e-02 3.415937e-05 2.850207e-04 5.400948e-03
+#&gt; cyl  1.217567e-07 3.660533e-04 1.843018e-08 2.151207e-03 4.173297e-03
+#&gt; disp 1.222311e-11 1.314404e-02 5.235012e-06 3.662114e-04 9.635921e-04
+#&gt; hp   4.145827e-05 5.766253e-06 2.940896e-06 1.798309e-01 4.930119e-01
+#&gt; drat 4.784260e-06 6.195826e-01 1.167553e-02 4.726790e-06 8.360110e-06
+#&gt; wt             NA 3.388683e-01 9.798492e-04 1.125440e-05 4.586601e-04
+#&gt; qsec 3.388683e-01           NA 1.029669e-06 2.056621e-01 2.425344e-01
+#&gt; vs   9.798492e-04 1.029669e-06           NA 3.570439e-01 2.579439e-01
+#&gt; am   1.125440e-05 2.056621e-01 3.570439e-01           NA 5.834043e-08
+#&gt; gear 4.586601e-04 2.425344e-01 2.579439e-01 5.834043e-08           NA
+#&gt; carb 1.463861e-02 4.536949e-05 6.670496e-04 7.544526e-01 1.290291e-01
+#&gt;              carb
+#&gt; mpg  1.084446e-03
+#&gt; cyl  1.942340e-03
+#&gt; disp 2.526789e-02
+#&gt; hp   7.827810e-07
+#&gt; drat 6.211834e-01
+#&gt; wt   1.463861e-02
+#&gt; qsec 4.536949e-05
+#&gt; vs   6.670496e-04
+#&gt; am   7.544526e-01
+#&gt; gear 1.290291e-01
+#&gt; carb           NA
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "SEMSummary"</div><div class='input'>
+<span class='co'>## . expansion is also useful when we know column positions</span>
+<span class='co'>## but not necessarily names</span>
+<span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>9</span>, <span class='fl'>10</span>, <span class='fl'>11</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $names
+#&gt; [1] "mpg"  "cyl"  "disp" "am"   "gear" "carb"
+#&gt; 
+#&gt; $n
+#&gt; [1] 32
+#&gt; 
+#&gt; $nmissing
+#&gt;  mpg  cyl disp   am gear carb 
+#&gt;    0    0    0    0    0    0 
+#&gt; 
+#&gt; $mu
+#&gt;       mpg       cyl      disp        am      gear      carb 
+#&gt;  20.09062   6.18750 230.72188   0.40625   3.68750   2.81250 
+#&gt; 
+#&gt; $stdev
+#&gt;         mpg         cyl        disp          am        gear        carb 
+#&gt;   6.0269481   1.7859216 123.9386938   0.4989909   0.7378041   1.6152000 
+#&gt; 
+#&gt; $Sigma
+#&gt;              mpg         cyl        disp           am        gear        carb
+#&gt; mpg    36.324103  -9.1723790  -633.09721   1.80393145   2.1356855 -5.36310484
+#&gt; cyl    -9.172379   3.1895161   199.66028  -0.46572581  -0.6491935  1.52016129
+#&gt; disp -633.097208 199.6602823 15360.79983 -36.56401210 -50.8026210 79.06875000
+#&gt; am      1.803931  -0.4657258   -36.56401   0.24899194   0.2923387  0.04637097
+#&gt; gear    2.135685  -0.6491935   -50.80262   0.29233871   0.5443548  0.32661290
+#&gt; carb   -5.363105   1.5201613    79.06875   0.04637097   0.3266129  2.60887097
+#&gt; 
+#&gt; $sSigma
+#&gt;             mpg        cyl       disp          am       gear        carb
+#&gt; mpg   1.0000000 -0.8521620 -0.8475514  0.59983243  0.4802848 -0.55092507
+#&gt; cyl  -0.8521620  1.0000000  0.9020329 -0.52260705 -0.4926866  0.52698829
+#&gt; disp -0.8475514  0.9020329  1.0000000 -0.59122704 -0.5555692  0.39497686
+#&gt; am    0.5998324 -0.5226070 -0.5912270  1.00000000  0.7940588  0.05753435
+#&gt; gear  0.4802848 -0.4926866 -0.5555692  0.79405876  1.0000000  0.27407284
+#&gt; carb -0.5509251  0.5269883  0.3949769  0.05753435  0.2740728  1.00000000
+#&gt; 
+#&gt; $coverage
+#&gt;      mpg cyl disp am gear carb
+#&gt; mpg    1   1    1  1    1    1
+#&gt; cyl    1   1    1  1    1    1
+#&gt; disp   1   1    1  1    1    1
+#&gt; am     1   1    1  1    1    1
+#&gt; gear   1   1    1  1    1    1
+#&gt; carb   1   1    1  1    1    1
+#&gt; 
+#&gt; $pvalue
+#&gt;               mpg          cyl         disp           am         gear
+#&gt; mpg            NA 6.112687e-10 9.380327e-10 2.850207e-04 5.400948e-03
+#&gt; cyl  6.112687e-10           NA 1.803002e-12 2.151207e-03 4.173297e-03
+#&gt; disp 9.380327e-10 1.803002e-12           NA 3.662114e-04 9.635921e-04
+#&gt; am   2.850207e-04 2.151207e-03 3.662114e-04           NA 5.834043e-08
+#&gt; gear 5.400948e-03 4.173297e-03 9.635921e-04 5.834043e-08           NA
+#&gt; carb 1.084446e-03 1.942340e-03 2.526789e-02 7.544526e-01 1.290291e-01
+#&gt;             carb
+#&gt; mpg  0.001084446
+#&gt; cyl  0.001942340
+#&gt; disp 0.025267886
+#&gt; am   0.754452554
+#&gt; gear 0.129029084
+#&gt; carb          NA
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "SEMSummary"</div><div class='input'>
+<span class='co'>## clean up</span>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>)</span>
+
+<span class='co'>## sample data</span>
+<span class='va'>Xmiss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[</span>, <span class='op'>-</span><span class='fl'>5</span><span class='op'>]</span><span class='op'>)</span>
+<span class='co'># make q0% missing completely at random</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
+<span class='va'>Xmiss</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>Xmiss</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>Xmiss</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>.10</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
+<span class='va'>Xmiss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>Xmiss</span><span class='op'>)</span>
+
+<span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>Xmiss</span>, use <span class='op'>=</span> <span class='st'>"fiml"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $names
+#&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" 
+#&gt; 
+#&gt; $n
+#&gt; [1] 150
+#&gt; 
+#&gt; $nmissing
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#&gt;           15            8           21           16 
+#&gt; 
+#&gt; $mu
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#&gt;     5.859048     3.063777     3.744655     1.199088 
+#&gt; 
+#&gt; $stdev
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#&gt;    0.8315335    0.4326462    1.7393932    0.7630092 
+#&gt; 
+#&gt; $Sigma
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length   0.69144798 -0.04277193     1.255775   0.5177624
+#&gt; Sepal.Width   -0.04277193  0.18718270    -0.325356  -0.1222384
+#&gt; Petal.Length   1.25577465 -0.32535602     3.025489   1.2796561
+#&gt; Petal.Width    0.51776245 -0.12223835     1.279656   0.5821831
+#&gt; 
+#&gt; $sSigma
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length    1.0000000  -0.1188902    0.8682288   0.8160580
+#&gt; Sepal.Width    -0.1188902   1.0000000   -0.4323428  -0.3702924
+#&gt; Petal.Length    0.8682288  -0.4323428    1.0000000   0.9641969
+#&gt; Petal.Width     0.8160580  -0.3702924    0.9641969   1.0000000
+#&gt; 
+#&gt; $coverage
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length    0.9000000   0.8466667    0.7733333   0.8000000
+#&gt; Sepal.Width     0.8466667   0.9466667    0.8266667   0.8400000
+#&gt; Petal.Length    0.7733333   0.8266667    0.8600000   0.7600000
+#&gt; Petal.Width     0.8000000   0.8400000    0.7600000   0.8933333
+#&gt; 
+#&gt; $pvalue
+#&gt;              Sepal.Length  Sepal.Width Petal.Length  Petal.Width
+#&gt; Sepal.Length           NA 1.830888e-01 0.000000e+00 0.000000e+00
+#&gt; Sepal.Width     0.1830888           NA 5.321816e-07 1.973922e-05
+#&gt; Petal.Length    0.0000000 5.321816e-07           NA 0.000000e+00
+#&gt; Petal.Width     0.0000000 1.973922e-05 0.000000e+00           NA
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "SEMSummary"</div><div class='input'>
+
+<span class='co'>## pairwise</span>
+<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>Xmiss</span>, use <span class='op'>=</span> <span class='st'>"pair"</span><span class='op'>)</span>,
+  type <span class='op'>=</span> <span class='st'>"cor"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                 N   M    SD   1.  2.    3.    4.   
+#&gt; 1. Sepal.Length 135 5.89 0.81  -  -0.18  0.86  0.81
+#&gt; 2. Sepal.Width  142 3.07 0.44      -    -0.43 -0.43
+#&gt; 3. Petal.Length 129 3.82 1.74            -     0.97
+#&gt; 4. Petal.Width  134 1.19 0.77                  -   
+#&gt; 
+#&gt; Percentage of coverage for each pairwise covariance or correlation
+#&gt; 
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length 0.9          0.85        0.77         0.8        
+#&gt; Sepal.Width               0.95        0.83         0.84       
+#&gt; Petal.Length                          0.86         0.76       
+#&gt; Petal.Width                                        0.89       </div><div class='input'>
+<span class='co'>## same as cor()</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>Xmiss</span>, use <span class='op'>=</span> <span class='st'>"pairwise.complete.obs"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length    1.0000000  -0.1832230    0.8646983   0.8119316
+#&gt; Sepal.Width    -0.1832230   1.0000000   -0.4291999  -0.4293565
+#&gt; Petal.Length    0.8646983  -0.4291999    1.0000000   0.9650212
+#&gt; Petal.Width     0.8119316  -0.4293565    0.9650212   1.0000000</div><div class='input'>
+<span class='co'>## complete cases only</span>
+<span class='fu'>SEMSummary</span><span class='op'>(</span><span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>Xmiss</span>, use <span class='op'>=</span> <span class='st'>"comp"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $names
+#&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" 
+#&gt; 
+#&gt; $n
+#&gt; [1] 150
+#&gt; 
+#&gt; $nmissing
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#&gt;           15            8           21           16 
+#&gt; 
+#&gt; $mu
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#&gt;     5.853608     3.037113     3.802062     1.229897 
+#&gt; 
+#&gt; $stdev
+#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#&gt;    0.7987049    0.4194042    1.7165845    0.7479367 
+#&gt; 
+#&gt; $Sigma
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length   0.63792955 -0.05919781    1.1747841   0.4824431
+#&gt; Sepal.Width   -0.05919781  0.17589991   -0.3682023  -0.1415378
+#&gt; Petal.Length   1.17478415 -0.36820232    2.9466624   1.2399377
+#&gt; Petal.Width    0.48244308 -0.14153780    1.2399377   0.5594094
+#&gt; 
+#&gt; $sSigma
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length    1.0000000  -0.1767203    0.8568534   0.8075973
+#&gt; Sepal.Width    -0.1767203   1.0000000   -0.5114327  -0.4512059
+#&gt; Petal.Length    0.8568534  -0.5114327    1.0000000   0.9657613
+#&gt; Petal.Width     0.8075973  -0.4512059    0.9657613   1.0000000
+#&gt; 
+#&gt; $coverage
+#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width
+#&gt; Sepal.Length    0.9000000   0.8466667    0.7733333   0.8000000
+#&gt; Sepal.Width     0.8466667   0.9466667    0.8266667   0.8400000
+#&gt; Petal.Length    0.7733333   0.8266667    0.8600000   0.7600000
+#&gt; Petal.Width     0.8000000   0.8400000    0.7600000   0.8933333
+#&gt; 
+#&gt; $pvalue
+#&gt;              Sepal.Length  Sepal.Width Petal.Length  Petal.Width
+#&gt; Sepal.Length           NA 4.686510e-02 0.000000e+00 0.000000e+00
+#&gt; Sepal.Width     0.0468651           NA 1.278788e-09 1.142829e-07
+#&gt; Petal.Length    0.0000000 1.278788e-09           NA 0.000000e+00
+#&gt; Petal.Width     0.0000000 1.142829e-07 0.000000e+00           NA
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "SEMSummary"</div><div class='input'>
+<span class='co'>## clean up</span>
+<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>Xmiss</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -626,11 +616,11 @@ algorithm, the default.</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by Joshua F. Wiley.</p></p>
+  <p>Developed by Joshua F. Wiley.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -638,8 +628,6 @@ algorithm, the default.</p>
 
   
 
-
-  
 
   </body>
 </html>
