@@ -19,8 +19,8 @@ test_that("lm2 works", {
                          x = TRUE, y = TRUE, qr = FALSE)
 
   expect_true(inherits(m2, "lm"))
-  expect_is(m2[["x"]], "matrix")
-  expect_is(m2[["y"]], "numeric") 
+  expect_true(inherits(m2[["x"]], "matrix"))
+  expect_type(m2[["y"]], "double")
   expect_null(m2[["qr"]])
 
   m2 <- JWileymisc:::lm2(mpg ~ 0, data = mtcars,

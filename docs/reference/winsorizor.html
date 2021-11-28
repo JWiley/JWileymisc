@@ -6,16 +6,42 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Inform modern browsers that this page supports both dark and light color schemes,
+  and the page author prefers light. -->
+<meta name="color-scheme" content="dark light">
+<script>
+  // If `prefers-color-scheme` is not supported, fall back to light mode.
+  // i.e. In this case, inject the `light` CSS before the others, with
+  // no media filter so that it will be downloaded with highest priority.
+  if (window.matchMedia("(prefers-color-scheme: dark)").media === "not all") {
+    document.documentElement.style.display = "none";
+    document.head.insertAdjacentHTML(
+      "beforeend",
+      "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/3/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
+    );
+  }
+</script>
+
 <title>Winsorize at specified percentiles — winsorizor • JWileymisc</title>
 
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- Flatly Theme - Light  -->
+<link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+
+<!-- Darkly Theme - Dark -->
+<link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
+
+<!-- preferably CSS -->
+<link rel="stylesheet" href="../preferably.css">
+<link id="css-code-light" rel="stylesheet" href="../code-color-scheme-light.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+<link id="css-code-dark" rel="stylesheet" href="../code-color-scheme-dark.css" media="(prefers-color-scheme: dark)">
+
 
 <!-- bootstrap-toc -->
 <link rel="stylesheet" href="../bootstrap-toc.css">
@@ -48,6 +74,9 @@
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
+
+
+
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -110,12 +139,17 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
+        
+        
+
+
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -173,78 +207,84 @@ for values to winsorize at as there are columns in the data.</p></td>
   at the lower and upper ends.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.new</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>10</span>, height <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/vector.html'>as.vector</a></span><span class='op'>(</span><span class='va'>eurodist</span><span class='op'>)</span>, main <span class='op'>=</span> <span class='st'>"Eurodist"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span><span class='fu'>winsorizor</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/vector.html'>as.vector</a></span><span class='op'>(</span><span class='va'>eurodist</span><span class='op'>)</span>, <span class='fl'>.05</span><span class='op'>)</span>, main <span class='op'>=</span> <span class='st'>"Eurodist with lower and upper\n5% winsorized"</span><span class='op'>)</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span>
-<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>
-<span class='va'>dat</span><span class='op'>[</span>, <span class='va'>y</span> <span class='op'>:=</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    x          y
-#&gt; 1: 1 -1.2649111
-#&gt; 2: 2 -0.6324555
-#&gt; 3: 3  0.0000000
-#&gt; 4: 4  0.6324555
-#&gt; 5: 5  1.2649111</div><div class='input'><span class='fu'>winsorizor</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>y</span>, <span class='fl'>.01</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: atomic type with no dimensions, coercing to a numeric vector. To remove this warning, try wrapping the data in as.numeric() or otherwise coercing to a vector prior to passing to winsorizor().</span></div><div class='output co'>#&gt; [1] -1.2396128 -0.6324555  0.0000000  0.6324555  1.2396128
-#&gt; attr(,"winsorizedValues")
-#&gt;         low     high percentile
-#&gt; 1 -1.239613 1.239613       0.01</div><div class='input'>
-<span class='co'>## make a copy of the data table</span>
-<span class='fu'>winsorizor</span><span class='op'>(</span><span class='va'>dat</span>, <span class='fl'>.01</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       x          y
-#&gt; 1: 1.04 -1.2396128
-#&gt; 2: 2.00 -0.6324555
-#&gt; 3: 3.00  0.0000000
-#&gt; 4: 4.00  0.6324555
-#&gt; 5: 4.96  1.2396128</div><div class='input'>
-<span class='fu'>winsorizor</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fl'>.01</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;       mpg cyl    disp     hp  drat      wt    qsec vs am gear carb
-#&gt; 1  21.000   6 160.000 110.00 3.900 2.62000 16.4600  0  1    4 4.00
-#&gt; 2  21.000   6 160.000 110.00 3.900 2.87500 17.0200  0  1    4 4.00
-#&gt; 3  22.800   4 108.000  93.00 3.850 2.32000 18.6100  1  1    4 1.00
-#&gt; 4  21.400   6 258.000 110.00 3.080 3.21500 19.4400  1  0    3 1.00
-#&gt; 5  18.700   8 360.000 175.00 3.150 3.44000 17.0200  0  0    3 2.00
-#&gt; 6  18.100   6 225.000 105.00 2.760 3.46000 20.2200  1  0    3 1.00
-#&gt; 7  14.300   8 360.000 245.00 3.210 3.57000 15.8400  0  0    3 4.00
-#&gt; 8  24.400   4 146.700  62.00 3.690 3.19000 20.0000  1  0    4 2.00
-#&gt; 9  22.800   4 140.800  95.00 3.920 3.15000 22.0692  1  0    4 2.00
-#&gt; 10 19.200   6 167.600 123.00 3.920 3.44000 18.3000  1  0    4 4.00
-#&gt; 11 17.800   6 167.600 123.00 3.920 3.44000 18.9000  1  0    4 4.00
-#&gt; 12 16.400   8 275.800 180.00 3.070 4.07000 17.4000  0  0    3 3.00
-#&gt; 13 17.300   8 275.800 180.00 3.070 3.73000 17.6000  0  0    3 3.00
-#&gt; 14 15.200   8 275.800 180.00 3.070 3.78000 18.0000  0  0    3 3.00
-#&gt; 15 10.400   8 468.280 205.00 2.930 5.25000 17.9800  0  0    3 4.00
-#&gt; 16 10.400   8 460.000 215.00 3.000 5.39951 17.8200  0  0    3 4.00
-#&gt; 17 14.700   8 440.000 230.00 3.230 5.34500 17.4200  0  0    3 4.00
-#&gt; 18 32.400   4  78.700  66.00 4.080 2.20000 19.4700  1  1    4 1.00
-#&gt; 19 30.400   4  75.700  55.10 4.775 1.61500 18.5200  1  1    4 2.00
-#&gt; 20 33.435   4  72.526  65.00 4.220 1.83500 19.9000  1  1    4 1.00
-#&gt; 21 21.500   4 120.100  97.00 3.700 2.46500 20.0100  1  0    3 1.00
-#&gt; 22 15.500   8 318.000 150.00 2.760 3.52000 16.8700  0  0    3 2.00
-#&gt; 23 15.200   8 304.000 150.00 3.150 3.43500 17.3000  0  0    3 2.00
-#&gt; 24 13.300   8 350.000 245.00 3.730 3.84000 15.4100  0  0    3 4.00
-#&gt; 25 19.200   8 400.000 175.00 3.080 3.84500 17.0500  0  0    3 2.00
-#&gt; 26 27.300   4  79.000  66.00 4.080 1.93500 18.9000  1  1    4 1.00
-#&gt; 27 26.000   4 120.300  91.00 4.430 2.14000 16.7000  0  1    5 2.00
-#&gt; 28 30.400   4  95.100 113.00 3.770 1.54462 16.9000  1  1    5 2.00
-#&gt; 29 15.800   8 351.000 264.00 4.220 3.17000 14.5310  0  1    5 4.00
-#&gt; 30 19.700   6 145.000 175.00 3.620 2.77000 15.5000  0  1    5 6.00
-#&gt; 31 15.000   8 301.000 312.99 3.540 3.57000 14.6000  0  1    5 7.38
-#&gt; 32 21.400   4 121.000 109.00 4.110 2.78000 18.6000  1  1    4 2.00</div><div class='input'>
-<span class='fu'>winsorizor</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>9</span>, <span class='fl'>3</span><span class='op'>)</span>, <span class='fl'>.01</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      [,1] [,2] [,3]
-#&gt; [1,] 1.02 4.02 7.02
-#&gt; [2,] 2.00 5.00 8.00
-#&gt; [3,] 2.98 5.98 8.98
-#&gt; attr(,"winsorizedValues")
-#&gt;    low high percentile
-#&gt; 1 1.02 2.98       0.01
-#&gt; 2 4.02 5.98       0.01
-#&gt; 3 7.02 8.98       0.01</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span> <span class='co'># clean up</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.new</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>10</span>, height <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/vector.html'>as.vector</a></span><span class='op'>(</span><span class='va'>eurodist</span><span class='op'>)</span>, main <span class='op'>=</span> <span class='st'>"Eurodist"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span><span class='fu'>winsorizor</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/vector.html'>as.vector</a></span><span class='op'>(</span><span class='va'>eurodist</span><span class='op'>)</span>, <span class='fl'>.05</span><span class='op'>)</span>, main <span class='op'>=</span> <span class='st'>"Eurodist with lower and upper\n5% winsorized"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dat</span><span class='op'>[</span>, <span class='va'>y</span> <span class='op'>:=</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    x          y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 1 -1.2649111</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: 2 -0.6324555</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: 3  0.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4: 4  0.6324555</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5: 5  1.2649111</span>
+<span class='r-in'><span class='fu'>winsorizor</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>y</span>, <span class='fl'>.01</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>atomic type with no dimensions, coercing to a numeric vector. To remove this warning, try wrapping the data in as.numeric() or otherwise coercing to a vector prior to passing to winsorizor().</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -1.2396128 -0.6324555  0.0000000  0.6324555  1.2396128</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"winsorizedValues")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         low     high percentile</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 -1.239613 1.239613       0.01</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## make a copy of the data table</span></span>
+<span class='r-in'><span class='fu'>winsorizor</span><span class='op'>(</span><span class='va'>dat</span>, <span class='fl'>.01</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       x          y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1: 1.04 -1.2396128</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2: 2.00 -0.6324555</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: 3.00  0.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4: 4.00  0.6324555</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5: 4.96  1.2396128</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>winsorizor</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fl'>.01</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       mpg cyl    disp     hp  drat      wt    qsec vs am gear carb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  21.000   6 160.000 110.00 3.900 2.62000 16.4600  0  1    4 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  21.000   6 160.000 110.00 3.900 2.87500 17.0200  0  1    4 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  22.800   4 108.000  93.00 3.850 2.32000 18.6100  1  1    4 1.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  21.400   6 258.000 110.00 3.080 3.21500 19.4400  1  0    3 1.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  18.700   8 360.000 175.00 3.150 3.44000 17.0200  0  0    3 2.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  18.100   6 225.000 105.00 2.760 3.46000 20.2200  1  0    3 1.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  14.300   8 360.000 245.00 3.210 3.57000 15.8400  0  0    3 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  24.400   4 146.700  62.00 3.690 3.19000 20.0000  1  0    4 2.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  22.800   4 140.800  95.00 3.920 3.15000 22.0692  1  0    4 2.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 19.200   6 167.600 123.00 3.920 3.44000 18.3000  1  0    4 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11 17.800   6 167.600 123.00 3.920 3.44000 18.9000  1  0    4 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12 16.400   8 275.800 180.00 3.070 4.07000 17.4000  0  0    3 3.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13 17.300   8 275.800 180.00 3.070 3.73000 17.6000  0  0    3 3.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14 15.200   8 275.800 180.00 3.070 3.78000 18.0000  0  0    3 3.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15 10.400   8 468.280 205.00 2.930 5.25000 17.9800  0  0    3 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16 10.400   8 460.000 215.00 3.000 5.39951 17.8200  0  0    3 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17 14.700   8 440.000 230.00 3.230 5.34500 17.4200  0  0    3 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18 32.400   4  78.700  66.00 4.080 2.20000 19.4700  1  1    4 1.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19 30.400   4  75.700  55.10 4.775 1.61500 18.5200  1  1    4 2.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20 33.435   4  72.526  65.00 4.220 1.83500 19.9000  1  1    4 1.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21 21.500   4 120.100  97.00 3.700 2.46500 20.0100  1  0    3 1.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22 15.500   8 318.000 150.00 2.760 3.52000 16.8700  0  0    3 2.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23 15.200   8 304.000 150.00 3.150 3.43500 17.3000  0  0    3 2.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24 13.300   8 350.000 245.00 3.730 3.84000 15.4100  0  0    3 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25 19.200   8 400.000 175.00 3.080 3.84500 17.0500  0  0    3 2.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26 27.300   4  79.000  66.00 4.080 1.93500 18.9000  1  1    4 1.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27 26.000   4 120.300  91.00 4.430 2.14000 16.7000  0  1    5 2.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 28 30.400   4  95.100 113.00 3.770 1.54462 16.9000  1  1    5 2.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 29 15.800   8 351.000 264.00 4.220 3.17000 14.5310  0  1    5 4.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 30 19.700   6 145.000 175.00 3.620 2.77000 15.5000  0  1    5 6.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 31 15.000   8 301.000 312.99 3.540 3.57000 14.6000  0  1    5 7.38</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 32 21.400   4 121.000 109.00 4.110 2.78000 18.6000  1  1    4 2.00</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>winsorizor</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>9</span>, <span class='fl'>3</span><span class='op'>)</span>, <span class='fl'>.01</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2] [,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 1.02 4.02 7.02</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] 2.00 5.00 8.00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,] 2.98 5.98 8.98</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> attr(,"winsorizedValues")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    low high percentile</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 1.02 2.98       0.01</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 4.02 5.98       0.01</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 7.02 8.98       0.01</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span> <span class='co'># clean up</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -260,7 +300,7 @@ for values to winsorize at as there are columns in the data.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Made with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1, using <a href="https://preferably.amirmasoudabdol.name/?source=footer">preferably</a> template.</p>
 </div>
 
       </footer>

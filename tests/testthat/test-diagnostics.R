@@ -1,5 +1,3 @@
-context("residualDiagnostics")
-
 test_that("is.residualDiagnostics and as.residualDiagnostics work", {
   expect_false(is.residualDiagnostics(mtcars))
   expect_error(as.residualDiagnostics(1))
@@ -8,11 +6,11 @@ test_that("is.residualDiagnostics and as.residualDiagnostics work", {
 
 test_that("residualDiagnostics works with linear models", {
   m <- stats::lm(mpg ~ hp, data = mtcars)
-  expect_warning(rd <- residualDiagnostics(m))
-  expect_is(rd, "residualDiagnostics.lm")
+  rd <- suppressWarnings(residualDiagnostics(m))
+  expect_s3_class(rd, "residualDiagnostics.lm")
 
-  expect_warning(rd <- residualDiagnostics(m, standardized = FALSE))
-  expect_is(rd, "residualDiagnostics.lm")
+  rd <- suppressWarnings(residualDiagnostics(m, standardized = FALSE))
+  expect_s3_class(rd, "residualDiagnostics.lm")
   expect_true(is.residualDiagnostics(rd))
 })
 
@@ -22,7 +20,7 @@ test_that("internal function, .quantilePercentiles works", {
       Predicted = mtcars$mpg,
       Residuals = mtcars$hp))
 
-  expect_is(x, "data.table")
+  expect_s3_class(x, "data.table")
   expect_equal(nrow(x), 1000)
   expect_false(anyNA(x))
 
@@ -31,13 +29,11 @@ test_that("internal function, .quantilePercentiles works", {
       Predicted = 1:10,
       Residuals = 1))
 
-  expect_is(x, "data.table")
+  expect_s3_class(x, "data.table")
   expect_equal(nrow(x), 1000)
   expect_true(anyNA(x))
 })
 
-
-context("modelDiagnostics")
 
 test_that("is.modelDiagnostics and as.modelDiagnostics work", {
   expect_false(is.modelDiagnostics(mtcars))
@@ -48,19 +44,19 @@ test_that("is.modelDiagnostics and as.modelDiagnostics work", {
 
 test_that("modelDiagnostics works with linear models", {
   m <- stats::lm(mpg ~ hp * factor(cyl), data = mtcars)
-  expect_warning(md <- modelDiagnostics(m))
-  expect_is(md, "modelDiagnostics.lm")
+  md <- suppressWarnings(modelDiagnostics(m))
+  expect_s3_class(md, "modelDiagnostics.lm")
 
   expect_invisible(td <- plot(md, plot = FALSE, ask = FALSE))
   expect_length(td, 2)
-  expect_is(td$ResPlot, "ggplot")
-  expect_is(td$ResFittedPlot, "ggplot")
+  expect_s3_class(td$ResPlot, "ggplot")
+  expect_s3_class(td$ResFittedPlot, "ggplot")
 
   expect_invisible(td <- plot(md, plot = TRUE, ask = FALSE))
   expect_invisible(td <- plot(md, plot = TRUE, ask = FALSE, ncol = 1))
 
-  expect_warning(md2 <- modelDiagnostics(m, ev.perc = .2))
-  expect_is(md2, "modelDiagnostics.lm")
+  md2 <- suppressWarnings(modelDiagnostics(m, ev.perc = .2))
+  expect_s3_class(md2, "modelDiagnostics.lm")
 
   m <- stats::lm(EffectType ~ 1, data = data.frame(EffectType = 1:10))
   expect_error(modelDiagnostics(m))
@@ -70,5 +66,4 @@ test_that("modelDiagnostics works with linear models", {
 
   md <- modelDiagnostics(stats::lm(Y ~ 1, data = data.frame(Y = 1:505)))
   expect_warning(plot(md, plot = TRUE, ask = FALSE, ncol = 1))
-
 })

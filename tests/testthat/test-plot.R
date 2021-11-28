@@ -1,10 +1,8 @@
-context("TukeyHSDgg")
-
 test_that("TukeyHSDgg works with single level data", {
 
   mtcars$cyl <- factor(mtcars$cyl)
 
-  expect_is(
+  expect_s3_class(
     TukeyHSDgg("cyl", "mpg", mtcars),
     "ggplot")
   expect_warning(TukeyHSDgg("am", "mpg", mtcars))
@@ -12,12 +10,10 @@ test_that("TukeyHSDgg works with single level data", {
 
 test_that("TUkeyHSDgg works with multilevel data", {
   expect_warning(hsdp <- TukeyHSDgg("am", "mpg", mtcars, idvar = "cyl"))
-  expect_is(
+  expect_s3_class(
     hsdp,
     "ggplot")
 })
-
-context("gglikert")
 
 test_that("gglikert works", {
   testdat <- data.table::data.table(
@@ -26,17 +22,19 @@ test_that("gglikert works", {
                            Low = c("Happy", "Peaceful", "Excited", "Content"),
                            High = c("Sad", "Angry", "Hopeless", "Anxious"))
 
-  expect_is(
+  expect_s3_class(
     gglikert("Mean", "Var", "Low", "High", data = testdat, xlim = c(1, 5),
              title = "Example Plot of Average Affect Ratings"),
     "ggplot")
-  expect_is(
+
+  expect_s3_class(
     gglikert("Mean", "Var", "Low", "High",
              colour = "blue",
              data = testdat, xlim = c(1, 5),
              title = "Example Plot of Average Affect Ratings"),
     "ggplot")
-  expect_is(
+
+  expect_s3_class(
     gglikert("Mean", "Var", "Low", "High",
              colour = "Low",
              data = testdat, xlim = c(1, 5),
@@ -48,5 +46,4 @@ test_that("gglikert works", {
   expect_message(
     gglikert("Mean", "Var", "Low", "High", data = testdat, xlim = c(1, 5),
              title = "Example Plot of Average Affect Ratings"))
-
 })

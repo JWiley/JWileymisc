@@ -1,16 +1,16 @@
-context("SEMSummary")
-
 test_that("moments works with missing data.", {
      Xmiss <- as.matrix(iris[, -5])
-     set.seed(10)
-     Xmiss[sample(length(Xmiss), length(Xmiss) * .25)] <- NA
+     Xmiss <- withr::with_seed(seed = 10, {
+       Xmiss[sample(length(Xmiss), length(Xmiss) * .25)] <- NA
+       Xmiss
+     })
      Xmiss <- as.data.frame(Xmiss)
 
      m <- moments(Xmiss)
 
-     expect_that(m, is_a("list"))
-     expect_that(m$sigma, is_a("matrix"))
-     expect_that(m$mu, is_a("numeric"))
+     expect_type(m, "list")
+     expect_true(inherits(m$sigma, "matrix"))
+     expect_type(m$mu, "double")
 
      expect_identical(length(m$mu), 4L)
      expect_identical(dim(m$sigma), c(4L, 4L))
@@ -22,9 +22,9 @@ test_that("moments works with missing data.", {
 test_that("moments works with complete data.", {
      m <- moments(iris[, -5])
 
-     expect_that(m, is_a("list"))
-     expect_that(m$sigma, is_a("matrix"))
-     expect_that(m$mu, is_a("numeric"))
+     expect_type(m, "list")
+     expect_true(inherits(m$sigma, "matrix"))
+     expect_type(m$mu, "double")
 
      expect_identical(length(m$mu), 4L)
      expect_identical(dim(m$sigma), c(4L, 4L))
@@ -34,11 +34,11 @@ test_that("moments works with complete data.", {
 })
 
 test_that("moments works with complete matrix data.", {
-     m <- moments(matrix(1:100, ncol = 4))
+     expect_warning(m <- moments(matrix(1:100, ncol = 4)))
 
-     expect_that(m, is_a("list"))
-     expect_that(m$sigma, is_a("matrix"))
-     expect_that(m$mu, is_a("numeric"))
+     expect_type(m, "list")
+     expect_true(inherits(m$sigma, "matrix"))
+     expect_type(m$mu, "double")
 
      expect_identical(length(m$mu), 4L)
      expect_identical(dim(m$sigma), c(4L, 4L))
@@ -49,22 +49,22 @@ test_that("moments works with complete matrix data.", {
 
 test_that("SEMSummary works with complete matrix data.", {
   s <- SEMSummary(~., data = matrix(1:50, ncol = 2))
-  expect_that(s, is_a("SEMSummary"))
-  expect_that(s$Sigma, is_a("matrix"))
+  expect_s3_class(s, "SEMSummary")
+  expect_true(inherits(s$Sigma, "matrix"))
   expect_identical(dim(s$Sigma), c(2L, 2L))
 
-  expect_is(
+  expect_s3_class(
     corplot(s$sSigma, order = "cluster"),
     "ggplot")
-  expect_is(
+  expect_s3_class(
     corplot(s$sSigma, coverage = s$coverage, pvalues = s$pvalue,
             order = "asis"),
     "ggplot")
-  expect_is(
+  expect_s3_class(
     corplot(s$sSigma, coverage = s$coverage, pvalues = s$pvalue,
             type = "p", order = "asis"),
     "ggplot")
-  expect_is(
+  expect_s3_class(
     corplot(s$sSigma, coverage = s$coverage, pvalues = s$pvalue,
             type = "coverage", order = "asis"),
     "ggplot")
@@ -75,8 +75,8 @@ test_that("SEMSummary works with complete matrix data.", {
 test_that("SEMSummary works with complete data.", {
   s <- SEMSummary(~ Sepal.Length + Sepal.Width + Petal.Length, data = iris)
 
-  expect_that(s, is_a("SEMSummary"))
-  expect_that(s$Sigma, is_a("matrix"))
+  expect_s3_class(s, "SEMSummary")
+  expect_true(inherits(s$Sigma, "matrix"))
   expect_identical(dim(s$Sigma), c(3L, 3L))
 })
 
@@ -88,25 +88,25 @@ test_that("SEMSummary works with missing data.", {
      Xmiss <- as.data.frame(Xmiss)
 
      s <- SEMSummary(~ ., data = Xmiss, use = "fiml")
-     expect_that(s, is_a("SEMSummary"))
-     expect_that(s$Sigma, is_a("matrix"))
+     expect_s3_class(s, "SEMSummary")
+     expect_true(inherits(s$Sigma, "matrix"))
      expect_identical(dim(s$Sigma), c(4L, 4L))
 
-     expect_is(
+     expect_s3_class(
        corplot(s$sSigma, coverage = s$coverage, pvalues = s$pvalue,
                type = "coverage", order = "asis"),
        "ggplot")
 
-     expect_is(plot(s), "ggplot")
+     expect_s3_class(plot(s), "ggplot")
 
      s <- SEMSummary(~ ., data = Xmiss, use = "pairwise.complete.obs")
-     expect_that(s, is_a("SEMSummary"))
-     expect_that(s$Sigma, is_a("matrix"))
+     expect_s3_class(s, "SEMSummary")
+     expect_true(inherits(s$Sigma, "matrix"))
      expect_identical(dim(s$Sigma), c(4L, 4L))
 
      s <- SEMSummary(~ ., data = Xmiss, use = "complete.obs")
-     expect_that(s, is_a("SEMSummary"))
-     expect_that(s$Sigma, is_a("matrix"))
+     expect_s3_class(s, "SEMSummary")
+     expect_true(inherits(s$Sigma, "matrix"))
      expect_identical(dim(s$Sigma), c(4L, 4L))
 
   ## styler methods work
@@ -126,17 +126,17 @@ test_that("SEMSummary works with missing data.", {
 test_that("SEMSummary works by group.", {
   s <- SEMSummary(~ Sepal.Length + Sepal.Width | Species, data = iris)
 
-  expect_that(s, is_a("SEMSummary.list"))
-  expect_that(s[[1]]$Sigma, is_a("matrix"))
+  expect_s3_class(s, "SEMSummary.list")
+  expect_true(inherits(s[[1]]$Sigma, "matrix"))
   expect_identical(dim(s[[1]]$Sigma), c(2L, 2L))
 
   ## plot methods work
   expect_invisible(sp <- plot(s, plot = FALSE))
-  expect_is(sp, "list")
+  expect_type(sp, "list")
   expect_length(sp, 3)
-  expect_is(sp[[1]], "ggplot")
-  expect_is(sp[[2]], "ggplot")
-  expect_is(sp[[3]], "ggplot")
+  expect_s3_class(sp[[1]], "ggplot")
+  expect_s3_class(sp[[2]], "ggplot")
+  expect_s3_class(sp[[3]], "ggplot")
 
   expect_invisible(plot(s, plot = TRUE))
   expect_invisible(plot(s, which = 1, plot = FALSE))

@@ -1,5 +1,3 @@
-context("modelPerformance and R2")
-
 test_that("is.modelPerformance and as.modelPerformance work.", {
   expect_false(is.modelPerformance(mtcars))
   expect_error(as.modelPerformance(1))
@@ -8,19 +6,17 @@ test_that("is.modelPerformance and as.modelPerformance work.", {
 })
 
 test_that("modelPerformance and R2 work with linear models", {
-  expect_is(
+  expect_s3_class(
     modelPerformance(lm(mpg ~ 1, data = mtcars))$Performance,
     "data.table")
-  expect_is(
+  expect_s3_class(
     modelPerformance(lm(mpg ~ hp, data = mtcars))$Performance,
     "data.table")
 
-  expect_equivalent(
+  expect_equal(
     R2(lm(mpg ~ 1, data = mtcars)),
-    c(0, 0))
+    c(0, 0), ignore_attr = TRUE)
 })
-
-context("modelCompare")
 
 test_that("is.modelCompare and as.modelCompare work.", {
   expect_false(is.modelCompare(mtcars))
@@ -39,64 +35,60 @@ test_that("modelCompare works with linear models", {
   expect_error(modelCompare(m1, m1))
 
   c1 <- modelCompare(m1, m2)
-  expect_is(c1$Comparison, "data.table")
-  expect_equivalent(
+  expect_s3_class(c1$Comparison, "data.table")
+  expect_equal(
     c1$Comparison$N_Obs,
     c(32, 32, 0))
-  expect_equivalent(
+  expect_equal(
     c1$Comparison$FNumDF,
     c(NA, 1, 1))
 
   c2 <- modelCompare(m2, m1)
-  expect_is(c2$Comparison, "data.table")
-  expect_equivalent(
+  expect_s3_class(c2$Comparison, "data.table")
+  expect_equal(
     c2$Comparison$N_Obs,
     c(32, 32, 0))
-  expect_equivalent(
+  expect_equal(
     c2$Comparison$FNumDF,
     c(NA, 1, 1))
 })
-
-
-
-context("modelTest")
 
 test_that("is.modelTest and as.modelTest work.", {
   expect_false(is.modelTest(mtcars))
   expect_error(as.modelTest(1))
   expect_error(as.modelTest(list(1)))
-  expect_is(
+  expect_s3_class(
     as.modelTest(list(1, 2, 3, 4)),
     "modelTest")
 })
 
 test_that("modelTest works with lm objects.", {
   mt1 <- modelTest(lm(mpg ~ hp, data = mtcars))
-  expect_is(
+  expect_s3_class(
     mt1,
     "modelTest.lm")
-  expect_is(mt1$FixedEffects,
+  expect_s3_class(mt1$FixedEffects,
             "data.table")
-  expect_equivalent(
+  expect_equal(
     nrow(mt1$FixedEffects),
     2L)
-  expect_equivalent(
+  expect_equal(
     nrow(mt1$EffectSizes),
     1L)
 
   out <- APAStyler(mt1)
-  expect_is(out, "data.table")
-  expect_equivalent(
+  expect_s3_class(out, "data.table")
+  expect_equal(
     dim(out), c(11L, 3L))
 
   ## APAStyler on lists works
   mt2 <- modelTest(lm(mpg ~ wt, data = mtcars))
-  expect_is(
+  expect_s3_class(
     APAStyler(list(mt1, mt2), pcontrol = list(
                                 digits = 3, stars = FALSE,
                                 includeP = TRUE, includeSign = TRUE,
                                 dropLeadingZero = TRUE)),
-    "data.table") 
+    "data.table")
 })
 
 test_that("modelTest errors with on the fly variable creation", {
@@ -108,20 +100,19 @@ test_that("modelTest works with vglm objects.", {
   m <- VGAM::vglm(cyl ~ qsec,
                   family = VGAM::multinomial(), data = mtcars)
   mt <- modelTest(m)
-  expect_is(mt, "modelTest.vglm")
-  expect_is(APAStyler(mt), "data.table")
-  expect_is(APAStyler(mt, OR = FALSE), "data.table")
+  expect_s3_class(mt, "modelTest.vglm")
+  expect_s3_class(APAStyler(mt), "data.table")
+  expect_s3_class(APAStyler(mt, OR = FALSE), "data.table")
 })
-
 
 test_that("modelTest works with vglm objects with multiple predictors.", {
   mtcars$cyl <- factor(mtcars$cyl)
   set.seed(1234)
-  expect_warning(
-    m <- VGAM::vglm(cyl ~ jitter(qsec) + jitter(hp, 2),
-                    family = VGAM::multinomial(), data = mtcars))
-  expect_warning(mt <- modelTest(m))
-  expect_is(mt, "modelTest.vglm")
-  expect_is(APAStyler(mt), "data.table")
-  expect_is(APAStyler(mt, OR = FALSE), "data.table")
+  m <- suppressWarnings(
+    VGAM::vglm(cyl ~ jitter(qsec) + jitter(hp, 2),
+               family = VGAM::multinomial(), data = mtcars))
+  mt <- suppressWarnings(modelTest(m))
+  expect_s3_class(mt, "modelTest.vglm")
+  expect_s3_class(APAStyler(mt), "data.table")
+  expect_s3_class(APAStyler(mt, OR = FALSE), "data.table")
 })

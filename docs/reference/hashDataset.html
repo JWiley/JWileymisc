@@ -6,16 +6,42 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Inform modern browsers that this page supports both dark and light color schemes,
+  and the page author prefers light. -->
+<meta name="color-scheme" content="dark light">
+<script>
+  // If `prefers-color-scheme` is not supported, fall back to light mode.
+  // i.e. In this case, inject the `light` CSS before the others, with
+  // no media filter so that it will be downloaded with highest priority.
+  if (window.matchMedia("(prefers-color-scheme: dark)").media === "not all") {
+    document.documentElement.style.display = "none";
+    document.head.insertAdjacentHTML(
+      "beforeend",
+      "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/3/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
+    );
+  }
+</script>
+
 <title>Create a character vector or file hash of a dataset and each variable — hashDataset • JWileymisc</title>
 
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- Flatly Theme - Light  -->
+<link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+
+<!-- Darkly Theme - Dark -->
+<link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
+
+<!-- preferably CSS -->
+<link rel="stylesheet" href="../preferably.css">
+<link id="css-code-light" rel="stylesheet" href="../code-color-scheme-light.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+<link id="css-code-dark" rel="stylesheet" href="../code-color-scheme-dark.css" media="(prefers-color-scheme: dark)">
+
 
 <!-- bootstrap-toc -->
 <link rel="stylesheet" href="../bootstrap-toc.css">
@@ -54,6 +80,9 @@ to know which variable(s) changed, if any." />
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
+
+
+
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -116,12 +145,17 @@ to know which variable(s) changed, if any." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
+        
+        
+
+
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -174,28 +208,30 @@ When missing (default), the character vector is returned directly.</p></td>
   written version of the character string.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "dataset: 'mtcars', MD5: a63c70e73b58d0823ab3bcbd3b543d6f"                                     
-#&gt;  [2] "'mpg' (numeric), f8e0303e137d946eec8ee06e2f152f51, 95d3087aa4b1ccb7e1ef49ba4b6ed83b (sorted)" 
-#&gt;  [3] "'cyl' (numeric), 1b8fcb72575f2a120d77279ecf8851f9, ebfb767c78836025f7917bc845443804 (sorted)" 
-#&gt;  [4] "'disp' (numeric), 4743a496928535c54d157d145aa114e1, 46b67296541e9f9c4c4e2b70227f9673 (sorted)"
-#&gt;  [5] "'hp' (numeric), c1d443aac7c7e1284e2d0a5a6cbe1a98, cd2e69df37f9f864e98780c5d588c95a (sorted)"  
-#&gt;  [6] "'drat' (numeric), 87a99a22f86d30cea74565dbad577790, f8bbcfc7e573cf1c72600683ac354d7a (sorted)"
-#&gt;  [7] "'wt' (numeric), 2515679118871778eb21a32575973085, 67b94c293a66443abcb0427684b5ae28 (sorted)"  
-#&gt;  [8] "'qsec' (numeric), 8632d4fe83c9a91aa2c3f5069002c870, 6875ea7f4d4a3ec56ff6fc214b69f7ff (sorted)"
-#&gt;  [9] "'vs' (numeric), 34b3720888fd730d1dbb5d01c5d57ae3, e5a86583130d2649356bc9dc6060787d (sorted)"  
-#&gt; [10] "'am' (numeric), 9bc5bef75a08e8812da6f8542311aaba, 3ec14454a35c411d95eedb78c176c0b4 (sorted)"  
-#&gt; [11] "'gear' (numeric), 1415993e090fa6fd2078f6d907deb29f, 1cd9d9b506d3170cfeb79a869b29211f (sorted)"
-#&gt; [12] "'carb' (numeric), 5b570f391814e8569d81dd5e2a9f30e0, 2acb8f5f747919d7befb9bba53dd6a68 (sorted)"</div><div class='input'>
-<span class='co'>## if a file is specified it will write the results to the text file</span>
-<span class='co'>## nicely formatted, along these lines</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>cars</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; dataset: 'cars', MD5: f98a59010652c8e1ee062ed4c43f648e
-#&gt; 'speed' (numeric), 4eb3e01aee9abbc01e91d22b651be559, 4eb3e01aee9abbc01e91d22b651be559 (sorted)
-#&gt; 'dist' (numeric), be6c7701fccdd59b5e47c48881a2acae, 5cf4867b5bc8dc320c7aea4513d0f557 (sorted)</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "dataset: 'mtcars', MD5: a63c70e73b58d0823ab3bcbd3b543d6f"                                     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [2] "'mpg' (numeric), f8e0303e137d946eec8ee06e2f152f51, 95d3087aa4b1ccb7e1ef49ba4b6ed83b (sorted)" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [3] "'cyl' (numeric), 1b8fcb72575f2a120d77279ecf8851f9, ebfb767c78836025f7917bc845443804 (sorted)" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4] "'disp' (numeric), 4743a496928535c54d157d145aa114e1, 46b67296541e9f9c4c4e2b70227f9673 (sorted)"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [5] "'hp' (numeric), c1d443aac7c7e1284e2d0a5a6cbe1a98, cd2e69df37f9f864e98780c5d588c95a (sorted)"  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [6] "'drat' (numeric), 87a99a22f86d30cea74565dbad577790, f8bbcfc7e573cf1c72600683ac354d7a (sorted)"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "'wt' (numeric), 2515679118871778eb21a32575973085, 67b94c293a66443abcb0427684b5ae28 (sorted)"  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] "'qsec' (numeric), 8632d4fe83c9a91aa2c3f5069002c870, 6875ea7f4d4a3ec56ff6fc214b69f7ff (sorted)"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9] "'vs' (numeric), 34b3720888fd730d1dbb5d01c5d57ae3, e5a86583130d2649356bc9dc6060787d (sorted)"  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [10] "'am' (numeric), 9bc5bef75a08e8812da6f8542311aaba, 3ec14454a35c411d95eedb78c176c0b4 (sorted)"  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [11] "'gear' (numeric), 1415993e090fa6fd2078f6d907deb29f, 1cd9d9b506d3170cfeb79a869b29211f (sorted)"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [12] "'carb' (numeric), 5b570f391814e8569d81dd5e2a9f30e0, 2acb8f5f747919d7befb9bba53dd6a68 (sorted)"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## if a file is specified it will write the results to the text file</span></span>
+<span class='r-in'><span class='co'>## nicely formatted, along these lines</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>hashDataset</span><span class='op'>(</span><span class='va'>cars</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> dataset: 'cars', MD5: f98a59010652c8e1ee062ed4c43f648e</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 'speed' (numeric), 4eb3e01aee9abbc01e91d22b651be559, 4eb3e01aee9abbc01e91d22b651be559 (sorted)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 'dist' (numeric), be6c7701fccdd59b5e47c48881a2acae, 5cf4867b5bc8dc320c7aea4513d0f557 (sorted)</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -211,7 +247,7 @@ When missing (default), the character vector is returned directly.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Made with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1, using <a href="https://preferably.amirmasoudabdol.name/?source=footer">preferably</a> template.</p>
 </div>
 
       </footer>

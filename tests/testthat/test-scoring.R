@@ -1,5 +1,3 @@
-context("CheckVals")
-
 test_that("CheckVals works", {
   expect_true(CheckVals(mtcars$cyl, c(4, 6, 8)))
   expect_true(CheckVals(mtcars[, c("cyl", "am")], c(0, 1, 4, 6, 8)))
@@ -13,12 +11,10 @@ test_that("CheckVals works", {
 })
 
 
-context("score")
-
 test_that("score warnings and errors", {
-  expect_warning(
+  expect_warning(expect_warning(expect_warning(
     score(mtcars[, 1:3], mean = FALSE, na.rm = TRUE),
-    "Summing is not meaningful for missing values.")
+    "Summing is not meaningful for missing values.")))
 
   expect_error(
     score(mtcars[, 1:3],
@@ -26,66 +22,57 @@ test_that("score warnings and errors", {
           rev = 2),
     "Cannot reverse score scale that can take on negative values.")
 
-  expect_is(
+  expect_type(
     score(mtcars[, 1:3], mean = FALSE, reliability = FALSE,
           na.rm = FALSE),
     "list")
-
 })
-
-context(".scoreCESD and scaleScore")
 
 test_that(".scoreCESD works", {
   set.seed(1234)
   x <- matrix(sample(0:3, size = 20 * 5, TRUE), ncol = 20)
-  expect_warning(xc <- .scoreCESD(x))
-  expect_is(xc, "list")
+  xc <- suppressWarnings(.scoreCESD(x))
+  expect_type(xc, "list")
 
-  expect_is(.scoreCESD(x, reliability = FALSE), "list")
+  expect_type(.scoreCESD(x, reliability = FALSE), "list")
 
-  expect_is(scaleScore(x, type = "CESD", reliability = FALSE), "list")
+  expect_type(scaleScore(x, type = "CESD", reliability = FALSE), "list")
 
-  expect_is(scaleScore(data.table::as.data.table(x),
+  expect_type(scaleScore(data.table::as.data.table(x),
                        type = "CESD", reliability = FALSE), "list")
 
   expect_match(names(xc), "score|reliability")
 })
 
-context(".scoreLOTR and scaleScore")
-
 test_that(".scoreLOTR and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(1:5, size = 6 * 5, TRUE), ncol = 6)
-  expect_warning(xc <- .scoreLOTR(x))
-  expect_is(xc, "list")
+  xc <- suppressWarnings(.scoreLOTR(x))
+  expect_type(xc, "list")
 
-  expect_is(.scoreLOTR(x, reliability = FALSE), "list")
+  expect_type(.scoreLOTR(x, reliability = FALSE), "list")
 
-  expect_is(scaleScore(x, type = "LOTR", reliability = FALSE), "list")
+  expect_type(scaleScore(x, type = "LOTR", reliability = FALSE), "list")
 
-  expect_is(scaleScore(data.table::as.data.table(x),
+  expect_type(scaleScore(data.table::as.data.table(x),
                        type = "LOTR", reliability = FALSE), "list")
   expect_match(names(xc), "score|reliability")
 })
 
-context(".scoreMastery and scaleScore")
-
 test_that(".scoreMastery and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(1:4, size = 7 * 5, TRUE), ncol = 7)
-  expect_warning(xc <- .scoreMastery(x))
-  expect_is(xc, "list")
+  xc <- suppressWarnings(.scoreMastery(x))
+  expect_type(xc, "list")
 
-  expect_is(.scoreMastery(x, reliability = FALSE), "list")
+  expect_type(.scoreMastery(x, reliability = FALSE), "list")
 
-  expect_is(scaleScore(x, type = "Mastery", reliability = FALSE), "list")
+  expect_type(scaleScore(x, type = "Mastery", reliability = FALSE), "list")
 
-  expect_is(scaleScore(data.table::as.data.table(x),
+  expect_type(scaleScore(data.table::as.data.table(x),
                        type = "Mastery", reliability = FALSE), "list")
   expect_match(names(xc), "score|reliability")
 })
-
-context(".scoreMOSSSS and scaleScore")
 
 test_that(".scoreMOSSSS and scaleScore work", {
   set.seed(5234)
@@ -97,57 +84,49 @@ test_that(".scoreMOSSSS and scaleScore work", {
                    labels = 1:5))
   })
 
-  expect_warning(xc <- .scoreMOSSSS(x))
-  expect_is(xc, "list")
-
-  expect_warning(scaleScore(x, type = "MOSSSS"))
+  xc <- suppressWarnings(.scoreMOSSSS(x))
+  expect_type(xc, "list")
 
   expect_match(names(xc), "score|reliability")
+  xc <- suppressWarnings(scaleScore(x, type = "MOSSSS"))  
 })
-
-context(".scorePANAS and scaleScore")
 
 test_that(".scorePANAS and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(1:5, size = 20 * 5, TRUE), ncol = 20)
   if (isTRUE(capabilities("long.double"))) {
-    expect_warning(xc <- .scorePANAS(x))
-    expect_is(xc, "list")
+    xc <- suppressWarnings(.scorePANAS(x))
+    expect_type(xc, "list")
     expect_match(names(xc), "score|reliability")
   }
 
-  expect_is(.scorePANAS(x, reliability = FALSE), "list")
+  expect_type(.scorePANAS(x, reliability = FALSE), "list")
 
-  expect_is(scaleScore(x, type = "PANAS", reliability = FALSE), "list")
+  expect_type(scaleScore(x, type = "PANAS", reliability = FALSE), "list")
 
-  expect_is(scaleScore(data.table::as.data.table(x),
+  expect_type(scaleScore(data.table::as.data.table(x),
                        type = "PANAS", reliability = FALSE), "list")
 })
-
-context(".scoreRSES and scaleScore")
 
 test_that(".scoreRSES and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(0:3, size = 10 * 5, TRUE), ncol = 10)
-  expect_warning(xc <- .scoreRSES(x))
-  expect_is(xc, "list")
+  xc <- suppressWarnings(.scoreRSES(x))
+  expect_type(xc, "list")
 
-  expect_is(.scoreRSES(x, reliability = FALSE), "list")
+  expect_type(.scoreRSES(x, reliability = FALSE), "list")
 
-  expect_is(scaleScore(x, type = "RSES", reliability = FALSE), "list")
+  expect_type(scaleScore(x, type = "RSES", reliability = FALSE), "list")
 
-  expect_is(scaleScore(data.table::as.data.table(x),
+  expect_type(scaleScore(data.table::as.data.table(x),
                        type = "RSES", reliability = FALSE), "list")
   expect_match(names(xc), "score|reliability")
 })
-
-context(".scoreMOOD and scaleScore")
 
 ## weakest tests as not sure what MOOD scores should be??
 test_that(".scoreMOOD and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(0:3, size = 21 * 5, TRUE), ncol = 21)
-  expect_warning(xc <- .scoreMOOD(x))
-  expect_is(xc, "list")
+  xc <- suppressWarnings(.scoreMOOD(x))
+  expect_type(xc, "list")
 })
-

@@ -6,16 +6,42 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Inform modern browsers that this page supports both dark and light color schemes,
+  and the page author prefers light. -->
+<meta name="color-scheme" content="dark light">
+<script>
+  // If `prefers-color-scheme` is not supported, fall back to light mode.
+  // i.e. In this case, inject the `light` CSS before the others, with
+  // no media filter so that it will be downloaded with highest priority.
+  if (window.matchMedia("(prefers-color-scheme: dark)").media === "not all") {
+    document.documentElement.style.display = "none";
+    document.head.insertAdjacentHTML(
+      "beforeend",
+      "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/3/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
+    );
+  }
+</script>
+
 <title>Internal Visual Acuity Functions — vainternal • JWileymisc</title>
 
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- Flatly Theme - Light  -->
+<link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+
+<!-- Darkly Theme - Dark -->
+<link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
+
+<!-- preferably CSS -->
+<link rel="stylesheet" href="../preferably.css">
+<link id="css-code-light" rel="stylesheet" href="../code-color-scheme-light.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+<link id="css-code-dark" rel="stylesheet" href="../code-color-scheme-dark.css" media="(prefers-color-scheme: dark)">
+
 
 <!-- bootstrap-toc -->
 <link rel="stylesheet" href="../bootstrap-toc.css">
@@ -56,6 +82,9 @@ called directly." />
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
+
+
+
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -118,12 +147,17 @@ called directly." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
+        
+        
+
+
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -248,21 +282,26 @@ be called.</p>
   called</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## logMAR value for "perfect" 20/20 vision</span>
-<span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0</div><div class='input'>
-<span class='co'>## Go to and from logMAR value, should return "20"</span>
-<span class='co'>## there may be slight error due to floating point arithmetic</span>
-<span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>, inverse <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 20</div><div class='input'>
-<span class='co'>## logMAR value for 20/40 vision</span>
-<span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span><span class='fl'>40</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.30103</div><div class='input'><span class='co'>## logMAR approximations, note "HM" is just the zero value</span>
-<span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>CFHM</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HM 20"</span>, <span class='st'>"HM"</span>, <span class='st'>"CF 20"</span>, <span class='st'>"CF 12"</span>, <span class='st'>"CF"</span><span class='op'>)</span>, zero <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2.000000 3.000000 1.000000 1.221849 3.000000</div><div class='input'><span class='co'>## In cases where there is insufficient data, rather than choose</span>
-<span class='co'>## an arbitrary value, you can may just use NA</span>
-<span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>CFHM</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HM 20"</span>, <span class='st'>"HM"</span>, <span class='st'>"CF 20"</span>, <span class='st'>"CF 12"</span>, <span class='st'>"CF"</span><span class='op'>)</span>, zero <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2.000000       NA 1.000000 1.221849       NA</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'>## logMAR value for "perfect" 20/20 vision</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## Go to and from logMAR value, should return "20"</span></span>
+<span class='r-in'><span class='co'>## there may be slight error due to floating point arithmetic</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>, inverse <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 20</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## logMAR value for 20/40 vision</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>logmar</span><span class='op'>(</span><span class='fl'>40</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.30103</span>
+<span class='r-in'><span class='co'>## logMAR approximations, note "HM" is just the zero value</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>CFHM</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HM 20"</span>, <span class='st'>"HM"</span>, <span class='st'>"CF 20"</span>, <span class='st'>"CF 12"</span>, <span class='st'>"CF"</span><span class='op'>)</span>, zero <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2.000000 3.000000 1.000000 1.221849 3.000000</span>
+<span class='r-in'><span class='co'>## In cases where there is insufficient data, rather than choose</span></span>
+<span class='r-in'><span class='co'>## an arbitrary value, you can may just use NA</span></span>
+<span class='r-in'><span class='fu'>JWileymisc</span><span class='fu'>:::</span><span class='fu'>CFHM</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HM 20"</span>, <span class='st'>"HM"</span>, <span class='st'>"CF 20"</span>, <span class='st'>"CF 12"</span>, <span class='st'>"CF"</span><span class='op'>)</span>, zero <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2.000000       NA 1.000000 1.221849       NA</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -278,7 +317,7 @@ be called.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Made with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1, using <a href="https://preferably.amirmasoudabdol.name/?source=footer">preferably</a> template.</p>
 </div>
 
       </footer>

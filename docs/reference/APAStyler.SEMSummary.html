@@ -6,16 +6,42 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Inform modern browsers that this page supports both dark and light color schemes,
+  and the page author prefers light. -->
+<meta name="color-scheme" content="dark light">
+<script>
+  // If `prefers-color-scheme` is not supported, fall back to light mode.
+  // i.e. In this case, inject the `light` CSS before the others, with
+  // no media filter so that it will be downloaded with highest priority.
+  if (window.matchMedia("(prefers-color-scheme: dark)").media === "not all") {
+    document.documentElement.style.display = "none";
+    document.head.insertAdjacentHTML(
+      "beforeend",
+      "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/3/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
+    );
+  }
+</script>
+
 <title>A generic function for pretty printing in (semi) APA Style — APAStyler.SEMSummary • JWileymisc</title>
 
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- Flatly Theme - Light  -->
+<link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+
+<!-- Darkly Theme - Dark -->
+<link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
+
+<!-- preferably CSS -->
+<link rel="stylesheet" href="../preferably.css">
+<link id="css-code-light" rel="stylesheet" href="../code-color-scheme-light.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+<link id="css-code-dark" rel="stylesheet" href="../code-color-scheme-dark.css" media="(prefers-color-scheme: dark)">
+
 
 <!-- bootstrap-toc -->
 <link rel="stylesheet" href="../bootstrap-toc.css">
@@ -48,6 +74,9 @@
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
+
+
+
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -110,12 +139,17 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
+        
+        
+
+
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -186,266 +220,272 @@ stars (*** p &lt; .001, ** p &lt; .01, * p &lt; .05).</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='SEMSummary.html'>SEMSummary</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"cor"</span>, stars <span class='op'>=</span> <span class='cn'>FALSE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          N  M      SD     1.  2.    3.    4.    5.    6.    7.    8.    9.   
-#&gt; 1. mpg   32  20.09   6.03  -  -0.85 -0.85 -0.78  0.68 -0.87  0.42  0.66  0.60
-#&gt; 2. cyl   32   6.19   1.79      -     0.90  0.83 -0.70  0.78 -0.59 -0.81 -0.52
-#&gt; 3. disp  32 230.72 123.94            -     0.79 -0.71  0.89 -0.43 -0.71 -0.59
-#&gt; 4. hp    32 146.69  68.56                  -    -0.45  0.66 -0.71 -0.72 -0.24
-#&gt; 5. drat  32   3.60   0.53                        -    -0.71  0.09  0.44  0.71
-#&gt; 6. wt    32   3.22   0.98                              -    -0.17 -0.55 -0.69
-#&gt; 7. qsec  32  17.85   1.79                                    -     0.74 -0.23
-#&gt; 8. vs    32   0.44   0.50                                          -     0.17
-#&gt; 9. am    32   0.41   0.50                                                -   
-#&gt; 10. gear 32   3.69   0.74                                                    
-#&gt; 11. carb 32   2.81   1.62                                                    
-#&gt;          10.   11.  
-#&gt; 1. mpg    0.48 -0.55
-#&gt; 2. cyl   -0.49  0.53
-#&gt; 3. disp  -0.56  0.39
-#&gt; 4. hp    -0.13  0.75
-#&gt; 5. drat   0.70 -0.09
-#&gt; 6. wt    -0.58  0.43
-#&gt; 7. qsec  -0.21 -0.66
-#&gt; 8. vs     0.21 -0.57
-#&gt; 9. am     0.79  0.06
-#&gt; 10. gear  -     0.27
-#&gt; 11. carb        -   
-#&gt; 
-#&gt; Percentage of coverage for each pairwise covariance or correlation
-#&gt; 
-#&gt;      mpg cyl disp hp drat wt qsec vs am gear carb
-#&gt; mpg  1   1   1    1  1    1  1    1  1  1    1   
-#&gt; cyl      1   1    1  1    1  1    1  1  1    1   
-#&gt; disp         1    1  1    1  1    1  1  1    1   
-#&gt; hp                1  1    1  1    1  1  1    1   
-#&gt; drat                 1    1  1    1  1  1    1   
-#&gt; wt                        1  1    1  1  1    1   
-#&gt; qsec                         1    1  1  1    1   
-#&gt; vs                                1  1  1    1   
-#&gt; am                                   1  1    1   
-#&gt; gear                                    1    1   
-#&gt; carb                                         1   </div><div class='input'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"cov"</span>, stars <span class='op'>=</span> <span class='cn'>FALSE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          N  M      SD     1.  2.       3.       4.       5.       6.      
-#&gt; 1. mpg   32  20.09   6.03  -     -9.17  -633.10  -320.73     2.20    -5.12
-#&gt; 2. cyl   32   6.19   1.79      -         199.66   101.93    -0.67     1.37
-#&gt; 3. disp  32 230.72 123.94               -        6721.16   -47.06   107.68
-#&gt; 4. hp    32 146.69  68.56                        -         -16.45    44.19
-#&gt; 5. drat  32   3.60   0.53                                 -          -0.37
-#&gt; 6. wt    32   3.22   0.98                                          -      
-#&gt; 7. qsec  32  17.85   1.79                                                 
-#&gt; 8. vs    32   0.44   0.50                                                 
-#&gt; 9. am    32   0.41   0.50                                                 
-#&gt; 10. gear 32   3.69   0.74                                                 
-#&gt; 11. carb 32   2.81   1.62                                                 
-#&gt;          7.       8.       9.       10.      11.     
-#&gt; 1. mpg       4.51     2.02     1.80     2.14    -5.36
-#&gt; 2. cyl      -1.89    -0.73    -0.47    -0.65     1.52
-#&gt; 3. disp    -96.05   -44.38   -36.56   -50.80    79.07
-#&gt; 4. hp      -86.77   -24.99    -8.32    -6.36    83.04
-#&gt; 5. drat      0.09     0.12     0.19     0.28    -0.08
-#&gt; 6. wt       -0.31    -0.27    -0.34    -0.42     0.68
-#&gt; 7. qsec   -           0.67    -0.20    -0.28    -1.89
-#&gt; 8. vs              -           0.04     0.08    -0.46
-#&gt; 9. am                       -           0.29     0.05
-#&gt; 10. gear                             -           0.33
-#&gt; 11. carb                                      -      
-#&gt; 
-#&gt; Percentage of coverage for each pairwise covariance or correlation
-#&gt; 
-#&gt;      mpg cyl disp hp drat wt qsec vs am gear carb
-#&gt; mpg  1   1   1    1  1    1  1    1  1  1    1   
-#&gt; cyl      1   1    1  1    1  1    1  1  1    1   
-#&gt; disp         1    1  1    1  1    1  1  1    1   
-#&gt; hp                1  1    1  1    1  1  1    1   
-#&gt; drat                 1    1  1    1  1  1    1   
-#&gt; wt                        1  1    1  1  1    1   
-#&gt; qsec                         1    1  1  1    1   
-#&gt; vs                                1  1  1    1   
-#&gt; am                                   1  1    1   
-#&gt; gear                                    1    1   
-#&gt; carb                                         1   </div><div class='input'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"both"</span>, stars <span class='op'>=</span> <span class='cn'>FALSE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          N  M      SD     1.    2.       3.       4.       5.       6.      
-#&gt; 1. mpg   32  20.09   6.03  -       -9.17  -633.10  -320.73     2.20    -5.12
-#&gt; 2. cyl   32   6.19   1.79 -0.85  -         199.66   101.93    -0.67     1.37
-#&gt; 3. disp  32 230.72 123.94 -0.85  0.90     -        6721.16   -47.06   107.68
-#&gt; 4. hp    32 146.69  68.56 -0.78  0.83     0.79     -         -16.45    44.19
-#&gt; 5. drat  32   3.60   0.53  0.68 -0.70    -0.71    -0.45     -          -0.37
-#&gt; 6. wt    32   3.22   0.98 -0.87  0.78     0.89     0.66    -0.71     -      
-#&gt; 7. qsec  32  17.85   1.79  0.42 -0.59    -0.43    -0.71     0.09    -0.17   
-#&gt; 8. vs    32   0.44   0.50  0.66 -0.81    -0.71    -0.72     0.44    -0.55   
-#&gt; 9. am    32   0.41   0.50  0.60 -0.52    -0.59    -0.24     0.71    -0.69   
-#&gt; 10. gear 32   3.69   0.74  0.48 -0.49    -0.56    -0.13     0.70    -0.58   
-#&gt; 11. carb 32   2.81   1.62 -0.55  0.53     0.39     0.75    -0.09     0.43   
-#&gt;          7.       8.       9.       10.      11.     
-#&gt; 1. mpg       4.51     2.02     1.80     2.14    -5.36
-#&gt; 2. cyl      -1.89    -0.73    -0.47    -0.65     1.52
-#&gt; 3. disp    -96.05   -44.38   -36.56   -50.80    79.07
-#&gt; 4. hp      -86.77   -24.99    -8.32    -6.36    83.04
-#&gt; 5. drat      0.09     0.12     0.19     0.28    -0.08
-#&gt; 6. wt       -0.31    -0.27    -0.34    -0.42     0.68
-#&gt; 7. qsec   -           0.67    -0.20    -0.28    -1.89
-#&gt; 8. vs     0.74     -           0.04     0.08    -0.46
-#&gt; 9. am    -0.23     0.17     -           0.29     0.05
-#&gt; 10. gear -0.21     0.21     0.79     -           0.33
-#&gt; 11. carb -0.66    -0.57     0.06     0.27     -      
-#&gt; 
-#&gt; Percentage of coverage for each pairwise covariance or correlation
-#&gt; 
-#&gt;      mpg cyl disp hp drat wt qsec vs am gear carb
-#&gt; mpg  1   1   1    1  1    1  1    1  1  1    1   
-#&gt; cyl      1   1    1  1    1  1    1  1  1    1   
-#&gt; disp         1    1  1    1  1    1  1  1    1   
-#&gt; hp                1  1    1  1    1  1  1    1   
-#&gt; drat                 1    1  1    1  1  1    1   
-#&gt; wt                        1  1    1  1  1    1   
-#&gt; qsec                         1    1  1  1    1   
-#&gt; vs                                1  1  1    1   
-#&gt; am                                   1  1    1   
-#&gt; gear                                    1    1   
-#&gt; carb                                         1   </div><div class='input'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"cor"</span>, stars <span class='op'>=</span> <span class='cn'>TRUE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          N  M      SD     1.  2.       3.       4.       5.       6.      
-#&gt; 1. mpg   32  20.09   6.03  -  -0.85*** -0.85*** -0.78***  0.68*** -0.87***
-#&gt; 2. cyl   32   6.19   1.79      -        0.90***  0.83*** -0.70***  0.78***
-#&gt; 3. disp  32 230.72 123.94               -        0.79*** -0.71***  0.89***
-#&gt; 4. hp    32 146.69  68.56                        -       -0.45**   0.66***
-#&gt; 5. drat  32   3.60   0.53                                 -       -0.71***
-#&gt; 6. wt    32   3.22   0.98                                          -      
-#&gt; 7. qsec  32  17.85   1.79                                                 
-#&gt; 8. vs    32   0.44   0.50                                                 
-#&gt; 9. am    32   0.41   0.50                                                 
-#&gt; 10. gear 32   3.69   0.74                                                 
-#&gt; 11. carb 32   2.81   1.62                                                 
-#&gt;          7.       8.       9.       10.      11.     
-#&gt; 1. mpg    0.42*    0.66***  0.60***  0.48**  -0.55** 
-#&gt; 2. cyl   -0.59*** -0.81*** -0.52**  -0.49**   0.53** 
-#&gt; 3. disp  -0.43*   -0.71*** -0.59*** -0.56***  0.39*  
-#&gt; 4. hp    -0.71*** -0.72*** -0.24    -0.13     0.75***
-#&gt; 5. drat   0.09     0.44*    0.71***  0.70*** -0.09   
-#&gt; 6. wt    -0.17    -0.55*** -0.69*** -0.58***  0.43*  
-#&gt; 7. qsec   -        0.74*** -0.23    -0.21    -0.66***
-#&gt; 8. vs              -        0.17     0.21    -0.57***
-#&gt; 9. am                       -        0.79***  0.06   
-#&gt; 10. gear                             -        0.27   
-#&gt; 11. carb                                      -      
-#&gt; 
-#&gt; Percentage of coverage for each pairwise covariance or correlation
-#&gt; 
-#&gt;      mpg cyl disp hp drat wt qsec vs am gear carb
-#&gt; mpg  1   1   1    1  1    1  1    1  1  1    1   
-#&gt; cyl      1   1    1  1    1  1    1  1  1    1   
-#&gt; disp         1    1  1    1  1    1  1  1    1   
-#&gt; hp                1  1    1  1    1  1  1    1   
-#&gt; drat                 1    1  1    1  1  1    1   
-#&gt; wt                        1  1    1  1  1    1   
-#&gt; qsec                         1    1  1  1    1   
-#&gt; vs                                1  1  1    1   
-#&gt; am                                   1  1    1   
-#&gt; gear                                    1    1   
-#&gt; carb                                         1   </div><div class='input'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"cov"</span>, stars <span class='op'>=</span> <span class='cn'>TRUE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          N  M      SD     1.  2.          3.          4.          5.         
-#&gt; 1. mpg   32  20.09   6.03  -     -9.17***  -633.10***  -320.73***     2.20***
-#&gt; 2. cyl   32   6.19   1.79      -            199.66***   101.93***    -0.67***
-#&gt; 3. disp  32 230.72 123.94                  -           6721.16***   -47.06***
-#&gt; 4. hp    32 146.69  68.56                              -            -16.45** 
-#&gt; 5. drat  32   3.60   0.53                                          -         
-#&gt; 6. wt    32   3.22   0.98                                                    
-#&gt; 7. qsec  32  17.85   1.79                                                    
-#&gt; 8. vs    32   0.44   0.50                                                    
-#&gt; 9. am    32   0.41   0.50                                                    
-#&gt; 10. gear 32   3.69   0.74                                                    
-#&gt; 11. carb 32   2.81   1.62                                                    
-#&gt;          6.          7.          8.          9.          10.        
-#&gt; 1. mpg      -5.12***     4.51*       2.02***     1.80***     2.14** 
-#&gt; 2. cyl       1.37***    -1.89***    -0.73***    -0.47**     -0.65** 
-#&gt; 3. disp    107.68***   -96.05*     -44.38***   -36.56***   -50.80***
-#&gt; 4. hp       44.19***   -86.77***   -24.99***    -8.32       -6.36   
-#&gt; 5. drat     -0.37***     0.09        0.12*       0.19***     0.28***
-#&gt; 6. wt     -             -0.31       -0.27***    -0.34***    -0.42***
-#&gt; 7. qsec               -              0.67***    -0.20       -0.28   
-#&gt; 8. vs                             -              0.04        0.08   
-#&gt; 9. am                                         -              0.29***
-#&gt; 10. gear                                                  -         
-#&gt; 11. carb                                                            
-#&gt;          11.        
-#&gt; 1. mpg      -5.36** 
-#&gt; 2. cyl       1.52** 
-#&gt; 3. disp     79.07*  
-#&gt; 4. hp       83.04***
-#&gt; 5. drat     -0.08   
-#&gt; 6. wt        0.68*  
-#&gt; 7. qsec     -1.89***
-#&gt; 8. vs       -0.46***
-#&gt; 9. am        0.05   
-#&gt; 10. gear     0.33   
-#&gt; 11. carb  -         
-#&gt; 
-#&gt; Percentage of coverage for each pairwise covariance or correlation
-#&gt; 
-#&gt;      mpg cyl disp hp drat wt qsec vs am gear carb
-#&gt; mpg  1   1   1    1  1    1  1    1  1  1    1   
-#&gt; cyl      1   1    1  1    1  1    1  1  1    1   
-#&gt; disp         1    1  1    1  1    1  1  1    1   
-#&gt; hp                1  1    1  1    1  1  1    1   
-#&gt; drat                 1    1  1    1  1  1    1   
-#&gt; wt                        1  1    1  1  1    1   
-#&gt; qsec                         1    1  1  1    1   
-#&gt; vs                                1  1  1    1   
-#&gt; am                                   1  1    1   
-#&gt; gear                                    1    1   
-#&gt; carb                                         1   </div><div class='input'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"both"</span>, stars <span class='op'>=</span> <span class='cn'>TRUE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          N  M      SD     1.       2.          3.          4.         
-#&gt; 1. mpg   32  20.09   6.03  -          -9.17***  -633.10***  -320.73***
-#&gt; 2. cyl   32   6.19   1.79 -0.85***  -            199.66***   101.93***
-#&gt; 3. disp  32 230.72 123.94 -0.85***  0.90***     -           6721.16***
-#&gt; 4. hp    32 146.69  68.56 -0.78***  0.83***     0.79***     -         
-#&gt; 5. drat  32   3.60   0.53  0.68*** -0.70***    -0.71***    -0.45**    
-#&gt; 6. wt    32   3.22   0.98 -0.87***  0.78***     0.89***     0.66***   
-#&gt; 7. qsec  32  17.85   1.79  0.42*   -0.59***    -0.43*      -0.71***   
-#&gt; 8. vs    32   0.44   0.50  0.66*** -0.81***    -0.71***    -0.72***   
-#&gt; 9. am    32   0.41   0.50  0.60*** -0.52**     -0.59***    -0.24      
-#&gt; 10. gear 32   3.69   0.74  0.48**  -0.49**     -0.56***    -0.13      
-#&gt; 11. carb 32   2.81   1.62 -0.55**   0.53**      0.39*       0.75***   
-#&gt;          5.          6.          7.          8.          9.         
-#&gt; 1. mpg       2.20***    -5.12***     4.51*       2.02***     1.80***
-#&gt; 2. cyl      -0.67***     1.37***    -1.89***    -0.73***    -0.47** 
-#&gt; 3. disp    -47.06***   107.68***   -96.05*     -44.38***   -36.56***
-#&gt; 4. hp      -16.45**     44.19***   -86.77***   -24.99***    -8.32   
-#&gt; 5. drat   -             -0.37***     0.09        0.12*       0.19***
-#&gt; 6. wt    -0.71***     -             -0.31       -0.27***    -0.34***
-#&gt; 7. qsec   0.09       -0.17        -              0.67***    -0.20   
-#&gt; 8. vs     0.44*      -0.55***     0.74***     -              0.04   
-#&gt; 9. am     0.71***    -0.69***    -0.23        0.17        -         
-#&gt; 10. gear  0.70***    -0.58***    -0.21        0.21        0.79***   
-#&gt; 11. carb -0.09        0.43*      -0.66***    -0.57***     0.06      
-#&gt;          10.         11.        
-#&gt; 1. mpg       2.14**     -5.36** 
-#&gt; 2. cyl      -0.65**      1.52** 
-#&gt; 3. disp    -50.80***    79.07*  
-#&gt; 4. hp       -6.36       83.04***
-#&gt; 5. drat      0.28***    -0.08   
-#&gt; 6. wt       -0.42***     0.68*  
-#&gt; 7. qsec     -0.28       -1.89***
-#&gt; 8. vs        0.08       -0.46***
-#&gt; 9. am        0.29***     0.05   
-#&gt; 10. gear  -              0.33   
-#&gt; 11. carb  0.27        -         
-#&gt; 
-#&gt; Percentage of coverage for each pairwise covariance or correlation
-#&gt; 
-#&gt;      mpg cyl disp hp drat wt qsec vs am gear carb
-#&gt; mpg  1   1   1    1  1    1  1    1  1  1    1   
-#&gt; cyl      1   1    1  1    1  1    1  1  1    1   
-#&gt; disp         1    1  1    1  1    1  1  1    1   
-#&gt; hp                1  1    1  1    1  1  1    1   
-#&gt; drat                 1    1  1    1  1  1    1   
-#&gt; wt                        1  1    1  1  1    1   
-#&gt; qsec                         1    1  1  1    1   
-#&gt; vs                                1  1  1    1   
-#&gt; am                                   1  1    1   
-#&gt; gear                                    1    1   
-#&gt; carb                                         1   </div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='SEMSummary.html'>SEMSummary</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"cor"</span>, stars <span class='op'>=</span> <span class='cn'>FALSE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          N  M      SD     1.  2.    3.    4.    5.    6.    7.    8.    9.   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg   32  20.09   6.03  -  -0.85 -0.85 -0.78  0.68 -0.87  0.42  0.66  0.60</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl   32   6.19   1.79      -     0.90  0.83 -0.70  0.78 -0.59 -0.81 -0.52</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp  32 230.72 123.94            -     0.79 -0.71  0.89 -0.43 -0.71 -0.59</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp    32 146.69  68.56                  -    -0.45  0.66 -0.71 -0.72 -0.24</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat  32   3.60   0.53                        -    -0.71  0.09  0.44  0.71</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt    32   3.22   0.98                              -    -0.17 -0.55 -0.69</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec  32  17.85   1.79                                    -     0.74 -0.23</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs    32   0.44   0.50                                          -     0.17</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am    32   0.41   0.50                                                -   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear 32   3.69   0.74                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb 32   2.81   1.62                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          10.   11.  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg    0.48 -0.55</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl   -0.49  0.53</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp  -0.56  0.39</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp    -0.13  0.75</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat   0.70 -0.09</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt    -0.58  0.43</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec  -0.21 -0.66</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs     0.21 -0.57</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am     0.79  0.06</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear  -     0.27</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb        -   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Percentage of coverage for each pairwise covariance or correlation</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      mpg cyl disp hp drat wt qsec vs am gear carb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg  1   1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl      1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> disp         1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> hp                1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> drat                 1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> wt                        1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec                         1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> vs                                1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> am                                   1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> gear                                    1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> carb                                         1   </span>
+<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"cov"</span>, stars <span class='op'>=</span> <span class='cn'>FALSE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          N  M      SD     1.  2.       3.       4.       5.       6.      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg   32  20.09   6.03  -     -9.17  -633.10  -320.73     2.20    -5.12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl   32   6.19   1.79      -         199.66   101.93    -0.67     1.37</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp  32 230.72 123.94               -        6721.16   -47.06   107.68</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp    32 146.69  68.56                        -         -16.45    44.19</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat  32   3.60   0.53                                 -          -0.37</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt    32   3.22   0.98                                          -      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec  32  17.85   1.79                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs    32   0.44   0.50                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am    32   0.41   0.50                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear 32   3.69   0.74                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb 32   2.81   1.62                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          7.       8.       9.       10.      11.     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg       4.51     2.02     1.80     2.14    -5.36</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl      -1.89    -0.73    -0.47    -0.65     1.52</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp    -96.05   -44.38   -36.56   -50.80    79.07</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp      -86.77   -24.99    -8.32    -6.36    83.04</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat      0.09     0.12     0.19     0.28    -0.08</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt       -0.31    -0.27    -0.34    -0.42     0.68</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec   -           0.67    -0.20    -0.28    -1.89</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs              -           0.04     0.08    -0.46</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am                       -           0.29     0.05</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear                             -           0.33</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb                                      -      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Percentage of coverage for each pairwise covariance or correlation</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      mpg cyl disp hp drat wt qsec vs am gear carb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg  1   1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl      1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> disp         1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> hp                1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> drat                 1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> wt                        1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec                         1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> vs                                1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> am                                   1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> gear                                    1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> carb                                         1   </span>
+<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"both"</span>, stars <span class='op'>=</span> <span class='cn'>FALSE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          N  M      SD     1.    2.       3.       4.       5.       6.      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg   32  20.09   6.03  -       -9.17  -633.10  -320.73     2.20    -5.12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl   32   6.19   1.79 -0.85  -         199.66   101.93    -0.67     1.37</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp  32 230.72 123.94 -0.85  0.90     -        6721.16   -47.06   107.68</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp    32 146.69  68.56 -0.78  0.83     0.79     -         -16.45    44.19</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat  32   3.60   0.53  0.68 -0.70    -0.71    -0.45     -          -0.37</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt    32   3.22   0.98 -0.87  0.78     0.89     0.66    -0.71     -      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec  32  17.85   1.79  0.42 -0.59    -0.43    -0.71     0.09    -0.17   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs    32   0.44   0.50  0.66 -0.81    -0.71    -0.72     0.44    -0.55   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am    32   0.41   0.50  0.60 -0.52    -0.59    -0.24     0.71    -0.69   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear 32   3.69   0.74  0.48 -0.49    -0.56    -0.13     0.70    -0.58   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb 32   2.81   1.62 -0.55  0.53     0.39     0.75    -0.09     0.43   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          7.       8.       9.       10.      11.     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg       4.51     2.02     1.80     2.14    -5.36</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl      -1.89    -0.73    -0.47    -0.65     1.52</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp    -96.05   -44.38   -36.56   -50.80    79.07</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp      -86.77   -24.99    -8.32    -6.36    83.04</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat      0.09     0.12     0.19     0.28    -0.08</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt       -0.31    -0.27    -0.34    -0.42     0.68</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec   -           0.67    -0.20    -0.28    -1.89</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs     0.74     -           0.04     0.08    -0.46</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am    -0.23     0.17     -           0.29     0.05</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear -0.21     0.21     0.79     -           0.33</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb -0.66    -0.57     0.06     0.27     -      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Percentage of coverage for each pairwise covariance or correlation</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      mpg cyl disp hp drat wt qsec vs am gear carb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg  1   1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl      1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> disp         1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> hp                1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> drat                 1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> wt                        1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec                         1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> vs                                1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> am                                   1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> gear                                    1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> carb                                         1   </span>
+<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"cor"</span>, stars <span class='op'>=</span> <span class='cn'>TRUE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          N  M      SD     1.  2.       3.       4.       5.       6.      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg   32  20.09   6.03  -  -0.85*** -0.85*** -0.78***  0.68*** -0.87***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl   32   6.19   1.79      -        0.90***  0.83*** -0.70***  0.78***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp  32 230.72 123.94               -        0.79*** -0.71***  0.89***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp    32 146.69  68.56                        -       -0.45**   0.66***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat  32   3.60   0.53                                 -       -0.71***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt    32   3.22   0.98                                          -      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec  32  17.85   1.79                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs    32   0.44   0.50                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am    32   0.41   0.50                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear 32   3.69   0.74                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb 32   2.81   1.62                                                 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          7.       8.       9.       10.      11.     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg    0.42*    0.66***  0.60***  0.48**  -0.55** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl   -0.59*** -0.81*** -0.52**  -0.49**   0.53** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp  -0.43*   -0.71*** -0.59*** -0.56***  0.39*  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp    -0.71*** -0.72*** -0.24    -0.13     0.75***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat   0.09     0.44*    0.71***  0.70*** -0.09   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt    -0.17    -0.55*** -0.69*** -0.58***  0.43*  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec   -        0.74*** -0.23    -0.21    -0.66***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs              -        0.17     0.21    -0.57***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am                       -        0.79***  0.06   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear                             -        0.27   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb                                      -      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Percentage of coverage for each pairwise covariance or correlation</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      mpg cyl disp hp drat wt qsec vs am gear carb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg  1   1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl      1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> disp         1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> hp                1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> drat                 1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> wt                        1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec                         1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> vs                                1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> am                                   1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> gear                                    1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> carb                                         1   </span>
+<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"cov"</span>, stars <span class='op'>=</span> <span class='cn'>TRUE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          N  M      SD     1.  2.          3.          4.          5.         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg   32  20.09   6.03  -     -9.17***  -633.10***  -320.73***     2.20***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl   32   6.19   1.79      -            199.66***   101.93***    -0.67***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp  32 230.72 123.94                  -           6721.16***   -47.06***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp    32 146.69  68.56                              -            -16.45** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat  32   3.60   0.53                                          -         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt    32   3.22   0.98                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec  32  17.85   1.79                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs    32   0.44   0.50                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am    32   0.41   0.50                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear 32   3.69   0.74                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb 32   2.81   1.62                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          6.          7.          8.          9.          10.        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg      -5.12***     4.51*       2.02***     1.80***     2.14** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl       1.37***    -1.89***    -0.73***    -0.47**     -0.65** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp    107.68***   -96.05*     -44.38***   -36.56***   -50.80***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp       44.19***   -86.77***   -24.99***    -8.32       -6.36   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat     -0.37***     0.09        0.12*       0.19***     0.28***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt     -             -0.31       -0.27***    -0.34***    -0.42***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec               -              0.67***    -0.20       -0.28   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs                             -              0.04        0.08   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am                                         -              0.29***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear                                                  -         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb                                                            </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          11.        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg      -5.36** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl       1.52** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp     79.07*  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp       83.04***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat     -0.08   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt        0.68*  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec     -1.89***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs       -0.46***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am        0.05   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear     0.33   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb  -         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Percentage of coverage for each pairwise covariance or correlation</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      mpg cyl disp hp drat wt qsec vs am gear carb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg  1   1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl      1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> disp         1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> hp                1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> drat                 1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> wt                        1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec                         1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> vs                                1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> am                                   1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> gear                                    1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> carb                                         1   </span>
+<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='va'>m</span>, type <span class='op'>=</span> <span class='st'>"both"</span>, stars <span class='op'>=</span> <span class='cn'>TRUE</span>, file <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          N  M      SD     1.       2.          3.          4.         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg   32  20.09   6.03  -          -9.17***  -633.10***  -320.73***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl   32   6.19   1.79 -0.85***  -            199.66***   101.93***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp  32 230.72 123.94 -0.85***  0.90***     -           6721.16***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp    32 146.69  68.56 -0.78***  0.83***     0.79***     -         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat  32   3.60   0.53  0.68*** -0.70***    -0.71***    -0.45**    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt    32   3.22   0.98 -0.87***  0.78***     0.89***     0.66***   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec  32  17.85   1.79  0.42*   -0.59***    -0.43*      -0.71***   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs    32   0.44   0.50  0.66*** -0.81***    -0.71***    -0.72***   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am    32   0.41   0.50  0.60*** -0.52**     -0.59***    -0.24      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear 32   3.69   0.74  0.48**  -0.49**     -0.56***    -0.13      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb 32   2.81   1.62 -0.55**   0.53**      0.39*       0.75***   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          5.          6.          7.          8.          9.         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg       2.20***    -5.12***     4.51*       2.02***     1.80***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl      -0.67***     1.37***    -1.89***    -0.73***    -0.47** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp    -47.06***   107.68***   -96.05*     -44.38***   -36.56***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp      -16.45**     44.19***   -86.77***   -24.99***    -8.32   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat   -             -0.37***     0.09        0.12*       0.19***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt    -0.71***     -             -0.31       -0.27***    -0.34***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec   0.09       -0.17        -              0.67***    -0.20   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs     0.44*      -0.55***     0.74***     -              0.04   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am     0.71***    -0.69***    -0.23        0.17        -         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear  0.70***    -0.58***    -0.21        0.21        0.79***   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb -0.09        0.43*      -0.66***    -0.57***     0.06      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          10.         11.        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1. mpg       2.14**     -5.36** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2. cyl      -0.65**      1.52** </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3. disp    -50.80***    79.07*  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4. hp       -6.36       83.04***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5. drat      0.28***    -0.08   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6. wt       -0.42***     0.68*  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7. qsec     -0.28       -1.89***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8. vs        0.08       -0.46***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9. am        0.29***     0.05   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10. gear  -              0.33   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11. carb  0.27        -         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Percentage of coverage for each pairwise covariance or correlation</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      mpg cyl disp hp drat wt qsec vs am gear carb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mpg  1   1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cyl      1   1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> disp         1    1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> hp                1  1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> drat                 1    1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> wt                        1  1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> qsec                         1    1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> vs                                1  1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> am                                   1  1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> gear                                    1    1   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> carb                                         1   </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -461,7 +501,7 @@ stars (*** p &lt; .001, ** p &lt; .01, * p &lt; .05).</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Made with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1, using <a href="https://preferably.amirmasoudabdol.name/?source=footer">preferably</a> template.</p>
 </div>
 
       </footer>

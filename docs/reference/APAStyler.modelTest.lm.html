@@ -6,16 +6,42 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Inform modern browsers that this page supports both dark and light color schemes,
+  and the page author prefers light. -->
+<meta name="color-scheme" content="dark light">
+<script>
+  // If `prefers-color-scheme` is not supported, fall back to light mode.
+  // i.e. In this case, inject the `light` CSS before the others, with
+  // no media filter so that it will be downloaded with highest priority.
+  if (window.matchMedia("(prefers-color-scheme: dark)").media === "not all") {
+    document.documentElement.style.display = "none";
+    document.head.insertAdjacentHTML(
+      "beforeend",
+      "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/3/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
+    );
+  }
+</script>
+
 <title>APAStyler method for model tests from a linear model — APAStyler.modelTest.lm • JWileymisc</title>
 
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- Flatly Theme - Light  -->
+<link id="css-light" rel="stylesheet" href="https://bootswatch.com/3/flatly/bootstrap.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+
+<!-- Darkly Theme - Dark -->
+<link id="css-dark" rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.css" media="(prefers-color-scheme: dark)">
+
+<!-- preferably CSS -->
+<link rel="stylesheet" href="../preferably.css">
+<link id="css-code-light" rel="stylesheet" href="../code-color-scheme-light.css" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">
+<link id="css-code-dark" rel="stylesheet" href="../code-color-scheme-dark.css" media="(prefers-color-scheme: dark)">
+
 
 <!-- bootstrap-toc -->
 <link rel="stylesheet" href="../bootstrap-toc.css">
@@ -48,6 +74,9 @@
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
+
+
+
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -110,12 +139,17 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
   <a href="https://github.com/JWiley/JWileymisc/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
+        
+        
+
+
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -185,51 +219,53 @@ APA style).</p></td>
     <p>Styled results.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>qsec</span> <span class='op'>*</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                 Term                      Est          Type
-#&gt;  1:      (Intercept)     8.52 [-17.15, 34.20] Fixed Effects
-#&gt;  2:             qsec    1.48* [  0.08,  2.87] Fixed Effects
-#&gt;  3:               hp   0.24** [  0.09,  0.39] Fixed Effects
-#&gt;  4:          qsec:hp -0.02*** [ -0.03, -0.01] Fixed Effects
-#&gt;  5: N (Observations)                       32 Overall Model
-#&gt;  6:        logLik DF                        5 Overall Model
-#&gt;  7:           logLik                   -77.75 Overall Model
-#&gt;  8:              AIC                   165.50 Overall Model
-#&gt;  9:              BIC                   172.83 Overall Model
-#&gt; 10:               F2                     3.66 Overall Model
-#&gt; 11:               R2                     0.79 Overall Model
-#&gt; 12:           Adj R2                     0.76 Overall Model
-#&gt; 13:             qsec      f2 = 0.17, p = .039  Effect Sizes
-#&gt; 14:               hp      f2 = 0.37, p = .003  Effect Sizes
-#&gt; 15:          qsec:hp      f2 = 0.69, p &lt; .001  Effect Sizes</div><div class='input'>
-<span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span>,
-format <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  FixedEffects <span class='op'>=</span> <span class='st'>"%s, %s\n(%s, %s)"</span>,
-  EffectSizes <span class='op'>=</span> <span class='st'>"Cohen's f2 = %s (%s)"</span><span class='op'>)</span>,
-pcontrol <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>digits <span class='op'>=</span> <span class='fl'>4</span>,
-  stars <span class='op'>=</span> <span class='cn'>FALSE</span>, includeP <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  includeSign <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  dropLeadingZero <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                 Term                               Est          Type
-#&gt;  1:      (Intercept)  8.52, p = .5020\n(-17.15, 34.20) Fixed Effects
-#&gt;  2:             qsec  1.48, p = .0386\n(  0.08,  2.87) Fixed Effects
-#&gt;  3:               hp  0.24, p = .0034\n(  0.09,  0.39) Fixed Effects
-#&gt;  4:          qsec:hp -0.02, p = .0001\n( -0.03, -0.01) Fixed Effects
-#&gt;  5: N (Observations)                                32 Overall Model
-#&gt;  6:        logLik DF                                 5 Overall Model
-#&gt;  7:           logLik                            -77.75 Overall Model
-#&gt;  8:              AIC                            165.50 Overall Model
-#&gt;  9:              BIC                            172.83 Overall Model
-#&gt; 10:               F2                              3.66 Overall Model
-#&gt; 11:               R2                              0.79 Overall Model
-#&gt; 12:           Adj R2                              0.76 Overall Model
-#&gt; 13:             qsec     Cohen's f2 = 0.17 (p = .0386)  Effect Sizes
-#&gt; 14:               hp     Cohen's f2 = 0.37 (p = .0034)  Effect Sizes
-#&gt; 15:          qsec:hp     Cohen's f2 = 0.69 (p = .0001)  Effect Sizes</div><div class='input'>
-<span class='co'>## clean up</span>
-<span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>qsec</span> <span class='op'>*</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 Term                      Est          Type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1:      (Intercept)     8.52 [-17.15, 34.20] Fixed Effects</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:             qsec    1.48* [  0.08,  2.87] Fixed Effects</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:               hp   0.24** [  0.09,  0.39] Fixed Effects</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4:          qsec:hp -0.02*** [ -0.03, -0.01] Fixed Effects</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5: N (Observations)                       32 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6:        logLik DF                        5 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7:           logLik                   -77.75 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8:              AIC                   165.50 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:              BIC                   172.83 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10:               F2                     3.66 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11:               R2                     0.79 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12:           Adj R2                     0.76 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13:             qsec      f2 = 0.17, p = .039  Effect Sizes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14:               hp      f2 = 0.37, p = .003  Effect Sizes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15:          qsec:hp      f2 = 0.69, p &lt; .001  Effect Sizes</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='APAStyler.html'>APAStyler</a></span><span class='op'>(</span><span class='fu'><a href='modelTest.html'>modelTest</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span>,</span>
+<span class='r-in'>format <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>  FixedEffects <span class='op'>=</span> <span class='st'>"%s, %s\n(%s, %s)"</span>,</span>
+<span class='r-in'>  EffectSizes <span class='op'>=</span> <span class='st'>"Cohen's f2 = %s (%s)"</span><span class='op'>)</span>,</span>
+<span class='r-in'>pcontrol <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>digits <span class='op'>=</span> <span class='fl'>4</span>,</span>
+<span class='r-in'>  stars <span class='op'>=</span> <span class='cn'>FALSE</span>, includeP <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>  includeSign <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>  dropLeadingZero <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 Term                               Est          Type</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1:      (Intercept)  8.52, p = .5020\n(-17.15, 34.20) Fixed Effects</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  2:             qsec  1.48, p = .0386\n(  0.08,  2.87) Fixed Effects</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3:               hp  0.24, p = .0034\n(  0.09,  0.39) Fixed Effects</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  4:          qsec:hp -0.02, p = .0001\n( -0.03, -0.01) Fixed Effects</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  5: N (Observations)                                32 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  6:        logLik DF                                 5 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  7:           logLik                            -77.75 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  8:              AIC                            165.50 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  9:              BIC                            172.83 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10:               F2                              3.66 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11:               R2                              0.79 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12:           Adj R2                              0.76 Overall Model</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13:             qsec     Cohen's f2 = 0.17 (p = .0386)  Effect Sizes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14:               hp     Cohen's f2 = 0.37 (p = .0034)  Effect Sizes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15:          qsec:hp     Cohen's f2 = 0.69 (p = .0001)  Effect Sizes</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## clean up</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -245,7 +281,7 @@ pcontrol <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/b
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Made with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1, using <a href="https://preferably.amirmasoudabdol.name/?source=footer">preferably</a> template.</p>
 </div>
 
       </footer>

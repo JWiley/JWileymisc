@@ -1,5 +1,7 @@
 # JWileymisc Devel
 
+# JWileymisc 1.2.1
+
 ## New Features
 * `diffCircular()` calculates the circular difference 
 	between two vectors.
@@ -12,6 +14,9 @@
    a factor class. Fixes a bug that could occur with 
    cells with zero frequencies when the variables were not 
    factors.
+   
+## Changes
+* Now using testthat 3e and preferably for light/dark package website.
 
 # JWileymisc 1.2.0
 

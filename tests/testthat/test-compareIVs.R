@@ -1,5 +1,3 @@
-context("compareIVs")
-
 test_that("compareIVs works correctly for different numbers of DVs, IVs, Covariates, and Multivariate", {
   grid <- expand.grid(
     DV = 1:2,

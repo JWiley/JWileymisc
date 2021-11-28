@@ -1,12 +1,12 @@
-context("Utilities")
-
 test_that("empirical_pvalue returns correct p-values", {
-  expect_that(empirical_pvalue(c(-1, 1:3))["p-value"], is_equivalent_to(.5))
+  expect_equal(
+    empirical_pvalue(c(-1, 1:3))["p-value"],
+    .5, ignore_attr = TRUE)
 })
 
 test_that("cd changes directory", {
   randomDIR <- paste(sample(c(letters, 0:9), 30), collapse = "")
-  while(file.exists(randomDIR)) {
+  while (file.exists(randomDIR)) {
     randomDIR <- paste(sample(c(letters, 0:9), 30), collapse = "")
   }
 
@@ -27,7 +27,7 @@ test_that("cd changes directory", {
   setwd(tdir)
   newdir <- file.path(tdir, paste0("abc", 2))
   cd(tdir, "abc", 2)
-  expect_equivalent(
+  expect_equal(
     normalizePath(newdir, mustWork = FALSE),
     normalizePath(getwd(), mustWork = FALSE))
   unlink(newdir, TRUE, TRUE)
@@ -35,10 +35,9 @@ test_that("cd changes directory", {
 })
 
 test_that("cor2cov is equivalent to covariance matrix", {
-  expect_that(
+  expect_equal(
     cov(mtcars[, 1:4]),
-    is_equivalent_to(
-      cor2cov(cor(mtcars[, 1:4]), sapply(mtcars[, 1:4], sd))))
+    cor2cov(cor(mtcars[, 1:4]), sapply(mtcars[, 1:4], sd)))
 })
 
 test_that("cor2cov catches errors", {
@@ -49,14 +48,14 @@ test_that("cor2cov catches errors", {
 
 test_that("corOK removes missing values correctly", {
   cormat <- cor(iris[, -5])
-  cormat[cbind(c(1,2), c(2,1))] <- NA
+  cormat[cbind(c(1, 2), c(2, 1))] <- NA
   cormat <- corOK(cormat)
-  expect_equivalent(dim(cormat$x), c(3, 3))
-  expect_equivalent(cormat$keep.indices, c(2, 3, 4))
+  expect_equal(dim(cormat$x), c(3, 3))
+  expect_equal(cormat$keep.indices, c(2, 3, 4))
 
   cormat <- cor(iris[, -5])
-  cormat[cbind(c(1,2), c(2,1))] <- NA  
-  expect_warning(corOK(cormat, 1))  
+  cormat[cbind(c(1, 2), c(2, 1))] <- NA
+  expect_warning(corOK(cormat, 1))
 })
 
 test_that("as.na converts to the correct class of missing", {
@@ -66,8 +65,9 @@ test_that("as.na converts to the correct class of missing", {
   expect_equal(as.na("x"), NA_character_)
 
   expect_true(is.factor(as.na(factor("x"))))
-  expect_equal(class(as.na(as.POSIXct("1990-01-01 10:40:04"))), c("POSIXct", "POSIXt"))
-  expect_equal(class(as.na(as.POSIXlt("1990-01-01 10:40:04"))), c("POSIXlt", "POSIXt"))
+  expect_s3_class(as.na(as.POSIXct("1990-01-01 10:40:04")), c("POSIXct", "POSIXt"))
+  expect_s3_class(as.na(as.POSIXct("1990-01-01 10:40:04")), c("POSIXct", "POSIXt"))
+  expect_s3_class(as.na(as.POSIXlt("1990-01-01 10:40:04")), c("POSIXlt", "POSIXt"))
 
   ## check times (from chron package) convert properly
   x <- structure(0.819513888888889, format = "h:m:s", class = "times")
@@ -95,7 +95,7 @@ test_that("naz.omit removes missing, nan, and zero length characters", {
 test_that("lagk lags by k", {
   expect_equal(lagk(1:3, 1), c(NA, 1, 2))
   expect_equal(lagk(1:3, 2), c(NA, NA, 1))
-  expect_equivalent(
+  expect_equal(
     lagk(1:4, 1, factor(c("a", "a", "b", "b"))),
     c(a1 = NA, a2 = 1,
       b1 = NA, b2 = 3))
@@ -112,11 +112,11 @@ test_that("timeshift works", {
     timeshift(c(0, 3, 6), center = 3, min = 0, max = 6),
     c(3, 0, 3))
 
-  expect_equivalent(
+  expect_equal(
     timeshift(c(0, .5, .9), center = .5),
     c(.5, 0, .4))
 
-  expect_equivalent(
+  expect_equal(
     timeshift(c(.5, 0, .4), center = .5, inverse = TRUE),
     c(0, .5, .9))
 
