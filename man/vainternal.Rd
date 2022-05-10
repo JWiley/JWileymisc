@@ -105,8 +105,7 @@ JWileymisc:::CFHM(c("HM 20", "HM", "CF 20", "CF 12", "CF"), zero = NA)
 \references{
 Jack T. Holladay (2004).  Visual acuity measurements.
   \emph{Journal of Cataract & Refractive Surgery, 30}(2),
-  pp. 287--290. DOI: 10.1016/j.jcrs.2004.01.014.
-  \url{http://dx.doi.org/10.1016/j.jcrs.2004.01.014}
+  pp. 287--290. \doi{10.1016/j.jcrs.2004.01.014}
 }
 \seealso{
 \code{\link{VAConverter}} the overall function typically

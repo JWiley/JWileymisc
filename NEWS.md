@@ -1,6 +1,4 @@
-# JWileymisc Devel
-
-# JWileymisc 1.2.1
+# JWileymisc 1.3.0
 
 ## New Features
 * `diffCircular()` calculates the circular difference 
