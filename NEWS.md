@@ -14,6 +14,8 @@
    a factor class. Fixes a bug that could occur with 
    cells with zero frequencies when the variables were not 
    factors.
+* `winsorizor()` would not properly check if a vector of percentiles 
+   was passed. This is fixed and a new test added to prevent regression.
    
 ## Changes
 * Now using testthat 3e and preferably for light/dark package website.

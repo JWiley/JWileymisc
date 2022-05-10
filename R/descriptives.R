@@ -851,6 +851,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
 #'   at the lower and upper ends.
 #' @importFrom stats quantile
 #' @importFrom data.table data.table := copy is.data.table
+#' @importFrom extraoperators %age% %ale%
 #' @export
 #' @examples
 #' dev.new(width = 10, height = 5)
@@ -873,14 +874,17 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
 #' rm(dat) # clean up
 winsorizor <- function(d, percentile, values, na.rm = TRUE) {
     if (!missing(percentile)) {
-      stopifnot(percentile >= 0 && percentile <= 1)
+      stopifnot(percentile %age% 0 && percentile %ale% 1)
     } else if (missing(percentile)) {
       percentile <- NA_real_
     }
 
   if (!is.vector(d) && !is.matrix(d) && !is.data.frame(d) && !is.data.table(d)) {
     if (is.atomic(d) && is.null(dim(d))) {
-      warning("atomic type with no dimensions, coercing to a numeric vector. To remove this warning, try wrapping the data in as.numeric() or otherwise coercing to a vector prior to passing to winsorizor().")
+      warning(paste0(
+        "Atomic type with no dimensions, coercing to a numeric vector.\n",
+        "To remove this warning, try wrapping the data in as.numeric() or\n",
+        "otherwise coercing to a vector prior to passing to winsorizor()."))
       d <- as.numeric(d)
     }
   }
@@ -916,18 +920,18 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
         if (is.data.table(d)) {
           d <- copy(d)
           if (missing(values)) {
-            for (i in 1:ncol(d)) {
+            for (i in seq_len(ncol(d))) {
               v <- names(d)[i]
               d[, (v) := f(get(v), percentile = percentile[i], na.rm = na.rm)]
             }
           } else {
-            for (i in 1:ncol(d)) {
+            for (i in seq_len(ncol(d))) {
               v <- names(d)[i]
               d[, (v) := f(get(v), percentile = percentile[i], values = values[i, ], na.rm = na.rm)]
             }
           }
 
-          all.attr <- do.call(rbind, lapply(1:ncol(d), function(i) attr(d[[i]], "winsorizedValues")))
+          all.attr <- do.call(rbind, lapply(seq_len(ncol(d)), function(i) attr(d[[i]], "winsorizedValues")))
           all.attr$variable <- colnames(d)
           rownames(all.attr) <- NULL
 
@@ -938,11 +942,11 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
         } else {
 
           if (missing(values)) {
-            tmp <- lapply(1:ncol(d), function(i) {
+            tmp <- lapply(seq_len(ncol(d)), function(i) {
               f(d[, i], percentile = percentile[i], na.rm = na.rm)
             })
           } else {
-            tmp <- lapply(1:ncol(d), function(i) {
+            tmp <- lapply(seq_len(ncol(d)), function(i) {
               f(d[, i], percentile = percentile[i], values = values[i, ], na.rm = na.rm)
             })
           }

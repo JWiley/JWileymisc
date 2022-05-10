@@ -377,7 +377,7 @@ hashDataset <- function(x, file) {
       sprintf("'%s' (%s), %s, %s (sorted)",
               y, paste(class(x[[y]]), collapse = "; "),
               digest(x[[y]], "md5"), digest(sort(x[[y]]), "md5"))
-              
+
     })))
 
   if (!missing(file)) {
@@ -481,6 +481,6 @@ readRDSfst <- function(filename) {
   if (isFALSE(nzchar(filename))) {
     stop("'filename' must be a non zero character string")
   }
-  
+
   unserialize(decompress_fst(base::readRDS(filename)))
 }

@@ -24,6 +24,14 @@ test_that(
       "data.table")
   })
 
+test_that(
+  "winsorizor uses a vector of percentiles without warning data frames", {
+    d2 <- data.frame(a = 0:100, b = 0:100)
+    e2 <- cbind(a = c(1, 99), b = c(10, 90))    
+    expect_equal(apply(winsorizor(d2, c(.01, .10)), 2, range),
+                 e2, ignore_attr = TRUE)
+  })
+
 test_that("winsorizor removes missing values", {
   d1 <- c(NA, 0:100)
   e1 <- c(1, 99)
