@@ -32,7 +32,7 @@ will be used based on covMcd from the robustbase package."><!-- Inform modern br
       "<link id=\"css\" rel=\"stylesheet\" href=\"https://bootswatch.com/5/flatly/bootstrap.css\" onload=\"document.documentElement.style.display = ''\">"
     );
   }
-</script><title>Test the distribution of a variable against a specific distribution — testDistribution • JWileymisc</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Test the distribution of a variable against a specific distribution — testDistribution"><meta property="og:description" content="Function designed to help examine distributions.
+</script><title>Test the distribution of a variable against a specific distribution — testDistribution • JWileymisc</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Test the distribution of a variable against a specific distribution — testDistribution"><meta property="og:description" content="Function designed to help examine distributions.
 It also includes an option for assessing multivariate normality using the
 (squared) Mahalanobis distance. A generic function, some methods, and
 constructor (as.testDistribution) and function to check class
@@ -138,25 +138,25 @@ will be used based on <code>covMcd</code> from the <span class="pkg">robustbase<
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">testDistribution</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">as.testDistribution</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-
-<span class="fu">is.testDistribution</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-
-<span class="co"># S3 method for default</span>
-<span class="fu">testDistribution</span><span class="op">(</span>
-  <span class="va">x</span>,
-  distr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"beta"</span>, <span class="st">"chisq"</span>, <span class="st">"f"</span>, <span class="st">"gamma"</span>, <span class="st">"geometric"</span>, <span class="st">"nbinom"</span>, <span class="st">"poisson"</span>,
-    <span class="st">"uniform"</span>, <span class="st">"mvnormal"</span><span class="op">)</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">starts</span>,
-  extremevalues <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"no"</span>, <span class="st">"theoretical"</span>, <span class="st">"empirical"</span><span class="op">)</span>,
-  ev.perc <span class="op">=</span> <span class="fl">0.005</span>,
-  use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"complete.obs"</span>, <span class="st">"pairwise.complete.obs"</span>, <span class="st">"fiml"</span><span class="op">)</span>,
-  robust <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">as.testDistribution</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">is.testDistribution</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">testDistribution</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  distr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normal"</span>, <span class="st">"beta"</span>, <span class="st">"chisq"</span>, <span class="st">"f"</span>, <span class="st">"gamma"</span>, <span class="st">"geometric"</span>, <span class="st">"nbinom"</span>, <span class="st">"poisson"</span>,</span>
+<span>    <span class="st">"uniform"</span>, <span class="st">"mvnormal"</span><span class="op">)</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">starts</span>,</span>
+<span>  extremevalues <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"no"</span>, <span class="st">"theoretical"</span>, <span class="st">"empirical"</span><span class="op">)</span>,</span>
+<span>  ev.perc <span class="op">=</span> <span class="fl">0.005</span>,</span>
+<span>  use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"complete.obs"</span>, <span class="st">"pairwise.complete.obs"</span>, <span class="st">"fiml"</span><span class="op">)</span>,</span>
+<span>  robust <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -165,10 +165,14 @@ will be used based on <code>covMcd</code> from the <span class="pkg">robustbase<
 <dd><p>The data as a single variable or vector to check the distribution unless
 the distribution is “mvnormal” in which case it should be a data frame or
 data table.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments. If these include mu and sigma and the distribution
 is multivariate normal, then it will use the passed values instead of calculating
 the mean and covariances of the data.</p></dd>
+
+
 <dt>distr</dt>
 <dd><p>A character string indicating the distribution to be tested.
 Currently one of: “normal”, “beta”, “chisq” (chi-squared),
@@ -176,21 +180,31 @@ Currently one of: “normal”, “beta”, “chisq” (chi-squared),
 “poisson”, “uniform”, or “mvnormal” for multivariate normal where Mahalanobis
 distances are calculated and compared against a Chi-squared distribution with
 degrees of freedom equal to the number of variables.</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>A logical value whether to omit missing values. Defaults to <code>TRUE</code>.</p></dd>
+
+
 <dt>starts</dt>
 <dd><p>A named list of the starting values. Not required for all distributions.
 Passed on to <code>fitdistr</code> which fits the maximum likelihood estimates of the
 distribution parameters.</p></dd>
+
+
 <dt>extremevalues</dt>
 <dd><p>A character vector whether to indicate extreme values.
 Should be “no” to do nothing, “empirical” to show extreme
 values based on the observed data percentiles, or “theoretical”
 to show extreme values based on percentiles of the theoretical distribution.</p></dd>
+
+
 <dt>ev.perc</dt>
 <dd><p>Percentile to use for extreme values.  For example if .01,
 then the lowest 1 percent and highest 1 percent will be labelled
 extreme values.  Defaults to the lowest and highest 0.5 percent.</p></dd>
+
+
 <dt>use</dt>
 <dd><p>A character vector indicating how the moments
 (means and covariance matrix) should be estimated in the presence of
@@ -198,18 +212,26 @@ missing data when <code>distr = mvnormal</code>.
 The default is to use complete observations, but
 full information maximum likelihood based on functions in
 <span class="pkg">lavaan</span> is also available.  See details.</p></dd>
+
+
 <dt>robust</dt>
 <dd><p>A logical whether to use robust estimation or not.
 Currently only applies to normally distributed data
 (univariate or multivariate).  Also, when <code>robust = TRUE</code>,
 only complete observations are used (i.e., <code>use = "complete.obs"</code>).
 See details.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A logical whether or not an object is of class
-<code>testDistribution</code> or an object of the same class.
-A list with information about the distribution (parameter estimates,
+    
+
+<p>A logical whether or not an object is of class</p>
+<p></p>
+<p><code>testDistribution</code> or an object of the same class.</p>
+
+
+<p>A list with information about the distribution (parameter estimates,
   name, log likelihood (useful for comparing the fit of different distributions
   to the data), and a dataset with the sorted data and theoretical quantiles.</p>
     </div>
@@ -220,20 +242,20 @@ A list with information about the distribution (parameter estimates,
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co">## example data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
-<span class="r-in">  Ynorm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span>,</span>
-<span class="r-in">  Ybeta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html" class="external-link">rbeta</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span>,</span>
-<span class="r-in">  Ychisq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">rchisq</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">8</span><span class="op">)</span>,</span>
-<span class="r-in">  Yf <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html" class="external-link">rf</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>,</span>
-<span class="r-in">  Ygamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">  Ynbinom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/NegBinomial.html" class="external-link">rnbinom</a></span><span class="op">(</span><span class="fl">200</span>, mu <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span>,</span>
-<span class="r-in">  Ypois <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## testing and graphing</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ybeta</span>, <span class="st">"beta"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape1 <span class="op">=</span> <span class="fl">1</span>, shape2 <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## example data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  Ynorm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  Ybeta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html" class="external-link">rbeta</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  Ychisq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">rchisq</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  Yf <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html" class="external-link">rf</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  Ygamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  Ynbinom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/NegBinomial.html" class="external-link">rnbinom</a></span><span class="op">(</span><span class="fl">200</span>, mu <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  Ypois <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## testing and graphing</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ybeta</span>, <span class="st">"beta"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape1 <span class="op">=</span> <span class="fl">1</span>, shape2 <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 X           Y OriginalOrder isEV    YDeviates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1: 0.0009548787 0.002899638            20   No  0.001944759</span>
@@ -256,7 +278,7 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dbeta, x, shape1, shape2, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnbeta, x, shape1, shape2, ncp, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55575616f798&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56018a31f718&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$q</span>
@@ -267,7 +289,7 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_qnbeta, p, shape1, shape2, ncp, lower.tail, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55575616c4c8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x56018a31ead8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$Name</span>
@@ -308,7 +330,7 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "testDistribution"</span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ychisq</span>, <span class="st">"chisq"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ychisq</span>, <span class="st">"chisq"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              X         Y OriginalOrder isEV   YDeviates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:  1.020806  1.119129            75   No  0.09832363</span>
@@ -331,7 +353,7 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dchisq, x, df, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnchisq, x, df, ncp, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555755f0aec8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560182882208&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$q</span>
@@ -341,7 +363,7 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_qchisq, p, df, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_qnchisq, p, df, ncp, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555755f08870&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560182881718&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$Name</span>
@@ -382,11 +404,11 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "testDistribution"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## for chi-square distribution, extreme values only on</span></span>
-<span class="r-in"><span class="co">## the right tail</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ychisq</span>, <span class="st">"chisq"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span>
-<span class="r-in">  extremevalues <span class="op">=</span> <span class="st">"empirical"</span>, ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## for chi-square distribution, extreme values only on</span></span></span>
+<span class="r-in"><span><span class="co">## the right tail</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ychisq</span>, <span class="st">"chisq"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  extremevalues <span class="op">=</span> <span class="st">"empirical"</span>, ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              X         Y OriginalOrder isEV   YDeviates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:  1.020806  1.119129            75   No  0.09832363</span>
@@ -409,7 +431,7 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dchisq, x, df, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnchisq, x, df, ncp, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555755f0aec8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560182882208&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$q</span>
@@ -419,7 +441,7 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_qchisq, p, df, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_qnchisq, p, df, ncp, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555755f08870&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560182881718&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$Name</span>
@@ -461,8 +483,8 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "testDistribution"</span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ychisq</span>, <span class="st">"chisq"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span>
-<span class="r-in">  extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>, ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ychisq</span>, <span class="st">"chisq"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>, ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              X         Y OriginalOrder isEV   YDeviates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1:  1.020806  1.119129            75   No  0.09832363</span>
@@ -485,7 +507,7 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dchisq, x, df, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnchisq, x, df, ncp, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555755f0aec8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560182882208&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$q</span>
@@ -495,7 +517,7 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_qchisq, p, df, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_qnchisq, p, df, ncp, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x555755f08870&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560182881718&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$Name</span>
@@ -536,40 +558,40 @@ A list with information about the distribution (parameter estimates,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "testDistribution"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Yf</span>, <span class="st">"uniform"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ypois</span>, <span class="st">"geometric"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Yf</span>, <span class="st">"f"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df1 <span class="op">=</span> <span class="fl">5</span>, df2 <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ygamma</span>, <span class="st">"gamma"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynbinom</span>, <span class="st">"poisson"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynbinom</span>, <span class="st">"nbinom"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ypois</span>, <span class="st">"poisson"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## compare log likelihood of two different distributions</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ygamma</span>, <span class="st">"normal"</span><span class="op">)</span><span class="op">$</span><span class="va">Distribution</span><span class="op">$</span><span class="va">LL</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ygamma</span>, <span class="st">"gamma"</span><span class="op">)</span><span class="op">$</span><span class="va">Distribution</span><span class="op">$</span><span class="va">LL</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynorm</span>, <span class="st">"normal"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynorm</span>, <span class="fl">10</span>, <span class="fl">1000</span><span class="op">)</span>, <span class="st">"normal"</span>,</span>
-<span class="r-in">  extremevalues <span class="op">=</span> <span class="st">"theoretical"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynorm</span>, <span class="fl">10</span>, <span class="fl">1000</span><span class="op">)</span>, <span class="st">"normal"</span>,</span>
-<span class="r-in">  extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>, robust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mvnormal"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## for multivariate normal mahalanobis distance</span></span>
-<span class="r-in"><span class="co">## which follows a chi-square distribution, extreme values only on</span></span>
-<span class="r-in"><span class="co">## the right tail</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mvnormal"</span>, extremevalues <span class="op">=</span> <span class="st">"empirical"</span>,</span>
-<span class="r-in">  ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">testDistribution</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mvnormal"</span>, extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>,</span>
-<span class="r-in">  ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="co">## cleanup</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Yf</span>, <span class="st">"uniform"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ypois</span>, <span class="st">"geometric"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Yf</span>, <span class="st">"f"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df1 <span class="op">=</span> <span class="fl">5</span>, df2 <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ygamma</span>, <span class="st">"gamma"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynbinom</span>, <span class="st">"poisson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynbinom</span>, <span class="st">"nbinom"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ypois</span>, <span class="st">"poisson"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## compare log likelihood of two different distributions</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ygamma</span>, <span class="st">"normal"</span><span class="op">)</span><span class="op">$</span><span class="va">Distribution</span><span class="op">$</span><span class="va">LL</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ygamma</span>, <span class="st">"gamma"</span><span class="op">)</span><span class="op">$</span><span class="va">Distribution</span><span class="op">$</span><span class="va">LL</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynorm</span>, <span class="st">"normal"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynorm</span>, <span class="fl">10</span>, <span class="fl">1000</span><span class="op">)</span>, <span class="st">"normal"</span>,</span></span>
+<span class="r-in"><span>  extremevalues <span class="op">=</span> <span class="st">"theoretical"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ynorm</span>, <span class="fl">10</span>, <span class="fl">1000</span><span class="op">)</span>, <span class="st">"normal"</span>,</span></span>
+<span class="r-in"><span>  extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>, robust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mvnormal"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## for multivariate normal mahalanobis distance</span></span></span>
+<span class="r-in"><span><span class="co">## which follows a chi-square distribution, extreme values only on</span></span></span>
+<span class="r-in"><span><span class="co">## the right tail</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mvnormal"</span>, extremevalues <span class="op">=</span> <span class="st">"empirical"</span>,</span></span>
+<span class="r-in"><span>  ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mvnormal"</span>, extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>,</span></span>
+<span class="r-in"><span>  ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="co">## cleanup</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -581,7 +603,7 @@ A list with information about the distribution (parameter estimates,
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

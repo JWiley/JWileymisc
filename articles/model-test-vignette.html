@@ -21,8 +21,8 @@
   }
 </script><title>Model Performance and Tests • JWileymisc</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Model Performance and Tests">
 <meta property="og:description" content="JWileymisc">
@@ -95,11 +95,11 @@
 
 
 <script src="model-test-vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Model Performance and Tests</h1>
                         <h4 data-toc-skip class="author">Joshua F. Wiley</h4>
             
-            <h4 data-toc-skip class="date">2022-05-11</h4>
+            <h4 data-toc-skip class="date">2022-09-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/HEAD/vignettes/model-test-vignette.Rmd" class="external-link"><code>vignettes/model-test-vignette.Rmd</code></a></small>
       <div class="d-none name"><code>model-test-vignette.Rmd</code></div>
@@ -109,7 +109,7 @@
     
 <p>To start, load the package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://joshuawiley.com/JWileymisc/">JWileymisc</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://joshuawiley.com/JWileymisc/">JWileymisc</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="model-performance">Model Performance<a class="anchor" aria-label="anchor" href="#model-performance"></a>
 </h2>
@@ -129,104 +129,104 @@
 <li>P (p value for model F test)</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span>
-<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-
-<span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelPerformance.html">modelPerformance</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span>
-<span class="co">#&gt; $Performance</span>
-<span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span>
-<span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578 3.062692</span>
-<span class="co">#&gt;        AdjR2        F FNumDF FDenDF           P</span>
-<span class="co">#&gt; 1: 0.7274854 28.58513      3     28 1.13969e-08</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "modelPerformance.lm" "modelPerformance"</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelPerformance.html">modelPerformance</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $Performance</span></span>
+<span><span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span></span>
+<span><span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578 3.062692</span></span>
+<span><span class="co">#&gt;        AdjR2        F FNumDF FDenDF           P</span></span>
+<span><span class="co">#&gt; 1: 0.7274854 28.58513      3     28 1.13969e-08</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "modelPerformance.lm" "modelPerformance"</span></span></code></pre></div>
 <p>If only certain metrics are desired, these can be found by extracting the “Performance” list element and then the correct column from the data table.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co">## Cohen's f^2 effect size</span>
-<span class="va">mp</span><span class="op">$</span><span class="va">Performance</span><span class="op">[</span>, <span class="va">F2</span><span class="op">]</span>
-<span class="co">#&gt; [1] 3.062692</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="co">## Cohen's f^2 effect size</span></span>
+<span><span class="va">mp</span><span class="op">$</span><span class="va">Performance</span><span class="op">[</span>, <span class="va">F2</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] 3.062692</span></span></code></pre></div>
 <p>Another function, <code><a href="../reference/modelTest.html">modelTest()</a></code> is a generic providing a comprehensive series of tests for a model. Currently methods are implemented for both <code>lm</code> class models and <code>vglm</code> class models from the <code>VGAM</code> package with a multinomial family.</p>
 <p><code><a href="../reference/modelTest.html">modelTest()</a></code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">mt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelTest.html">modelTest</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mt</span><span class="op">)</span>
-<span class="co">#&gt; $FixedEffects</span>
-<span class="co">#&gt;           Term         Est           LL           UL         Pval</span>
-<span class="co">#&gt; 1: (Intercept) 28.65011816  25.39768395 31.902552374 5.921199e-17</span>
-<span class="co">#&gt; 2:          hp -0.02403883  -0.05560048  0.007522814 1.299540e-01</span>
-<span class="co">#&gt; 3:        cyl6 -5.96765508  -9.32556307 -2.609747083 1.092089e-03</span>
-<span class="co">#&gt; 4:        cyl8 -8.52085075 -13.28559928 -3.756102224 1.028617e-03</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $RandomEffects</span>
-<span class="co">#&gt; [1] NA</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $EffectSizes</span>
-<span class="co">#&gt;    Term N_Obs         AIC        BIC       LL LLDF       Sigma         R2</span>
-<span class="co">#&gt; 1:   hp     0  -0.6675031  0.7982328 1.333752    1 -0.07685536 0.02139775</span>
-<span class="co">#&gt; 2:  cyl     0 -11.3421811 -8.4107093 7.671091    2 -0.71671885 0.15142046</span>
-<span class="co">#&gt;            F2     AdjR2        F FNumDF FDenDF           P  Type</span>
-<span class="co">#&gt; 1: 0.08693246 0.0134764 2.434109      1     28 0.129954045 Fixed</span>
-<span class="co">#&gt; 2: 0.61517476 0.1383002 8.612447      2     28 0.001215981 Fixed</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $OverallModel</span>
-<span class="co">#&gt; $Performance</span>
-<span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span>
-<span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578 3.062692</span>
-<span class="co">#&gt;        AdjR2        F FNumDF FDenDF           P</span>
-<span class="co">#&gt; 1: 0.7274854 28.58513      3     28 1.13969e-08</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "modelPerformance.lm" "modelPerformance"   </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "modelTest.lm" "modelTest"</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="va">mt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelTest.html">modelTest</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mt</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $FixedEffects</span></span>
+<span><span class="co">#&gt;           Term         Est           LL           UL         Pval</span></span>
+<span><span class="co">#&gt; 1: (Intercept) 28.65011816  25.39768395 31.902552374 5.921199e-17</span></span>
+<span><span class="co">#&gt; 2:          hp -0.02403883  -0.05560048  0.007522814 1.299540e-01</span></span>
+<span><span class="co">#&gt; 3:        cyl6 -5.96765508  -9.32556307 -2.609747083 1.092089e-03</span></span>
+<span><span class="co">#&gt; 4:        cyl8 -8.52085075 -13.28559928 -3.756102224 1.028617e-03</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $RandomEffects</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $EffectSizes</span></span>
+<span><span class="co">#&gt;    Term N_Obs         AIC        BIC       LL LLDF       Sigma         R2</span></span>
+<span><span class="co">#&gt; 1:   hp     0  -0.6675031  0.7982328 1.333752    1 -0.07685536 0.02139775</span></span>
+<span><span class="co">#&gt; 2:  cyl     0 -11.3421811 -8.4107093 7.671091    2 -0.71671885 0.15142046</span></span>
+<span><span class="co">#&gt;            F2     AdjR2        F FNumDF FDenDF           P  Type</span></span>
+<span><span class="co">#&gt; 1: 0.08693246 0.0134764 2.434109      1     28 0.129954045 Fixed</span></span>
+<span><span class="co">#&gt; 2: 0.61517476 0.1383002 8.612447      2     28 0.001215981 Fixed</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $OverallModel</span></span>
+<span><span class="co">#&gt; $Performance</span></span>
+<span><span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span></span>
+<span><span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578 3.062692</span></span>
+<span><span class="co">#&gt;        AdjR2        F FNumDF FDenDF           P</span></span>
+<span><span class="co">#&gt; 1: 0.7274854 28.58513      3     28 1.13969e-08</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "modelPerformance.lm" "modelPerformance"   </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "modelTest.lm" "modelTest"</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="../reference/APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="va">mt</span><span class="op">)</span>
-<span class="co">#&gt;                 Term                      Est          Type</span>
-<span class="co">#&gt;  1:      (Intercept) 28.65*** [ 25.40, 31.90] Fixed Effects</span>
-<span class="co">#&gt;  2:               hp    -0.02 [ -0.06,  0.01] Fixed Effects</span>
-<span class="co">#&gt;  3:             cyl6  -5.97** [ -9.33, -2.61] Fixed Effects</span>
-<span class="co">#&gt;  4:             cyl8  -8.52** [-13.29, -3.76] Fixed Effects</span>
-<span class="co">#&gt;  5: N (Observations)                       32 Overall Model</span>
-<span class="co">#&gt;  6:        logLik DF                        5 Overall Model</span>
-<span class="co">#&gt;  7:           logLik                   -79.95 Overall Model</span>
-<span class="co">#&gt;  8:              AIC                   169.90 Overall Model</span>
-<span class="co">#&gt;  9:              BIC                   177.23 Overall Model</span>
-<span class="co">#&gt; 10:               F2                     3.06 Overall Model</span>
-<span class="co">#&gt; 11:               R2                     0.75 Overall Model</span>
-<span class="co">#&gt; 12:           Adj R2                     0.73 Overall Model</span>
-<span class="co">#&gt; 13:               hp      f2 = 0.09, p = .130  Effect Sizes</span>
-<span class="co">#&gt; 14:              cyl      f2 = 0.62, p = .001  Effect Sizes</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="va">mt</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                 Term                      Est          Type</span></span>
+<span><span class="co">#&gt;  1:      (Intercept) 28.65*** [ 25.40, 31.90] Fixed Effects</span></span>
+<span><span class="co">#&gt;  2:               hp    -0.02 [ -0.06,  0.01] Fixed Effects</span></span>
+<span><span class="co">#&gt;  3:             cyl6  -5.97** [ -9.33, -2.61] Fixed Effects</span></span>
+<span><span class="co">#&gt;  4:             cyl8  -8.52** [-13.29, -3.76] Fixed Effects</span></span>
+<span><span class="co">#&gt;  5: N (Observations)                       32 Overall Model</span></span>
+<span><span class="co">#&gt;  6:        logLik DF                        5 Overall Model</span></span>
+<span><span class="co">#&gt;  7:           logLik                   -79.95 Overall Model</span></span>
+<span><span class="co">#&gt;  8:              AIC                   169.90 Overall Model</span></span>
+<span><span class="co">#&gt;  9:              BIC                   177.23 Overall Model</span></span>
+<span><span class="co">#&gt; 10:               F2                     3.06 Overall Model</span></span>
+<span><span class="co">#&gt; 11:               R2                     0.75 Overall Model</span></span>
+<span><span class="co">#&gt; 12:           Adj R2                     0.73 Overall Model</span></span>
+<span><span class="co">#&gt; 13:               hp      f2 = 0.09, p = .130  Effect Sizes</span></span>
+<span><span class="co">#&gt; 14:              cyl      f2 = 0.62, p = .001  Effect Sizes</span></span></code></pre></div>
 <p>The model tests can also be used with interactions.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelTest.html">modelTest</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;                 Term                       Est          Type</span>
-<span class="co">#&gt;  1:      (Intercept)  35.98*** [ 27.99, 43.98] Fixed Effects</span>
-<span class="co">#&gt;  2:               hp    -0.11* [ -0.21, -0.02] Fixed Effects</span>
-<span class="co">#&gt;  3:             cyl6   -15.31* [-30.59, -0.03] Fixed Effects</span>
-<span class="co">#&gt;  4:             cyl8  -17.90** [-28.71, -7.09] Fixed Effects</span>
-<span class="co">#&gt;  5:          hp:cyl6      0.11 [ -0.04,  0.25] Fixed Effects</span>
-<span class="co">#&gt;  6:          hp:cyl8      0.10 [  0.00,  0.20] Fixed Effects</span>
-<span class="co">#&gt;  7: N (Observations)                        32 Overall Model</span>
-<span class="co">#&gt;  8:        logLik DF                         7 Overall Model</span>
-<span class="co">#&gt;  9:           logLik                    -77.54 Overall Model</span>
-<span class="co">#&gt; 10:              AIC                    169.08 Overall Model</span>
-<span class="co">#&gt; 11:              BIC                    179.34 Overall Model</span>
-<span class="co">#&gt; 12:               F2                      3.72 Overall Model</span>
-<span class="co">#&gt; 13:               R2                      0.79 Overall Model</span>
-<span class="co">#&gt; 14:           Adj R2                      0.75 Overall Model</span>
-<span class="co">#&gt; 15:               hp       f2 = 0.23, p = .021  Effect Sizes</span>
-<span class="co">#&gt; 16:              cyl       f2 = 0.47, p = .007  Effect Sizes</span>
-<span class="co">#&gt; 17:           hp:cyl       f2 = 0.16, p = .142  Effect Sizes</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelTest.html">modelTest</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                 Term                       Est          Type</span></span>
+<span><span class="co">#&gt;  1:      (Intercept)  35.98*** [ 27.99, 43.98] Fixed Effects</span></span>
+<span><span class="co">#&gt;  2:               hp    -0.11* [ -0.21, -0.02] Fixed Effects</span></span>
+<span><span class="co">#&gt;  3:             cyl6   -15.31* [-30.59, -0.03] Fixed Effects</span></span>
+<span><span class="co">#&gt;  4:             cyl8  -17.90** [-28.71, -7.09] Fixed Effects</span></span>
+<span><span class="co">#&gt;  5:          hp:cyl6      0.11 [ -0.04,  0.25] Fixed Effects</span></span>
+<span><span class="co">#&gt;  6:          hp:cyl8      0.10 [  0.00,  0.20] Fixed Effects</span></span>
+<span><span class="co">#&gt;  7: N (Observations)                        32 Overall Model</span></span>
+<span><span class="co">#&gt;  8:        logLik DF                         7 Overall Model</span></span>
+<span><span class="co">#&gt;  9:           logLik                    -77.54 Overall Model</span></span>
+<span><span class="co">#&gt; 10:              AIC                    169.08 Overall Model</span></span>
+<span><span class="co">#&gt; 11:              BIC                    179.34 Overall Model</span></span>
+<span><span class="co">#&gt; 12:               F2                      3.72 Overall Model</span></span>
+<span><span class="co">#&gt; 13:               R2                      0.79 Overall Model</span></span>
+<span><span class="co">#&gt; 14:           Adj R2                      0.75 Overall Model</span></span>
+<span><span class="co">#&gt; 15:               hp       f2 = 0.23, p = .021  Effect Sizes</span></span>
+<span><span class="co">#&gt; 16:              cyl       f2 = 0.47, p = .007  Effect Sizes</span></span>
+<span><span class="co">#&gt; 17:           hp:cyl       f2 = 0.16, p = .142  Effect Sizes</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -241,7 +241,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
