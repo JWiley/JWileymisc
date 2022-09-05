@@ -522,6 +522,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
 #' @importFrom stats sd aov chisq.test kruskal.test quantile xtabs t.test
 #' @importFrom stats wilcox.test mcnemar.test
 #' @importFrom data.table is.data.table as.data.table setnames
+#' @importFrom extraoperators %snin%
 #' @examples
 #' egltable(iris)
 #' egltable(colnames(iris)[1:4], "Species", data = iris)
@@ -567,13 +568,21 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
 #'   idvar = "Chick", paired = TRUE)
 #'
 #' rm(tmp)
-egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
+egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
                      paired = FALSE, simChisq = FALSE, sims = 1e6L) {
   if (!missing(data)) {
+    present <- vars %in% names(data)
+    if (isFALSE(all(present))) {
+      absent <- vars %snin% names(data)
+      errmsg <- sprintf(
+        "The following variable name(s) were not found:\n%s",
+        paste(absent, collapse = "\n"))
+      stop(errmsg)
+    }
     if (is.data.table(data)) {
-      dat <- data[, vars, with=FALSE]
+      dat <- data[, vars, with = FALSE]
     } else {
-      dat <- as.data.table(data[, vars, drop=FALSE])
+      dat <- as.data.table(data[, vars, drop = FALSE])
     }
     if (!missing(g)) {
       if (length(g) == 1) {
@@ -611,6 +620,11 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
 
   k <- ncol(dat)
 
+  testmiss <- .allmissing(dat)
+  if (!isFALSE(testmiss)) {
+    stop(testmiss)
+  }
+
   contvars.index <- unlist(lapply(dat, function(x) {
       (is.integer(x) | is.numeric(x)) &
         ((length(unique(x)) > 3) | strict)
@@ -629,7 +643,7 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
     multi <- FALSE
   }
 
-  if (isTRUE(length(catvars.index)>0)) {
+  if (isTRUE(length(catvars.index) > 0)) {
     for (n in vnames[catvars.index]) {
       if (isFALSE(is.factor(dat[[n]]))) {
         dat[[n]] <- factor(dat[[n]])
@@ -639,6 +653,12 @@ egltable <- function(vars, g, data, idvar, strict=TRUE, parametric = TRUE,
 
   tmpout <- lapply(levels(g), function(gd) {
     d <- dat[which(g == gd)]
+    testmiss <- .allmissing(d)
+    if (!isFALSE(testmiss)) {
+      testmiss <- sprintf("In group: %s\n%s", gd, testmiss)
+      stop(testmiss)
+    }
+
     tmpres <- NULL
     reslab <- ""
 

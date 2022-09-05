@@ -224,15 +224,40 @@ as.na <- function(x) {
   rep(use, n)
 }
 
+#' Is a variable missing, non finite or zero length character?
+#'
+#' Given a vector, return \code{TRUE} or \code{FALSE}
+#' if each element is either missing (NA/NaN), non finite (e.g. infinite)
+#' or a zero length character string (only for character vectors).
+#'
+#' @param x A vector to identify missing / non finite or zero length strings from
+#' @return a logical vector
+#' @keywords utils
+#' @export
+#' @examples
+#' is.naz(c(1, NA, NaN))
+#' is.naz(c(1, NA, NaN, Inf))
+#' is.naz(c("test", "", NA_character_))
+is.naz <- function(x) {
+  if (is.character(x)) {
+    ok <- (is.na(x) | is.nan(x) | (!nzchar(x)))
+  } else if (is.numeric(x)) {
+    ok <- (is.na(x) | is.nan(x) | (!is.finite(x)))
+  } else {
+    ok <- (is.na(x) | is.nan(x))
+  }
+  ok
+}
+
 
 #' Missing and Zero Character Omit
 #'
 #' Given a vector, exclude any missing values,
-#' not a number values, and if a character class, any
-#' zero length strings.
+#' not a number values, non finite values,
+#' and if a character class, any zero length strings.
 #'
-#' @param x A vector to exclude missing or zero length strings from
-#' @return a vector with missing or zero length strings omitted
+#' @param x A vector to exclude missing, non finite or zero length strings from
+#' @return a vector with missing/non finite/zero length strings omitted
 #' @keywords utils
 #' @importFrom stats na.omit
 #' @export
@@ -242,15 +267,42 @@ as.na <- function(x) {
 #' stats::na.omit(c("test", "", NA_character_))
 #'
 #' naz.omit(c(1, NA, NaN))
+#' naz.omit(c(1L, NA))
+#' naz.omit(c(1L, NA, Inf))
 #' naz.omit(c("test", "", NA_character_))
 naz.omit <- function(x) {
-  if (is.character(x)) {
-    ok <- (!is.na(x)) & (!is.nan(x)) & (nzchar(x))
-  } else {
-    ok <- (!is.na(x)) & (!is.nan(x))
-  }
+  ok <- !is.naz(x)
   x[ok]
 }
+
+#' Determine which if any variables are all missing in a dataset
+#'
+#' Internal function.
+#'
+#' @param data A dataset to check each variable if all missing / non finite / zero character vectors
+#' @return \code{FALSE} if no variable(s) all missing, else an informative string message.
+#' @keywords internal
+#' @examples
+#' JWileymisc:::.allmissing(mtcars)
+#' cat(JWileymisc:::.allmissing(data.frame(a = NA, b = 1)), fill = TRUE)
+.allmissing <- function(data) {
+  k <- ncol(data)
+  x <- rep(NA, k)
+
+  for (i in seq_len(k)) {
+    x[i] <- all(is.naz(data[[i]]))
+  }
+
+  if (isTRUE(any(x))) {
+    out <- sprintf(
+      "the following variable(s) were all missing/not finite/empty strings:\n%s",
+      paste(names(data)[x], collapse = "\n"))
+  } else {
+    out <- FALSE
+  }
+  return(out)
+}
+
 
 #' Create a lagged variable
 #'

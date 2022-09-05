@@ -203,3 +203,8 @@ test_that("egltable works", {
                   data = tmp,
                   idvar = "Chick", paired = TRUE))
 })
+
+test_that("egltable errors when it should", {
+  expect_error(egltable("a", data = data.frame(a = NA)))
+  expect_error(egltable("a", g = "g", data = data.frame(a = c(1, NA), g = c(1, 2))))
+})

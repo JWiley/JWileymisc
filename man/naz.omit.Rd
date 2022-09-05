@@ -7,15 +7,15 @@
 naz.omit(x)
 }
 \arguments{
-\item{x}{A vector to exclude missing or zero length strings from}
+\item{x}{A vector to exclude missing, non finite or zero length strings from}
 }
 \value{
-a vector with missing or zero length strings omitted
+a vector with missing/non finite/zero length strings omitted
 }
 \description{
 Given a vector, exclude any missing values,
-not a number values, and if a character class, any
-zero length strings.
+not a number values, non finite values,
+and if a character class, any zero length strings.
 }
 \examples{
 ## stats na.omit
@@ -23,6 +23,8 @@ stats::na.omit(c(1, NA, NaN))
 stats::na.omit(c("test", "", NA_character_))
 
 naz.omit(c(1, NA, NaN))
+naz.omit(c(1L, NA))
+naz.omit(c(1L, NA, Inf))
 naz.omit(c("test", "", NA_character_))
 }
 \keyword{utils}

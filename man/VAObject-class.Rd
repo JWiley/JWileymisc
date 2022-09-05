@@ -43,15 +43,15 @@ and oculus dexter (OD; right eye)
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{[}: extract method
+\item \code{x[i}: extract method
 
-\item \code{print}: print method
+\item \code{print(VAObject)}: print method
 
-\item \code{show}: show method
+\item \code{show(VAObject)}: show method
 
-\item \code{summary}: summary method
+\item \code{summary(VAObject)}: summary method
+
 }}
-
 \section{Slots}{
 
 \describe{

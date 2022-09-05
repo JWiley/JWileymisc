@@ -1,3 +1,14 @@
+# JWileymisc dev
+
+## New Features
+* `is.naz()` is a new function that is the testing counter part to `naz.omit()`.
+   Notably, both `is.naz()` and `naz.omit()` both also identify and exclude 
+   non finite values now. This is new behavior.
+
+## Changes
+* `egltable()` has more error checks including for variables
+   that are all missing values.
+
 # JWileymisc 1.3.0
 
 ## New Features

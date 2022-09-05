@@ -25,11 +25,11 @@ A class designed to hold visual acuity summary data
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{show}: show method
+\item \code{show(VASummaryObject)}: show method
 
-\item \code{plot}: plot method
+\item \code{plot(x = VASummaryObject, y = missing)}: plot method
+
 }}
-
 \section{Slots}{
 
 \describe{

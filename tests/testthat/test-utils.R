@@ -87,9 +87,23 @@ test_that("as.na converts to the correct class of missing", {
   expect_error(as.na(x))  
 })
 
+test_that("is.naz identifies missing, non finite, and zero length characters", {
+  expect_identical(is.naz(c(1.5, NA, Inf)), c(FALSE, TRUE, TRUE))
+  expect_identical(is.naz(c(1L, NA, 2L)), c(FALSE, TRUE, FALSE))
+  expect_identical(is.naz(c("test", "", NA_character_)), c(FALSE, TRUE, TRUE))
+})
+
 test_that("naz.omit removes missing, nan, and zero length characters", {
   expect_identical(length(naz.omit(c("test", "", NA_character_))), 1L)
   expect_identical(length(naz.omit(c(1, NA))), 1L)
+})
+
+test_that(".allmissing returns FALSE if nothing missing", {
+  expect_false(JWileymisc:::.allmissing(mtcars))
+})
+
+test_that(".allmissing message if anything all missing", {
+  expect_true(is.character(JWileymisc:::.allmissing(data.frame(a = NA, b = 1))))
 })
 
 test_that("lagk lags by k", {
