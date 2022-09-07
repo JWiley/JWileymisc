@@ -28,7 +28,7 @@ statistics optionally by group levels."><meta name="twitter:card" content="summa
     
     <a class="navbar-brand me-2" href="../index.html">JWileymisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -173,9 +173,9 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3: Petal.Length  3.76 (1.77)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:  Petal.Width  1.20 (0.76)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:      Species             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:       setosa    50 (33.3)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:   versicolor    50 (33.3)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    virginica    50 (33.3)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:       setosa   50 (33.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:   versicolor   50 (33.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    virginica   50 (33.3%)</span>
 <span class="r-in"><span><span class="fu">egltable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="st">"Species"</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 setosa M (SD) versicolor M (SD) virginica M (SD)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: Sepal.Length   5.01 (0.35)       5.94 (0.52)      6.59 (0.64)</span>
@@ -194,9 +194,9 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3: Petal.Length     4.35 (3.50)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:  Petal.Width     1.30 (1.50)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:      Species                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:       setosa       50 (33.3)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:   versicolor       50 (33.3)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    virginica       50 (33.3)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:       setosa      50 (33.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:   versicolor      50 (33.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    virginica      50 (33.3%)</span>
 <span class="r-in"><span><span class="fu">egltable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="st">"Species"</span>, <span class="va">iris</span>,</span></span>
 <span class="r-in"><span>  parametric <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 setosa Mdn (IQR) versicolor Mdn (IQR) virginica Mdn (IQR)</span>
@@ -255,14 +255,14 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:  hp 160.26 (53.91) 126.85 (84.06)  t(df=30) = 1.37, p = .180, d = 0.49</span>
 <span class="r-in"><span><span class="fu">egltable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"am"</span>, <span class="st">"cyl"</span><span class="op">)</span>, <span class="st">"vs"</span>, <span class="va">tmp</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          0 N (%)   1 N (%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  am                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   0 12 (66.7)  7 (50.0)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   1  6 (33.3)  7 (50.0)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: cyl                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:   4   1 (5.6) 10 (71.4)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:   6  3 (16.7)  4 (28.6)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:   8 14 (77.8)   0 (0.0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           0 N (%)    1 N (%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  am                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   0 12 (66.7%)  7 (50.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   1  6 (33.3%)  7 (50.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: cyl                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:   4   1 (5.6%) 10 (71.4%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:   6  3 (16.7%)  4 (28.6%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:   8 14 (77.8%)   0 (0.0%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                       Test</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:         Chi-square = 0.91, df = 1, p = .341, Phi = 0.17</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:                                                        </span>
@@ -311,9 +311,9 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  0 M (SD)/N (%) 20 M (SD)/N (%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:        weight   41.06 (1.13)  209.72 (66.51)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: WeightTertile                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     [39,41.7]      32 (64.0)         0 (0.0)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:    (41.7,169]      18 (36.0)       14 (30.4)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     (169,361]        0 (0.0)       32 (69.6)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     [39,41.7]     32 (64.0%)        0 (0.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:    (41.7,169]     18 (36.0%)      14 (30.4%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     (169,361]       0 (0.0%)      32 (69.6%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                              Test</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:           t(df=45) = 17.10, p &lt; .001, d = 2.52</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: McNemar's Chi-square = 39.00, df = 3, p &lt; .001</span>
