@@ -1,4 +1,4 @@
-# JWileymisc dev
+# JWileymisc 1.4.9000
 
 ## New Features
 * `is.naz()` is a new function that is the testing counter part to `naz.omit()`.
@@ -7,7 +7,10 @@
 
 ## Changes
 * `egltable()` has more error checks including for variables
-   that are all missing values.
+   that are all missing values. Frequency (percent) results are 
+   now shown more clearly with a percent sign (%). This corresponds 
+   to changes in the backend of `egltable()` to facilitate more 
+   tests and descriptives to be calculated.
 
 # JWileymisc 1.3.0
 

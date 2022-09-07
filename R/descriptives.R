@@ -23,7 +23,7 @@
 #' meanCircular(c(355, 5, 15), max = 360)
 #'
 meanCircular <- function(x, max, na.rm = TRUE) {
-  if(!(is.integer(x) || is.numeric(x))) {
+  if (!(is.integer(x) || is.numeric(x))) {
     stop(sprintf("x must be class integer or numeric but was %s",
                  paste(class(x), collapse = "; ")))
   }
@@ -93,7 +93,7 @@ diffCircular <- function(x, y, max) {
     }
 
     stopifnot(identical(length(x), length(y)))
-    
+
     if (any(x < 0 | y < 0, na.rm = TRUE)) {
       stop("For cicular means, cannot have negative numbers")
     }
@@ -106,7 +106,7 @@ diffCircular <- function(x, y, max) {
     toorig <- (180 / pi) / scale
     radx <- x * torad
     rady <- y * torad
-    acos(cos(radx - rady)) * toorig 
+    acos(cos(radx - rady)) * toorig
 }
 
 
@@ -476,7 +476,7 @@ SEMSummary.fit <- function(formula, data,
 
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
 
 #' Function makes nice tables
 #'
@@ -519,7 +519,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
 #' @return A data frame of the table.
 #' @keywords utils
 #' @export
-#' @importFrom stats sd aov chisq.test kruskal.test quantile xtabs t.test
+#' @importFrom stats sd aov chisq.test kruskal.test quantile xtabs t.test 
 #' @importFrom stats wilcox.test mcnemar.test
 #' @importFrom data.table is.data.table as.data.table setnames
 #' @importFrom extraoperators %snin%
@@ -666,15 +666,9 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
       tmpcont <- lapply(contvars.index, function(v) {
         n <- vnames[v]
         if (parametric[v]) {
-          ## use parametric tests
-          data.table(
-            Variable = sprintf("%s%s", n, c("", ", M (SD)")[multi+1]),
-            Res = sprintf("%0.2f (%0.2f)", mean(d[[n]], na.rm=TRUE), sd(d[[n]], na.rm=TRUE)))
+          .stylemsd(n, d[[n]], digits = 2, includeLabel = multi)
         } else {
-          data.table(
-            Variable = sprintf("%s%s", n, c("", ", Mdn (IQR)")[multi+1]),
-            Res = sprintf("%0.2f (%0.2f)", median(d[[n]], na.rm=TRUE),
-                          abs(diff(quantile(d[[n]], c(.25, .75), na.rm = TRUE)))))
+          .stylemdniqr(n, d[[n]], digits = 2, includeLabel = multi)
         }
       })
 
@@ -685,12 +679,9 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
                                         "M (SD)", "Mdn (IQR)"), "See Rows")[multi+1])
     }
 
-    if (isTRUE(length(catvars.index)>0)) {
+    if (isTRUE(length(catvars.index) > 0)) {
       tmpcat <- lapply(vnames[catvars.index], function(n) {
-        x <- table(d[[n]])
-        data.table(
-          Variable = c(n, paste0("  ", names(x))),
-          Res = c("", sprintf("%d (%2.1f)", x, prop.table(x) * 100)))
+        .stylefreq(n, d[[n]])
       })
 
       names(tmpcat) <- vnames[catvars.index]
@@ -712,7 +703,7 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
   if (isTRUE(length(levels(g)) > 1)) {
     tmpout <- lapply(seq_along(vnames), function(v) {
 
-      out <- do.call(cbind, lapply(1:length(levels(g)), function(i) {
+      out <- do.call(cbind, lapply(seq_along(levels(g)), function(i) {
         d <- tmpout[[i]][[v]]
         setnames(d, old = names(d)[2], paste(levels(g)[i], names(d)[2], sep = " "))
         if (isTRUE(i == 1)) {
@@ -726,75 +717,17 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
         if (isTRUE(v %in% contvars.index)) {
           if (isTRUE(parametric[v])) {
             if (isTRUE(length(levels(g)) > 2)) {
-              tests <- summary(aov(dv ~ g, data = data.table(dv = dat[[v]], g = g)))[[1]]
-              es <- tests[1, "Sum Sq"] / sum(tests[, "Sum Sq"])
-              out <- cbind(out,
-                           Test = c(sprintf("F(%d, %d) = %0.2f, %s, Eta-squared = %0.2f",
-                                            tests[1, "Df"], tests[2, "Df"], tests[1, "F value"],
-                                            formatPval(tests[1, "Pr(>F)"], 3, 3, includeP=TRUE),
-                                            es),
-                                    rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(.styleaov(dat[[v]], g), rep("", nrow(out) - 1)))
             } else if (isTRUE(length(levels(g)) == 2) && isFALSE(paired)) {
-
-              tests <- t.test(dv ~ g, data = data.table(dv = dat[[v]], g = g),
-                              var.equal=TRUE)
-              dv = NULL # for R CMD check
-              es <- data.table(dv = dat[[v]], g = g)[, smd(dv, g, "all")]
-              out <- cbind(out,
-                           Test = c(sprintf("t(df=%0.0f) = %0.2f, %s, d = %0.2f",
-                                            tests$parameter[["df"]],
-                                            tests$statistic[["t"]],
-                                            formatPval(tests$p.value, 3, 3, includeP=TRUE),
-                                            es),
-                                    rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(.style2sttest(dat[[v]], g), rep("", nrow(out) - 1)))
             } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
-              ## paired t-test and cohen's D on difference scores
-              widedat <- copy(reshape(data.table(
-                dv = dat[[v]],
-                g = as.integer(factor(g)),
-                ID = ids),
-                v.names = "dv",
-                timevar = "g",
-                idvar = "ID",
-                direction = "wide", sep = ""))
-              widedat[, diff := dv2 - dv1]
-
-              tests <- t.test(widedat$dv2, widedat$dv1, paired = TRUE)
-              es <- mean(widedat$diff, na.rm = TRUE) / sd(widedat$diff, na.rm = TRUE)
-              out <- cbind(out,
-                           Test = c(sprintf("t(df=%0.0f) = %0.2f, %s, d = %0.2f",
-                                            tests$parameter[["df"]],
-                                            tests$statistic[["t"]],
-                                            formatPval(tests$p.value, 3, 3, includeP=TRUE),
-                                            es),
-                                    rep("", nrow(out) - 1)))
-
+              out <- cbind(out, Test = c(.stylepairedttest(dat[[v]], g, ids), rep("", nrow(out) - 1)))
             }
           } else {
             if (isFALSE(paired)) {
-            tests <- kruskal.test(dv ~ g, data = data.frame(dv = dat[[v]], g = g))
-            out <- cbind(out,
-                         Test = c(sprintf("KW chi-square = %0.2f, df = %d, %s",
-                                          tests$statistic, tests$parameter,
-                                          formatPval(tests$p.value, 3, 3, includeP=TRUE)),
-                                  rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(.stylekruskal(dat[[v]], g), rep("", nrow(out) - 1)))
             } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
-              ## non parametric paired wilcoxon test
-              widedat <- copy(reshape(data.table(
-                dv = dat[[v]],
-                g = as.integer(factor(g)),
-                ID = ids),
-                v.names = "dv",
-                timevar = "g",
-                idvar = "ID",
-                direction = "wide", sep = ""))
-
-              tests <- wilcox.test(widedat$dv2, widedat$dv1, paired = TRUE)
-              out <- cbind(out,
-                           Test = c(sprintf("Wilcoxon Paired V = %0.2f, %s",
-                                            tests$statistic,
-                                            formatPval(tests$p.value, 3, 3, includeP=TRUE)),
-                                    rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(.stylepairedwilcox(dat[[v]], g, ids), rep("", nrow(out) - 1)))
             }
           }
         }
@@ -804,39 +737,11 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
         if (isTRUE(v %in% catvars.index)) {
 
           if (isFALSE(paired)) {
-
-          tabs <- xtabs(~ dv + g, data = data.frame(dv = dat[[v]], g = g))
-          es <- cramerV(tabs)
-          tests <- chisq.test(tabs,
-                              correct = FALSE,
-                              simulate.p.value = simChisq,
-                              B = sims)
-          out <- cbind(out,
-                       Test = c(sprintf("Chi-square = %0.2f, %s, %s, %s",
-                                        tests$statistic,
-                                        ifelse(simChisq, "simulated", sprintf("df = %d", tests$parameter)),
-                                        formatPval(tests$p.value, 3, 3, includeP=TRUE),
-                                        sprintf("%s = %0.2f", names(es), es)
-                                        ),
-                                rep("", nrow(out) - 1)))
+            out <- cbind(out, Test = c(
+              .stylechisq(dat[[v]], g, simChisq = simChisq, sims = sims),
+              rep("", nrow(out) - 1)))
           } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
-            ## mcnemar test for paired data
-            widedat <- copy(reshape(data.table(
-              dv = factor(dat[[v]], levels = unique(dat[[v]])),
-              g = as.integer(factor(g)),
-              ID = ids),
-              v.names = "dv",
-              timevar = "g",
-              idvar = "ID",
-              direction = "wide", sep = ""))
-            tab <- xtabs(~ dv1 + dv2, data = widedat)
-
-              tests <- mcnemar.test(tab)
-              out <- cbind(out,
-                           Test = c(sprintf("McNemar's Chi-square = %0.2f, df = %d, %s",
-                                            tests$statistic, tests$parameter,
-                                            formatPval(tests$p.value, 3, 3, includeP=TRUE)),
-                                    rep("", nrow(out) - 1)))
+            out <- cbind(out, Test = c(.stylepairedmcnemar(dat[[v]], g, ids), rep("", nrow(out) - 1)))
           }
         }
       }
@@ -1007,7 +912,7 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
 roundedfivenum <- function(x, round = 2, sig = 3) {
   x <- as.numeric(quantile(x[!is.na(x)], breaks = c(0, .25, .5, .75, 1),
                 type = 7))
-  if(max(nchar(signif(x, sig))) < max(nchar(round(x, round)))) {
+  if (max(nchar(signif(x, sig))) < max(nchar(round(x, round)))) {
     signif(x, sig)
   } else {
     round(x, round)
@@ -1023,9 +928,9 @@ roundedfivenum <- function(x, round = 2, sig = 3) {
 #' @keywords internal
 #' @importFrom stats pf
 #' @examples
-#' # make me!
+#' JWileymisc:::f.r2(.30, 1, 99)
 f.r2 <- function(r2, numdf, dendf) {
-  F <- (dendf/numdf) * (-r2/(r2 - 1))
-  p <- pf(F, df1 = numdf, df2 = dendf, lower.tail = FALSE)
-  c(F = F[[1]], NumDF = numdf, DenDF = dendf, p = p[[1]])
+  Fval <- (dendf / numdf) * (-r2 / (r2 - 1))
+  p <- pf(Fval, df1 = numdf, df2 = dendf, lower.tail = FALSE)
+  c(F = Fval[[1]], NumDF = numdf, DenDF = dendf, p = p[[1]])
 }

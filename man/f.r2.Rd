@@ -20,6 +20,6 @@ a vector
 Calculate F and p-value from the R2
 }
 \examples{
-# make me!
+JWileymisc:::f.r2(.30, 1, 99)
 }
 \keyword{internal}
