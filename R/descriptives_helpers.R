@@ -113,7 +113,7 @@ NULL
 #'
 #' ## example data
 #' set.seed(1234)
-#' exdata <- data.table(
+#' exdata <- data.frame(
 #'   ID = rep(1:10, 2),
 #'   Time = rep(c("base", "post"), each = 10),
 #'   Rating = sample(c("good", "bad"), size = 20, replace = TRUE))
