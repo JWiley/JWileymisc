@@ -381,7 +381,7 @@ gglikert <- function(x, y, leftLab, rightLab, colour, data, xlim, title,
 # clear R CMD CHECK notes
 if(getRversion() >= "2.15.1") {
   utils::globalVariables(
-           c("X", "Y", "isEV", "YDeviates", "..count..", "variable",
+           c("X", "Y", "isEV", "YDeviates", "count", "variable",
              "V1", "value"))
 }
 
@@ -736,7 +736,7 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
       guides(colour = "none")
   } else {
     p.resfit <- p.resfit +
-      geom_bin2d(aes(fill = ..count..), bins = 80) +
+      geom_bin2d(aes(fill = after_stat(count)), bins = 80) +
       scale_fill_gradient(low = "grey70", high = "black")
   }
   p.resfit <- p.resfit +
