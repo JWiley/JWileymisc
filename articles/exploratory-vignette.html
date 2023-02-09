@@ -21,8 +21,8 @@
   }
 </script><title>Exploratory and Descriptive Statistics and Plots • JWileymisc</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Exploratory and Descriptive Statistics and Plots">
 <meta property="og:description" content="JWileymisc">
@@ -94,7 +94,8 @@
 
 
 
-<script src="exploratory-vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Exploratory and Descriptive Statistics and Plots</h1>
             
@@ -113,7 +114,8 @@
 <div class="section level2">
 <h2 id="descriptive-statistics">Descriptive Statistics<a class="anchor" aria-label="anchor" href="#descriptive-statistics"></a>
 </h2>
-<p>The <code><a href="../reference/egltable.html">egltable()</a></code> function calculates basic descriptive statistics.</p>
+<p>The <code><a href="../reference/egltable.html">egltable()</a></code> function calculates basic descriptive
+statistics.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span><span class="op">)</span>,</span>
@@ -151,13 +153,17 @@
 </tr>
 </tbody>
 </table>
-<p>The <code>strict</code> argument can be used if variables are categorical but are not coded as factors. In this case, <code>vs</code> has two levels: 0 and 1 and the frequency and percentage of each are shown instead of the mean and standard deviation.</p>
+<p>The <code>strict</code> argument can be used if variables are
+categorical but are not coded as factors. In this case, <code>vs</code>
+has two levels: 0 and 1 and the frequency and percentage of each are
+shown instead of the mean and standard deviation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span><span class="op">)</span>,</span>
 <span>         data <span class="op">=</span> <span class="va">mtcars</span>, strict<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table style="width:36%;" class="table">
-<caption>Example descriptive statistics table with automatic categorical variables.</caption>
+<caption>Example descriptive statistics table with automatic categorical
+variables.</caption>
 <colgroup>
 <col width="12%">
 <col width="23%">
@@ -197,7 +203,12 @@
 </tr>
 </tbody>
 </table>
-<p><code><a href="../reference/egltable.html">egltable()</a></code> also allows descriptive statistics to be broken down by another variable by using the <code>g</code> argument. This not only separates results by group but also calculates bivariate tests of the differences between groups and effect sizes. For example, t-tests for continuous variables and two groups or chi-square tests for categorical variables. For more than two groups, ANOVAs are used.</p>
+<p><code><a href="../reference/egltable.html">egltable()</a></code> also allows descriptive statistics to be
+broken down by another variable by using the <code>g</code> argument.
+This not only separates results by group but also calculates bivariate
+tests of the differences between groups and effect sizes. For example,
+t-tests for continuous variables and two groups or chi-square tests for
+categorical variables. For more than two groups, ANOVAs are used.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span><span class="op">)</span>, </span>
@@ -261,7 +272,10 @@
 </tr>
 </tbody>
 </table>
-<p>For very skewed continuous variables, non-parametric statistics and tests may be more appropriate. These can be generated using the <code>parametric</code> argument. For chi-square tests with small cell sizes, simulated p-values also can be generated.</p>
+<p>For very skewed continuous variables, non-parametric statistics and
+tests may be more appropriate. These can be generated using the
+<code>parametric</code> argument. For chi-square tests with small cell
+sizes, simulated p-values also can be generated.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"qsec"</span>, <span class="st">"wt"</span>, <span class="st">"vs"</span><span class="op">)</span>, </span>
@@ -329,8 +343,19 @@
 <div class="section level3">
 <h3 id="paired-data">Paired Data<a class="anchor" aria-label="anchor" href="#paired-data"></a>
 </h3>
-<p>We have already seen how to compare descriptives across groups when the groups were independent. <code><a href="../reference/egltable.html">egltable()</a></code> also supports using groups to test paired samples. To use this, the variable passed to the grouping argument, <code>g</code> must have exactly two levels and you must also pass a variable that is a unique ID per unit and specify <code>paired =  TRUE</code>.</p>
-<p>By default for continuous, paired data, mean and standard deviations are presented and a paired samples t-test is used. A pseudo Cohen’s d effect size is calculated as the mean of the change score divided by the standard deviation of the change score. If there are missing data, its possible that the mean difference will be different than the difference in means as the means are calculated on all available data, but the effect size can only be calculated on complete cases.</p>
+<p>We have already seen how to compare descriptives across groups when
+the groups were independent. <code><a href="../reference/egltable.html">egltable()</a></code> also supports using
+groups to test paired samples. To use this, the variable passed to the
+grouping argument, <code>g</code> must have exactly two levels and you
+must also pass a variable that is a unique ID per unit and specify
+<code>paired =  TRUE</code>.</p>
+<p>By default for continuous, paired data, mean and standard deviations
+are presented and a paired samples t-test is used. A pseudo Cohen’s d
+effect size is calculated as the mean of the change score divided by the
+standard deviation of the change score. If there are missing data, its
+possible that the mean difference will be different than the difference
+in means as the means are calculated on all available data, but the
+effect size can only be calculated on complete cases.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## example with paired data</span></span>
 <span><span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span></span>
@@ -340,7 +365,8 @@
 <span>  idvar <span class="op">=</span> <span class="st">"ID"</span>,</span>
 <span>  paired <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <table style="width:96%;" class="table">
-<caption>Example parametric descriptive statistics for paired data.</caption>
+<caption>Example parametric descriptive statistics for paired
+data.</caption>
 <colgroup>
 <col width="12%">
 <col width="19%">
@@ -360,7 +386,13 @@
 <td align="left">t(df=9) = 4.06, p = .003, d = 1.28</td>
 </tr></tbody>
 </table>
-<p>If we do not want to make parametric assumptions with continuous variables, we can set <code>parametric = FALSE</code>. In this case the descriptives are medians and a paired Wilcoxon test is used. In this dataset there are ties and a warning is generated about ties and zeroes. This warning is generally ignorable, but if these were central hypothesis tests, it may warrant further testing using, for example, simulations which are more precise in the case of ties.</p>
+<p>If we do not want to make parametric assumptions with continuous
+variables, we can set <code>parametric = FALSE</code>. In this case the
+descriptives are medians and a paired Wilcoxon test is used. In this
+dataset there are ties and a warning is generated about ties and zeroes.
+This warning is generally ignorable, but if these were central
+hypothesis tests, it may warrant further testing using, for example,
+simulations which are more precise in the case of ties.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span></span>
 <span>  vars <span class="op">=</span> <span class="st">"extra"</span>,</span>
@@ -374,7 +406,8 @@
 <span><span class="co">#&gt; Warning in wilcox.test.default(widedat$dv2, widedat$dv1, paired = TRUE): cannot</span></span>
 <span><span class="co">#&gt; compute exact p-value with zeroes</span></span></code></pre>
 <table style="width:97%;" class="table">
-<caption>Example non parametric descriptive statistics for paired data.</caption>
+<caption>Example non parametric descriptive statistics for paired
+data.</caption>
 <colgroup>
 <col width="12%">
 <col width="19%">
@@ -394,7 +427,10 @@
 <td align="left">Wilcoxon Paired V = 45.00, p = .009</td>
 </tr></tbody>
 </table>
-<p>We can also work with categorical paired data. The following code creates a categorical variable, the tertiles of chick weights measured over time. The chick weight dataset has many time points, but we will just use two.</p>
+<p>We can also work with categorical paired data. The following code
+creates a categorical variable, the tertiles of chick weights measured
+over time. The chick weight dataset has many time points, but we will
+just use two.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## paired categorical data example</span></span>
@@ -403,7 +439,14 @@
 <span><span class="va">tmp</span><span class="op">$</span><span class="va">WeightTertile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">$</span><span class="va">weight</span>,</span>
 <span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">$</span><span class="va">weight</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  include.lowest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>No special code is needed to work with categorical variables. <code><a href="../reference/egltable.html">egltable()</a></code> recognises categorical variables and uses McNemar’s test, which is a chi-square of the off diagonals, which tests whether people (or chicks in this case) change groups equally over time or preferentially move one direction. In this case, a significant result suggests that over time chicks’ weights change preferentially one way and the descriptive statistics show us that there is an increase in weight tertile from time 0 to time 20.</p>
+<p>No special code is needed to work with categorical variables.
+<code><a href="../reference/egltable.html">egltable()</a></code> recognises categorical variables and uses
+McNemar’s test, which is a chi-square of the off diagonals, which tests
+whether people (or chicks in this case) change groups equally over time
+or preferentially move one direction. In this case, a significant result
+suggests that over time chicks’ weights change preferentially one way
+and the descriptive statistics show us that there is an increase in
+weight tertile from time 0 to time 20.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/egltable.html">egltable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"weight"</span>, <span class="st">"WeightTertile"</span><span class="op">)</span>, g <span class="op">=</span> <span class="st">"Time"</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">tmp</span>,</span>
@@ -460,8 +503,15 @@
 <div class="section level2">
 <h2 id="correlation-summaries">Correlation Summaries<a class="anchor" aria-label="anchor" href="#correlation-summaries"></a>
 </h2>
-<p>For continuous variables, correlation matrices are commonly examined. This is especially true for structural equation models or path analyses.</p>
-<p>The <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> function provides a simple way to generate these under various options. There is a formula interface, similar to <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or other regression models. Missing data can be handled using listwise deletion, pairwise present data, or full information maximum likelihood (FIML). When assumptions are met, FIML is less biased and uses all available data, and is the default.</p>
+<p>For continuous variables, correlation matrices are commonly examined.
+This is especially true for structural equation models or path
+analyses.</p>
+<p>The <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> function provides a simple way to
+generate these under various options. There is a formula interface,
+similar to <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or other regression models. Missing data
+can be handled using listwise deletion, pairwise present data, or full
+information maximum likelihood (FIML). When assumptions are met, FIML is
+less biased and uses all available data, and is the default.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SEMSummary.html">SEMSummary</a></span><span class="op">(</span><span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">qsec</span> <span class="op">+</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
@@ -546,7 +596,15 @@
 </tr>
 </tbody>
 </table>
-<p>Plot methods exist for <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> objects. By default, above the diagonal are correlations and below the diagonal are p-values. However, the type argument can be set (see <code><a href="../reference/corplot.html">?corplot</a></code>) to get all values to be either correlations or p-values. By default, another useful feature is that hierarchical clustering is used to group similar variables together in clusters, provided a more useful sorting of the data than many “default” correlation matrices. If a specific order is desired, you can use the <code>order = "asis"</code> option to keep the variable order the same as written in <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code>.</p>
+<p>Plot methods exist for <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> objects. By default,
+above the diagonal are correlations and below the diagonal are p-values.
+However, the type argument can be set (see <code><a href="../reference/corplot.html">?corplot</a></code>) to get
+all values to be either correlations or p-values. By default, another
+useful feature is that hierarchical clustering is used to group similar
+variables together in clusters, provided a more useful sorting of the
+data than many “default” correlation matrices. If a specific order is
+desired, you can use the <code>order = "asis"</code> option to keep the
+variable order the same as written in <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">+</span></span>
@@ -565,7 +623,9 @@
 <div class="section level3">
 <h3 id="grouped-correlations">Grouped Correlations<a class="anchor" aria-label="anchor" href="#grouped-correlations"></a>
 </h3>
-<p>Correlations also can be broken down by group. Here results are separated by species which are automaticaly used as the title of each graph.</p>
+<p>Correlations also can be broken down by group. Here results are
+separated by species which are automaticaly used as the title of each
+graph.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">mg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SEMSummary.html">SEMSummary</a></span><span class="op">(</span><span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="va">Petal.Length</span> <span class="op">+</span></span>
@@ -586,8 +646,14 @@
 <div class="section level2">
 <h2 id="likert-scale-plots">Likert Scale Plots<a class="anchor" aria-label="anchor" href="#likert-scale-plots"></a>
 </h2>
-<p>In much of psychological and consumer/market research, likert rating scales are used. For example, rating a question/item from “Strongly DISagree” to “Strongly Agree” or rating satisfaction from “Not at all” to “Very Satisfied” or adjectives that capture mood/affect from “Not at all” to “Extremely”. Likert plots aim to show these results clearly and aid interpretation by presenting the anchors as well.</p>
-<p>The following code creates some simulated data, summarizes it, adds the necessary labels/anchors, and creates a nice plot.</p>
+<p>In much of psychological and consumer/market research, likert rating
+scales are used. For example, rating a question/item from “Strongly
+DISagree” to “Strongly Agree” or rating satisfaction from “Not at all”
+to “Very Satisfied” or adjectives that capture mood/affect from “Not at
+all” to “Extremely”. Likert plots aim to show these results clearly and
+aid interpretation by presenting the anchors as well.</p>
+<p>The following code creates some simulated data, summarizes it, adds
+the necessary labels/anchors, and creates a nice plot.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## simulate some likert style data</span></span>
@@ -687,7 +753,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 

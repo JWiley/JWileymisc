@@ -21,8 +21,8 @@
   }
 </script><title>Diagnostics • JWileymisc</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Diagnostics">
 <meta property="og:description" content="JWileymisc">
@@ -94,12 +94,14 @@
 
 
 
-<script src="diagnostics-vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Diagnostics</h1>
-                        <h4 data-toc-skip class="author">Joshua F. Wiley</h4>
+                        <h4 data-toc-skip class="author">Joshua F.
+Wiley</h4>
             
-            <h4 data-toc-skip class="date">2022-09-07</h4>
+            <h4 data-toc-skip class="date">2023-02-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/HEAD/vignettes/diagnostics-vignette.Rmd" class="external-link"><code>vignettes/diagnostics-vignette.Rmd</code></a></small>
       <div class="d-none name"><code>diagnostics-vignette.Rmd</code></div>
@@ -113,8 +115,20 @@
 <div class="section level2">
 <h2 id="univariate-diagnostics">Univariate Diagnostics<a class="anchor" aria-label="anchor" href="#univariate-diagnostics"></a>
 </h2>
-<p>The <code><a href="../reference/testDistribution.html">testDistribution()</a></code> function can be used to evaluate whether a variable comes from a specific, known parametric distribution. By default, no outliers or “extreme values” are shown. These can be used directly through the data output or plotted. The plot includes both the empirical density, the density of the assumed parametric distribution, a rug plot showing actual values, if not too many data points, and a Quantile-Quantile plot (QQ Plot). The QQ Plot is rotated to save space, by removing the diagonal and rotating to be horizontal, which we call a QQ Deviates plot.</p>
-<p>One other unique feature of the density plot is the x axis. It follows Tufte’s principles about presenting data. To make the x axis more informative, it is a “range frame”, meaning it is only plotted over the range of the actual data. Secondly, the breaks are a five number summary of the data. These five numbers are:</p>
+<p>The <code><a href="../reference/testDistribution.html">testDistribution()</a></code> function can be used to evaluate
+whether a variable comes from a specific, known parametric distribution.
+By default, no outliers or “extreme values” are shown. These can be used
+directly through the data output or plotted. The plot includes both the
+empirical density, the density of the assumed parametric distribution, a
+rug plot showing actual values, if not too many data points, and a
+Quantile-Quantile plot (QQ Plot). The QQ Plot is rotated to save space,
+by removing the diagonal and rotating to be horizontal, which we call a
+QQ Deviates plot.</p>
+<p>One other unique feature of the density plot is the x axis. It
+follows Tufte’s principles about presenting data. To make the x axis
+more informative, it is a “range frame”, meaning it is only plotted over
+the range of the actual data. Secondly, the breaks are a five number
+summary of the data. These five numbers are:</p>
 <ul>
 <li>Minimum (0th percentile)</li>
 <li>Lower quartile (25th percentile)</li>
@@ -122,7 +136,11 @@
 <li>Upper quartile (75th percentile)</li>
 <li>Maximum (100th percentile)</li>
 </ul>
-<p>Most plots use breaks that are evenly spaced. These do not convey information about the data. Using a five number summary the breaks themselves are effectively like a boxplot with specific values provided so you can immediately read what values the min and max are, the median, etc.</p>
+<p>Most plots use breaks that are evenly spaced. These do not convey
+information about the data. Using a five number summary the breaks
+themselves are effectively like a boxplot with specific values provided
+so you can immediately read what values the min and max are, the median,
+etc.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"normal"</span><span class="op">)</span></span>
@@ -141,7 +159,14 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span></span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-<p>It is possible to have extreme values automatically identified either based on a theoretical distribution or empirically identified (e.g., the top or bottom XX percent are classified as extreme). We say that .10 (10%) of data points are “extreme” just to illustrate. Extreme values are shown in black with non extreme values shown in light grey, both in the rug plot and in the QQ plot. Although 10% is higher than typically would be chosen, given the small dataset, it is necessary to have extreme values at both ends of the distribution for illustration.</p>
+<p>It is possible to have extreme values automatically identified either
+based on a theoretical distribution or empirically identified (e.g., the
+top or bottom XX percent are classified as extreme). We say that .10
+(10%) of data points are “extreme” just to illustrate. Extreme values
+are shown in black with non extreme values shown in light grey, both in
+the rug plot and in the QQ plot. Although 10% is higher than typically
+would be chosen, given the small dataset, it is necessary to have
+extreme values at both ends of the distribution for illustration.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"normal"</span>,</span>
 <span>                         extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>,</span>
@@ -189,7 +214,8 @@
 <span><span class="co">#&gt; Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2</span></span>
 <span><span class="co">#&gt; Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1</span></span>
 <span><span class="co">#&gt; Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1</span></span></code></pre></div>
-<p>Extreme values taken off the empirical percentiles can be chosen as well.</p>
+<p>Extreme values taken off the empirical percentiles can be chosen as
+well.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"normal"</span>,</span>
 <span>                         extremevalues <span class="op">=</span> <span class="st">"empirical"</span>,</span>
@@ -209,7 +235,11 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span></span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>Many distributions beyond normal are possible. These can be compared visually or based on log likelihoods. Here we compare results between a normal and gamma distribution. The log likelihood values show that the <code>mpg</code> variable is better fit by the gamma distribution than the normal, although they are quite close.</p>
+<p>Many distributions beyond normal are possible. These can be compared
+visually or based on log likelihoods. Here we compare results between a
+normal and gamma distribution. The log likelihood values show that the
+<code>mpg</code> variable is better fit by the gamma distribution than
+the normal, although they are quite close.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">testN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"normal"</span>,</span>
 <span>                          extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>,</span>
@@ -233,10 +263,36 @@
 <div class="section level2">
 <h2 id="model-diagnostics">Model Diagnostics<a class="anchor" aria-label="anchor" href="#model-diagnostics"></a>
 </h2>
-<p><code>JWileymisc</code> has features to support standard parametric model diagnostics. The generic function <code><a href="../reference/modelDiagnostics.html">modelDiagnostics()</a></code> has a method implemented for linear models.</p>
-<p>In the code that follows, we use the <code><a href="../reference/modelDiagnostics.html">modelDiagnostics()</a></code> function to calculate some diagnostics which are plotted using the matching <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method. The result is a plot of the standardized residuals against the expected (normal) distribution, the same QQ deviates plot we saw with <code><a href="../reference/testDistribution.html">testDistribution()</a></code>. Together, these provide information about whether the model assumption of normality is likely met, or not. In addition, block dots and the black rug lines indicate relatively extreme residual values. The label in the top left is the outcome variable name.</p>
-<p>Another plot is a scatter plot of predicted values (x axis) against the standardized residuals (y axis). Again a five number summary is used for the x and y axis. To assess whether there are any systematic trends in the residuals, a loess line is added as a solid blue line. To assess heterogeneity/heteroscedasticity of residuals, quantile regression lines are added as dashed blue lines. These lines are for the 10th and 90th percentile of the distribution. Depending on the model and data, these quantile regression lines may use smoothing splines to allow non-linear patterns. For the assumption that residual variance is homogenous, you would expect the two lines to be approximately parallel and flat, with equal distance between them, across the range of predicted values.</p>
-<p><strong>Note</strong> it is uncommon to decide that 5 percent of values are extreme. This high value was chosen to illustrate only. More common values in practice are <code>ev.perc = .001</code>, <code>ev.perc = .005</code> or <code>ev.perc = .01</code>, which capture 0.1%, 0.5%, and 1% of values, respectively. However, in this small dataset, those would not give many “extreme values” for illustration, so a higher value was used.</p>
+<p><code>JWileymisc</code> has features to support standard parametric
+model diagnostics. The generic function <code><a href="../reference/modelDiagnostics.html">modelDiagnostics()</a></code>
+has a method implemented for linear models.</p>
+<p>In the code that follows, we use the <code><a href="../reference/modelDiagnostics.html">modelDiagnostics()</a></code>
+function to calculate some diagnostics which are plotted using the
+matching <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method. The result is a plot of the
+standardized residuals against the expected (normal) distribution, the
+same QQ deviates plot we saw with <code><a href="../reference/testDistribution.html">testDistribution()</a></code>.
+Together, these provide information about whether the model assumption
+of normality is likely met, or not. In addition, block dots and the
+black rug lines indicate relatively extreme residual values. The label
+in the top left is the outcome variable name.</p>
+<p>Another plot is a scatter plot of predicted values (x axis) against
+the standardized residuals (y axis). Again a five number summary is used
+for the x and y axis. To assess whether there are any systematic trends
+in the residuals, a loess line is added as a solid blue line. To assess
+heterogeneity/heteroscedasticity of residuals, quantile regression lines
+are added as dashed blue lines. These lines are for the 10th and 90th
+percentile of the distribution. Depending on the model and data, these
+quantile regression lines may use smoothing splines to allow non-linear
+patterns. For the assumption that residual variance is homogenous, you
+would expect the two lines to be approximately parallel and flat, with
+equal distance between them, across the range of predicted values.</p>
+<p><strong>Note</strong> it is uncommon to decide that 5 percent of
+values are extreme. This high value was chosen to illustrate only. More
+common values in practice are <code>ev.perc = .001</code>,
+<code>ev.perc = .005</code> or <code>ev.perc = .01</code>, which capture
+0.1%, 0.5%, and 1% of values, respectively. However, in this small
+dataset, those would not give many “extreme values” for illustration, so
+a higher value was used.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
@@ -249,7 +305,14 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">md</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<p>Finally, given that there are a few extreme values, we may want to identify and exclude them. We can view the extreme values. Here we extract these by effect type and with the outcome score associated with each. The index shows the index, from the residuals where the extreme values occurred. Note that this may not match up to the original data if there are missing values. In those cases, the easiest approach is to remove missing values on model variables first, then fit the model and then calculate diagnostics.</p>
+<p>Finally, given that there are a few extreme values, we may want to
+identify and exclude them. We can view the extreme values. Here we
+extract these by effect type and with the outcome score associated with
+each. The index shows the index, from the residuals where the extreme
+values occurred. Note that this may not match up to the original data if
+there are missing values. In those cases, the easiest approach is to
+remove missing values on model variables first, then fit the model and
+then calculate diagnostics.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## show extreme values</span></span>
 <span><span class="va">md</span><span class="op">$</span><span class="va">extremeValues</span></span>
@@ -266,7 +329,9 @@
 <span><span class="co">#&gt; Cadillac Fleetwood 10.4   8 472.0 205</span></span>
 <span><span class="co">#&gt; Toyota Corolla     33.9   4  71.1  65</span></span>
 <span><span class="co">#&gt; Lotus Europa       30.4   4  95.1 113</span></span></code></pre></div>
-<p>Using the extreme values index, we can exclude these and re-fit the model to see if it changes. We can show a summary of coefficients from each model and how much they change.</p>
+<p>Using the extreme values index, we can exclude these and re-fit the
+model to see if it changes. We can show a summary of coefficients from
+each model and how much they change.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## exclude extreme values</span></span>
@@ -330,7 +395,10 @@
 </tr>
 </tbody>
 </table>
-<p>Once some values are removed, new values may be extreme. Although additional passes are not that common, they can be done. In the following code, we conduct new diagnostics on the model that had extreme values from the first model removed.</p>
+<p>Once some values are removed, new values may be extreme. Although
+additional passes are not that common, they can be done. In the
+following code, we conduct new diagnostics on the model that had extreme
+values from the first model removed.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## diagnostics after removing outliers from first model</span></span>
@@ -364,7 +432,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
   <p class="preferably">Using <a href="https://preferably.amirmasoudabdol.name/?source=footer" class="external-link">preferably</a> template.</p>
 </div>
 
