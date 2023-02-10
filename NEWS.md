@@ -1,4 +1,4 @@
-# JWileymisc 1.4.9000
+# JWileymisc 1.4.0
 
 ## New Features
 * `is.naz()` is a new function that is the testing counter part to `naz.omit()`.
