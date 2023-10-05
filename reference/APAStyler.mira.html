@@ -76,7 +76,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for mira</span></span>
-<span><span class="fu"><a href="APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">lmobject</span>, digits <span class="op">=</span> <span class="fl">2</span>, <span class="va">pdigits</span>, <span class="va">file</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">lmobject</span>, digits <span class="op">=</span> <span class="fl">2</span>, <span class="va">pdigits</span>, print <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">file</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -95,6 +95,11 @@
 
 <dt>pdigits</dt>
 <dd><p>The number of digits to use for p values. Defaults to digits + 1 if missing.</p></dd>
+
+
+<dt>print</dt>
+<dd><p>A logical argument, whether or not to print results to screen.
+This is distinct from saving them to a file. Defaults to <code>TRUE</code> for back compatibility.</p></dd>
 
 
 <dt>file</dt>

@@ -83,6 +83,7 @@
 <span>  stars <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">.Platform</span><span class="op">$</span><span class="va">OS.type</span> <span class="op">==</span> <span class="st">"windows"</span>, <span class="st">"clipboard"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  sep <span class="op">=</span> <span class="st">"\t"</span>,</span>
+<span>  print <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -113,6 +114,11 @@ stars (*** p &lt; .001, ** p &lt; .01, * p &lt; .05).</p></dd>
 
 <dt>sep</dt>
 <dd><p>Character what the separator for the table should be. Defaults to tabs.</p></dd>
+
+
+<dt>print</dt>
+<dd><p>A logical argument, whether or not to print results to screen.
+This is distinct from saving them to a file. Defaults to <code>TRUE</code> for back compatibility.</p></dd>
 
 
 <dt>...</dt>
