@@ -1,3 +1,9 @@
+# JWileymisc 1.4.1
+
+## Bug Fixes
+* Updated code in preparation for is.atomic(NULL) no longer working.
+* Updated to address aes_string() being deprecated
+
 # JWileymisc 1.4.0
 
 ## New Features

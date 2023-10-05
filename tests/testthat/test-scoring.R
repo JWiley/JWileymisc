@@ -31,7 +31,7 @@ test_that("score warnings and errors", {
 test_that(".scoreCESD works", {
   set.seed(1234)
   x <- matrix(sample(0:3, size = 20 * 5, TRUE), ncol = 20)
-  xc <- suppressWarnings(.scoreCESD(x))
+  xc <- suppressMessages(suppressWarnings(.scoreCESD(x)))
   expect_type(xc, "list")
 
   expect_type(.scoreCESD(x, reliability = FALSE), "list")
@@ -47,7 +47,7 @@ test_that(".scoreCESD works", {
 test_that(".scoreLOTR and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(1:5, size = 6 * 5, TRUE), ncol = 6)
-  xc <- suppressWarnings(.scoreLOTR(x))
+  xc <- suppressMessages(suppressWarnings(.scoreLOTR(x)))
   expect_type(xc, "list")
 
   expect_type(.scoreLOTR(x, reliability = FALSE), "list")
@@ -62,7 +62,7 @@ test_that(".scoreLOTR and scaleScore work", {
 test_that(".scoreMastery and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(1:4, size = 7 * 5, TRUE), ncol = 7)
-  xc <- suppressWarnings(.scoreMastery(x))
+  xc <- suppressMessages(suppressWarnings(.scoreMastery(x)))
   expect_type(xc, "list")
 
   expect_type(.scoreMastery(x, reliability = FALSE), "list")
@@ -84,7 +84,7 @@ test_that(".scoreMOSSSS and scaleScore work", {
                    labels = 1:5))
   })
 
-  xc <- suppressWarnings(.scoreMOSSSS(x))
+  xc <- suppressMessages(suppressWarnings(.scoreMOSSSS(x)))
   expect_type(xc, "list")
 
   expect_match(names(xc), "score|reliability")
@@ -95,7 +95,7 @@ test_that(".scorePANAS and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(1:5, size = 20 * 5, TRUE), ncol = 20)
   if (isTRUE(capabilities("long.double"))) {
-    xc <- suppressWarnings(.scorePANAS(x))
+    xc <- suppressMessages(suppressWarnings(.scorePANAS(x)))
     expect_type(xc, "list")
     expect_match(names(xc), "score|reliability")
   }
@@ -111,7 +111,7 @@ test_that(".scorePANAS and scaleScore work", {
 test_that(".scoreRSES and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(0:3, size = 10 * 5, TRUE), ncol = 10)
-  xc <- suppressWarnings(.scoreRSES(x))
+  xc <- suppressMessages(suppressWarnings(.scoreRSES(x)))
   expect_type(xc, "list")
 
   expect_type(.scoreRSES(x, reliability = FALSE), "list")
@@ -127,6 +127,6 @@ test_that(".scoreRSES and scaleScore work", {
 test_that(".scoreMOOD and scaleScore work", {
   set.seed(1234)
   x <- matrix(sample(0:3, size = 21 * 5, TRUE), ncol = 21)
-  xc <- suppressWarnings(.scoreMOOD(x))
+  xc <- suppressMessages(suppressWarnings(.scoreMOOD(x)))
   expect_type(xc, "list")
 })

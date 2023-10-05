@@ -798,100 +798,105 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 #'
 #' rm(dat) # clean up
 winsorizor <- function(d, percentile, values, na.rm = TRUE) {
-    if (!missing(percentile)) {
-      stopifnot(percentile %age% 0 && percentile %ale% 1)
-    } else if (missing(percentile)) {
-      percentile <- NA_real_
-    }
-
-  if (!is.vector(d) && !is.matrix(d) && !is.data.frame(d) && !is.data.table(d)) {
-    if (is.atomic(d) && is.null(dim(d))) {
-      warning(paste0(
-        "Atomic type with no dimensions, coercing to a numeric vector.\n",
-        "To remove this warning, try wrapping the data in as.numeric() or\n",
-        "otherwise coercing to a vector prior to passing to winsorizor()."))
-      d <- as.numeric(d)
-    }
+  if (!missing(percentile)) {
+    stopifnot(percentile %age% 0 && percentile %ale% 1)
+  } else if (missing(percentile)) {
+    percentile <- NA_real_
   }
+
+  if (is.null(d)) {
+    warning("d was NULL, no winsorization performed")
+  } else {
+
+    if (!is.vector(d) && !is.matrix(d) && !is.data.frame(d) && !is.data.table(d)) {
+      if (is.atomic(d) && is.null(dim(d))) {
+        warning(paste0(
+          "Atomic type with no dimensions, coercing to a numeric vector.\n",
+          "To remove this warning, try wrapping the data in as.numeric() or\n",
+          "otherwise coercing to a vector prior to passing to winsorizor()."))
+        d <- as.numeric(d)
+      }
+    }
     stopifnot(is.vector(d) || is.matrix(d) || is.data.frame(d) || is.data.table(d))
     dismatrix <- is.matrix(d)
 
     f <- function(x, percentile, values, na.rm) {
-          if (!missing(values)) {
-            low <- values[, "low"]
-            high <- values[, "high"]
-          } else {
-            low <- quantile(x, probs = 0 + percentile, na.rm = na.rm)
-            high <- quantile(x, probs = 1 - percentile, na.rm = na.rm)
-          }
+      if (!missing(values)) {
+        low <- values[, "low"]
+        high <- values[, "high"]
+      } else {
+        low <- quantile(x, probs = 0 + percentile, na.rm = na.rm)
+        high <- quantile(x, probs = 1 - percentile, na.rm = na.rm)
+      }
 
-          out <- pmin(pmax(x, low), high)
+      out <- pmin(pmax(x, low), high)
 
-          new.attr <- data.frame(low = low, high = high, percentile = percentile)
-          rownames(new.attr) <- NULL
+      new.attr <- data.frame(low = low, high = high, percentile = percentile)
+      rownames(new.attr) <- NULL
 
-          attributes(out) <- c(attributes(x), winsorizedValues = list(new.attr))
+      attributes(out) <- c(attributes(x), winsorizedValues = list(new.attr))
 
-          return(out)
+      return(out)
     }
 
     if (is.vector(d)) {
-        d <- f(d, percentile = percentile, values = values, na.rm = na.rm)
+      d <- f(d, percentile = percentile, values = values, na.rm = na.rm)
     } else if (is.matrix(d) || is.data.frame(d) || is.data.table(d)) {
-        if (length(percentile) == 1) {
-          percentile <- rep(percentile, ncol(d))
-        }
+      if (length(percentile) == 1) {
+        percentile <- rep(percentile, ncol(d))
+      }
 
-        if (is.data.table(d)) {
-          d <- copy(d)
-          if (missing(values)) {
-            for (i in seq_len(ncol(d))) {
-              v <- names(d)[i]
-              d[, (v) := f(get(v), percentile = percentile[i], na.rm = na.rm)]
-            }
-          } else {
-            for (i in seq_len(ncol(d))) {
-              v <- names(d)[i]
-              d[, (v) := f(get(v), percentile = percentile[i], values = values[i, ], na.rm = na.rm)]
-            }
+      if (is.data.table(d)) {
+        d <- copy(d)
+        if (missing(values)) {
+          for (i in seq_len(ncol(d))) {
+            v <- names(d)[i]
+            d[, (v) := f(get(v), percentile = percentile[i], na.rm = na.rm)]
           }
-
-          all.attr <- do.call(rbind, lapply(seq_len(ncol(d)), function(i) attr(d[[i]], "winsorizedValues")))
-          all.attr$variable <- colnames(d)
-          rownames(all.attr) <- NULL
-
-          for (v in names(d)) {
-            d[, (v) := as.vector(get(v))]
-          }
-
         } else {
-
-          if (missing(values)) {
-            tmp <- lapply(seq_len(ncol(d)), function(i) {
-              f(d[, i], percentile = percentile[i], na.rm = na.rm)
-            })
-          } else {
-            tmp <- lapply(seq_len(ncol(d)), function(i) {
-              f(d[, i], percentile = percentile[i], values = values[i, ], na.rm = na.rm)
-            })
+          for (i in seq_len(ncol(d))) {
+            v <- names(d)[i]
+            d[, (v) := f(get(v), percentile = percentile[i], values = values[i, ], na.rm = na.rm)]
           }
-
-          all.attr <- do.call(rbind, lapply(tmp, function(x) attr(x, "winsorizedValues")))
-          all.attr$variable <- colnames(d)
-          rownames(all.attr) <- NULL
-          d <- as.data.frame(lapply(tmp, as.vector))
-          colnames(d) <- all.attr$variable
-
-          if (dismatrix) {
-            d <- as.matrix(d)
-          }
-
         }
 
-        attributes(d) <- c(attributes(d), winsorizedValues = list(all.attr))
-    }
+        all.attr <- do.call(rbind, lapply(seq_len(ncol(d)), function(i) attr(d[[i]], "winsorizedValues")))
+        all.attr$variable <- colnames(d)
+        rownames(all.attr) <- NULL
 
-    return(d)
+        for (v in names(d)) {
+          d[, (v) := as.vector(get(v))]
+        }
+
+      } else {
+
+        if (missing(values)) {
+          tmp <- lapply(seq_len(ncol(d)), function(i) {
+            f(d[, i], percentile = percentile[i], na.rm = na.rm)
+          })
+        } else {
+          tmp <- lapply(seq_len(ncol(d)), function(i) {
+            f(d[, i], percentile = percentile[i], values = values[i, ], na.rm = na.rm)
+          })
+        }
+
+        all.attr <- do.call(rbind, lapply(tmp, function(x) attr(x, "winsorizedValues")))
+        all.attr$variable <- colnames(d)
+        rownames(all.attr) <- NULL
+        d <- as.data.frame(lapply(tmp, as.vector))
+        colnames(d) <- all.attr$variable
+
+        if (dismatrix) {
+          d <- as.matrix(d)
+        }
+
+      }
+
+      attributes(d) <- c(attributes(d), winsorizedValues = list(all.attr))
+    }
+  }
+
+  return(d)
 }
 
 #' Calculate a rounded five number summary

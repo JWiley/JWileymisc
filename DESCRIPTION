@@ -1,6 +1,6 @@
 Package: JWileymisc
 Title: Miscellaneous Utilities and Functions
-Version: 1.4.0
+Version: 1.4.1
 Authors@R: 
     person(given = "Joshua F.",
            family = "Wiley",
@@ -23,10 +23,10 @@ Imports:
     MASS,
     multcompView,
     emmeans,
-    data.table (>= 1.14.6),
+    data.table (>= 1.14.8),
     graphics,
     ggthemes,
-    ggplot2 (>= 3.4.0),
+    ggplot2 (>= 3.4.3),
     ggpubr,
     mgcv,
     mice,
@@ -36,16 +36,17 @@ Imports:
     rms,
     robustbase,
     quantreg,
-    lavaan (>= 0.6-14),
-    VGAM (>= 1.1-7),
+    lavaan (>= 0.6-16),
+    VGAM (>= 1.1-9),
     lme4,
     extraoperators (>= 0.1.1),
     digest,
-    fst
+    fst,
+    rlang
 Suggests:
     scales,
     foreach,
-    testthat (>= 3.1.0),
+    testthat (>= 3.1.10),
     covr,
     withr,
     knitr,

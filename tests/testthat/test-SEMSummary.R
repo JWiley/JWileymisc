@@ -112,14 +112,11 @@ test_that("SEMSummary works with missing data.", {
   ## styler methods work
      expect_invisible(
        APAStyler(s, type = "cor", stars = TRUE,
-                 file = FALSE))
-
-     expect_invisible(
-       APAStyler(s, type = "cor", stars = TRUE,
-                 file = ""))
+                 file = FALSE, print = FALSE))
+    
      expect_output(
        APAStyler(s, type = "cor", stars = TRUE,
-                 file = ""),
+                 file = "", print = FALSE),
        "Sepal.Length")
 })
 
@@ -142,9 +139,9 @@ test_that("SEMSummary works by group.", {
   expect_invisible(plot(s, which = 1, plot = FALSE))
 
   ## styler methods work
-  expect_invisible(APAStyler(s[[1]], type = "cor", stars = TRUE, file = FALSE))
-  expect_invisible(APAStyler(s[[2]], type = "cov", stars = FALSE, file = FALSE))
-  expect_invisible(APAStyler(s[[3]], type = "both", stars = TRUE, file = FALSE))
+  expect_invisible(APAStyler(s[[1]], type = "cor", stars = TRUE, file = FALSE, print = FALSE))
+  expect_invisible(APAStyler(s[[2]], type = "cov", stars = FALSE, file = FALSE, print = FALSE))
+  expect_invisible(APAStyler(s[[3]], type = "both", stars = TRUE, file = FALSE, print = FALSE))
 
 
 })

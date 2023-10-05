@@ -253,7 +253,7 @@ corplot <- function(x, coverage, pvalues,
   }
 
   defaults <- list(
-    main = quote(ggplot(mx, aes_string(x = "Var1", y = "Var2", fill = "r"))),
+    main = quote(ggplot(mx, aes(x = Var1, y = Var2, fill = r))),
     tiles = quote(geom_tile()),
     gradient = quote(scale_fill_gradientn(name = "Correlation",
       guide = guide_colorbar(),
@@ -300,9 +300,10 @@ corplot <- function(x, coverage, pvalues,
 #' @param title A character vector giving the title for the plot
 #' @param shape A number indicating the point shape, passed to \code{\link{geom_point}}
 #' @param size  A number indicating the size of points, passed to \code{\link{geom_point}}
-#' @importFrom ggplot2 ggplot aes_string geom_point scale_y_reverse dup_axis
+#' @importFrom ggplot2 ggplot geom_point scale_y_reverse dup_axis
 #' @importFrom ggplot2 theme element_line element_blank element_text coord_cartesian ggtitle
 #' @importFrom ggpubr theme_pubr
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #'
@@ -348,13 +349,13 @@ gglikert <- function(x, y, leftLab, rightLab, colour, data, xlim, title,
   databreaks <- data[[y]][index]
 
   if (missing(colour)) {
-    p <- ggplot(data, aes_string(x = x, y = y)) +
+    p <- ggplot(data, aes(x = .data[[x]], y = .data[[y]])) +
       geom_point(shape = shape, size = size, colour = "grey50")
   } else if (colour %in% names(data)) {
-    p <- ggplot(data, aes_string(x = x, y = y, colour = colour)) +
+    p <- ggplot(data, aes(x = .data[[x]], y = .data[[y]], colour = .data[[colour]])) +
       geom_point(shape = shape, size = size)
   } else {
-    p <- ggplot(data, aes_string(x = x, y = y)) +
+    p <- ggplot(data, aes(x = .data[[x]], y = .data[[y]])) +
       geom_point(shape = shape, size = size, colour = colour)
   }
 
@@ -365,7 +366,7 @@ gglikert <- function(x, y, leftLab, rightLab, colour, data, xlim, title,
         labels = data[[rightLab]][index])) +
     theme_pubr() +
     theme(
-      panel.grid.major.y = element_line(size = 1),
+      panel.grid.major.y = element_line(linewidth = 1),
       axis.line = element_blank(),
       axis.title = element_blank(),
       axis.ticks.y = element_blank(),
@@ -504,7 +505,7 @@ plot.testDistribution <- function(x, y, xlim = NULL, varlab = "X", plot = TRUE,
       geom_density() +
       stat_function(fun = x$Distribution$d,
                     args = as.list(x$Distribution$fit$estimate),
-                    colour = "blue", linetype = 2, size = 1, xlim = xlim)
+                    colour = "blue", linetype = 2, linewidth = 1, xlim = xlim)
   }
   p.density <- p.density +
     geom_rug(aes(x = Y, colour = isEV),
@@ -518,7 +519,7 @@ plot.testDistribution <- function(x, y, xlim = NULL, varlab = "X", plot = TRUE,
     theme(
       legend.position = "none",
       axis.text = element_text(colour = "black"),
-      axis.ticks = element_line(colour = "white", size = 2))
+      axis.ticks = element_line(colour = "white", linewidth = 2))
 
   if (identical(x$distr, "mvnormal")) {
     p.density <- p.density +
@@ -615,6 +616,7 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", ".", "upper.CL",
 #' @importFrom lme4 lmer
 #' @importFrom emmeans emmeans
 #' @importFrom multcompView multcompLetters
+#' @importFrom rlang .data
 #' @keywords plot
 #' @export
 #' @examples
@@ -672,7 +674,7 @@ TukeyHSDgg <- function(x, y, d, ci = .95, idvar, ...) {
     data.frame(Labels = plot.labels, Letters = Tukey.labels),
     by.x = x, by.y = "Labels")
 
-  p <- ggplot(plotdf, aes_string(x=x, y="emmean", ymin = "lower.CL", ymax = "upper.CL")) +
+  p <- ggplot(plotdf, aes(x = .data[[x]], y = emmean, ymin = lower.CL, ymax = upper.CL)) +
     geom_pointrange() + geom_point() +
     geom_text(aes(y = upper.CL + (max(upper.CL) * .05),
                   label = Letters))
@@ -747,7 +749,7 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
     theme(
       legend.position = "bottom",
       axis.text = element_text(colour = "black"),
-      axis.ticks.x = element_line(colour = "white", size = 2)) +
+      axis.ticks.x = element_line(colour = "white", linewidth = 2)) +
     ggtitle(x$Outcome)
   
   if ( isTRUE(x$Hat$cut[1]) ) {
@@ -764,17 +766,17 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
     p.resfit <- p.resfit +
       stat_smooth(method = "loess",
                   formula = y ~ x,
-                  se = FALSE, size = 1, colour = "blue")
+                  se = FALSE, linewidth = 1, colour = "blue")
 
     if (any(!is.na(x$Hat$LL) |
               !is.na(x$Hat$UL))) {
       p.resfit <- p.resfit +
         geom_line(mapping = aes(x = Predicted, y = LL),
                   data = x$Hat,
-                  colour = "blue", size = 1, linetype = 2) +
+                  colour = "blue", linewidth = 1, linetype = 2) +
         geom_line(mapping = aes(x = Predicted, y = UL),
                   data = x$Hat,
-                  colour = "blue", size = 1, linetype = 2)
+                  colour = "blue", linewidth = 1, linetype = 2)
     }
   }
 

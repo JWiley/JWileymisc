@@ -367,12 +367,14 @@ APAStyler.modelTest.vglm <- function(object,
 #' @param digits The number of digits to round results to. Defaults to 2.
 #' @param pdigits The number of digits to use for p values. Defaults to digits + 1 if missing.
 #' @param file An optional argument indicating whether the output should be written to a file.
+#' @param print A logical argument, whether or not to print results to screen.
+#'   This is distinct from saving them to a file. Defaults to \code{TRUE} for back compatibility.
 #' @param ... Additional argiuments passed on to \code{write.table}.
 #' @importFrom stats coef confint
 #' @importFrom utils write.table
 #' @method APAStyler lm
 #' @export
-APAStyler.lm <- function(object, digits = 2, pdigits, file, ...) {
+APAStyler.lm <- function(object, digits = 2, pdigits, file, print = TRUE, ...) {
   if (missing(pdigits)) pdigits <- digits + 1
 
   s <- summary(object)
@@ -412,7 +414,9 @@ APAStyler.lm <- function(object, digits = 2, pdigits, file, ...) {
   out["F", ] <- F
 
   if (!missing(file)) write.table(out, file = file, ...)
-  print(noquote(out))
+  if (isTRUE(print)) {
+    print(noquote(out))
+  }
   return(invisible(out))
 }
 
@@ -422,13 +426,15 @@ APAStyler.lm <- function(object, digits = 2, pdigits, file, ...) {
 #' @param lmobject an lm object the degrees of freedom of which can be used for conservative F tests
 #' @param digits The number of digits to round results to. Defaults to 2.
 #' @param pdigits The number of digits to use for p values. Defaults to digits + 1 if missing.
+#' @param print A logical argument, whether or not to print results to screen.
+#'   This is distinct from saving them to a file. Defaults to \code{TRUE} for back compatibility.
 #' @param file An optional argument indicating whether the output should be written to a file.
 #' @param ... Additional argiuments passed on to \code{write.table}.
 #' @importFrom mice pool.r.squared
 #' @importFrom mice pool
 #' @method APAStyler mira
 #' @export
-APAStyler.mira <- function(object, lmobject, digits = 2, pdigits, file, ...) {
+APAStyler.mira <- function(object, lmobject, digits = 2, pdigits, print = TRUE, file, ...) {
   if (!inherits(object[["analyses"]][[1]], "lm"))
     stop("mira object must use a model that inherits from class 'lm' such as 'lm' or 'glm'")
 
@@ -476,7 +482,9 @@ APAStyler.mira <- function(object, lmobject, digits = 2, pdigits, file, ...) {
 
   if (!missing(file)) write.table(out, file = file, ...)
 
-  print(noquote(out))
+  if (isTRUE(print)) {
+    print(noquote(out))
+  }
 
   return(invisible(out))
 }
@@ -491,6 +499,8 @@ APAStyler.mira <- function(object, lmobject, digits = 2, pdigits, file, ...) {
 #'   stars (*** p < .001, ** p < .01, * p < .05).
 #' @param file An optional argument indicating whether the output should be written to a file.
 #' @param sep Character what the separator for the table should be. Defaults to tabs.
+#' @param print A logical argument, whether or not to print results to screen.
+#'   This is distinct from saving them to a file. Defaults to \code{TRUE} for back compatibility. 
 #' @param ... Additional argiuments passed on to \code{write.table}.
 #' @export
 #' @method APAStyler SEMSummary
@@ -503,7 +513,7 @@ APAStyler.mira <- function(object, lmobject, digits = 2, pdigits, file, ...) {
 #' APAStyler(m, type = "cov", stars = TRUE, file = FALSE)
 #' APAStyler(m, type = "both", stars = TRUE, file = FALSE)
 APAStyler.SEMSummary <- function(object, digits = 2, type = c("cov", "cor", "both"), stars = FALSE,
-  file = ifelse(.Platform$OS.type == "windows", "clipboard", FALSE), sep = "\t", ...) {
+  file = ifelse(.Platform$OS.type == "windows", "clipboard", FALSE), sep = "\t", print = TRUE, ...) {
 
   type <- match.arg(type)
   mat <- switch(type,
@@ -530,7 +540,7 @@ APAStyler.SEMSummary <- function(object, digits = 2, type = c("cov", "cor", "bot
                     mc[] <- paste0(mc, star(object$pvalue))
                   }
 
-                                        #mv[] <- as.character(mv)
+                  # mv[] <- as.character(mv)
                   mv[lower.tri(mv)] <- mc[lower.tri(mc)]
                   diag(mv) <- " - "
                   mv
@@ -553,16 +563,18 @@ APAStyler.SEMSummary <- function(object, digits = 2, type = c("cov", "cor", "bot
   mtable[] <- as.character(mtable)
   mtable[lower.tri(mtable)] <- ""
 
-  if (!identical(FALSE, file)) {
+  if (!isFALSE(file)) {
     copyout <- cbind(rownames(out.table), out.table)
     copyout <- rbind(colnames(copyout), copyout)
     write.table(copyout, file = file, sep = sep, row.names = FALSE, col.names = FALSE, ...)
   }
   output <- list(table = out.table, coverage = mtable)
 
-  print(noquote(out.table))
-  cat("\nPercentage of coverage for each pairwise covariance or correlation\n\n")
-  print(noquote(mtable))
+  if (isTRUE(print)) {
+    print(noquote(out.table))
+    cat("\nPercentage of coverage for each pairwise covariance or correlation\n\n")
+    print(noquote(mtable))
+  }
 
   return(invisible(output))
 }
