@@ -596,7 +596,7 @@ plot.testDistribution <- function(x, y, xlim = NULL, varlab = "X", plot = TRUE,
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", ".", "upper.CL", "Letters"))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", ".", "upper.CL", "Letters", "lower.CL", "emmean"))
 
 #' Tukey HSD Plot
 #'

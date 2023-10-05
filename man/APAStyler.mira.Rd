@@ -4,7 +4,7 @@
 \alias{APAStyler.mira}
 \title{A generic function for pretty printing in (semi) APA Style}
 \usage{
-\method{APAStyler}{mira}(object, lmobject, digits = 2, pdigits, file, ...)
+\method{APAStyler}{mira}(object, lmobject, digits = 2, pdigits, print = TRUE, file, ...)
 }
 \arguments{
 \item{object}{\code{mira} object}
@@ -14,6 +14,9 @@
 \item{digits}{The number of digits to round results to. Defaults to 2.}
 
 \item{pdigits}{The number of digits to use for p values. Defaults to digits + 1 if missing.}
+
+\item{print}{A logical argument, whether or not to print results to screen.
+This is distinct from saving them to a file. Defaults to \code{TRUE} for back compatibility.}
 
 \item{file}{An optional argument indicating whether the output should be written to a file.}
 

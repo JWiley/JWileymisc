@@ -11,6 +11,7 @@
   stars = FALSE,
   file = ifelse(.Platform$OS.type == "windows", "clipboard", FALSE),
   sep = "\\t",
+  print = TRUE,
   ...
 )
 }
@@ -28,6 +29,9 @@ stars (*** p < .001, ** p < .01, * p < .05).}
 \item{file}{An optional argument indicating whether the output should be written to a file.}
 
 \item{sep}{Character what the separator for the table should be. Defaults to tabs.}
+
+\item{print}{A logical argument, whether or not to print results to screen.
+This is distinct from saving them to a file. Defaults to \code{TRUE} for back compatibility.}
 
 \item{...}{Additional argiuments passed on to \code{write.table}.}
 }

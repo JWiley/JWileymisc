@@ -4,7 +4,7 @@
 \alias{APAStyler.lm}
 \title{APAStyler method for linear models}
 \usage{
-\method{APAStyler}{lm}(object, digits = 2, pdigits, file, ...)
+\method{APAStyler}{lm}(object, digits = 2, pdigits, file, print = TRUE, ...)
 }
 \arguments{
 \item{object}{A \code{lm} object}
@@ -14,6 +14,9 @@
 \item{pdigits}{The number of digits to use for p values. Defaults to digits + 1 if missing.}
 
 \item{file}{An optional argument indicating whether the output should be written to a file.}
+
+\item{print}{A logical argument, whether or not to print results to screen.
+This is distinct from saving them to a file. Defaults to \code{TRUE} for back compatibility.}
 
 \item{...}{Additional argiuments passed on to \code{write.table}.}
 }
