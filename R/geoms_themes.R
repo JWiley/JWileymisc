@@ -1,6 +1,6 @@
 #' Tufte Range
 #'
-#' Make axis lines informative by making them show the \textbf{observed range} of the data.
+#' Make axis lines informative by making them show the observed range of the data.
 #' Inspired from the excellent ggthemes package: https://github.com/jrnold/ggthemes
 #'
 #' @inheritParams ggplot2::geom_point

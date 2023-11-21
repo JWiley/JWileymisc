@@ -64,7 +64,7 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-Make axis lines informative by making them show the \textbf{observed range} of the data.
+Make axis lines informative by making them show the observed range of the data.
 Inspired from the excellent ggthemes package: https://github.com/jrnold/ggthemes
 }
 \keyword{datasets}

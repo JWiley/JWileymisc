@@ -25,13 +25,14 @@ Imports:
     emmeans,
     data.table (>= 1.14.8),
     graphics,
+    grid,    
     ggplot2 (>= 3.4.3),
+    scales,    
     ggpubr,
     mgcv,
     mice,
     methods,
     psych,
-    grid,
     rms,
     robustbase,
     quantreg,
@@ -42,8 +43,7 @@ Imports:
     digest,
     fst,
     rlang
-Suggests:
-    scales,
+Suggests:    
     foreach,
     testthat (>= 3.1.10),
     covr,
