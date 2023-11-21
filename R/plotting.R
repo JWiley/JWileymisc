@@ -124,6 +124,7 @@ plot.SEMSummary.list <- function(x, y, which, plot = TRUE, ...) {
 #' @importFrom ggplot2 ggtitle
 #' @importFrom stats setNames as.dist hclust
 #' @importFrom utils type.convert
+#' @importFrom ggplot2 element_text
 #' @export
 #' @examples
 #' # example plotting the correlation matrix from the
@@ -263,7 +264,7 @@ corplot <- function(x, coverage, pvalues,
     area = quote(scale_size_area()),
     scale = quote(scale_x_discrete(position = "top") ),
     text = quote(geom_text(aes(label = correlation), size = 3, vjust = 0)),
-    theme = quote(theme(axis.title = element_blank())))
+    theme = quote(theme(axis.title = element_blank(), axis.text.x = element_text(angle = 45, hjust = 0))))
 
   i <- names(defaults)[!names(defaults) %in% names(control.grobs)]
   control.grobs[i] <- defaults[i]
@@ -300,8 +301,9 @@ corplot <- function(x, coverage, pvalues,
 #' @param title A character vector giving the title for the plot
 #' @param shape A number indicating the point shape, passed to \code{\link{geom_point}}
 #' @param size  A number indicating the size of points, passed to \code{\link{geom_point}}
-#' @importFrom ggplot2 ggplot geom_point scale_y_reverse dup_axis
-#' @importFrom ggplot2 theme element_line element_blank element_text coord_cartesian ggtitle
+#' @importFrom ggplot2 ggplot geom_point scale_y_reverse dup_axis ggtitle
+#' @importFrom ggplot2 theme element_line element_blank element_text
+#' @importFrom ggplot2 coord_cartesian
 #' @importFrom ggpubr theme_pubr
 #' @importFrom rlang .data
 #' @export
@@ -416,7 +418,6 @@ if(getRversion() >= "2.15.1") {
 #' @importFrom ggplot2 geom_abline ggtitle xlab ylab
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous theme ggtitle
 #' @importFrom ggplot2 element_text element_line
-#' @importFrom ggthemes geom_rangeframe theme_tufte
 #' @importFrom data.table melt as.data.table setnames
 #' @importFrom robustbase covMcd
 #' @importFrom ggpubr ggarrange
@@ -514,12 +515,10 @@ plot.testDistribution <- function(x, y, xlim = NULL, varlab = "X", plot = TRUE,
     scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
     ylab("Density") +
     scale_x_continuous(breaks = roundedfivenum(x$Data$Y)) +
-    geom_rangeframe() +
-    theme_tufte(base_family = "sans") +
+    geom_tufterange() + theme_tufte() +
     theme(
       legend.position = "none",
-      axis.text = element_text(colour = "black"),
-      axis.ticks = element_line(colour = "white", linewidth = 2))
+      axis.text = element_text(colour = "black"))
 
   if (identical(x$distr, "mvnormal")) {
     p.density <- p.density +
@@ -551,8 +550,7 @@ plot.testDistribution <- function(x, y, xlim = NULL, varlab = "X", plot = TRUE,
     xlab(label = "Theoretical Quantiles") +
     scale_x_continuous(breaks = roundedfivenum(x$Data$X)) +
     scale_y_continuous(breaks = roundedfivenum(x$Data$Y)) +
-    geom_rangeframe() +
-    theme_tufte(base_family = "sans") +
+    geom_tufterange() + theme_tufte() +
     theme(
       legend.position = "none",
       axis.text = element_text(colour = "black"))
@@ -575,7 +573,7 @@ plot.testDistribution <- function(x, y, xlim = NULL, varlab = "X", plot = TRUE,
     scale_colour_manual(values = c("No" = "grey70", "Yes" = "black")) +
     geom_hline(yintercept = 0) +
     ylab("Deviates") +
-    theme_tufte(base_family = "sans") +
+    theme_tufte() +
     theme(axis.line.x = element_blank(),
           axis.title.x = element_blank(),
           axis.text.x = element_blank(),
@@ -711,7 +709,6 @@ if(getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals"
 #' @importFrom ggplot2 ggtitle theme geom_quantile stat_smooth
 #' @importFrom ggplot2 geom_point geom_bin2d scale_fill_gradient scale_x_continuous scale_y_continuous
 #' @importFrom ggplot2 element_text element_line
-#' @importFrom ggthemes geom_rangeframe theme_tufte
 #' @importFrom ggpubr ggarrange
 #' @keywords plot
 #' @method plot residualDiagnostics
@@ -742,14 +739,13 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
       scale_fill_gradient(low = "grey70", high = "black")
   }
   p.resfit <- p.resfit +
-    geom_rangeframe() +
+    geom_tufterange() +
     scale_x_continuous(breaks = roundedfivenum(x$Residuals$Predicted)) +
     scale_y_continuous(breaks = roundedfivenum(x$Residuals$Residuals)) +
-    theme_tufte(base_family = "sans") +
+    theme_tufte() +
     theme(
       legend.position = "bottom",
-      axis.text = element_text(colour = "black"),
-      axis.ticks.x = element_line(colour = "white", linewidth = 2)) +
+      axis.text = element_text(colour = "black")) +
     ggtitle(x$Outcome)
   
   if ( isTRUE(x$Hat$cut[1]) ) {

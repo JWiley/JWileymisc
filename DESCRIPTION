@@ -1,6 +1,6 @@
 Package: JWileymisc
 Title: Miscellaneous Utilities and Functions
-Version: 1.4.1
+Version: 1.4.2
 Authors@R: 
     person(given = "Joshua F.",
            family = "Wiley",
@@ -25,7 +25,6 @@ Imports:
     emmeans,
     data.table (>= 1.14.8),
     graphics,
-    ggthemes,
     ggplot2 (>= 3.4.3),
     ggpubr,
     mgcv,

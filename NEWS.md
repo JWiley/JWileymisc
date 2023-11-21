@@ -1,3 +1,14 @@
+# JWileymisc 1.4.2
+
+## Changes
+* `corplot()` and functions that build on it (like `plot()` methods for `SEMSummary()` 
+   now use a 45 degree angle for column labels to improve readability with long variable 
+   names. As always this is a `ggplot2` theme option and can be overwritten by the user.
+
+## New Features
+* `geom_tufterange()` simple geom to add a left and bottom line that shows the observed range of non missing data.
+* `theme_tufte()` simple mostly empty theme built off the minimal theme.
+
 # JWileymisc 1.4.1
 
 ## Bug Fixes
