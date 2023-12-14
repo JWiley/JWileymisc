@@ -2,7 +2,7 @@
 title: "Exploratory and Descriptive Statistics and Plots"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{exploratory-vignette}
+  %\VignetteIndexEntry{Exploratory and Descriptive Statistics and Plots}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

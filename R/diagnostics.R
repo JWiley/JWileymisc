@@ -43,8 +43,8 @@ testDistribution <- function(x, ...) {
 #' @export
 #' @rdname testDistribution
 as.testDistribution <- function(x) {
-  if (!is.testDistribution(x)) {
-    if(!is.list(x)) {
+  if (isFALSE(is.testDistribution(x))) {
+    if(isFALSE(is.list(x))) {
       stop("Input must be a list or a testDistribution object")
     }
     x <- list(
@@ -112,7 +112,7 @@ is.testDistribution <- function(x) {
 #'   to show extreme values based on percentiles of the theoretical distribution.
 #' @param ev.perc Percentile to use for extreme values.  For example if .01,
 #'   then the lowest 1 percent and highest 1 percent will be labelled
-#'   extreme values.  Defaults to the lowest and highest 0.5 percent.
+#'   extreme values.  Defaults to the lowest and highest 0.1 percent.
 #' @param use A character vector indicating how the moments
 #'   (means and covariance matrix) should be estimated in the presence of
 #'   missing data when \code{distr = mvnormal}.
@@ -203,7 +203,7 @@ testDistribution.default <- function(x,
   distr = c("normal", "beta", "chisq", "f", "gamma", "geometric", "nbinom", "poisson", "uniform", "mvnormal"),
   na.rm = TRUE, starts,
   extremevalues = c("no", "theoretical", "empirical"),
-  ev.perc = .005,
+  ev.perc = .001,
   use = c("complete.obs", "pairwise.complete.obs", "fiml"),
   robust = FALSE, ...) {
 
@@ -226,13 +226,13 @@ testDistribution.default <- function(x,
     }
 
     optargs <- list(...)
-    if (all(c("mu", "sigma") %in% names(optargs))) {
+    if (c("mu", "sigma") %ain% names(optargs)) {
       desc <- list(mu = optargs$mu,
                    sigma = optargs$sigma)
     } else {
 
       if (isTRUE(robust)) {
-        tmp <- covMcd(x[OK, , drop=FALSE])
+        tmp <- covMcd(x[OK, , drop = FALSE])
         desc <- list(mu = tmp$center, sigma = tmp$cov)
         rm(tmp)
       } else {
@@ -290,7 +290,7 @@ testDistribution.default <- function(x,
       OKindex <- rep(TRUE, length(x))
     }
 
-  if (identical(distr, "normal") & isTRUE(robust)) {
+  if (identical(distr, "normal") && isTRUE(robust)) {
     estimate <- covMcd(x)
     estimate <- c(
       mean = as.vector(estimate$center),
@@ -509,7 +509,7 @@ is.residualDiagnostics <- function(x) {
 }
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("originalindex"))
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("originalindex"))
 
 #' @importFrom stats rstandard residuals fitted coef predict model.frame
 #' @importFrom data.table data.table :=
@@ -561,8 +561,8 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
     }
   } else {
     key <- data.table(
-      originalindex = 1:nrow(d.frame),
-      index = 1:nrow(d.frame))[!is.na(index)]
+      originalindex = seq_len(nrow(d.frame)),
+      index = seq_len(nrow(d.frame)))[!is.na(index)]
   }
 
   d.frame <- as.data.table(d.frame)
@@ -587,7 +587,7 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
     robust = robust)
 
   d.res[!is.na(Residuals), isEV := d.dist$Data[order(OriginalOrder), isEV]]
-  d.res[, Index := 1:.N]
+  d.res[, Index := seq_len(.N)]
 
   ## fix the index to match original data if missing data existed and were omitted
   if (isFALSE(is.null(naaction))) {
@@ -644,7 +644,7 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
       cut = TRUE),
       by = Predicted]
   ## if more than cut unique non missing values, use quantile regression
-  } else {    
+  } else {
     d.hat <- data.table(
       Predicted = seq(
         min(data$Predicted, na.rm = na.rm),
@@ -740,7 +740,7 @@ as.modelDiagnostics <- function(x) {
       residualDiagnostics = x[[1]],
       modelDiagnostics = x[[2]],
       extremeValues = x[[3]])
-    if(is.null(augmentClass)) {
+    if (is.null(augmentClass)) {
       class(x) <- "modelDiagnostics"
     } else {
       class(x) <- c(paste0("modelDiagnostics.", augmentClass), "modelDiagnostics")

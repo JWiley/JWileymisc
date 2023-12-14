@@ -4,7 +4,7 @@ author: "Joshua F. Wiley"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{diagnostics-vignette}
+  %\VignetteIndexEntry{Diagnostics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

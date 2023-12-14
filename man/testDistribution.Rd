@@ -20,7 +20,7 @@ is.testDistribution(x)
   na.rm = TRUE,
   starts,
   extremevalues = c("no", "theoretical", "empirical"),
-  ev.perc = 0.005,
+  ev.perc = 0.001,
   use = c("complete.obs", "pairwise.complete.obs", "fiml"),
   robust = FALSE,
   ...
@@ -55,7 +55,7 @@ to show extreme values based on percentiles of the theoretical distribution.}
 
 \item{ev.perc}{Percentile to use for extreme values.  For example if .01,
 then the lowest 1 percent and highest 1 percent will be labelled
-extreme values.  Defaults to the lowest and highest 0.5 percent.}
+extreme values.  Defaults to the lowest and highest 0.1 percent.}
 
 \item{use}{A character vector indicating how the moments
 (means and covariance matrix) should be estimated in the presence of

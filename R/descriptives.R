@@ -305,6 +305,7 @@ smd <- function(x, g, index = c("all", "1", "2")) {
 #' @seealso \code{\link{APAStyler}}
 #' @keywords multivariate
 #' @importFrom stats terms as.formula
+#' @importFrom extraoperators %?in%
 #' @export
 #' @examples
 #' ## Example using the built in iris dataset
@@ -353,7 +354,7 @@ SEMSummary <- function(formula, data,
   use = c("fiml", "pairwise.complete.obs", "complete.obs")) {
   env <- environment(formula)
 
-  if (!is.data.frame(data)) {
+  if (isFALSE(is.data.frame(data))) {
     data <- as.data.frame(data)
   }
 
@@ -369,7 +370,9 @@ SEMSummary <- function(formula, data,
 
     grouping <- interaction(eval(vars, data, env), drop = TRUE)
 
-    output <- by(data[, -which(colnames(data) %in% vnames)], grouping, FUN = function(d) SEMSummary.fit(formula, d, use = use))
+    output <- by(data[, -(colnames(data) %?in% vnames)],
+      grouping,
+      FUN = function(d) SEMSummary.fit(formula, d, use = use))
     output$Levels <- levels(grouping)
 
     class(output) <- "SEMSummary.list"
@@ -412,7 +415,9 @@ SEMSummary.fit <- function(formula, data,
 
   vars <- attr(terms(formula, data = data), "variables")
   vnames <- as.character(vars)[-1L]
-  if (length(vnames) < 2) stop("You must specify at least 2 variables to use this function")
+  if (length(vnames) < 2) {
+    stop("You must specify at least 2 variables to use this function")
+  }
   env <- environment(formula)
 
   X <- eval(vars, data, env)
@@ -467,7 +472,8 @@ SEMSummary.fit <- function(formula, data,
 
   names(nmiss) <- names(mu) <- names(stdev) <- names(X)
 
-  output <- list(names = vnames, n = n, nmissing = nmiss, mu = mu, stdev = stdev,
+  output <- list(
+    names = vnames, n = n, nmissing = nmiss, mu = mu, stdev = stdev,
     Sigma = Sigma, sSigma = sSigma, coverage = coverage, pvalue = pvalue)
   class(output) <- "SEMSummary"
 
@@ -570,7 +576,7 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
 #' rm(tmp)
 egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
                      paired = FALSE, simChisq = FALSE, sims = 1e6L) {
-  if (!missing(data)) {
+  if (isFALSE(missing(data))) {
     present <- vars %in% names(data)
     if (isFALSE(all(present))) {
       absent <- vars %snin% names(data)
@@ -584,12 +590,12 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
     } else {
       dat <- as.data.table(data[, vars, drop = FALSE])
     }
-    if (!missing(g)) {
+    if (isFALSE(missing(g))) {
       if (length(g) == 1) {
         g <- data[[g]]
       }
     }
-    if (!missing(idvar)) {
+    if (isFALSE(missing(idvar))) {
       ids <- data[[idvar]]
       if (anyNA(ids)) stop("cannot have missing IDs")
     }
@@ -798,7 +804,7 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 #'
 #' rm(dat) # clean up
 winsorizor <- function(d, percentile, values, na.rm = TRUE) {
-  if (!missing(percentile)) {
+  if (isFALSE(missing(percentile))) {
     stopifnot(percentile %age% 0 && percentile %ale% 1)
   } else if (missing(percentile)) {
     percentile <- NA_real_

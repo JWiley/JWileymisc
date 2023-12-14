@@ -382,7 +382,7 @@ gglikert <- function(x, y, leftLab, rightLab, colour, data, xlim, title,
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1") {
+if (getRversion() >= "2.15.1") {
   utils::globalVariables(
            c("X", "Y", "isEV", "YDeviates", "count", "variable",
              "V1", "value"))
@@ -594,7 +594,7 @@ plot.testDistribution <- function(x, y, xlim = NULL, varlab = "X", plot = TRUE,
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", ".", "upper.CL", "Letters", "lower.CL", "emmean"))
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("ymax", ".", "upper.CL", "Letters", "lower.CL", "emmean"))
 
 #' Tukey HSD Plot
 #'
@@ -681,10 +681,10 @@ TukeyHSDgg <- function(x, y, d, ci = .95, idvar, ...) {
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("EffectType", "OriginalOrder"))
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("EffectType", "OriginalOrder"))
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals",
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals",
                                                         "LL", "UL"))
 
 
@@ -748,7 +748,7 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
       axis.text = element_text(colour = "black")) +
     ggtitle(x$Outcome)
   
-  if ( isTRUE(x$Hat$cut[1]) ) {
+  if (isTRUE(x$Hat$cut[1])) {
     p.resfit <- p.resfit +
       geom_point(aes(x = Predicted, y = LL),
                     data = x$Hat,
