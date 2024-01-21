@@ -35,7 +35,8 @@ as.modelPerformance <- function(x) {
     if (is.null(augmentClass)) {
       class(x) <- "modelPerformance"
     } else {
-      class(x) <- c(paste0("modelPerformance.", augmentClass), "modelPerformance")
+      class(x) <- c(paste0("modelPerformance.", augmentClass), 
+        "modelPerformance")
     }
   }
 
@@ -89,7 +90,8 @@ modelPerformance.lm <- function(object, ...) {
   msum <- summary(object)
 
   ## empty model or intercept only model
-  if (object$rank == 0 || (object$rank == 1 && attr(terms(object), "intercept") == 1)) {
+  if (object$rank == 0 || (object$rank == 1 && 
+      attr(terms(object), "intercept") == 1)) {
     msum$fstatistic <- c(value = NA_real_, numdf = NA_real_, dendf = NA_real_)
   }
   P <- pf(msum$fstatistic[["value"]],
@@ -538,7 +540,8 @@ lm2 <- function (formula, data, subset, weights, na.action,## method = "qr",
         if (!mlm)
             offset <- as.vector(offset)
         if (NROW(offset) != ny)
-            stop(gettextf("number of offsets is %d, should equal %d (number of observations)",
+            stop(gettextf(
+              "number of offsets is %d, should equal %d (number of observations)",
                 NROW(offset), ny), domain = NA)
     }
     if (is.empty.model(mt)) {
@@ -622,8 +625,12 @@ modelTest.lm <- function(object, ...) {
   if (identical(ncol(mf), length(vnames))) {
     names(mf) <- vnames
   } else {
-    stop(sprintf(
-      "There are %d columns in the model frame [%s],\n  but %d variable names in the formula [%s].\n  If an on-the-fly transformation was applied,\n  try creating the variable / transformation as a new variable in the dataset and re-running.",
+    stop(sprintf(paste0(
+      "There are %d columns in the model frame [%s],\n  ",
+      "but %d variable names in the formula [%s].\n  ",
+      "If an on-the-fly transformation was applied,\n  ",
+      "try creating the variable / transformation as a new ",
+      "variable in the dataset and re-running."),
       ncol(mf),
       paste(names(mf), collapse = ", "),
       length(vnames),
@@ -1014,8 +1021,10 @@ internalformulaIt <- function(dv, iv, covariates) {
 ##' @param iv A character string or vector giving the IV(s)
 ##' @param covariates A character string or vector giving the covariate(s)
 ##' @param data The data to be used for analysis
-##' @param multivariate A logical value whether to have models with all IVs simultaneously.
-##' @param \ldots Additional arguments passed on to the internal function, \code{.runIt}.
+##' @param multivariate A logical value whether to have models with
+##'   all IVs simultaneously.
+##' @param \ldots Additional arguments passed on to the internal 
+##'   function, \code{.runIt}.
 ##' @return A list with all the model results.
 ##' @keywords internal
 ##' @importFrom stats na.omit get_all_vars
@@ -1029,7 +1038,8 @@ internalformulaIt <- function(dv, iv, covariates) {
 ##' test1$Summary
 ##' rm(test1)
 internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
-                       iv, covariates = character(), data, multivariate = FALSE, ...) {
+                       iv, covariates = character(), data,
+                       multivariate = FALSE, ...) {
 
   if (length(iv) <= 1 & multivariate) {
     stop("Cannot use multivariate = TRUE when only a single IV")
@@ -1215,16 +1225,20 @@ internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
 
 #' Compares the effects of various independent variables on dependent variables
 #'
-#' Utility to estimate the unadjusted, covariate adjusted, and multivariate adjusted
-#' unique contributions of one or more IVs on one or more DVs
+#' Utility to estimate the unadjusted, covariate adjusted, and 
+#' multivariate adjusted unique contributions of one or more IVs 
+#' on one or more DVs
 #'
 #' @param dv A character string or vector of the depentent variable(s)
-#' @param type A character string or vector indicating the type of dependent variable(s)
+#' @param type A character string or vector indicating the type of 
+#'   dependent variable(s)
 #' @param iv A character string or vector giving the IV(s)
 #' @param covariates A character string or vector giving the covariate(s)
 #' @param data The data to be used for analysis
-#' @param multivariate A logical value whether to have models with all IVs simultaneously.
-#' @param \ldots Additional arguments passed on to the internal function, \code{.runIt}.
+#' @param multivariate A logical value whether to have models with all 
+#'   IVs simultaneously.
+#' @param \ldots Additional arguments passed on to the internal function, 
+#'   \code{.runIt}.
 #' @return A list with all the model results.
 #' @export
 #' @examples
@@ -1236,7 +1250,8 @@ internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
 #'   data = mtcars, multivariate = TRUE)
 #' test1$OverallSummary
 #' rm(test1)
-compareIVs <- function(dv, type, iv, covariates = character(), data, multivariate = FALSE, ...) {
+compareIVs <- function(dv, type, iv, covariates = character(), 
+                       data, multivariate = FALSE, ...) {
   stopifnot(identical(length(dv), length(type)))
 
   res <- lapply(seq_along(dv), function(i) {
@@ -1251,7 +1266,11 @@ compareIVs <- function(dv, type, iv, covariates = character(), data, multivariat
 
   res$OverallSummary <- do.call(rbind, lapply(seq_along(dv), function(x) {
     do.call(rbind, lapply(seq_along(iv), function(y) {
-      cbind.data.frame(dv = dv[x], iv = iv[y], res[[x]][[y]]$Summary, stringsAsFactors = FALSE)
+      cbind.data.frame(
+        dv = dv[x], 
+        iv = iv[y], 
+        res[[x]][[y]]$Summary,
+        stringsAsFactors = FALSE)
     }))
   }))
 

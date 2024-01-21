@@ -55,14 +55,6 @@ meanCircular <- function(x, max, na.rm = TRUE) {
     out <- atan2(ms, mc) + 2 * pi
   }
 
-  ## if (ms > 0 && mc > 0) {
-  ##   out <- atan2(ms, mc)
-  ## } else if (mc <= 0) {
-  ##   out <- atan2(ms, mc) + pi
-  ## } else if (ms < 0 && mc > 0) {
-  ##   out <- atan2(ms, mc) + 2 * pi
-  ## }
-
   ## radians to degrees and unscale to the inputs
   out <- out * (180 / pi) / scale
   if (out == max) {
@@ -75,38 +67,44 @@ meanCircular <- function(x, max, na.rm = TRUE) {
 #'
 #' @param x Numeric or integer values
 #' @param y Numeric or integer values
-#' @param max the theoretical maximum (e.g., if degrees, 360; if hours, 24; etc.).
-#' @return A value with the circular difference. This will always be positive if defined.
+#' @param max the theoretical maximum 
+#'   (e.g., if degrees, 360; if hours, 24; etc.).
+#' @return A value with the circular difference.
+#'   This will always be positive if defined.
 #' @export
 #' @examples
 #' diffCircular(330, 30, max = 360)
 #' diffCircular(22, 1, max = 24)
 #' diffCircular(c(22, 23, 21, 22), c(1, 1, 23, 14), max = 24)
 diffCircular <- function(x, y, max) {
-    if (!(is.integer(x) || is.numeric(x))) {
-        stop(sprintf("x must be class integer or numeric but was %s", 
-            paste(class(x), collapse = "; ")))
-    }
-    if (!(is.integer(y) || is.numeric(y))) {
-        stop(sprintf("y must be class integer or numeric but was %s", 
-            paste(class(y), collapse = "; ")))
-    }
+  if (!(is.integer(x) || is.numeric(x))) {
+    stop(sprintf(
+      "x must be class integer or numeric but was %s",
+      paste(class(x), collapse = "; ")
+    ))
+  }
+  if (!(is.integer(y) || is.numeric(y))) {
+    stop(sprintf(
+      "y must be class integer or numeric but was %s",
+      paste(class(y), collapse = "; ")
+    ))
+  }
 
-    stopifnot(identical(length(x), length(y)))
+  stopifnot(identical(length(x), length(y)))
 
-    if (any(x < 0 | y < 0, na.rm = TRUE)) {
-      stop("For cicular means, cannot have negative numbers")
-    }
-    if (any(x > max | y > max, na.rm = TRUE)) {
-      stop("For cicular means, cannot have values above the theoretical maximum")
-    }
+  if (any(x < 0 | y < 0, na.rm = TRUE)) {
+    stop("For cicular means, cannot have negative numbers")
+  }
+  if (any(x > max | y > max, na.rm = TRUE)) {
+    stop("For cicular means, cannot have values above the theoretical maximum")
+  }
 
-    scale <- 360/max
-    torad <- scale * (pi / 180)
-    toorig <- (180 / pi) / scale
-    radx <- x * torad
-    rady <- y * torad
-    acos(cos(radx - rady)) * toorig
+  scale <- 360 / max
+  torad <- scale * (pi / 180)
+  toorig <- (180 / pi) / scale
+  radx <- x * torad
+  rady <- y * torad
+  acos(cos(radx - rady)) * toorig
 }
 
 
@@ -126,7 +124,8 @@ diffCircular <- function(x, y, max) {
 #' @seealso \code{\link{SEMSummary}}
 #' @keywords multivariate
 #' @importFrom lavaan lavCor lavInspect
-#' @author Suggested by Yves Rosseel author of the lavaan package on which this depends
+#' @author Suggested by Yves Rosseel author of the lavaan 
+#'   package on which this depends
 #' @export
 #' @examples
 #' # sample data
@@ -270,9 +269,10 @@ smd <- function(x, g, index = c("all", "1", "2")) {
 #' be the right hand side only.  The most common way to use it would be with
 #' variable names separated by \sQuote{+s}.  For convenience, a \sQuote{.} is
 #' expanded to mean \dQuote{all variables in the data set}.  For a large number
-#' of variables or when whole datasets are being analyzed, this can be considerably
-#' easier to write.  Also it facilitates column indexing by simply passing a subset
-#' of the data (e.g., \code{data[, 1:10]}) and using the \sQuote{.} expansion to
+#' of variables or when whole datasets are being analyzed, this can
+#' be considerably easier to write.  Also it facilitates column indexing
+#' by simply passing a subset of the data (e.g., \code{data[, 1:10]}) and
+#' using the \sQuote{.} expansion to
 #' analyze the first 10 columns.  The examples section demonstrate this use.
 #'
 #' Also noteworthy is that \code{SEMSummary} is not really meant to be used
@@ -288,20 +288,25 @@ smd <- function(x, g, index = c("all", "1", "2")) {
 #'   See the \sQuote{details} section for more information.
 #' @param data A data frame, matrix, or list containing the variables
 #'   used in the formula.  This is a required argument.
-#' @param use A character vector of how to handle missing data. Defaults to \dQuote{fiml}.
+#' @param use A character vector of how to handle missing data.
+#'   Defaults to \dQuote{fiml}.
 #' @return A list with S3 class \dQuote{SEMSummary}
 #'   \item{names}{A character vector containing the variable names.}
 #'   \item{n}{An integer vector of the length of each variable used
 #'     (this includes available and missing data).}
-#'   \item{nmissing}{An integer vector of the number of missing values in each variable.}
-#'   \item{mu}{A vector of the arithmetic means of each variable (on complete data).}
-#'   \item{stdev}{A numeric vector of the standard deviations of each variable (on complete data).}
+#'   \item{nmissing}{An integer vector of the number of missing
+#'                   values in each variable.}
+#'   \item{mu}{A vector of the arithmetic means of each variable
+#'             (on complete data).}
+#'   \item{stdev}{A numeric vector of the standard deviations of each variable
+#'                (on complete data).}
 #'   \item{Sigma}{The numeric covariance matrix for all variables.}
 #'   \item{sSigma}{The numeric correlation matrix for all variables.}
-#'   \item{coverage}{A numeric matrix giving the percentage (technically decimal)
-#'     of information available for each pairwise covariance/correlation.}
-#'   \item{pvalue}{The two-sided p values for the correlation matrix. Pairwise present N
-#'     used to calculate degrees of freedom.}
+#'   \item{coverage}{A numeric matrix giving the percentage
+#'                   (technically decimal) of information available
+#'                   for each pairwise covariance/correlation.}
+#'   \item{pvalue}{The two-sided p values for the correlation matrix.
+#'                 Pairwise present N used to calculate degrees of freedom.}
 #' @seealso \code{\link{APAStyler}}
 #' @keywords multivariate
 #' @importFrom stats terms as.formula
@@ -391,20 +396,25 @@ SEMSummary <- function(formula, data,
 #'   See the \sQuote{details} section for more information.
 #' @param data A data frame, matrix, or list containing the variables
 #'   used in the formula.  This is a required argument.
-#' @param use A character vector of how to handle missing data. Defaults to \dQuote{fiml}.
+#' @param use A character vector of how to handle missing data.
+#'   Defaults to \dQuote{fiml}.
 #' @return A list with S3 class \dQuote{SEMSummary}
 #'   \item{names}{A character vector containing the variable names.}
 #'   \item{n}{An integer vector of the length of each variable used
 #'     (this includes available and missing data).}
-#'   \item{nmissing}{An integer vector of the number of missing values in each variable.}
-#'   \item{mu}{A vector of the arithmetic means of each variable (on complete data).}
-#'   \item{stdev}{A numeric vector of the standard deviations of each variable (on complete data).}
+#'   \item{nmissing}{An integer vector of the number of missing
+#'                   values in each variable.}
+#'   \item{mu}{A vector of the arithmetic means of each variable
+#'             (on complete data).}
+#'   \item{stdev}{A numeric vector of the standard deviations of each
+#'                variable (on complete data).}
 #'   \item{Sigma}{The numeric covariance matrix for all variables.}
 #'   \item{sSigma}{The numeric correlation matrix for all variables.}
-#'   \item{coverage}{A numeric matrix giving the percentage (technically decimal)
-#'     of information available for each pairwise covariance/correlation.}
-#'   \item{pvalue}{The two-sided p values for the correlation matrix. Pairwise present N
-#'     used to calculate degrees of freedom.}
+#'   \item{coverage}{A numeric matrix giving the percentage
+#'                   (technically decimal) of information available
+#'                   for each pairwise covariance/correlation.}
+#'   \item{pvalue}{The two-sided p values for the correlation matrix.
+#'                 Pairwise present N used to calculate degrees of freedom.}
 #' @seealso \code{\link{SEMSummary}}
 #' @keywords multivariate
 #' @importFrom stats cov cov2cor pt cor
@@ -624,7 +634,7 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 
   vnames <- names(dat)
 
-  k <- ncol(dat)
+  ##k <- ncol(dat)
 
   testmiss <- .allmissing(dat)
   if (!isFALSE(testmiss)) {
@@ -882,11 +892,13 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
           })
         } else {
           tmp <- lapply(seq_len(ncol(d)), function(i) {
-            f(d[, i], percentile = percentile[i], values = values[i, ], na.rm = na.rm)
+            f(d[, i], percentile = percentile[i],
+              values = values[i, ], na.rm = na.rm)
           })
         }
 
-        all.attr <- do.call(rbind, lapply(tmp, function(x) attr(x, "winsorizedValues")))
+        all.attr <- do.call(rbind, lapply(tmp,
+          function(x) attr(x, "winsorizedValues")))
         all.attr$variable <- colnames(d)
         rownames(all.attr) <- NULL
         d <- as.data.frame(lapply(tmp, as.vector))
