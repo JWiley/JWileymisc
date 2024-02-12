@@ -439,7 +439,7 @@ SEMSummary.fit <- function(formula, data,
   }
 
   res <- switch(use,
-    fiml = {moments(X)},
+    fiml = { moments(X) },
     pairwise.complete.obs = {
       list(mu = colMeans(X, na.rm = TRUE),
         sigma = cov(X, use = "pairwise.complete.obs"))
@@ -468,9 +468,9 @@ SEMSummary.fit <- function(formula, data,
     sum(L[, j[1]] | L[, j[2]])
   })
   pvalue <- coverage <- matrix(NA, nrow = ncol(X), ncol = ncol(X))
-  diag(coverage) <- (n - nmiss)/n
-  coverage[i] <- (n - pairmiss)/n
-  coverage[i[, c(2, 1)]] <- (n - pairmiss)/n
+  diag(coverage) <- (n - nmiss) / n
+  coverage[i] <- (n - pairmiss) / n
+  coverage[i[, c(2, 1)]] <- (n - pairmiss) / n
   dimnames(coverage) <- dimnames(Sigma)
 
   df <- (coverage * n) - 2
@@ -642,8 +642,8 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
   }
 
   contvars.index <- unlist(lapply(dat, function(x) {
-      (is.integer(x) | is.numeric(x)) &
-        ((length(unique(x)) > 3) | strict)
+    (is.integer(x) | is.numeric(x)) &
+      ((length(unique(x)) > 3) | strict)
   }))
 
   catvars.index <- which(!contvars.index)
@@ -692,7 +692,7 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
       tmpres <- c(tmpres, tmpcont)
 
       reslab <- paste0(reslab, c(ifelse(parametric[contvars.index[1]],
-                                        "M (SD)", "Mdn (IQR)"), "See Rows")[multi+1])
+                                        "M (SD)", "Mdn (IQR)"), "See Rows")[multi + 1])
     }
 
     if (isTRUE(length(catvars.index) > 0)) {
@@ -721,7 +721,8 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 
       out <- do.call(cbind, lapply(seq_along(levels(g)), function(i) {
         d <- tmpout[[i]][[v]]
-        setnames(d, old = names(d)[2], paste(levels(g)[i], names(d)[2], sep = " "))
+        setnames(d, old = names(d)[2], 
+          paste(levels(g)[i], names(d)[2], sep = " "))
         if (isTRUE(i == 1)) {
           return(d)
         } else {
@@ -733,17 +734,22 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
         if (isTRUE(v %in% contvars.index)) {
           if (isTRUE(parametric[v])) {
             if (isTRUE(length(levels(g)) > 2)) {
-              out <- cbind(out, Test = c(.styleaov(dat[[v]], g), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .styleaov(dat[[v]], g), rep("", nrow(out) - 1)))
             } else if (isTRUE(length(levels(g)) == 2) && isFALSE(paired)) {
-              out <- cbind(out, Test = c(.style2sttest(dat[[v]], g), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .style2sttest(dat[[v]], g), rep("", nrow(out) - 1)))
             } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
-              out <- cbind(out, Test = c(.stylepairedttest(dat[[v]], g, ids), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .stylepairedttest(dat[[v]], g, ids), rep("", nrow(out) - 1)))
             }
           } else {
             if (isFALSE(paired)) {
-              out <- cbind(out, Test = c(.stylekruskal(dat[[v]], g), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .stylekruskal(dat[[v]], g), rep("", nrow(out) - 1)))
             } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
-              out <- cbind(out, Test = c(.stylepairedwilcox(dat[[v]], g, ids), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .stylepairedwilcox(dat[[v]], g, ids), rep("", nrow(out) - 1)))
             }
           }
         }
@@ -757,7 +763,8 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
               .stylechisq(dat[[v]], g, simChisq = simChisq, sims = sims),
               rep("", nrow(out) - 1)))
           } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
-            out <- cbind(out, Test = c(.stylepairedmcnemar(dat[[v]], g, ids), rep("", nrow(out) - 1)))
+            out <- cbind(out, Test = c(
+              .stylepairedmcnemar(dat[[v]], g, ids), rep("", nrow(out) - 1)))
           }
         }
       }
@@ -782,9 +789,11 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 #' @param percentile The percentile bounded by [0, 1] to winsorize data at.
 #'   If a data frame or matrix is provided for the data, this should have the
 #'   same length as the number of columns, or it will be repeated for all.
-#' @param values If values are specified, use these instead of calculating by percentiles.
+#' @param values If values are specified, use these instead of 
+#'   calculating by percentiles.
 #'   Should be a data frame with columns named \dQuote{low}, and \dQuote{high}.
-#'   If a data frame or matrix is provided for the data, there should be as many rows
+#'   If a data frame or matrix is provided for the data, 
+#'   there should be as many rows
 #'   for values to winsorize at as there are columns in the data.
 #' @param na.rm A logical whether to remove NAs.
 #' @return winsorized data. Attributes are included to list the exact values
@@ -798,7 +807,8 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 #' dev.new(width = 10, height = 5)
 #' par(mfrow = c(1, 2))
 #' hist(as.vector(eurodist), main = "Eurodist")
-#' hist(winsorizor(as.vector(eurodist), .05), main = "Eurodist with lower and upper\n5% winsorized")
+#' hist(winsorizor(as.vector(eurodist), .05), 
+#'   main = "Eurodist with lower and upper\n5% winsorized")
 #'
 #' library(data.table)
 #' dat <- data.table(x = 1:5)
@@ -824,7 +834,8 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
     warning("d was NULL, no winsorization performed")
   } else {
 
-    if (!is.vector(d) && !is.matrix(d) && !is.data.frame(d) && !is.data.table(d)) {
+    if (!is.vector(d) && !is.matrix(d) && 
+        !is.data.frame(d) && !is.data.table(d)) {
       if (is.atomic(d) && is.null(dim(d))) {
         warning(paste0(
           "Atomic type with no dimensions, coercing to a numeric vector.\n",
@@ -833,7 +844,8 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
         d <- as.numeric(d)
       }
     }
-    stopifnot(is.vector(d) || is.matrix(d) || is.data.frame(d) || is.data.table(d))
+    stopifnot(is.vector(d) || is.matrix(d) || 
+      is.data.frame(d) || is.data.table(d))
     dismatrix <- is.matrix(d)
 
     f <- function(x, percentile, values, na.rm) {
@@ -872,11 +884,13 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
         } else {
           for (i in seq_len(ncol(d))) {
             v <- names(d)[i]
-            d[, (v) := f(get(v), percentile = percentile[i], values = values[i, ], na.rm = na.rm)]
+            d[, (v) := f(get(v), percentile = percentile[i], 
+              values = values[i, ], na.rm = na.rm)]
           }
         }
 
-        all.attr <- do.call(rbind, lapply(seq_len(ncol(d)), function(i) attr(d[[i]], "winsorizedValues")))
+        all.attr <- do.call(rbind, lapply(seq_len(ncol(d)), 
+          function(i) attr(d[[i]], "winsorizedValues")))
         all.attr$variable <- colnames(d)
         rownames(all.attr) <- NULL
 
