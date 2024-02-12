@@ -101,7 +101,7 @@
                         <h4 data-toc-skip class="author">Joshua F.
 Wiley</h4>
             
-            <h4 data-toc-skip class="date">2024-01-21</h4>
+            <h4 data-toc-skip class="date">2024-02-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/HEAD/vignettes/diagnostics-vignette.Rmd" class="external-link"><code>vignettes/diagnostics-vignette.Rmd</code></a></small>
       <div class="d-none name"><code>diagnostics-vignette.Rmd</code></div>
@@ -145,13 +145,14 @@ etc.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testDistribution.html">testDistribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"normal"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            X    Y OriginalOrder isEV YDeviates</span></span>
-<span><span class="co">#&gt; 1:  7.313777 10.4            15   No 3.0862233</span></span>
-<span><span class="co">#&gt; 2: 10.148901 10.4            16   No 0.2510990</span></span>
-<span><span class="co">#&gt; 3: 11.680210 13.3            24   No 1.6197895</span></span>
-<span><span class="co">#&gt; 4: 12.795066 14.3             7   No 1.5049335</span></span>
-<span><span class="co">#&gt; 5: 13.698771 14.7            17   No 1.0012292</span></span>
-<span><span class="co">#&gt; 6: 14.474288 15.0            31   No 0.5257124</span></span>
+<span><span class="co">#&gt;            X     Y OriginalOrder   isEV YDeviates</span></span>
+<span><span class="co">#&gt;        &lt;num&gt; &lt;num&gt;         &lt;int&gt; &lt;fctr&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:  7.313777  10.4            15     No 3.0862233</span></span>
+<span><span class="co">#&gt; 2: 10.148901  10.4            16     No 0.2510990</span></span>
+<span><span class="co">#&gt; 3: 11.680210  13.3            24     No 1.6197895</span></span>
+<span><span class="co">#&gt; 4: 12.795066  14.3             7     No 1.5049335</span></span>
+<span><span class="co">#&gt; 5: 13.698771  14.7            17     No 1.0012292</span></span>
+<span><span class="co">#&gt; 6: 14.474288  15.0            31     No 0.5257124</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">$</span><span class="va">isEV</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  No Yes </span></span>
@@ -173,13 +174,14 @@ extreme values at both ends of the distribution for illustration.</p>
 <span>                         ev.perc <span class="op">=</span> <span class="fl">.10</span><span class="op">)</span></span>
 <span><span class="co">## view the data with extreme values</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            X    Y OriginalOrder isEV YDeviates</span></span>
-<span><span class="co">#&gt; 1:  7.313777 10.4            15  Yes 3.0862233</span></span>
-<span><span class="co">#&gt; 2: 10.148901 10.4            16  Yes 0.2510990</span></span>
-<span><span class="co">#&gt; 3: 11.680210 13.3            24   No 1.6197895</span></span>
-<span><span class="co">#&gt; 4: 12.795066 14.3             7   No 1.5049335</span></span>
-<span><span class="co">#&gt; 5: 13.698771 14.7            17   No 1.0012292</span></span>
-<span><span class="co">#&gt; 6: 14.474288 15.0            31   No 0.5257124</span></span>
+<span><span class="co">#&gt;            X     Y OriginalOrder   isEV YDeviates</span></span>
+<span><span class="co">#&gt;        &lt;num&gt; &lt;num&gt;         &lt;int&gt; &lt;fctr&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:  7.313777  10.4            15    Yes 3.0862233</span></span>
+<span><span class="co">#&gt; 2: 10.148901  10.4            16    Yes 0.2510990</span></span>
+<span><span class="co">#&gt; 3: 11.680210  13.3            24     No 1.6197895</span></span>
+<span><span class="co">#&gt; 4: 12.795066  14.3             7     No 1.5049335</span></span>
+<span><span class="co">#&gt; 5: 13.698771  14.7            17     No 1.0012292</span></span>
+<span><span class="co">#&gt; 6: 14.474288  15.0            31     No 0.5257124</span></span>
 <span></span>
 <span><span class="co">## count how many extreme values there are</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">$</span><span class="va">isEV</span><span class="op">)</span></span>
@@ -195,13 +197,14 @@ extreme values at both ends of the distribution for illustration.</p>
 <span></span>
 <span><span class="co">## show which values are extreme</span></span>
 <span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">[</span><span class="va">isEV</span> <span class="op">==</span> <span class="st">"Yes"</span><span class="op">]</span></span>
-<span><span class="co">#&gt;            X    Y OriginalOrder isEV YDeviates</span></span>
-<span><span class="co">#&gt; 1:  7.313777 10.4            15  Yes  3.086223</span></span>
-<span><span class="co">#&gt; 2: 10.148901 10.4            16  Yes  0.251099</span></span>
-<span><span class="co">#&gt; 3: 27.386184 30.4            19  Yes  3.013816</span></span>
-<span><span class="co">#&gt; 4: 28.501040 30.4            28  Yes  1.898960</span></span>
-<span><span class="co">#&gt; 5: 30.032349 32.4            18  Yes  2.367651</span></span>
-<span><span class="co">#&gt; 6: 32.867473 33.9            20  Yes  1.032527</span></span>
+<span><span class="co">#&gt;            X     Y OriginalOrder   isEV YDeviates</span></span>
+<span><span class="co">#&gt;        &lt;num&gt; &lt;num&gt;         &lt;int&gt; &lt;fctr&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:  7.313777  10.4            15    Yes  3.086223</span></span>
+<span><span class="co">#&gt; 2: 10.148901  10.4            16    Yes  0.251099</span></span>
+<span><span class="co">#&gt; 3: 27.386184  30.4            19    Yes  3.013816</span></span>
+<span><span class="co">#&gt; 4: 28.501040  30.4            28    Yes  1.898960</span></span>
+<span><span class="co">#&gt; 5: 30.032349  32.4            18    Yes  2.367651</span></span>
+<span><span class="co">#&gt; 6: 32.867473  33.9            20    Yes  1.032527</span></span>
 <span></span>
 <span><span class="co">## view extreme values on mpg in the original dataset</span></span>
 <span><span class="co">## by use the original order, the original rows to select</span></span>
@@ -221,13 +224,14 @@ well.</p>
 <span>                         extremevalues <span class="op">=</span> <span class="st">"empirical"</span>,</span>
 <span>                         ev.perc <span class="op">=</span> <span class="fl">.10</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            X    Y OriginalOrder isEV YDeviates</span></span>
-<span><span class="co">#&gt; 1:  7.313777 10.4            15  Yes 3.0862233</span></span>
-<span><span class="co">#&gt; 2: 10.148901 10.4            16  Yes 0.2510990</span></span>
-<span><span class="co">#&gt; 3: 11.680210 13.3            24  Yes 1.6197895</span></span>
-<span><span class="co">#&gt; 4: 12.795066 14.3             7  Yes 1.5049335</span></span>
-<span><span class="co">#&gt; 5: 13.698771 14.7            17   No 1.0012292</span></span>
-<span><span class="co">#&gt; 6: 14.474288 15.0            31   No 0.5257124</span></span>
+<span><span class="co">#&gt;            X     Y OriginalOrder   isEV YDeviates</span></span>
+<span><span class="co">#&gt;        &lt;num&gt; &lt;num&gt;         &lt;int&gt; &lt;fctr&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:  7.313777  10.4            15    Yes 3.0862233</span></span>
+<span><span class="co">#&gt; 2: 10.148901  10.4            16    Yes 0.2510990</span></span>
+<span><span class="co">#&gt; 3: 11.680210  13.3            24    Yes 1.6197895</span></span>
+<span><span class="co">#&gt; 4: 12.795066  14.3             7    Yes 1.5049335</span></span>
+<span><span class="co">#&gt; 5: 13.698771  14.7            17     No 1.0012292</span></span>
+<span><span class="co">#&gt; 6: 14.474288  15.0            31     No 0.5257124</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Data</span><span class="op">$</span><span class="va">isEV</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  No Yes </span></span>
@@ -316,11 +320,12 @@ then calculate diagnostics.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## show extreme values</span></span>
 <span><span class="va">md</span><span class="op">$</span><span class="va">extremeValues</span></span>
-<span><span class="co">#&gt;     mpg Index EffectType</span></span>
-<span><span class="co">#&gt; 1: 24.4     8  Residuals</span></span>
-<span><span class="co">#&gt; 2: 10.4    15  Residuals</span></span>
-<span><span class="co">#&gt; 3: 33.9    20  Residuals</span></span>
-<span><span class="co">#&gt; 4: 30.4    28  Residuals</span></span>
+<span><span class="co">#&gt;      mpg Index EffectType</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;     &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:  24.4     8  Residuals</span></span>
+<span><span class="co">#&gt; 2:  10.4    15  Residuals</span></span>
+<span><span class="co">#&gt; 3:  33.9    20  Residuals</span></span>
+<span><span class="co">#&gt; 4:  30.4    28  Residuals</span></span>
 <span></span>
 <span><span class="co">## show extreme values in overall dataset</span></span>
 <span><span class="va">mtcars</span><span class="op">[</span><span class="va">md</span><span class="op">$</span><span class="va">extremeValues</span><span class="op">$</span><span class="va">Index</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
@@ -414,10 +419,11 @@ values from the first model removed.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="co">## show (new) extreme values</span></span>
 <span><span class="va">md2</span><span class="op">$</span><span class="va">extremeValues</span></span>
-<span><span class="co">#&gt;     mpg Index EffectType</span></span>
-<span><span class="co">#&gt; 1: 10.4    14  Residuals</span></span>
-<span><span class="co">#&gt; 2: 32.4    16  Residuals</span></span>
-<span><span class="co">#&gt; 3: 19.2    22  Residuals</span></span></code></pre></div>
+<span><span class="co">#&gt;      mpg Index EffectType</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;     &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:  10.4    14  Residuals</span></span>
+<span><span class="co">#&gt; 2:  32.4    16  Residuals</span></span>
+<span><span class="co">#&gt; 3:  19.2    22  Residuals</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

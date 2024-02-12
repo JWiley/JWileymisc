@@ -120,12 +120,13 @@ for values to winsorize at as there are columns in the data.</p></dd>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dat</span><span class="op">[</span>, <span class="va">y</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    x          y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 1 -1.2649111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 2 -0.6324555</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 3  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 4  0.6324555</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 5  1.2649111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        x          y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1 -1.2649111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     2 -0.6324555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     3  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     4  0.6324555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     5  1.2649111</span>
 <span class="r-in"><span><span class="fu">winsorizor</span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">y</span>, <span class="fl">.01</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Atomic type with no dimensions, coercing to a numeric vector.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> To remove this warning, try wrapping the data in as.numeric() or</span>
@@ -137,12 +138,13 @@ for values to winsorize at as there are columns in the data.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## make a copy of the data table</span></span></span>
 <span class="r-in"><span><span class="fu">winsorizor</span><span class="op">(</span><span class="va">dat</span>, <span class="fl">.01</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x          y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 1.04 -1.2396128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 2.00 -0.6324555</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 3.00  0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: 4.00  0.6324555</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 4.96  1.2396128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        x          y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1.04 -1.2396128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  2.00 -0.6324555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  3.00  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4.00  0.6324555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  4.96  1.2396128</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">winsorizor</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fl">.01</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       mpg cyl    disp     hp  drat      wt    qsec vs am gear carb</span>

@@ -101,7 +101,7 @@
                         <h4 data-toc-skip class="author">Joshua F.
 Wiley</h4>
             
-            <h4 data-toc-skip class="date">2024-01-21</h4>
+            <h4 data-toc-skip class="date">2024-02-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/JWiley/JWileymisc/blob/HEAD/vignettes/model-test-vignette.Rmd" class="external-link"><code>vignettes/model-test-vignette.Rmd</code></a></small>
       <div class="d-none name"><code>model-test-vignette.Rmd</code></div>
@@ -146,9 +146,11 @@ variance accounted for)</li>
 <span><span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelPerformance.html">modelPerformance</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $Performance</span></span>
-<span><span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span></span>
-<span><span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578 3.062692</span></span>
+<span><span class="co">#&gt;     Model N_Obs      AIC      BIC        LL  LLDF    Sigma        R2       F2</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;num&gt;    &lt;num&gt;    &lt;num&gt;     &lt;num&gt; &lt;num&gt;    &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:     lm    32 169.8964 177.2251 -79.94822     5 3.146243 0.7538578 3.062692</span></span>
 <span><span class="co">#&gt;        AdjR2        F FNumDF FDenDF           P</span></span>
+<span><span class="co">#&gt;        &lt;num&gt;    &lt;num&gt;  &lt;num&gt;  &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: 0.7274854 28.58513      3     28 1.13969e-08</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attr(,"class")</span></span>
@@ -173,6 +175,7 @@ family.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mt</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $FixedEffects</span></span>
 <span><span class="co">#&gt;           Term         Est           LL           UL         Pval</span></span>
+<span><span class="co">#&gt;         &lt;char&gt;       &lt;num&gt;        &lt;num&gt;        &lt;num&gt;        &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: (Intercept) 28.65011816  25.39768395 31.902552374 5.921199e-17</span></span>
 <span><span class="co">#&gt; 2:          hp -0.02403883  -0.05560048  0.007522814 1.299540e-01</span></span>
 <span><span class="co">#&gt; 3:        cyl6 -5.96765508  -9.32556307 -2.609747083 1.092089e-03</span></span>
@@ -182,18 +185,22 @@ family.</p>
 <span><span class="co">#&gt; [1] NA</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $EffectSizes</span></span>
-<span><span class="co">#&gt;    Term N_Obs         AIC        BIC       LL LLDF       Sigma         R2</span></span>
-<span><span class="co">#&gt; 1:   hp     0  -0.6675031  0.7982328 1.333752    1 -0.07685536 0.02139775</span></span>
-<span><span class="co">#&gt; 2:  cyl     0 -11.3421811 -8.4107093 7.671091    2 -0.71671885 0.15142046</span></span>
-<span><span class="co">#&gt;            F2     AdjR2        F FNumDF FDenDF           P  Type</span></span>
-<span><span class="co">#&gt; 1: 0.08693246 0.0134764 2.434109      1     28 0.129954045 Fixed</span></span>
-<span><span class="co">#&gt; 2: 0.61517476 0.1383002 8.612447      2     28 0.001215981 Fixed</span></span>
+<span><span class="co">#&gt;      Term N_Obs         AIC        BIC       LL  LLDF       Sigma         R2</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;num&gt;       &lt;num&gt;      &lt;num&gt;    &lt;num&gt; &lt;num&gt;       &lt;num&gt;      &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:     hp     0  -0.6675031  0.7982328 1.333752     1 -0.07685536 0.02139775</span></span>
+<span><span class="co">#&gt; 2:    cyl     0 -11.3421811 -8.4107093 7.671091     2 -0.71671885 0.15142046</span></span>
+<span><span class="co">#&gt;            F2     AdjR2        F FNumDF FDenDF           P   Type</span></span>
+<span><span class="co">#&gt;         &lt;num&gt;     &lt;num&gt;    &lt;num&gt;  &lt;num&gt;  &lt;num&gt;       &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1: 0.08693246 0.0134764 2.434109      1     28 0.129954045  Fixed</span></span>
+<span><span class="co">#&gt; 2: 0.61517476 0.1383002 8.612447      2     28 0.001215981  Fixed</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $OverallModel</span></span>
 <span><span class="co">#&gt; $Performance</span></span>
-<span><span class="co">#&gt;    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span></span>
-<span><span class="co">#&gt; 1:    lm    32 169.8964 177.2251 -79.94822    5 3.146243 0.7538578 3.062692</span></span>
+<span><span class="co">#&gt;     Model N_Obs      AIC      BIC        LL  LLDF    Sigma        R2       F2</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;num&gt;    &lt;num&gt;    &lt;num&gt;     &lt;num&gt; &lt;num&gt;    &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:     lm    32 169.8964 177.2251 -79.94822     5 3.146243 0.7538578 3.062692</span></span>
 <span><span class="co">#&gt;        AdjR2        F FNumDF FDenDF           P</span></span>
+<span><span class="co">#&gt;        &lt;num&gt;    &lt;num&gt;  &lt;num&gt;  &lt;num&gt;       &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1: 0.7274854 28.58513      3     28 1.13969e-08</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attr(,"class")</span></span>
@@ -205,6 +212,7 @@ family.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="va">mt</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                 Term                      Est          Type</span></span>
+<span><span class="co">#&gt;               &lt;char&gt;                   &lt;char&gt;        &lt;char&gt;</span></span>
 <span><span class="co">#&gt;  1:      (Intercept) 28.65*** [ 25.40, 31.90] Fixed Effects</span></span>
 <span><span class="co">#&gt;  2:               hp    -0.02 [ -0.06,  0.01] Fixed Effects</span></span>
 <span><span class="co">#&gt;  3:             cyl6  -5.97** [ -9.33, -2.61] Fixed Effects</span></span>
@@ -226,6 +234,7 @@ family.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelTest.html">modelTest</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                 Term                       Est          Type</span></span>
+<span><span class="co">#&gt;               &lt;char&gt;                    &lt;char&gt;        &lt;char&gt;</span></span>
 <span><span class="co">#&gt;  1:      (Intercept)  35.98*** [ 27.99, 43.98] Fixed Effects</span></span>
 <span><span class="co">#&gt;  2:               hp    -0.11* [ -0.21, -0.02] Fixed Effects</span></span>
 <span><span class="co">#&gt;  3:             cyl6   -15.31* [-30.59, -0.03] Fixed Effects</span></span>

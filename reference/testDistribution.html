@@ -257,18 +257,19 @@ See details.</p></dd>
 <span class="r-in"><span><span class="co">## testing and graphing</span></span></span>
 <span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ybeta</span>, <span class="st">"beta"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape1 <span class="op">=</span> <span class="fl">1</span>, shape2 <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 X           Y OriginalOrder isEV    YDeviates</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1: 0.0009548787 0.002899638            20   No  0.001944759</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: 0.0026222465 0.006542140           122   No  0.003919893</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3: 0.0041999262 0.007116305           124   No  0.002916379</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4: 0.0057324381 0.007488806           119   No  0.001756368</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5: 0.0072360495 0.008381499             7   No  0.001145450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 0.5896978140 0.658553356           192   No  0.068855542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 0.6125406443 0.680790719           171   No  0.068250075</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 0.6411187285 0.689096550           175   No  0.047977822</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 0.6804840872 0.694824897           181   No  0.014340810</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 0.7510216428 0.697959189           198   No -0.053062454</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 X           Y OriginalOrder   isEV    YDeviates</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             &lt;num&gt;       &lt;num&gt;         &lt;int&gt; &lt;fctr&gt;        &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: 0.0009548787 0.002899638            20     No  0.001944759</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: 0.0026222465 0.006542140           122     No  0.003919893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3: 0.0041999262 0.007116305           124     No  0.002916379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: 0.0057324381 0.007488806           119     No  0.001756368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: 0.0072360495 0.008381499             7     No  0.001145450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 0.5896978140 0.658553356           192     No  0.068855542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 0.6125406443 0.680790719           171     No  0.068250075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 0.6411187285 0.689096550           175     No  0.047977822</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 0.6804840872 0.694824897           181     No  0.014340810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 0.7510216428 0.697959189           198     No -0.053062454</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$d</span>
@@ -278,7 +279,7 @@ See details.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dbeta, x, shape1, shape2, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnbeta, x, shape1, shape2, ncp, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5599af738518&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d7a0185c18&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$q</span>
@@ -289,7 +290,7 @@ See details.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_qnbeta, p, shape1, shape2, ncp, lower.tail, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5599af7330a8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d7a0185128&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$Name</span>
@@ -332,18 +333,19 @@ See details.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "testDistribution"</span>
 <span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ychisq</span>, <span class="st">"chisq"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              X         Y OriginalOrder isEV   YDeviates</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  1.020806  1.119129            75   No  0.09832363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  1.409747  1.386369            54   No -0.02337731</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  1.647133  1.476380            78   No -0.17075244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  1.829535  1.785484           149   No -0.04405142</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  1.981898  1.948253            56   No -0.03364471</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 17.443427 19.520193            34   No  2.07676616</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 18.145695 19.541868           154   No  1.39617310</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 19.071980 20.585244            55   No  1.51326441</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 20.451772 20.984934           170   No  0.53316198</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 23.332634 24.064860            12   No  0.73222569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              X         Y OriginalOrder   isEV   YDeviates</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;     &lt;num&gt;         &lt;int&gt; &lt;fctr&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  1.020806  1.119129            75     No  0.09832363</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  1.409747  1.386369            54     No -0.02337731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  1.647133  1.476380            78     No -0.17075244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  1.829535  1.785484           149     No -0.04405142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  1.981898  1.948253            56     No -0.03364471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 17.443427 19.520193            34     No  2.07676616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 18.145695 19.541868           154     No  1.39617310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 19.071980 20.585244            55     No  1.51326441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 20.451772 20.984934           170     No  0.53316198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 23.332634 24.064860            12     No  0.73222569</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$d</span>
@@ -353,7 +355,7 @@ See details.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dchisq, x, df, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnchisq, x, df, ncp, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5599af568cc8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d79f897f08&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$q</span>
@@ -363,7 +365,7 @@ See details.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_qchisq, p, df, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_qnchisq, p, df, ncp, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5599af569780&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d79f8974c0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$Name</span>
@@ -410,18 +412,19 @@ See details.</p></dd>
 <span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ychisq</span>, <span class="st">"chisq"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  extremevalues <span class="op">=</span> <span class="st">"empirical"</span>, ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              X         Y OriginalOrder isEV   YDeviates</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  1.020806  1.119129            75   No  0.09832363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  1.409747  1.386369            54   No -0.02337731</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  1.647133  1.476380            78   No -0.17075244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  1.829535  1.785484           149   No -0.04405142</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  1.981898  1.948253            56   No -0.03364471</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 17.443427 19.520193            34  Yes  2.07676616</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 18.145695 19.541868           154  Yes  1.39617310</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 19.071980 20.585244            55  Yes  1.51326441</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 20.451772 20.984934           170  Yes  0.53316198</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 23.332634 24.064860            12  Yes  0.73222569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              X         Y OriginalOrder   isEV   YDeviates</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;     &lt;num&gt;         &lt;int&gt; &lt;fctr&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  1.020806  1.119129            75     No  0.09832363</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  1.409747  1.386369            54     No -0.02337731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  1.647133  1.476380            78     No -0.17075244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  1.829535  1.785484           149     No -0.04405142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  1.981898  1.948253            56     No -0.03364471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 17.443427 19.520193            34    Yes  2.07676616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 18.145695 19.541868           154    Yes  1.39617310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 19.071980 20.585244            55    Yes  1.51326441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 20.451772 20.984934           170    Yes  0.53316198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 23.332634 24.064860            12    Yes  0.73222569</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$d</span>
@@ -431,7 +434,7 @@ See details.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dchisq, x, df, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnchisq, x, df, ncp, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5599af568cc8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d79f897f08&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$q</span>
@@ -441,7 +444,7 @@ See details.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_qchisq, p, df, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_qnchisq, p, df, ncp, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5599af569780&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d79f8974c0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$Name</span>
@@ -486,18 +489,19 @@ See details.</p></dd>
 <span class="r-in"><span><span class="fu">testDistribution</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">Ychisq</span>, <span class="st">"chisq"</span>, starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>df <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  extremevalues <span class="op">=</span> <span class="st">"theoretical"</span>, ev.perc <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              X         Y OriginalOrder isEV   YDeviates</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  1.020806  1.119129            75   No  0.09832363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  1.409747  1.386369            54   No -0.02337731</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  1.647133  1.476380            78   No -0.17075244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  1.829535  1.785484           149   No -0.04405142</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  1.981898  1.948253            56   No -0.03364471</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 17.443427 19.520193            34  Yes  2.07676616</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 18.145695 19.541868           154  Yes  1.39617310</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 19.071980 20.585244            55  Yes  1.51326441</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 20.451772 20.984934           170  Yes  0.53316198</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 23.332634 24.064860            12  Yes  0.73222569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              X         Y OriginalOrder   isEV   YDeviates</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;num&gt;     &lt;num&gt;         &lt;int&gt; &lt;fctr&gt;       &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  1.020806  1.119129            75     No  0.09832363</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  1.409747  1.386369            54     No -0.02337731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  1.647133  1.476380            78     No -0.17075244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  1.829535  1.785484           149     No -0.04405142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  1.981898  1.948253            56     No -0.03364471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196: 17.443427 19.520193            34    Yes  2.07676616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197: 18.145695 19.541868           154    Yes  1.39617310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198: 19.071980 20.585244            55    Yes  1.51326441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199: 20.451772 20.984934           170    Yes  0.53316198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200: 23.332634 24.064860            12    Yes  0.73222569</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$d</span>
@@ -507,7 +511,7 @@ See details.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dchisq, x, df, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnchisq, x, df, ncp, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5599af568cc8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d79f897f08&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$q</span>
@@ -517,7 +521,7 @@ See details.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_qchisq, p, df, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_qnchisq, p, df, ncp, lower.tail, log.p)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5599af569780&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55d79f8974c0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Distribution$Name</span>

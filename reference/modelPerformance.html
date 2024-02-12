@@ -170,9 +170,11 @@ AIC, BIC, log likelihood, R2, overall model F test, and p-value.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">modelPerformance</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span> <span class="op">*</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Performance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    lm    32 165.4972 172.8259 -77.74861    5 2.937243 0.7854734 3.661427</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Model N_Obs      AIC      BIC        LL  LLDF    Sigma        R2       F2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;num&gt;    &lt;num&gt;    &lt;num&gt;     &lt;num&gt; &lt;num&gt;    &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     lm    32 165.4972 172.8259 -77.74861     5 2.937243 0.7854734 3.661427</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        AdjR2        F FNumDF FDenDF            P</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;num&gt;    &lt;num&gt;  &lt;num&gt;  &lt;num&gt;        &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.7624884 34.17332      3     28 1.694676e-09</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
@@ -180,9 +182,11 @@ AIC, BIC, log likelihood, R2, overall model F test, and p-value.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">modelPerformance</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Performance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Model N_Obs      AIC      BIC        LL LLDF    Sigma        R2       F2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    lm    32 181.2386 185.6358 -87.61931    3 3.862962 0.6024373 1.515327</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Model N_Obs      AIC      BIC        LL  LLDF    Sigma        R2       F2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;num&gt;    &lt;num&gt;    &lt;num&gt;     &lt;num&gt; &lt;num&gt;    &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     lm    32 181.2386 185.6358 -87.61931     3 3.862962 0.6024373 1.515327</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        AdjR2       F FNumDF FDenDF            P</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;num&gt;   &lt;num&gt;  &lt;num&gt;  &lt;num&gt;        &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.5891853 45.4598      1     30 1.787835e-07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>

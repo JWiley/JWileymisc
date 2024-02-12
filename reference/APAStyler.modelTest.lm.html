@@ -126,6 +126,7 @@ APA style).</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span> <span class="op">*</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="APAStyler.html">APAStyler</a></span><span class="op">(</span><span class="fu"><a href="modelTest.html">modelTest</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Term                      Est          Type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               &lt;char&gt;                   &lt;char&gt;        &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:      (Intercept)     8.52 [-17.15, 34.20] Fixed Effects</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:             qsec    1.48* [  0.08,  2.87] Fixed Effects</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3:               hp   0.24** [  0.09,  0.39] Fixed Effects</span>
@@ -151,6 +152,7 @@ APA style).</p></dd>
 <span class="r-in"><span>  includeSign <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  dropLeadingZero <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Term                               Est          Type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               &lt;char&gt;                            &lt;char&gt;        &lt;char&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:      (Intercept)  8.52, p = .5020\n(-17.15, 34.20) Fixed Effects</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2:             qsec  1.48, p = .0386\n(  0.08,  2.87) Fixed Effects</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3:               hp  0.24, p = .0034\n(  0.09,  0.39) Fixed Effects</span>
