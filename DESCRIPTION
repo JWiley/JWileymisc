@@ -43,7 +43,7 @@ Imports:
     digest,
     fst,
     rlang
-Suggests:    
+Suggests: 
     foreach,
     testthat (>= 3.1.10),
     covr,
@@ -56,4 +56,4 @@ Encoding: UTF-8
 LazyData: true
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
