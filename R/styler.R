@@ -8,7 +8,7 @@ APAStyler <- function(object, ...) {
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1") utils::globalVariables(c("Rank", "._FinalRank", "._WhichModel"))
+if (getRversion() >= "2.15.1") utils::globalVariables(c("Rank", "._FinalRank", "._WhichModel"))
 
 #' APAStyler method for lists
 #'
@@ -201,7 +201,7 @@ APAStyler.modelTest.lm <- function(object,
 
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("Names", ".SD", "Count", "DF", "Chisq", "Test"))
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("Names", ".SD", "Count", "DF", "Chisq", "Test"))
 
 #' APAStyler method for model tests from a vglm multinomial model
 #'

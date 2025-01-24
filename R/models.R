@@ -24,7 +24,7 @@ modelPerformance <- function(object, ...) {
 #' @export
 as.modelPerformance <- function(x) {
   if (!is.modelPerformance(x)) {
-    if(!is.list(x)) {
+    if (!is.list(x)) {
       stop("Input must be a list or a modelPerformance object")
     }
     augmentClass <- attr(x, "augmentClass")
@@ -32,10 +32,11 @@ as.modelPerformance <- function(x) {
     x <- list(
       Performance = x[[1]])
 
-    if(is.null(augmentClass)) {
+    if (is.null(augmentClass)) {
       class(x) <- "modelPerformance"
     } else {
-      class(x) <- c(paste0("modelPerformance.", augmentClass), "modelPerformance")
+      class(x) <- c(paste0("modelPerformance.", augmentClass), 
+        "modelPerformance")
     }
   }
 
@@ -89,7 +90,8 @@ modelPerformance.lm <- function(object, ...) {
   msum <- summary(object)
 
   ## empty model or intercept only model
-  if (object$rank == 0 || (object$rank == 1 && attr(terms(object), "intercept") == 1)) {
+  if (object$rank == 0 || (object$rank == 1 && 
+      attr(terms(object), "intercept") == 1)) {
     msum$fstatistic <- c(value = NA_real_, numdf = NA_real_, dendf = NA_real_)
   }
   P <- pf(msum$fstatistic[["value"]],
@@ -98,20 +100,20 @@ modelPerformance.lm <- function(object, ...) {
           lower.tail = FALSE)
 
   out <- data.table(
-    Model = as.character("lm"),
+    Model =  as.character("lm"),
     N_Obs =  as.numeric(nrow(model.matrix(object))),
-    AIC =   as.numeric(AIC(object)),
-    BIC =   as.numeric(BIC(object)),
-    LL =    as.numeric(LL),
-    LLDF =  as.numeric(LLdf),
-    Sigma = as.numeric(msum$sigma),
-    R2 =    as.numeric(msum$r.squared),
-    F2 =    as.numeric(msum$r.squared / (1 - msum$r.squared)),
-    AdjR2 = as.numeric(msum$adj.r.squared),
-    F =     as.numeric(msum$fstatistic[["value"]]),
-    FNumDF= as.numeric(msum$fstatistic[["numdf"]]),
-    FDenDF= as.numeric(msum$fstatistic[["dendf"]]),
-    P =     as.numeric(P))
+    AIC =    as.numeric(AIC(object)),
+    BIC =    as.numeric(BIC(object)),
+    LL =     as.numeric(LL),
+    LLDF =   as.numeric(LLdf),
+    Sigma =  as.numeric(msum$sigma),
+    R2 =     as.numeric(msum$r.squared),
+    F2 =     as.numeric(msum$r.squared / (1 - msum$r.squared)),
+    AdjR2 =  as.numeric(msum$adj.r.squared),
+    F =      as.numeric(msum$fstatistic[["value"]]),
+    FNumDF = as.numeric(msum$fstatistic[["numdf"]]),
+    FDenDF = as.numeric(msum$fstatistic[["dendf"]]),
+    P =      as.numeric(P))
   out <- list(out)
   attr(out, "augmentClass") <- "lm"
 
@@ -198,7 +200,7 @@ is.modelCompare <- function(x) {
 }
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("F2", "FNumDF", "FDenDF"))
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("F2", "FNumDF", "FDenDF"))
 
 #' @rdname modelCompare
 #' @importFrom data.table data.table
@@ -318,7 +320,7 @@ as.modelTest <- function(x) {
 }
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("K"))
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("K"))
 
 #' At the moment, \code{modelTest.vglm} method only handles the multinomial
 #'   family, although this may get expanded in the future.
@@ -380,10 +382,10 @@ modelTest.vglm <- function(object, ...) {
   if ("multinomial" %in% object@family@vfamily) {
     "do something"
   } else {
-    stop ("can only deal with multinomial family vglm models right now")
+    stop("can only deal with multinomial family vglm models right now")
   }
 
-  k <- 1L:ncol(object@y)
+  k <- seq_len(ncol(object@y))
   if (length(k) < 3) stop("DV must have at least 3 levels, after omitting missing data")
 
   ## k - 1 comparisons
@@ -465,7 +467,7 @@ modelTest.vglm <- function(object, ...) {
 }
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("Model", "Type"))
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("Model", "Type"))
 
 #' Modified lm() to use a specified design matrix
 #'
@@ -538,7 +540,8 @@ lm2 <- function (formula, data, subset, weights, na.action,## method = "qr",
         if (!mlm)
             offset <- as.vector(offset)
         if (NROW(offset) != ny)
-            stop(gettextf("number of offsets is %d, should equal %d (number of observations)",
+            stop(gettextf(
+              "number of offsets is %d, should equal %d (number of observations)",
                 NROW(offset), ny), domain = NA)
     }
     if (is.empty.model(mt)) {
@@ -551,8 +554,7 @@ lm2 <- function (formula, data, subset, weights, na.action,## method = "qr",
             z$fitted.values <- offset
             z$residuals <- y - offset
         }
-    }
-    else {
+    } else {
         x <- designMatrix
         z <- if (is.null(w))
             lm.fit(x, y, offset = offset, singular.ok = singular.ok,
@@ -567,15 +569,19 @@ lm2 <- function (formula, data, subset, weights, na.action,## method = "qr",
     z$xlevels <- .getXlevels(mt, mf)
     z$call <- cl
     z$terms <- mt
-    if (model)
+    if (model) {
         z$model <- mf
-    if (ret.x)
+    }
+    if (ret.x) {
         z$x <- x
-    if (ret.y)
+    }
+    if (ret.y) {
         z$y <- y
-    if (!qr)
+    }
+    if (!qr) {
         z$qr <- NULL
-    z
+    }
+    return(z)
 }
 
 
@@ -612,15 +618,19 @@ modelTest.lm <- function(object, ...) {
   f <- formula(object)
   fe.terms <- terms(f)
   fe.labs <- labels(fe.terms)
-  fe.intercept <- if(identical(attr(fe.terms, "intercept"), 1L)) "1" else "0"
+  fe.intercept <- if (identical(attr(fe.terms, "intercept"), 1L)) "1" else "0"
 
   mf <- model.frame(object)
   vnames <- all.vars(formula(object))
   if (identical(ncol(mf), length(vnames))) {
     names(mf) <- vnames
   } else {
-    stop(sprintf(
-      "There are %d columns in the model frame [%s],\n  but %d variable names in the formula [%s].\n  If an on-the-fly transformation was applied,\n  try creating the variable / transformation as a new variable in the dataset and re-running.",
+    stop(sprintf(paste0(
+      "There are %d columns in the model frame [%s],\n  ",
+      "but %d variable names in the formula [%s].\n  ",
+      "If an on-the-fly transformation was applied,\n  ",
+      "try creating the variable / transformation as a new ",
+      "variable in the dataset and re-running."),
       ncol(mf),
       paste(names(mf), collapse = ", "),
       length(vnames),
@@ -636,8 +646,8 @@ modelTest.lm <- function(object, ...) {
   fes <- data.table(
     Term = rownames(cis),
     Est = as.numeric(coef(object)),
-    LL = cis[,1],
-    UL = cis[,2],
+    LL = cis[, 1],
+    UL = cis[, 2],
     Pval = coef(msum)[, "Pr(>|t|)"])
 
 
@@ -660,7 +670,7 @@ modelTest.lm <- function(object, ...) {
                       data = mf,
                       designMatrix = x[, use, drop = FALSE], yObserved = y)
 
-      out <- modelCompare(object, reduced)$Comparison[Model=="Difference"]
+      out <- modelCompare(object, reduced)$Comparison[Model == "Difference"]
     }
     setnames(out, old = "Model", new = "Term")
     out$Term <- fe.labs[[i]]
@@ -676,15 +686,15 @@ modelTest.lm <- function(object, ...) {
 }
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1") {
-  utils::globalVariables(c(
+if (getRversion() >= "2.15.1") {
+   utils::globalVariables(c(
            "Comp", "Num", "Labels", "Ref", "Term",
            "B", "P", "LL", "UL", "SE"))
 }
 
 
 ## clear R CMD CHECK notes
-if(getRversion() >= "2.15.1") utils::globalVariables(c("V2", "Index", ".N"))
+if (getRversion() >= "2.15.1") utils::globalVariables(c("V2", "Index", ".N"))
 
 
 ##' Function to find significant regions from an interaction
@@ -781,7 +791,7 @@ findSigRegions <- function(object, l1, l2, name.vary, lower, upper, alpha = .05,
 }
 
 # clear R CMD CHECK notes
-if(getRversion() >= "2.15.1") {
+if (getRversion() >= "2.15.1") {
   utils::globalVariables(c(
            "Pvalue", "xz", "yz", "yhat", "yllz",
            "lower", "yulz", "upper", "reglab", "Contrast",
@@ -1011,8 +1021,10 @@ internalformulaIt <- function(dv, iv, covariates) {
 ##' @param iv A character string or vector giving the IV(s)
 ##' @param covariates A character string or vector giving the covariate(s)
 ##' @param data The data to be used for analysis
-##' @param multivariate A logical value whether to have models with all IVs simultaneously.
-##' @param \ldots Additional arguments passed on to the internal function, \code{.runIt}.
+##' @param multivariate A logical value whether to have models with
+##'   all IVs simultaneously.
+##' @param \ldots Additional arguments passed on to the internal 
+##'   function, \code{.runIt}.
 ##' @return A list with all the model results.
 ##' @keywords internal
 ##' @importFrom stats na.omit get_all_vars
@@ -1026,7 +1038,8 @@ internalformulaIt <- function(dv, iv, covariates) {
 ##' test1$Summary
 ##' rm(test1)
 internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
-                       iv, covariates = character(), data, multivariate = FALSE, ...) {
+                       iv, covariates = character(), data,
+                       multivariate = FALSE, ...) {
 
   if (length(iv) <= 1 & multivariate) {
     stop("Cannot use multivariate = TRUE when only a single IV")
@@ -1212,16 +1225,20 @@ internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
 
 #' Compares the effects of various independent variables on dependent variables
 #'
-#' Utility to estimate the unadjusted, covariate adjusted, and multivariate adjusted
-#' unique contributions of one or more IVs on one or more DVs
+#' Utility to estimate the unadjusted, covariate adjusted, and 
+#' multivariate adjusted unique contributions of one or more IVs 
+#' on one or more DVs
 #'
 #' @param dv A character string or vector of the depentent variable(s)
-#' @param type A character string or vector indicating the type of dependent variable(s)
+#' @param type A character string or vector indicating the type of 
+#'   dependent variable(s)
 #' @param iv A character string or vector giving the IV(s)
 #' @param covariates A character string or vector giving the covariate(s)
 #' @param data The data to be used for analysis
-#' @param multivariate A logical value whether to have models with all IVs simultaneously.
-#' @param \ldots Additional arguments passed on to the internal function, \code{.runIt}.
+#' @param multivariate A logical value whether to have models with all 
+#'   IVs simultaneously.
+#' @param \ldots Additional arguments passed on to the internal function, 
+#'   \code{.runIt}.
 #' @return A list with all the model results.
 #' @export
 #' @examples
@@ -1233,7 +1250,8 @@ internalcompareIV <- function(dv, type = c("normal", "binary", "count"),
 #'   data = mtcars, multivariate = TRUE)
 #' test1$OverallSummary
 #' rm(test1)
-compareIVs <- function(dv, type, iv, covariates = character(), data, multivariate = FALSE, ...) {
+compareIVs <- function(dv, type, iv, covariates = character(), 
+                       data, multivariate = FALSE, ...) {
   stopifnot(identical(length(dv), length(type)))
 
   res <- lapply(seq_along(dv), function(i) {
@@ -1248,7 +1266,11 @@ compareIVs <- function(dv, type, iv, covariates = character(), data, multivariat
 
   res$OverallSummary <- do.call(rbind, lapply(seq_along(dv), function(x) {
     do.call(rbind, lapply(seq_along(iv), function(y) {
-      cbind.data.frame(dv = dv[x], iv = iv[y], res[[x]][[y]]$Summary, stringsAsFactors = FALSE)
+      cbind.data.frame(
+        dv = dv[x], 
+        iv = iv[y], 
+        res[[x]][[y]]$Summary,
+        stringsAsFactors = FALSE)
     }))
   }))
 

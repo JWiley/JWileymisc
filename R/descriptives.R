@@ -55,14 +55,6 @@ meanCircular <- function(x, max, na.rm = TRUE) {
     out <- atan2(ms, mc) + 2 * pi
   }
 
-  ## if (ms > 0 && mc > 0) {
-  ##   out <- atan2(ms, mc)
-  ## } else if (mc <= 0) {
-  ##   out <- atan2(ms, mc) + pi
-  ## } else if (ms < 0 && mc > 0) {
-  ##   out <- atan2(ms, mc) + 2 * pi
-  ## }
-
   ## radians to degrees and unscale to the inputs
   out <- out * (180 / pi) / scale
   if (out == max) {
@@ -75,38 +67,44 @@ meanCircular <- function(x, max, na.rm = TRUE) {
 #'
 #' @param x Numeric or integer values
 #' @param y Numeric or integer values
-#' @param max the theoretical maximum (e.g., if degrees, 360; if hours, 24; etc.).
-#' @return A value with the circular difference. This will always be positive if defined.
+#' @param max the theoretical maximum 
+#'   (e.g., if degrees, 360; if hours, 24; etc.).
+#' @return A value with the circular difference.
+#'   This will always be positive if defined.
 #' @export
 #' @examples
 #' diffCircular(330, 30, max = 360)
 #' diffCircular(22, 1, max = 24)
 #' diffCircular(c(22, 23, 21, 22), c(1, 1, 23, 14), max = 24)
 diffCircular <- function(x, y, max) {
-    if (!(is.integer(x) || is.numeric(x))) {
-        stop(sprintf("x must be class integer or numeric but was %s", 
-            paste(class(x), collapse = "; ")))
-    }
-    if (!(is.integer(y) || is.numeric(y))) {
-        stop(sprintf("y must be class integer or numeric but was %s", 
-            paste(class(y), collapse = "; ")))
-    }
+  if (!(is.integer(x) || is.numeric(x))) {
+    stop(sprintf(
+      "x must be class integer or numeric but was %s",
+      paste(class(x), collapse = "; ")
+    ))
+  }
+  if (!(is.integer(y) || is.numeric(y))) {
+    stop(sprintf(
+      "y must be class integer or numeric but was %s",
+      paste(class(y), collapse = "; ")
+    ))
+  }
 
-    stopifnot(identical(length(x), length(y)))
+  stopifnot(identical(length(x), length(y)))
 
-    if (any(x < 0 | y < 0, na.rm = TRUE)) {
-      stop("For cicular means, cannot have negative numbers")
-    }
-    if (any(x > max | y > max, na.rm = TRUE)) {
-      stop("For cicular means, cannot have values above the theoretical maximum")
-    }
+  if (any(x < 0 | y < 0, na.rm = TRUE)) {
+    stop("For cicular means, cannot have negative numbers")
+  }
+  if (any(x > max | y > max, na.rm = TRUE)) {
+    stop("For cicular means, cannot have values above the theoretical maximum")
+  }
 
-    scale <- 360/max
-    torad <- scale * (pi / 180)
-    toorig <- (180 / pi) / scale
-    radx <- x * torad
-    rady <- y * torad
-    acos(cos(radx - rady)) * toorig
+  scale <- 360 / max
+  torad <- scale * (pi / 180)
+  toorig <- (180 / pi) / scale
+  radx <- x * torad
+  rady <- y * torad
+  acos(cos(radx - rady)) * toorig
 }
 
 
@@ -126,7 +124,8 @@ diffCircular <- function(x, y, max) {
 #' @seealso \code{\link{SEMSummary}}
 #' @keywords multivariate
 #' @importFrom lavaan lavCor lavInspect
-#' @author Suggested by Yves Rosseel author of the lavaan package on which this depends
+#' @author Suggested by Yves Rosseel author of the lavaan 
+#'   package on which this depends
 #' @export
 #' @examples
 #' # sample data
@@ -270,9 +269,10 @@ smd <- function(x, g, index = c("all", "1", "2")) {
 #' be the right hand side only.  The most common way to use it would be with
 #' variable names separated by \sQuote{+s}.  For convenience, a \sQuote{.} is
 #' expanded to mean \dQuote{all variables in the data set}.  For a large number
-#' of variables or when whole datasets are being analyzed, this can be considerably
-#' easier to write.  Also it facilitates column indexing by simply passing a subset
-#' of the data (e.g., \code{data[, 1:10]}) and using the \sQuote{.} expansion to
+#' of variables or when whole datasets are being analyzed, this can
+#' be considerably easier to write.  Also it facilitates column indexing
+#' by simply passing a subset of the data (e.g., \code{data[, 1:10]}) and
+#' using the \sQuote{.} expansion to
 #' analyze the first 10 columns.  The examples section demonstrate this use.
 #'
 #' Also noteworthy is that \code{SEMSummary} is not really meant to be used
@@ -288,23 +288,29 @@ smd <- function(x, g, index = c("all", "1", "2")) {
 #'   See the \sQuote{details} section for more information.
 #' @param data A data frame, matrix, or list containing the variables
 #'   used in the formula.  This is a required argument.
-#' @param use A character vector of how to handle missing data. Defaults to \dQuote{fiml}.
+#' @param use A character vector of how to handle missing data.
+#'   Defaults to \dQuote{fiml}.
 #' @return A list with S3 class \dQuote{SEMSummary}
 #'   \item{names}{A character vector containing the variable names.}
 #'   \item{n}{An integer vector of the length of each variable used
 #'     (this includes available and missing data).}
-#'   \item{nmissing}{An integer vector of the number of missing values in each variable.}
-#'   \item{mu}{A vector of the arithmetic means of each variable (on complete data).}
-#'   \item{stdev}{A numeric vector of the standard deviations of each variable (on complete data).}
+#'   \item{nmissing}{An integer vector of the number of missing
+#'                   values in each variable.}
+#'   \item{mu}{A vector of the arithmetic means of each variable
+#'             (on complete data).}
+#'   \item{stdev}{A numeric vector of the standard deviations of each variable
+#'                (on complete data).}
 #'   \item{Sigma}{The numeric covariance matrix for all variables.}
 #'   \item{sSigma}{The numeric correlation matrix for all variables.}
-#'   \item{coverage}{A numeric matrix giving the percentage (technically decimal)
-#'     of information available for each pairwise covariance/correlation.}
-#'   \item{pvalue}{The two-sided p values for the correlation matrix. Pairwise present N
-#'     used to calculate degrees of freedom.}
+#'   \item{coverage}{A numeric matrix giving the percentage
+#'                   (technically decimal) of information available
+#'                   for each pairwise covariance/correlation.}
+#'   \item{pvalue}{The two-sided p values for the correlation matrix.
+#'                 Pairwise present N used to calculate degrees of freedom.}
 #' @seealso \code{\link{APAStyler}}
 #' @keywords multivariate
 #' @importFrom stats terms as.formula
+#' @importFrom extraoperators %?in%
 #' @export
 #' @examples
 #' ## Example using the built in iris dataset
@@ -353,7 +359,7 @@ SEMSummary <- function(formula, data,
   use = c("fiml", "pairwise.complete.obs", "complete.obs")) {
   env <- environment(formula)
 
-  if (!is.data.frame(data)) {
+  if (isFALSE(is.data.frame(data))) {
     data <- as.data.frame(data)
   }
 
@@ -369,7 +375,9 @@ SEMSummary <- function(formula, data,
 
     grouping <- interaction(eval(vars, data, env), drop = TRUE)
 
-    output <- by(data[, -which(colnames(data) %in% vnames)], grouping, FUN = function(d) SEMSummary.fit(formula, d, use = use))
+    output <- by(data[, -(colnames(data) %?in% vnames)],
+      grouping,
+      FUN = function(d) SEMSummary.fit(formula, d, use = use))
     output$Levels <- levels(grouping)
 
     class(output) <- "SEMSummary.list"
@@ -388,20 +396,25 @@ SEMSummary <- function(formula, data,
 #'   See the \sQuote{details} section for more information.
 #' @param data A data frame, matrix, or list containing the variables
 #'   used in the formula.  This is a required argument.
-#' @param use A character vector of how to handle missing data. Defaults to \dQuote{fiml}.
+#' @param use A character vector of how to handle missing data.
+#'   Defaults to \dQuote{fiml}.
 #' @return A list with S3 class \dQuote{SEMSummary}
 #'   \item{names}{A character vector containing the variable names.}
 #'   \item{n}{An integer vector of the length of each variable used
 #'     (this includes available and missing data).}
-#'   \item{nmissing}{An integer vector of the number of missing values in each variable.}
-#'   \item{mu}{A vector of the arithmetic means of each variable (on complete data).}
-#'   \item{stdev}{A numeric vector of the standard deviations of each variable (on complete data).}
+#'   \item{nmissing}{An integer vector of the number of missing
+#'                   values in each variable.}
+#'   \item{mu}{A vector of the arithmetic means of each variable
+#'             (on complete data).}
+#'   \item{stdev}{A numeric vector of the standard deviations of each
+#'                variable (on complete data).}
 #'   \item{Sigma}{The numeric covariance matrix for all variables.}
 #'   \item{sSigma}{The numeric correlation matrix for all variables.}
-#'   \item{coverage}{A numeric matrix giving the percentage (technically decimal)
-#'     of information available for each pairwise covariance/correlation.}
-#'   \item{pvalue}{The two-sided p values for the correlation matrix. Pairwise present N
-#'     used to calculate degrees of freedom.}
+#'   \item{coverage}{A numeric matrix giving the percentage
+#'                   (technically decimal) of information available
+#'                   for each pairwise covariance/correlation.}
+#'   \item{pvalue}{The two-sided p values for the correlation matrix.
+#'                 Pairwise present N used to calculate degrees of freedom.}
 #' @seealso \code{\link{SEMSummary}}
 #' @keywords multivariate
 #' @importFrom stats cov cov2cor pt cor
@@ -412,7 +425,9 @@ SEMSummary.fit <- function(formula, data,
 
   vars <- attr(terms(formula, data = data), "variables")
   vnames <- as.character(vars)[-1L]
-  if (length(vnames) < 2) stop("You must specify at least 2 variables to use this function")
+  if (length(vnames) < 2) {
+    stop("You must specify at least 2 variables to use this function")
+  }
   env <- environment(formula)
 
   X <- eval(vars, data, env)
@@ -424,7 +439,7 @@ SEMSummary.fit <- function(formula, data,
   }
 
   res <- switch(use,
-    fiml = {moments(X)},
+    fiml = { moments(X) },
     pairwise.complete.obs = {
       list(mu = colMeans(X, na.rm = TRUE),
         sigma = cov(X, use = "pairwise.complete.obs"))
@@ -453,9 +468,9 @@ SEMSummary.fit <- function(formula, data,
     sum(L[, j[1]] | L[, j[2]])
   })
   pvalue <- coverage <- matrix(NA, nrow = ncol(X), ncol = ncol(X))
-  diag(coverage) <- (n - nmiss)/n
-  coverage[i] <- (n - pairmiss)/n
-  coverage[i[, c(2, 1)]] <- (n - pairmiss)/n
+  diag(coverage) <- (n - nmiss) / n
+  coverage[i] <- (n - pairmiss) / n
+  coverage[i[, c(2, 1)]] <- (n - pairmiss) / n
   dimnames(coverage) <- dimnames(Sigma)
 
   df <- (coverage * n) - 2
@@ -467,7 +482,8 @@ SEMSummary.fit <- function(formula, data,
 
   names(nmiss) <- names(mu) <- names(stdev) <- names(X)
 
-  output <- list(names = vnames, n = n, nmissing = nmiss, mu = mu, stdev = stdev,
+  output <- list(
+    names = vnames, n = n, nmissing = nmiss, mu = mu, stdev = stdev,
     Sigma = Sigma, sSigma = sSigma, coverage = coverage, pvalue = pvalue)
   class(output) <- "SEMSummary"
 
@@ -570,7 +586,7 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("dv1", "dv2"))
 #' rm(tmp)
 egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
                      paired = FALSE, simChisq = FALSE, sims = 1e6L) {
-  if (!missing(data)) {
+  if (isFALSE(missing(data))) {
     present <- vars %in% names(data)
     if (isFALSE(all(present))) {
       absent <- vars %snin% names(data)
@@ -584,12 +600,12 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
     } else {
       dat <- as.data.table(data[, vars, drop = FALSE])
     }
-    if (!missing(g)) {
+    if (isFALSE(missing(g))) {
       if (length(g) == 1) {
         g <- data[[g]]
       }
     }
-    if (!missing(idvar)) {
+    if (isFALSE(missing(idvar))) {
       ids <- data[[idvar]]
       if (anyNA(ids)) stop("cannot have missing IDs")
     }
@@ -618,7 +634,7 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 
   vnames <- names(dat)
 
-  k <- ncol(dat)
+  ##k <- ncol(dat)
 
   testmiss <- .allmissing(dat)
   if (!isFALSE(testmiss)) {
@@ -626,8 +642,8 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
   }
 
   contvars.index <- unlist(lapply(dat, function(x) {
-      (is.integer(x) | is.numeric(x)) &
-        ((length(unique(x)) > 3) | strict)
+    (is.integer(x) | is.numeric(x)) &
+      ((length(unique(x)) > 3) | strict)
   }))
 
   catvars.index <- which(!contvars.index)
@@ -676,7 +692,7 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
       tmpres <- c(tmpres, tmpcont)
 
       reslab <- paste0(reslab, c(ifelse(parametric[contvars.index[1]],
-                                        "M (SD)", "Mdn (IQR)"), "See Rows")[multi+1])
+                                        "M (SD)", "Mdn (IQR)"), "See Rows")[multi + 1])
     }
 
     if (isTRUE(length(catvars.index) > 0)) {
@@ -705,7 +721,8 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 
       out <- do.call(cbind, lapply(seq_along(levels(g)), function(i) {
         d <- tmpout[[i]][[v]]
-        setnames(d, old = names(d)[2], paste(levels(g)[i], names(d)[2], sep = " "))
+        setnames(d, old = names(d)[2], 
+          paste(levels(g)[i], names(d)[2], sep = " "))
         if (isTRUE(i == 1)) {
           return(d)
         } else {
@@ -717,17 +734,22 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
         if (isTRUE(v %in% contvars.index)) {
           if (isTRUE(parametric[v])) {
             if (isTRUE(length(levels(g)) > 2)) {
-              out <- cbind(out, Test = c(.styleaov(dat[[v]], g), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .styleaov(dat[[v]], g), rep("", nrow(out) - 1)))
             } else if (isTRUE(length(levels(g)) == 2) && isFALSE(paired)) {
-              out <- cbind(out, Test = c(.style2sttest(dat[[v]], g), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .style2sttest(dat[[v]], g), rep("", nrow(out) - 1)))
             } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
-              out <- cbind(out, Test = c(.stylepairedttest(dat[[v]], g, ids), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .stylepairedttest(dat[[v]], g, ids), rep("", nrow(out) - 1)))
             }
           } else {
             if (isFALSE(paired)) {
-              out <- cbind(out, Test = c(.stylekruskal(dat[[v]], g), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .stylekruskal(dat[[v]], g), rep("", nrow(out) - 1)))
             } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
-              out <- cbind(out, Test = c(.stylepairedwilcox(dat[[v]], g, ids), rep("", nrow(out) - 1)))
+              out <- cbind(out, Test = c(
+                .stylepairedwilcox(dat[[v]], g, ids), rep("", nrow(out) - 1)))
             }
           }
         }
@@ -741,7 +763,8 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
               .stylechisq(dat[[v]], g, simChisq = simChisq, sims = sims),
               rep("", nrow(out) - 1)))
           } else if (isTRUE(length(levels(g)) == 2) && isTRUE(paired)) {
-            out <- cbind(out, Test = c(.stylepairedmcnemar(dat[[v]], g, ids), rep("", nrow(out) - 1)))
+            out <- cbind(out, Test = c(
+              .stylepairedmcnemar(dat[[v]], g, ids), rep("", nrow(out) - 1)))
           }
         }
       }
@@ -766,9 +789,11 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 #' @param percentile The percentile bounded by [0, 1] to winsorize data at.
 #'   If a data frame or matrix is provided for the data, this should have the
 #'   same length as the number of columns, or it will be repeated for all.
-#' @param values If values are specified, use these instead of calculating by percentiles.
+#' @param values If values are specified, use these instead of 
+#'   calculating by percentiles.
 #'   Should be a data frame with columns named \dQuote{low}, and \dQuote{high}.
-#'   If a data frame or matrix is provided for the data, there should be as many rows
+#'   If a data frame or matrix is provided for the data, 
+#'   there should be as many rows
 #'   for values to winsorize at as there are columns in the data.
 #' @param na.rm A logical whether to remove NAs.
 #' @return winsorized data. Attributes are included to list the exact values
@@ -782,7 +807,8 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 #' dev.new(width = 10, height = 5)
 #' par(mfrow = c(1, 2))
 #' hist(as.vector(eurodist), main = "Eurodist")
-#' hist(winsorizor(as.vector(eurodist), .05), main = "Eurodist with lower and upper\n5% winsorized")
+#' hist(winsorizor(as.vector(eurodist), .05), 
+#'   main = "Eurodist with lower and upper\n5% winsorized")
 #'
 #' library(data.table)
 #' dat <- data.table(x = 1:5)
@@ -798,7 +824,7 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
 #'
 #' rm(dat) # clean up
 winsorizor <- function(d, percentile, values, na.rm = TRUE) {
-  if (!missing(percentile)) {
+  if (isFALSE(missing(percentile))) {
     stopifnot(percentile %age% 0 && percentile %ale% 1)
   } else if (missing(percentile)) {
     percentile <- NA_real_
@@ -808,7 +834,8 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
     warning("d was NULL, no winsorization performed")
   } else {
 
-    if (!is.vector(d) && !is.matrix(d) && !is.data.frame(d) && !is.data.table(d)) {
+    if (!is.vector(d) && !is.matrix(d) && 
+        !is.data.frame(d) && !is.data.table(d)) {
       if (is.atomic(d) && is.null(dim(d))) {
         warning(paste0(
           "Atomic type with no dimensions, coercing to a numeric vector.\n",
@@ -817,7 +844,8 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
         d <- as.numeric(d)
       }
     }
-    stopifnot(is.vector(d) || is.matrix(d) || is.data.frame(d) || is.data.table(d))
+    stopifnot(is.vector(d) || is.matrix(d) || 
+      is.data.frame(d) || is.data.table(d))
     dismatrix <- is.matrix(d)
 
     f <- function(x, percentile, values, na.rm) {
@@ -856,11 +884,13 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
         } else {
           for (i in seq_len(ncol(d))) {
             v <- names(d)[i]
-            d[, (v) := f(get(v), percentile = percentile[i], values = values[i, ], na.rm = na.rm)]
+            d[, (v) := f(get(v), percentile = percentile[i], 
+              values = values[i, ], na.rm = na.rm)]
           }
         }
 
-        all.attr <- do.call(rbind, lapply(seq_len(ncol(d)), function(i) attr(d[[i]], "winsorizedValues")))
+        all.attr <- do.call(rbind, lapply(seq_len(ncol(d)), 
+          function(i) attr(d[[i]], "winsorizedValues")))
         all.attr$variable <- colnames(d)
         rownames(all.attr) <- NULL
 
@@ -876,11 +906,13 @@ winsorizor <- function(d, percentile, values, na.rm = TRUE) {
           })
         } else {
           tmp <- lapply(seq_len(ncol(d)), function(i) {
-            f(d[, i], percentile = percentile[i], values = values[i, ], na.rm = na.rm)
+            f(d[, i], percentile = percentile[i],
+              values = values[i, ], na.rm = na.rm)
           })
         }
 
-        all.attr <- do.call(rbind, lapply(tmp, function(x) attr(x, "winsorizedValues")))
+        all.attr <- do.call(rbind, lapply(tmp,
+          function(x) attr(x, "winsorizedValues")))
         all.attr$variable <- colnames(d)
         rownames(all.attr) <- NULL
         d <- as.data.frame(lapply(tmp, as.vector))

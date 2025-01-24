@@ -60,7 +60,7 @@ empirical_pvalue <- function(x, na.rm = TRUE) {
 #' }
 cd <- function(base, pre, num) {
   stopifnot(is.character(base))
-  if (!missing(pre) & !missing(num)) {
+  if (!missing(pre) && !missing(num)) {
     pre <- as.character(pre)
     num <- as.character(num)
     newdir <- file.path(base, paste0(pre, num))
@@ -318,7 +318,6 @@ naz.omit <- function(x) {
 #' @examples
 #' lagk(1:4, 1)
 lagk <- function(x, k = 1, by) {
-  m <- missing(by)
   pad <- rep(NA, k)
   if (missing(by)) {
     n <- length(x)
@@ -371,9 +370,9 @@ lagk <- function(x, k = 1, by) {
 #' ## example showing the inverse, note that 24/24 becomes 0
 #' plot((1:24)/24, timeshift(timeshift((1:24)/24, 11/24), 11/24, inverse = TRUE))
 timeshift <- function(x, center = 0, min = 0, max = 1, inverse = FALSE) {
-  stopifnot(center >= min && center <= max)
-  stopifnot(all(x >= min))
-  stopifnot(all(x <= max))
+  stopifnot(center %gele% c(min, max))
+  stopifnot(x %age% min)
+  stopifnot(x %ale% max)
 
   if (isTRUE(inverse)) { ## need to fix this
     ifelse(x >= (max - center),
