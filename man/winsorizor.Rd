@@ -13,9 +13,11 @@ winsorizor(d, percentile, values, na.rm = TRUE)
 If a data frame or matrix is provided for the data, this should have the
 same length as the number of columns, or it will be repeated for all.}
 
-\item{values}{If values are specified, use these instead of calculating by percentiles.
+\item{values}{If values are specified, use these instead of 
+calculating by percentiles.
 Should be a data frame with columns named \dQuote{low}, and \dQuote{high}.
-If a data frame or matrix is provided for the data, there should be as many rows
+If a data frame or matrix is provided for the data, 
+there should be as many rows
 for values to winsorize at as there are columns in the data.}
 
 \item{na.rm}{A logical whether to remove NAs.}
@@ -32,7 +34,8 @@ Simple function winsorizes data at the specified percentile.
 dev.new(width = 10, height = 5)
 par(mfrow = c(1, 2))
 hist(as.vector(eurodist), main = "Eurodist")
-hist(winsorizor(as.vector(eurodist), .05), main = "Eurodist with lower and upper\n5\% winsorized")
+hist(winsorizor(as.vector(eurodist), .05), 
+  main = "Eurodist with lower and upper\n5\% winsorized")
 
 library(data.table)
 dat <- data.table(x = 1:5)

@@ -11,10 +11,12 @@ diffCircular(x, y, max)
 
 \item{y}{Numeric or integer values}
 
-\item{max}{the theoretical maximum (e.g., if degrees, 360; if hours, 24; etc.).}
+\item{max}{the theoretical maximum 
+(e.g., if degrees, 360; if hours, 24; etc.).}
 }
 \value{
-A value with the circular difference. This will always be positive if defined.
+A value with the circular difference.
+  This will always be positive if defined.
 }
 \description{
 Calculate the Circular Difference

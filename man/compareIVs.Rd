@@ -17,7 +17,8 @@ compareIVs(
 \arguments{
 \item{dv}{A character string or vector of the depentent variable(s)}
 
-\item{type}{A character string or vector indicating the type of dependent variable(s)}
+\item{type}{A character string or vector indicating the type of 
+dependent variable(s)}
 
 \item{iv}{A character string or vector giving the IV(s)}
 
@@ -25,16 +26,19 @@ compareIVs(
 
 \item{data}{The data to be used for analysis}
 
-\item{multivariate}{A logical value whether to have models with all IVs simultaneously.}
+\item{multivariate}{A logical value whether to have models with all 
+IVs simultaneously.}
 
-\item{\ldots}{Additional arguments passed on to the internal function, \code{.runIt}.}
+\item{\ldots}{Additional arguments passed on to the internal function, 
+\code{.runIt}.}
 }
 \value{
 A list with all the model results.
 }
 \description{
-Utility to estimate the unadjusted, covariate adjusted, and multivariate adjusted
-unique contributions of one or more IVs on one or more DVs
+Utility to estimate the unadjusted, covariate adjusted, and 
+multivariate adjusted unique contributions of one or more IVs 
+on one or more DVs
 }
 \examples{
 test1 <- compareIVs(

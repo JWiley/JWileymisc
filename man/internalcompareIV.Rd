@@ -25,9 +25,11 @@ internalcompareIV(
 
 \item{data}{The data to be used for analysis}
 
-\item{multivariate}{A logical value whether to have models with all IVs simultaneously.}
+\item{multivariate}{A logical value whether to have models with
+all IVs simultaneously.}
 
-\item{\ldots}{Additional arguments passed on to the internal function, \code{.runIt}.}
+\item{\ldots}{Additional arguments passed on to the internal 
+function, \code{.runIt}.}
 }
 \value{
 A list with all the model results.

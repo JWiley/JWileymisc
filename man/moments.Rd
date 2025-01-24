@@ -49,6 +49,7 @@ rm(Xmiss)
 \code{\link{SEMSummary}}
 }
 \author{
-Suggested by Yves Rosseel author of the lavaan package on which this depends
+Suggested by Yves Rosseel author of the lavaan 
+  package on which this depends
 }
 \keyword{multivariate}

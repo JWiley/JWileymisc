@@ -17,22 +17,27 @@ See the \sQuote{details} section for more information.}
 \item{data}{A data frame, matrix, or list containing the variables
 used in the formula.  This is a required argument.}
 
-\item{use}{A character vector of how to handle missing data. Defaults to \dQuote{fiml}.}
+\item{use}{A character vector of how to handle missing data.
+Defaults to \dQuote{fiml}.}
 }
 \value{
 A list with S3 class \dQuote{SEMSummary}
   \item{names}{A character vector containing the variable names.}
   \item{n}{An integer vector of the length of each variable used
     (this includes available and missing data).}
-  \item{nmissing}{An integer vector of the number of missing values in each variable.}
-  \item{mu}{A vector of the arithmetic means of each variable (on complete data).}
-  \item{stdev}{A numeric vector of the standard deviations of each variable (on complete data).}
+  \item{nmissing}{An integer vector of the number of missing
+                  values in each variable.}
+  \item{mu}{A vector of the arithmetic means of each variable
+            (on complete data).}
+  \item{stdev}{A numeric vector of the standard deviations of each variable
+               (on complete data).}
   \item{Sigma}{The numeric covariance matrix for all variables.}
   \item{sSigma}{The numeric correlation matrix for all variables.}
-  \item{coverage}{A numeric matrix giving the percentage (technically decimal)
-    of information available for each pairwise covariance/correlation.}
-  \item{pvalue}{The two-sided p values for the correlation matrix. Pairwise present N
-    used to calculate degrees of freedom.}
+  \item{coverage}{A numeric matrix giving the percentage
+                  (technically decimal) of information available
+                  for each pairwise covariance/correlation.}
+  \item{pvalue}{The two-sided p values for the correlation matrix.
+                Pairwise present N used to calculate degrees of freedom.}
 }
 \description{
 This function is designed to calculate the descriptive statistics and
@@ -49,9 +54,10 @@ Both the formula and data arguments are required.  The formula should
 be the right hand side only.  The most common way to use it would be with
 variable names separated by \sQuote{+s}.  For convenience, a \sQuote{.} is
 expanded to mean \dQuote{all variables in the data set}.  For a large number
-of variables or when whole datasets are being analyzed, this can be considerably
-easier to write.  Also it facilitates column indexing by simply passing a subset
-of the data (e.g., \code{data[, 1:10]}) and using the \sQuote{.} expansion to
+of variables or when whole datasets are being analyzed, this can
+be considerably easier to write.  Also it facilitates column indexing
+by simply passing a subset of the data (e.g., \code{data[, 1:10]}) and
+using the \sQuote{.} expansion to
 analyze the first 10 columns.  The examples section demonstrate this use.
 
 Also noteworthy is that \code{SEMSummary} is not really meant to be used
