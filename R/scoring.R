@@ -41,7 +41,7 @@ CheckVals <- function(data, okay, na.rm = TRUE) {
 ##' @param type A character string indicating the scale name, the type of scoring to use.
 ##' @param na.rm Logical whether to remove missing values or not. Defaults to \code{TRUE}
 ##' @param ... Additional arguments passed on to lower level functions
-##' @seealso \code{\link{omega}}
+##' @seealso \code{\link[psych]{omega}}
 ##' @keywords internal
 ##' @importFrom psych omega
 ##' @importFrom data.table is.data.table

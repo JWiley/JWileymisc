@@ -294,13 +294,13 @@ corplot <- function(x, coverage, pvalues,
 #' @param y The variable containing an index of the different items, should be integers
 #' @param leftLab The variable with anchors for the low end of the Likert scale
 #' @param rightLab The variable with anchors for the high end of the Likert scale
-#' @param colour  A character string giving the name of a variable for colouring the data, like a grouping variable. Alternately the colour of points passed to \code{\link{geom_point}}
+#' @param colour  A character string giving the name of a variable for colouring the data, like a grouping variable. Alternately the colour of points passed to \code{\link[ggplot2]{geom_point}}
 #' @param data The data to use for plotting
 #' @param xlim A vector giving the lower an upper limit for the x axis.  This should be the
 #'   possible range of the Likert scale, not the actual range.
 #' @param title A character vector giving the title for the plot
-#' @param shape A number indicating the point shape, passed to \code{\link{geom_point}}
-#' @param size  A number indicating the size of points, passed to \code{\link{geom_point}}
+#' @param shape A number indicating the point shape, passed to \code{\link[ggplot2]{geom_point}}
+#' @param size  A number indicating the size of points, passed to \code{\link[ggplot2]{geom_point}}
 #' @importFrom ggplot2 ggplot geom_point scale_y_reverse dup_axis ggtitle
 #' @importFrom ggplot2 theme element_line element_blank element_text
 #' @importFrom ggplot2 coord_cartesian

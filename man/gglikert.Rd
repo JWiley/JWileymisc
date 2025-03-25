@@ -26,7 +26,7 @@ gglikert(
 
 \item{rightLab}{The variable with anchors for the high end of the Likert scale}
 
-\item{colour}{A character string giving the name of a variable for colouring the data, like a grouping variable. Alternately the colour of points passed to \code{\link{geom_point}}}
+\item{colour}{A character string giving the name of a variable for colouring the data, like a grouping variable. Alternately the colour of points passed to \code{\link[ggplot2]{geom_point}}}
 
 \item{data}{The data to use for plotting}
 
@@ -35,9 +35,9 @@ possible range of the Likert scale, not the actual range.}
 
 \item{title}{A character vector giving the title for the plot}
 
-\item{shape}{A number indicating the point shape, passed to \code{\link{geom_point}}}
+\item{shape}{A number indicating the point shape, passed to \code{\link[ggplot2]{geom_point}}}
 
-\item{size}{A number indicating the size of points, passed to \code{\link{geom_point}}}
+\item{size}{A number indicating the size of points, passed to \code{\link[ggplot2]{geom_point}}}
 }
 \description{
 Creates a plot for likert scale

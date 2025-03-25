@@ -98,6 +98,6 @@ A list containing the results.
 Score a set of items to create overall scale score - generic
 }
 \seealso{
-\code{\link{omega}}
+\code{\link[psych]{omega}}
 }
 \keyword{internal}
