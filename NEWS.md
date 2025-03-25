@@ -4,6 +4,12 @@
 * `corplot()` and functions that build on it (like `plot()` methods for `SEMSummary()` 
    now use a 45 degree angle for column labels to improve readability with long variable 
    names. As always this is a `ggplot2` theme option and can be overwritten by the user.
+* `plot.residualDiagnostics` gains an argument `smooths`. It defaults to `TRUE` providing
+   the same behaviour as before. It can optionally be set to `FALSE` to remove the smooths.
+   This is useful when the smooths fail (eg percentiles or the loess line for residuals 
+   being very extreme).
+* `residualDiagnostics.lm` tries harder to detect degenerate or failing cases of 
+   quantile/percentile estimation.
 
 ## New Features
 * `geom_tufterange()` simple geom to add a left and bottom line that shows the observed range of non missing data.

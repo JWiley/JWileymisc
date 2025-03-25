@@ -724,7 +724,7 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals
 #'
 #' ## clean up
 #' rm(testm, md)
-plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
+plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, smooths = TRUE, ...) {
   ## residuals versus fitted
   p.resfit <- ggplot(x$Residuals, aes(Predicted, Residuals))
   if (x$N < 500) {
@@ -748,31 +748,41 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
       axis.text = element_text(colour = "black")) +
     ggtitle(x$Outcome)
   
-  if (isTRUE(x$Hat$cut[1])) {
-    p.resfit <- p.resfit +
-      geom_point(aes(x = Predicted, y = LL),
-                    data = x$Hat,
-                 colour = "blue", size = 4,
-                 shape = 23, fill = "blue") + 
-      geom_point(aes(x = Predicted, y = UL),
-                    data = x$Hat,
-                 colour = "blue", size = 4,
-                 shape = 23, fill = "blue")
-  } else {
-    p.resfit <- p.resfit +
-      stat_smooth(method = "loess",
-                  formula = y ~ x,
-                  se = FALSE, linewidth = 1, colour = "blue")
-
-    if (any(!is.na(x$Hat$LL) |
-              !is.na(x$Hat$UL))) {
+  if (isTRUE(smooths)) {
+    if (isTRUE(x$Hat$cut[1])) {
       p.resfit <- p.resfit +
-        geom_line(mapping = aes(x = Predicted, y = LL),
-                  data = x$Hat,
-                  colour = "blue", linewidth = 1, linetype = 2) +
-        geom_line(mapping = aes(x = Predicted, y = UL),
-                  data = x$Hat,
-                  colour = "blue", linewidth = 1, linetype = 2)
+        geom_point(aes(x = Predicted, y = LL),
+          data = x$Hat,
+          colour = "blue", size = 4,
+          shape = 23, fill = "blue"
+        ) +
+        geom_point(aes(x = Predicted, y = UL),
+          data = x$Hat,
+          colour = "blue", size = 4,
+          shape = 23, fill = "blue"
+        )
+    } else {
+      p.resfit <- p.resfit +
+        stat_smooth(
+          method = "loess",
+          formula = y ~ x,
+          se = FALSE, linewidth = 1, colour = "blue"
+        )
+
+      if (any(!is.na(x$Hat$LL) |
+        !is.na(x$Hat$UL))) {
+        p.resfit <- p.resfit +
+          geom_line(
+            mapping = aes(x = Predicted, y = LL),
+            data = x$Hat,
+            colour = "blue", linewidth = 1, linetype = 2
+          ) +
+          geom_line(
+            mapping = aes(x = Predicted, y = UL),
+            data = x$Hat,
+            colour = "blue", linewidth = 1, linetype = 2
+          )
+      }
     }
   }
 
@@ -821,7 +831,8 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
 #' @param ncol The number of columns to use for plots.
 #'   Missing by default which means individual plots are created.
 #'   If specified, plots are put together in a grid.
-#' @param ... Included to match the generic. Not used.
+#' @param ... Additional arguments passed to plot methods for residual diagnostics.
+#'   See \code{\link{plot.residualDiagnostics}}.
 #' @return a list including plots of the residuals,
 #'   residuals versus fitted values
 #' @importFrom grDevices dev.interactive devAskNewPage
@@ -840,7 +851,7 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
 #' ## clean up
 #' rm(testm, md)
 plot.modelDiagnostics.lm <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
-  p <- plot(x$residualDiagnostics, plot = FALSE)
+  p <- plot(x$residualDiagnostics, plot = FALSE, ...)
   if (plot) {
     if (ask && dev.interactive()) {
         oask <- devAskNewPage(TRUE)

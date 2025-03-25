@@ -632,12 +632,12 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
   ## some predictions may be functionally identically but vary very slightly
   ## identify range in predicted values and use this to adjust the rounding
   ## to address slight discrepancies when identifying "unique" values
-  delta <- diff(range(data$Predicted, na.rm = na.rm))  
+  delta <- diff(range(data$Predicted, na.rm = na.rm))
   ## if there are <= cut unique non missing values, treat as discrete
   pred <- round(data$Predicted, digits = ifelse(isTRUE(delta > 1), 8, 16))
   uvals <- unique(na.omit(pred))
   if (length(uvals) <= cut) {
-    data$Predicted <- round(data$Predicted, digits = ifelse(isTRUE(delta > 1), 8, 16))
+    data$Predicted <- pred
     d.hat <- data[, .(
       LL = quantile(Residuals, probs = LL, na.rm = na.rm),
       UL = quantile(Residuals, probs = UL, na.rm = na.rm),
@@ -645,6 +645,9 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
       by = Predicted]
   ## if more than cut unique non missing values, use quantile regression
   } else {
+    ## range of the residuals (deltaRes) for use later
+    deltaRes <- diff(range(data$Residuals, na.rm = na.rm))
+    ## data for predictions, a grid across the range of predicted values
     d.hat <- data.table(
       Predicted = seq(
         min(data$Predicted, na.rm = na.rm),
@@ -664,8 +667,19 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
       tau.UL <- TRUE
     }
     if (!isTRUE(tau.LL) && !isTRUE(tau.UL)) {
-      d.hat[, LL := predict(tau.LL, d.hat)]
-      d.hat[, UL := predict(tau.UL, d.hat)]
+      d.hat[, LL := as.numeric(predict(tau.LL, d.hat))]
+      d.hat[, UL := as.numeric(predict(tau.UL, d.hat))]
+
+      ## code to try to catch degenerate cases
+      ## if the range of predicted values for the UL or LL quantiles are
+      ## more than 2x the range of the residuals (deltaRes), then set to NA
+      ## this catches cases with really extreme predictions, sometimes due to splines
+      deltaLL <- diff(range(d.hat$LL, na.rm = na.rm))
+      deltaUL <- diff(range(d.hat$UL, na.rm = na.rm))
+      if ((deltaLL > (2 * deltaRes)) || (deltaUL > (2 * deltaRes))) {
+        d.hat[, LL := NA_real_]
+        d.hat[, UL := NA_real_]
+      }
     }
     if (isTRUE(tau.LL) || isTRUE(tau.UL) ||
           isTRUE(all.equal(d.hat$LL, d.hat$UL))) {
@@ -682,6 +696,16 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
       if (!isTRUE(tau.2LL) && !isTRUE(tau.2UL)) {
         d.hat[, LL := predict(tau.2LL, d.hat)]
         d.hat[, UL := predict(tau.2UL, d.hat)]
+        ## code to try to catch degenerate cases
+        ## if the range of predicted values for the UL or LL quantiles are
+        ## more than 2x the range of the residuals (deltaRes), then set to NA
+        ## this catches cases with really extreme predictions, sometimes due to splines
+        deltaLL <- diff(range(d.hat$LL, na.rm = na.rm))
+        deltaUL <- diff(range(d.hat$UL, na.rm = na.rm))
+        if ((deltaLL > (2 * deltaRes)) || (deltaUL > (2 * deltaRes))) {
+          d.hat[, LL := NA_real_]
+          d.hat[, UL := NA_real_]
+        }
       }
     }
     d.hat[, cut := FALSE]
@@ -689,6 +713,7 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
   if (isTRUE(all.equal(d.hat$LL, d.hat$UL))) {
     d.hat[, LL := NA_real_]
     d.hat[, UL := NA_real_]
+    message("Quantile regression for percentiles failed. Percentile estimates set to missing.")
   }
   return(d.hat)
 }
