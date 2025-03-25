@@ -33,9 +33,7 @@ Imports:
     mice,
     methods,
     psych,
-    rms,
     robustbase,
-    quantreg,
     gamlss,
     lavaan (>= 0.6-16),
     VGAM (>= 1.1-9),
@@ -52,7 +50,8 @@ Suggests:
     knitr,
     rmarkdown,
     pander,
-    GPArotation
+    GPArotation,
+    rms
 Encoding: UTF-8
 LazyData: true
 Config/testthat/edition: 3

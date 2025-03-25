@@ -649,55 +649,10 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
 #' @return A data.table with the scores and predicted LL and UL,
 #'   possibly missing if quantile regression models do not
 #'   converge.
-#' @importFrom quantreg qss rq rqss
 #' @importFrom gamlss quantSheets
 #' @importFrom data.table data.table :=
 #' @export
 .quantilePercentiles <- function(data, Mid = .5, LL = .1, UL = .9, na.rm = TRUE, cut = 8L) {
-  ## define internal function to generate the predictions from splines or fall back to linear
-  .safeQuantReg <- function(data, d.hat, perc, na.rm) {
-    ## initialise output, as real NA
-    out <- rep(NA_real_, nrow(d.hat))
-
-    ## range of the residuals
-    deltaRes <- diff(range(data$Residuals, na.rm = na.rm))
-
-    ## quantile regression with splines
-    model.splines <- tryCatch(
-      rqss(Residuals ~ qss(Predicted, lambda = 1),
-        tau = perc, data = data
-      ),
-      error = function(e) TRUE
-    )
-    ## if the model did not error, generate predictions
-    if (!isTRUE(model.splines)) {
-      yhat <- as.numeric(predict(model.splines, d.hat))
-      ## if the range of predicted values is > 2x the range of the residuals, do not use
-      ## this catches cases with really extreme predictions, sometimes due to splines
-      deltayhat <- diff(range(yhat, na.rm = na.rm))
-      if (deltayhat <= (2 * deltaRes)) {
-        out <- yhat
-      }
-    }
-    ## if the above had errors or predictions did not work, try linear quantile regression
-    if (all(is.na(out))) {
-      model.linear <- tryCatch(
-        rq(Residuals ~ Predicted, tau = perc, data = data),
-        error = function(e) TRUE
-      )
-      if (!isTRUE(model.linear)) {
-        yhat <- as.numeric(predict(model.linear, d.hat))
-        ## if the range of predicted values is > 2x the range of the residuals, do not use
-        ## this catches cases with really extreme predictions, sometimes due to splines
-        deltayhat <- diff(range(yhat, na.rm = na.rm))
-        if (deltayhat <= (2 * deltaRes)) {
-          out <- yhat
-        }
-      }
-    }
-    return(out)
-  }
-
   data <- copy(as.data.table(data))
 
   ## some predictions may be functionally identically but vary very slightly
