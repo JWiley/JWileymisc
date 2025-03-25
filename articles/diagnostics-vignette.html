@@ -271,12 +271,6 @@ a higher value was used.</p>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelDiagnostics.html">modelDiagnostics</a></span><span class="op">(</span><span class="va">m</span>, ev.perc <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span></span>
-<span><span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span></span>
-<span><span class="co">#&gt; Warning: In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span></span>
-<span><span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span></span>
-<span><span class="co">#&gt; Warning: In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span></span>
-<span><span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">md</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
@@ -379,12 +373,6 @@ values from the first model removed.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="co">## diagnostics after removing outliers from first model</span></span>
 <span><span class="va">md2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelDiagnostics.html">modelDiagnostics</a></span><span class="op">(</span><span class="va">m2</span>, ev.perc <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span></span>
-<span><span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...):</span></span>
-<span><span class="co">#&gt; Warning: In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span></span>
-<span><span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...):</span></span>
-<span><span class="co">#&gt; Warning: In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span></span>
-<span><span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...):</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">md2</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="diagnostics-vignette_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
