@@ -585,7 +585,7 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
   if (isTRUE(quantiles)) {
   d.hat <- .quantilePercentiles(
     data = d.res,
-    Mid = .5, LL = .1, UL = .9,
+    Mid = 0.5, LL = 0.05, UL = 0.95,
     cut = cut)
   } else {
     d.hat <- data.table(
@@ -650,11 +650,12 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
 #'   possibly missing if quantile regression models do not
 #'   converge.
 #' @importFrom quantreg qss rq rqss
+#' @importFrom gamlss quantSheets
 #' @importFrom data.table data.table :=
 #' @export
-.quantilePercentiles <- function(data, Mid = 0.5, LL = .1, UL = .9, na.rm = TRUE, cut = 8L) {
+.quantilePercentiles <- function(data, Mid = .5, LL = .1, UL = .9, na.rm = TRUE, cut = 8L) {
   ## define internal function to generate the predictions from splines or fall back to linear
-  .safeQuantReg <- function(data, d.hat, tau, na.rm) {
+  .safeQuantReg <- function(data, d.hat, perc, na.rm) {
     ## initialise output, as real NA
     out <- rep(NA_real_, nrow(d.hat))
 
@@ -664,7 +665,7 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
     ## quantile regression with splines
     model.splines <- tryCatch(
       rqss(Residuals ~ qss(Predicted, lambda = 1),
-        tau = tau, data = data
+        tau = perc, data = data
       ),
       error = function(e) TRUE
     )
@@ -681,7 +682,7 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
     ## if the above had errors or predictions did not work, try linear quantile regression
     if (all(is.na(out))) {
       model.linear <- tryCatch(
-        rq(Residuals ~ Predicted, tau = tau, data = data),
+        rq(Residuals ~ Predicted, tau = perc, data = data),
         error = function(e) TRUE
       )
       if (!isTRUE(model.linear)) {
@@ -697,15 +698,16 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
     return(out)
   }
 
-  data <- as.data.table(data)
+  data <- copy(as.data.table(data))
 
   ## some predictions may be functionally identically but vary very slightly
   ## identify range in predicted values and use this to adjust the rounding
   ## to address slight discrepancies when identifying "unique" values
   delta <- diff(range(data$Predicted, na.rm = na.rm))
-  ## if there are <= cut unique non missing values, treat as discrete
-  pred <- round(data$Predicted, digits = ifelse(isTRUE(delta > 1), 8, 16))
+  ## if there are <= cut unique non missing values, with some rounding
+  pred <- round(data$Predicted, digits = 8)
   uvals <- unique(na.omit(pred))
+
   if (length(uvals) <= cut) {
     data$Predicted <- pred
     d.hat <- data[, .(
@@ -723,20 +725,51 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
         max(data$Predicted, na.rm = na.rm),
         length.out = 1000))
 
-    yhatMid <- .safeQuantReg(data = data, d.hat = d.hat, tau = Mid, na.rm = na.rm)
-    yhatLL <- .safeQuantReg(data = data, d.hat = d.hat, tau = LL, na.rm = na.rm)
-    yhatUL <- .safeQuantReg(data = data, d.hat = d.hat, tau = UL, na.rm = na.rm)
+    # yhatMid <- .safeQuantReg(data = data, d.hat = d.hat, perc = Mid, na.rm = na.rm)
+    # yhatLL <- .safeQuantReg(data = data, d.hat = d.hat, perc = LL, na.rm = na.rm)
+    # yhatUL <- .safeQuantReg(data = data, d.hat = d.hat, perc = UL, na.rm = na.rm)
 
-    d.hat[, Mid := yhatMid]
-    d.hat[, LL := yhatLL]
-    d.hat[, UL := yhatUL]
+    # d.hat[, Mid := yhatMid]
+    # d.hat[, LL := yhatLL]
+    # d.hat[, UL := yhatUL]
+  mq <- quantSheets(Residuals, Predicted,
+    x.lambda = 1, p.lambda = 1,
+    cent = c(LL, Mid, UL) * 100,
+    data = as.data.frame(data),
+    print = FALSE, plot = FALSE)
+  
+    d.hat <- data.table(
+      Predicted = seq(
+        min(data$Predicted, na.rm = TRUE),
+        max(data$Predicted, na.rm = TRUE),
+        length.out = 1000))
+    out <- predict(mq, newdata = d.hat)
+
+    ## range of the residuals
+    deltaRes <- diff(range(data$Residuals, na.rm = na.rm))
+
+    if (diff(range(out[, 2], na.rm = TRUE)) <= (2 * deltaRes)) {
+      d.hat[, Mid := out[, 2]]
+    } else {
+      d.hat[, Mid := NA_real_]
+    }
+    if (diff(range(out[, 1], na.rm = TRUE)) <= (2 * deltaRes)) {
+      d.hat[, LL := out[, 1]]
+    } else {
+      d.hat[, LL := NA_real_]
+    }
+    if (diff(range(out[, 3], na.rm = TRUE)) <= (2 * deltaRes)) {
+      d.hat[, UL := out[, 3]]
+    } else {
+      d.hat[, UL := NA_real_]
+    }
     d.hat[, cut := FALSE]
   }
 
   if (all(is.na(c(d.hat$Mid, d.hat$LL, d.hat$UL)))) {
     message("Quantile regression for percentiles failed. These are set to missing.")
   }
-  return(d.hat)
+  return(copy(d.hat))
 }
 
 

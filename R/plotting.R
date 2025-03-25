@@ -725,101 +725,147 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals
 #' ## clean up
 #' rm(testm, md)
 plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
-  ## residuals versus fitted
-  p.resfit <- ggplot(x$Residuals, aes(Predicted, Residuals))
-  if (x$N < 500) {
-    p.resfit <- p.resfit +
-      geom_point(aes(colour = isEV),
-        alpha = pmin(1 / sqrt(log10(x$N)), 1)) +
-      scale_colour_manual(values = c("No" = "grey50", "Yes" = "black")) +
-      guides(colour = "none")
-  } else {
-    p.resfit <- p.resfit +
-      geom_bin2d(aes(fill = after_stat(count)), bins = 80) +
-      scale_fill_gradient(low = "grey70", high = "black")
-  }
-  p.resfit <- p.resfit +
-    geom_tufterange() +
-    scale_x_continuous(breaks = roundedfivenum(x$Residuals$Predicted)) +
-    scale_y_continuous(breaks = roundedfivenum(x$Residuals$Residuals)) +
-    theme_tufte() +
-    theme(
-      legend.position = "bottom",
-      axis.text = element_text(colour = "black")) +
-    ggtitle(x$Outcome)
-  
-    if (isTRUE(x$Hat$cut[1])) {
-      if (any(!is.na(x$Hat$Mid))) {
-        p.resfit <- p.resfit +
-          geom_point(aes(x = Predicted, y = Mid),
-            data = x$Hat,
-            colour = "blue", size = 4,
-            shape = 16, fill = "blue"
-          )
-      }
-      if (any(!is.na(x$Hat$LL))) {
-        p.resfit <- p.resfit +
-          geom_point(aes(x = Predicted, y = LL),
-            data = x$Hat,
-            colour = "blue", size = 4,
-            shape = 23, fill = "blue"
-          )
-      }
-      if (any(!is.na(x$Hat$UL))) {
-        p.resfit <- p.resfit +
-          geom_point(aes(x = Predicted, y = UL),
-            data = x$Hat,
-            colour = "blue", size = 4,
-            shape = 23, fill = "blue"
-          )
-      }
-    } else {
-      if (any(!is.na(x$Hat$Mid))) {
-        p.resfit <- p.resfit +
-          geom_line(
-            mapping = aes(x = Predicted, y = Mid),
-            data = x$Hat,
-            colour = "blue", linewidth = 1, linetype = 1
-          )
-      }
-      if (any(!is.na(x$Hat$LL))) {
-        p.resfit <- p.resfit +
-          geom_line(
-            mapping = aes(x = Predicted, y = LL),
-            data = x$Hat,
-            colour = "blue", linewidth = 1, linetype = 2
-          )
-      }
-      if (any(!is.na(x$Hat$UL))) {
-        p.resfit <- p.resfit +
-          geom_line(
-            mapping = aes(x = Predicted, y = UL),
-            data = x$Hat,
-            colour = "blue", linewidth = 1, linetype = 2
-          )
-      }
+  if (isTRUE(x$Hat$cut[1])) {
+    ## residuals versus fitted basic setup
+    x$Residuals$Predicted <- round(x$Residuals$Predicted, digits = 8)
+
+    if (x$N < 500) {
+      p.resfit <- ggplot(x$Residuals, aes(Predicted, Residuals))
+      p.resfit <- p.resfit +
+        geom_point(aes(colour = isEV),
+          alpha = pmin(1 / sqrt(log10(x$N)), 1)
+        ) +
+        scale_colour_manual(values = c("No" = "grey50", "Yes" = "black")) +
+        guides(colour = "none")
+      p.resfit <- p.resfit +
+        geom_tufterange() +
+        scale_x_continuous(breaks = roundedfivenum(x$Residuals$Predicted)) +
+        scale_y_continuous(breaks = roundedfivenum(x$Residuals$Residuals)) +
+        theme_tufte() +
+        theme(
+          legend.position = "bottom",
+          axis.text = element_text(colour = "black")
+        ) +
+        ggtitle(x$Outcome)
+
+    ## add smooths, if available
+    if (any(!is.na(x$Hat$Mid))) {
+      p.resfit <- p.resfit +
+        geom_point(aes(x = Predicted, y = Mid),
+          data = x$Hat,
+          colour = "blue", size = 4,
+          shape = 16, fill = "blue"
+        )
     }
+    if (any(!is.na(x$Hat$LL))) {
+      p.resfit <- p.resfit +
+        geom_point(aes(x = Predicted, y = LL),
+          data = x$Hat,
+          colour = "blue", size = 4,
+          shape = 23, fill = "blue"
+        )
+    }
+    if (any(!is.na(x$Hat$UL))) {
+      p.resfit <- p.resfit +
+        geom_point(aes(x = Predicted, y = UL),
+          data = x$Hat,
+          colour = "blue", size = 4,
+          shape = 23, fill = "blue"
+        )
+    }
+    } else {
+      ## for N >= 500, and few unique predicted values, use boxplots
+      x$Residuals$Predicted <- factor(x$Residuals$Predicted)
+      p.resfit <- ggplot(x$Residuals, aes(Predicted, Residuals))
+      p.resfit <- p.resfit +
+        geom_boxplot()
+      p.resfit <- p.resfit +
+        geom_tufterange() +
+        scale_y_continuous(breaks = roundedfivenum(x$Residuals$Residuals)) +
+        theme_tufte() +
+        theme(
+          legend.position = "bottom",
+          axis.text = element_text(colour = "black")
+        ) +
+        ggtitle(x$Outcome)
+    }
+  } else {
+    ## residuals versus fitted basic setup
+    p.resfit <- ggplot(x$Residuals, aes(Predicted, Residuals))
+    if (x$N < 500) {
+      p.resfit <- p.resfit +
+        geom_point(aes(colour = isEV),
+          alpha = pmin(1 / sqrt(log10(x$N)), 1)
+        ) +
+        scale_colour_manual(values = c("No" = "grey50", "Yes" = "black")) +
+        guides(colour = "none")
+    } else {
+      p.resfit <- p.resfit +
+        geom_bin2d(aes(fill = after_stat(count)), bins = 80) +
+        scale_fill_gradient(low = "grey70", high = "black")
+    }
+    p.resfit <- p.resfit +
+      geom_tufterange() +
+      scale_x_continuous(breaks = roundedfivenum(x$Residuals$Predicted)) +
+      scale_y_continuous(breaks = roundedfivenum(x$Residuals$Residuals)) +
+      theme_tufte() +
+      theme(
+        legend.position = "bottom",
+        axis.text = element_text(colour = "black")
+      ) +
+      ggtitle(x$Outcome)
+
+    ## add smooths, if available
+    if (any(!is.na(x$Hat$Mid))) {
+      p.resfit <- p.resfit +
+        geom_line(
+          mapping = aes(x = Predicted, y = Mid),
+          data = x$Hat,
+          colour = "blue", linewidth = 1, linetype = 1
+        )
+    }
+    if (any(!is.na(x$Hat$LL))) {
+      p.resfit <- p.resfit +
+        geom_line(
+          mapping = aes(x = Predicted, y = LL),
+          data = x$Hat,
+          colour = "blue", linewidth = 1, linetype = 2
+        )
+    }
+    if (any(!is.na(x$Hat$UL))) {
+      p.resfit <- p.resfit +
+        geom_line(
+          mapping = aes(x = Predicted, y = UL),
+          data = x$Hat,
+          colour = "blue", linewidth = 1, linetype = 2
+        )
+    }
+  }
 
   ## distributions of residuals
   p.tmpres <- plot(x$testDistribution,
-                   varlab = "Residuals",
-                   plot = FALSE)
+    varlab = "Residuals",
+    plot = FALSE
+  )
 
   p.res <- ggarrange(
     p.tmpres$DensityPlot + ggtitle(x$Outcome),
-    p.tmpres$QQDeviatesPlot, ncol = 1,
-    heights = c(3, 1), align = "v")
+    p.tmpres$QQDeviatesPlot,
+    ncol = 1,
+    heights = c(3, 1), align = "v"
+  )
 
   if (plot) {
     if (ask && dev.interactive()) {
-        oask <- devAskNewPage(TRUE)
-        on.exit(devAskNewPage(oask))
+      oask <- devAskNewPage(TRUE)
+      on.exit(devAskNewPage(oask))
     }
     if (!missing(ncol)) {
       print(ggarrange(
         p.res,
         p.resfit,
-        ncol = ncol))
+        ncol = ncol
+      ))
     } else {
       print(p.res)
       print(p.resfit)
@@ -828,7 +874,8 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
 
   return(invisible(list(
     ResPlot = p.res,
-    ResFittedPlot = p.resfit)))
+    ResFittedPlot = p.resfit
+  )))
 }
 
 #' Plot Diagnostics for an lm model
