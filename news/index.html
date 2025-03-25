@@ -51,9 +51,12 @@
 <ul><li>
 <code><a href="../reference/corplot.html">corplot()</a></code> and functions that build on it (like <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods for <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> now use a 45 degree angle for column labels to improve readability with long variable names. As always this is a <code>ggplot2</code> theme option and can be overwritten by the user.</li>
 <li>
-<code>plot.residualDiagnostics</code> gains an argument <code>smooths</code>. It defaults to <code>TRUE</code> providing the same behaviour as before. It can optionally be set to <code>FALSE</code> to remove the smooths. This is useful when the smooths fail (eg percentiles or the loess line for residuals being very extreme).</li>
+<code>residualDiagnostics</code> gains an argument <code>quantiles</code>. It defaults to <code>TRUE</code> providing the same behaviour as before. It can optionally be set to <code>FALSE</code> to remove the quantile estimations for residuals. This is useful when the smooths fail or to save computational time.</li>
 <li>
-<code>residualDiagnostics.lm</code> tries harder to detect degenerate or failing cases of quantile/percentile estimation.</li>
+<code>.quantilePercentiles</code> tries harder to detect degenerate or failing cases of quantile/percentile estimation. This has implications for <code>residualDiagnostics</code>.</li>
+<li>
+<code><a href="../reference/plot.residualDiagnostics.html">plot.residualDiagnostics()</a></code> no longer calculates a loess smooth line for the average of the residuals. Instead this is conducted as part of the <code><a href="../reference/residualDiagnostics.html">residualDiagnostics()</a></code> function when <code>quantiles = TRUE</code>. Also the mid line is now the median from a quantile regression, first trying smooths and falling back to linear if that fails.</li>
+<li>many of these changes also impact <code><a href="../reference/modelDiagnostics.html">modelDiagnostics()</a></code> and <code>plot.modelDiagnostics()</code> as they are based on residual diagnostics.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-1-4-2">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-4-2"></a></h3>

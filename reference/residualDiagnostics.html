@@ -73,7 +73,8 @@
 <span>  robust <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  distr <span class="op">=</span> <span class="st">"normal"</span>,</span>
 <span>  standardized <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  cut <span class="op">=</span> <span class="fl">4L</span>,</span>
+<span>  cut <span class="op">=</span> <span class="fl">8L</span>,</span>
+<span>  quantiles <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -124,7 +125,19 @@ method.</p></dd>
 <dd><p>An integer, how many unique predicted values
 there have to be at least for predicted values to be
 treated continuously, otherwise they are treated as discrete values.
-Defaults to 4.</p></dd>
+Defaults to 8.</p></dd>
+
+
+<dt id="arg-quantiles">quantiles<a class="anchor" aria-label="anchor" href="#arg-quantiles"></a></dt>
+<dd><p>A logical whether to calculate quantiles for the
+residuals.  Defaults to <code>TRUE</code>. If <code>FALSE</code>, then
+do not calculate them. These are based on simple quantiles for
+each predicted value if the predicted values are few enough to be
+treated discretely. See <code>cut</code> argument. Otherwise they are
+based on quantile regression. First trying smoothing splines,
+and falling back to linear quantil regression if the splines
+fail. You may also want to turn these off if they are not working well,
+or are not of value in your diagnostics.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -143,10 +156,14 @@ Defaults to 4.</p></dd>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">resm</span><span class="op">$</span><span class="va">testDistribution</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="residualDiagnostics-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">resm</span> <span class="op">&lt;-</span> <span class="fu">residualDiagnostics</span><span class="op">(</span><span class="va">testm</span>, standardized <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>tiny diagonals replaced with Inf when calling blkfct</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In chol(&lt;matrix.csr&gt;, *): Replaced 2 tiny diagonal entries by 'Large'</span>
