@@ -1,12 +1,11 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   diagnostics-vignette: diagnostics-vignette.html
   exploratory-vignette: exploratory-vignette.html
   model-test-vignette: model-test-vignette.html
-last_built: 2024-02-12T05:34Z
+last_built: 2025-03-25T03:24Z
 urls:
   reference: https://joshuawiley.com/JWileymisc/reference
   article: https://joshuawiley.com/JWileymisc/articles
-
