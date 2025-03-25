@@ -3,7 +3,7 @@ JWileymisc
 
 <!-- badges: start -->
 [![CRAN_status](https://www.r-pkg.org/badges/version/JWileymisc)](https://cran.r-project.org/package=JWileymisc)
-[![R-CMD-check](https://github.com/JWiley/JWileymisc/workflows/R-CMD-check/badge.svg)](https://github.com/JWiley/JWileymisc/actions)
+[![R-CMD-check.yaml](https://github.com/JWiley/JWileymisc/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/JWiley/JWileymisc/actions/workflows/check-standard.yaml)
 [![codecov](https://codecov.io/gh/JWiley/JWileymisc/branch/main/graph/badge.svg?token=eW8frgT2Q1)](https://app.codecov.io/gh/JWiley/JWileymisc)
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
