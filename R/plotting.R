@@ -685,7 +685,7 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("EffectType", "Original
 
 ## clear R CMD CHECK notes
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals",
-                                                        "LL", "UL"))
+                                                        "Mid", "LL", "UL"))
 
 
 #' Plot Residual Diagnostics Default Method
@@ -702,10 +702,6 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals
 #' @param ncol The number of columns to use for plots.
 #'   Missing by default which means individual plots are created.
 #'   If specified, plots are put together in a grid.
-#' @param smooths A logical value. If \code{TRUE}, smooths are 
-#'   plotted, if available, for the quantiles and the average of the residuals
-#'   across the range of predicted values. If \code{FALSE}, no smooths are plotted,
-#'   regardless of whether they are available or not.
 #' @param ... Included to match the generic. Not used.
 #' @return a list including plots of the residuals,
 #'   residuals versus fitted values
@@ -728,7 +724,7 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals
 #'
 #' ## clean up
 #' rm(testm, md)
-plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, smooths = TRUE, ...) {
+plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
   ## residuals versus fitted
   p.resfit <- ggplot(x$Residuals, aes(Predicted, Residuals))
   if (x$N < 500) {
@@ -752,35 +748,50 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, smooth
       axis.text = element_text(colour = "black")) +
     ggtitle(x$Outcome)
   
-  if (isTRUE(smooths)) {
     if (isTRUE(x$Hat$cut[1])) {
-      p.resfit <- p.resfit +
-        geom_point(aes(x = Predicted, y = LL),
-          data = x$Hat,
-          colour = "blue", size = 4,
-          shape = 23, fill = "blue"
-        ) +
-        geom_point(aes(x = Predicted, y = UL),
-          data = x$Hat,
-          colour = "blue", size = 4,
-          shape = 23, fill = "blue"
-        )
+      if (any(!is.na(x$Hat$Mid))) {
+        p.resfit <- p.resfit +
+          geom_point(aes(x = Predicted, y = Mid),
+            data = x$Hat,
+            colour = "blue", size = 4,
+            shape = 16, fill = "blue"
+          )
+      }
+      if (any(!is.na(x$Hat$LL))) {
+        p.resfit <- p.resfit +
+          geom_point(aes(x = Predicted, y = LL),
+            data = x$Hat,
+            colour = "blue", size = 4,
+            shape = 23, fill = "blue"
+          )
+      }
+      if (any(!is.na(x$Hat$UL))) {
+        p.resfit <- p.resfit +
+          geom_point(aes(x = Predicted, y = UL),
+            data = x$Hat,
+            colour = "blue", size = 4,
+            shape = 23, fill = "blue"
+          )
+      }
     } else {
-      p.resfit <- p.resfit +
-        stat_smooth(
-          method = "loess",
-          formula = y ~ x,
-          se = FALSE, linewidth = 1, colour = "blue"
-        )
-
-      if (any(!is.na(x$Hat$LL) |
-        !is.na(x$Hat$UL))) {
+      if (any(!is.na(x$Hat$Mid))) {
+        p.resfit <- p.resfit +
+          geom_line(
+            mapping = aes(x = Predicted, y = Mid),
+            data = x$Hat,
+            colour = "blue", linewidth = 1, linetype = 1
+          )
+      }
+      if (any(!is.na(x$Hat$LL))) {
         p.resfit <- p.resfit +
           geom_line(
             mapping = aes(x = Predicted, y = LL),
             data = x$Hat,
             colour = "blue", linewidth = 1, linetype = 2
-          ) +
+          )
+      }
+      if (any(!is.na(x$Hat$UL))) {
+        p.resfit <- p.resfit +
           geom_line(
             mapping = aes(x = Predicted, y = UL),
             data = x$Hat,
@@ -788,7 +799,6 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, smooth
           )
       }
     }
-  }
 
   ## distributions of residuals
   p.tmpres <- plot(x$testDistribution,

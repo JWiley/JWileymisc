@@ -445,7 +445,16 @@ testDistribution.default <- function(x,
 #' @param cut An integer, how many unique predicted values
 #'   there have to be at least for predicted values to be
 #'   treated continuously, otherwise they are treated as discrete values.
-#'   Defaults to 4.
+#'   Defaults to 8.
+#' @param quantiles A logical whether to calculate quantiles for the
+#'   residuals.  Defaults to \code{TRUE}. If \code{FALSE}, then
+#'   do not calculate them. These are based on simple quantiles for
+#'   each predicted value if the predicted values are few enough to be
+#'   treated discretely. See \code{cut} argument. Otherwise they are
+#'   based on quantile regression. First trying smoothing splines,
+#'   and falling back to linear quantil regression if the splines
+#'   fail. You may also want to turn these off if they are not working well,
+#'   or are not of value in your diagnostics.
 #' @param ... Additional arguments, not currently used.
 #' @return A logical (\code{is.residualDiagnostics}) or
 #'   a residualDiagnostics object (list) for
@@ -547,7 +556,8 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("originalindex"))
 #' }
 residualDiagnostics.lm <- function(object, ev.perc = .001,
                                    robust = FALSE, distr = "normal",
-                                   standardized = TRUE, cut = 4L, ...) {
+                                   standardized = TRUE, cut = 8L, quantiles = TRUE,
+                                   ...) {
   d.frame <- model.frame(object)
   naaction <- attr(d.frame, "na.action")
   if (isFALSE(is.null(naaction))) {
@@ -572,10 +582,22 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
     Residuals = if (standardized) rstandard(object) else residuals(object),
     Predicted = fitted(object))
 
+  if (isTRUE(quantiles)) {
   d.hat <- .quantilePercentiles(
     data = d.res,
-    LL = .1, UL = .9,
+    Mid = .5, LL = .1, UL = .9,
     cut = cut)
+  } else {
+    d.hat <- data.table(
+      Predicted = seq(
+        min(d.res$Predicted, na.rm = TRUE),
+        max(d.res$Predicted, na.rm = TRUE),
+        length.out = 1000),
+      Mid = NA_real_,
+      LL = NA_real_,
+      UL = NA_real_,
+      cut = cut)
+  }
 
   d.dist <- testDistribution(
     x = d.res$Residuals,
@@ -612,6 +634,8 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
 #'
 #' @param data A dataset of predicted and residual values.
 #'   Assumed from some sort of (probably parametric) model.
+#' @param Mid The middle limit for prediction. Defaults to
+#'   \code{.5} to give the median.
 #' @param LL The lower limit for prediction. Defaults to
 #'   \code{.1} to give the 10th percentile.
 #' @param UL The upper limit for prediction. Defaults to
@@ -621,14 +645,60 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
 #' @param cut An integer, how many unique predicted values
 #'   there have to be at least for it to use quantile regression
 #'   or treat the predicted values as discrete.
-#'   Defaults to 4.
+#'   Defaults to 8.
 #' @return A data.table with the scores and predicted LL and UL,
 #'   possibly missing if quantile regression models do not
 #'   converge.
 #' @importFrom quantreg qss rq rqss
 #' @importFrom data.table data.table :=
 #' @export
-.quantilePercentiles <- function(data, LL = .1, UL = .9, na.rm = TRUE, cut = 4L) {
+.quantilePercentiles <- function(data, Mid = 0.5, LL = .1, UL = .9, na.rm = TRUE, cut = 8L) {
+  ## define internal function to generate the predictions from splines or fall back to linear
+  .safeQuantReg <- function(data, d.hat, tau, na.rm) {
+    ## initialise output, as real NA
+    out <- rep(NA_real_, nrow(d.hat))
+
+    ## range of the residuals
+    deltaRes <- diff(range(data$Residuals, na.rm = na.rm))
+
+    ## quantile regression with splines
+    model.splines <- tryCatch(
+      rqss(Residuals ~ qss(Predicted, lambda = 1),
+        tau = tau, data = data
+      ),
+      error = function(e) TRUE
+    )
+    ## if the model did not error, generate predictions
+    if (!isTRUE(model.splines)) {
+      yhat <- as.numeric(predict(model.splines, d.hat))
+      ## if the range of predicted values is > 2x the range of the residuals, do not use
+      ## this catches cases with really extreme predictions, sometimes due to splines
+      deltayhat <- diff(range(yhat, na.rm = na.rm))
+      if (deltayhat <= (2 * deltaRes)) {
+        out <- yhat
+      }
+    }
+    ## if the above had errors or predictions did not work, try linear quantile regression
+    if (all(is.na(out))) {
+      model.linear <- tryCatch(
+        rq(Residuals ~ Predicted, tau = tau, data = data),
+        error = function(e) TRUE
+      )
+      if (!isTRUE(model.linear)) {
+        yhat <- as.numeric(predict(model.linear, d.hat))
+        ## if the range of predicted values is > 2x the range of the residuals, do not use
+        ## this catches cases with really extreme predictions, sometimes due to splines
+        deltayhat <- diff(range(yhat, na.rm = na.rm))
+        if (deltayhat <= (2 * deltaRes)) {
+          out <- yhat
+        }
+      }
+    }
+    return(out)
+  }
+
+  data <- as.data.table(data)
+
   ## some predictions may be functionally identically but vary very slightly
   ## identify range in predicted values and use this to adjust the rounding
   ## to address slight discrepancies when identifying "unique" values
@@ -639,14 +709,13 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
   if (length(uvals) <= cut) {
     data$Predicted <- pred
     d.hat <- data[, .(
+      Mid = quantile(Residuals, probs = Mid, na.rm = na.rm),
       LL = quantile(Residuals, probs = LL, na.rm = na.rm),
       UL = quantile(Residuals, probs = UL, na.rm = na.rm),
       cut = TRUE),
       by = Predicted]
   ## if more than cut unique non missing values, use quantile regression
   } else {
-    ## range of the residuals (deltaRes) for use later
-    deltaRes <- diff(range(data$Residuals, na.rm = na.rm))
     ## data for predictions, a grid across the range of predicted values
     d.hat <- data.table(
       Predicted = seq(
@@ -654,66 +723,18 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
         max(data$Predicted, na.rm = na.rm),
         length.out = 1000))
 
-    tau.LL <- tryCatch(
-      rqss(Residuals ~ qss(Predicted, lambda = 1),
-           tau = LL, data = data),
-      error = function(e) TRUE)
-    if (!isTRUE(tau.LL)) {
-      tau.UL <- tryCatch(
-        rqss(Residuals ~ qss(Predicted, lambda = 1),
-             tau = UL, data = data),
-        error = function(e) TRUE)
-    } else {
-      tau.UL <- TRUE
-    }
-    if (!isTRUE(tau.LL) && !isTRUE(tau.UL)) {
-      d.hat[, LL := as.numeric(predict(tau.LL, d.hat))]
-      d.hat[, UL := as.numeric(predict(tau.UL, d.hat))]
+    yhatMid <- .safeQuantReg(data = data, d.hat = d.hat, tau = Mid, na.rm = na.rm)
+    yhatLL <- .safeQuantReg(data = data, d.hat = d.hat, tau = LL, na.rm = na.rm)
+    yhatUL <- .safeQuantReg(data = data, d.hat = d.hat, tau = UL, na.rm = na.rm)
 
-      ## code to try to catch degenerate cases
-      ## if the range of predicted values for the UL or LL quantiles are
-      ## more than 2x the range of the residuals (deltaRes), then set to NA
-      ## this catches cases with really extreme predictions, sometimes due to splines
-      deltaLL <- diff(range(d.hat$LL, na.rm = na.rm))
-      deltaUL <- diff(range(d.hat$UL, na.rm = na.rm))
-      if ((deltaLL > (2 * deltaRes)) || (deltaUL > (2 * deltaRes))) {
-        d.hat[, LL := NA_real_]
-        d.hat[, UL := NA_real_]
-      }
-    }
-    if (isTRUE(tau.LL) || isTRUE(tau.UL) ||
-          isTRUE(all.equal(d.hat$LL, d.hat$UL))) {
-      tau.2LL <- tryCatch(
-        rq(Residuals ~ Predicted, tau = LL, data = data),
-        error = function(e) TRUE)
-      if (!isTRUE(tau.2LL)) {
-        tau.2UL <- tryCatch(
-          rq(Residuals ~ Predicted, tau = UL, data = data),
-          error = function(e) TRUE)
-      } else {
-        tau.2UL <- TRUE
-      }
-      if (!isTRUE(tau.2LL) && !isTRUE(tau.2UL)) {
-        d.hat[, LL := predict(tau.2LL, d.hat)]
-        d.hat[, UL := predict(tau.2UL, d.hat)]
-        ## code to try to catch degenerate cases
-        ## if the range of predicted values for the UL or LL quantiles are
-        ## more than 2x the range of the residuals (deltaRes), then set to NA
-        ## this catches cases with really extreme predictions, sometimes due to splines
-        deltaLL <- diff(range(d.hat$LL, na.rm = na.rm))
-        deltaUL <- diff(range(d.hat$UL, na.rm = na.rm))
-        if ((deltaLL > (2 * deltaRes)) || (deltaUL > (2 * deltaRes))) {
-          d.hat[, LL := NA_real_]
-          d.hat[, UL := NA_real_]
-        }
-      }
-    }
+    d.hat[, Mid := yhatMid]
+    d.hat[, LL := yhatLL]
+    d.hat[, UL := yhatUL]
     d.hat[, cut := FALSE]
   }
-  if (isTRUE(all.equal(d.hat$LL, d.hat$UL))) {
-    d.hat[, LL := NA_real_]
-    d.hat[, UL := NA_real_]
-    message("Quantile regression for percentiles failed. Percentile estimates set to missing.")
+
+  if (all(is.na(c(d.hat$Mid, d.hat$LL, d.hat$UL)))) {
+    message("Quantile regression for percentiles failed. These are set to missing.")
   }
   return(d.hat)
 }

@@ -19,7 +19,8 @@ is.residualDiagnostics(x)
   robust = FALSE,
   distr = "normal",
   standardized = TRUE,
-  cut = 4L,
+  cut = 8L,
+  quantiles = TRUE,
   ...
 )
 }
@@ -51,7 +52,17 @@ method.}
 \item{cut}{An integer, how many unique predicted values
 there have to be at least for predicted values to be
 treated continuously, otherwise they are treated as discrete values.
-Defaults to 4.}
+Defaults to 8.}
+
+\item{quantiles}{A logical whether to calculate quantiles for the
+residuals.  Defaults to \code{TRUE}. If \code{FALSE}, then
+do not calculate them. These are based on simple quantiles for
+each predicted value if the predicted values are few enough to be
+treated discretely. See \code{cut} argument. Otherwise they are
+based on quantile regression. First trying smoothing splines,
+and falling back to linear quantil regression if the splines
+fail. You may also want to turn these off if they are not working well,
+or are not of value in your diagnostics.}
 }
 \value{
 A logical (\code{is.residualDiagnostics}) or

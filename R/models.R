@@ -584,7 +584,6 @@ lm2 <- function (formula, data, subset, weights, na.action,## method = "qr",
     return(z)
 }
 
-
 #' @return A list with two elements.
 #'   \code{Results} contains a data table of the actual estimates.
 #'   \code{Table} contains a nicely formatted character matrix.

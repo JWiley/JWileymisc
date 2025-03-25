@@ -4,7 +4,7 @@
 \alias{plot.residualDiagnostics}
 \title{Plot Residual Diagnostics Default Method}
 \usage{
-\method{plot}{residualDiagnostics}(x, y, plot = TRUE, ask = TRUE, ncol, smooths = TRUE, ...)
+\method{plot}{residualDiagnostics}(x, y, plot = TRUE, ask = TRUE, ncol, ...)
 }
 \arguments{
 \item{x}{A \code{residualDiagnostics} class object.}
@@ -20,11 +20,6 @@ Only applies to interactive environments.}
 \item{ncol}{The number of columns to use for plots.
 Missing by default which means individual plots are created.
 If specified, plots are put together in a grid.}
-
-\item{smooths}{A logical value. If \code{TRUE}, smooths are 
-plotted, if available, for the quantiles and the average of the residuals
-across the range of predicted values. If \code{FALSE}, no smooths are plotted,
-regardless of whether they are available or not.}
 
 \item{...}{Included to match the generic. Not used.}
 }

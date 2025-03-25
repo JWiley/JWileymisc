@@ -4,11 +4,21 @@
 \alias{.quantilePercentiles}
 \title{Internal Function to Calculate Quantiles}
 \usage{
-.quantilePercentiles(data, LL = 0.1, UL = 0.9, na.rm = TRUE, cut = 4L)
+.quantilePercentiles(
+  data,
+  Mid = 0.5,
+  LL = 0.1,
+  UL = 0.9,
+  na.rm = TRUE,
+  cut = 8L
+)
 }
 \arguments{
 \item{data}{A dataset of predicted and residual values.
 Assumed from some sort of (probably parametric) model.}
+
+\item{Mid}{The middle limit for prediction. Defaults to
+\code{.5} to give the median.}
 
 \item{LL}{The lower limit for prediction. Defaults to
 \code{.1} to give the 10th percentile.}
@@ -22,7 +32,7 @@ Defaults to \code{TRUE}}
 \item{cut}{An integer, how many unique predicted values
 there have to be at least for it to use quantile regression
 or treat the predicted values as discrete.
-Defaults to 4.}
+Defaults to 8.}
 }
 \value{
 A data.table with the scores and predicted LL and UL,
