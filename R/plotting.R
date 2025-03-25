@@ -702,6 +702,10 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("Predicted", "Residuals
 #' @param ncol The number of columns to use for plots.
 #'   Missing by default which means individual plots are created.
 #'   If specified, plots are put together in a grid.
+#' @param smooths A logical value. If \code{TRUE}, smooths are 
+#'   plotted, if available, for the quantiles and the average of the residuals
+#'   across the range of predicted values. If \code{FALSE}, no smooths are plotted,
+#'   regardless of whether they are available or not.
 #' @param ... Included to match the generic. Not used.
 #' @return a list including plots of the residuals,
 #'   residuals versus fitted values
