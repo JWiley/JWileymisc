@@ -21,7 +21,8 @@ Only applies to interactive environments.}
 Missing by default which means individual plots are created.
 If specified, plots are put together in a grid.}
 
-\item{...}{Included to match the generic. Not used.}
+\item{...}{Additional arguments passed to plot methods for residual diagnostics.
+See \code{\link{plot.residualDiagnostics}}.}
 }
 \value{
 a list including plots of the residuals,
