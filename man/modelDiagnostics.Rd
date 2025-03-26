@@ -26,7 +26,7 @@ is.modelDiagnostics(x)
 \item{object}{A fitted model object, with methods for
 \code{model.frame}, \code{resid} and \code{fitted}.}
 
-\item{...}{Additional arguments, passed to \code{residualDiagnostics}.}
+\item{...}{Additional arguments, passed to methods or  \code{\link{residualDiagnostics}}.}
 
 \item{x}{An object to test or a list to coerce to a
 \code{modelDiagnostics} object.}

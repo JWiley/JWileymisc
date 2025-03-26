@@ -28,7 +28,7 @@ is.residualDiagnostics(x)
 \item{object}{A fitted model object, with methods for
 \code{model.frame}, \code{resid} and \code{fitted}.}
 
-\item{...}{Additional arguments, not currently used.}
+\item{...}{Additional arguments passed to methods.}
 
 \item{x}{A object (e.g., list or a modelDiagnostics object) to
 test or attempt coercing to a residualDiagnostics object.}
