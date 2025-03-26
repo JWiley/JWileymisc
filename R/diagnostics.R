@@ -455,7 +455,7 @@ testDistribution.default <- function(x,
 #'   and falling back to linear quantil regression if the splines
 #'   fail. You may also want to turn these off if they are not working well,
 #'   or are not of value in your diagnostics.
-#' @param ... Additional arguments, not currently used.
+#' @param ... Additional arguments passed to methods.
 #' @return A logical (\code{is.residualDiagnostics}) or
 #'   a residualDiagnostics object (list) for
 #'   \code{as.residualDiagnostics} and \code{residualDiagnostics}.
@@ -749,7 +749,8 @@ residualDiagnostics.lm <- function(object, ev.perc = .001,
 #' @param standardized A logical whether to use standardized residuals.
 #'   Defaults to \code{TRUE} generally where possible but may depend on
 #'   method.
-#' @param ... Additional arguments, passed to \code{residualDiagnostics}.
+#' @param ... Additional arguments, passed to methods or  \code{\link{residualDiagnostics}}.
+
 #' @return A logical (\code{is.modelDiagnostics}) or
 #'   a modelDiagnostics object (list) for
 #'   \code{as.modelDiagnostics} and \code{modelDiagnostics}.

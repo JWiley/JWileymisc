@@ -892,8 +892,7 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
 #' @param ncol The number of columns to use for plots.
 #'   Missing by default which means individual plots are created.
 #'   If specified, plots are put together in a grid.
-#' @param ... Additional arguments passed to plot methods for residual diagnostics.
-#'   See \code{\link{plot.residualDiagnostics}}.
+#' @param ... Included to match the generic. Not used.
 #' @return a list including plots of the residuals,
 #'   residuals versus fitted values
 #' @importFrom grDevices dev.interactive devAskNewPage
@@ -912,7 +911,7 @@ plot.residualDiagnostics <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
 #' ## clean up
 #' rm(testm, md)
 plot.modelDiagnostics.lm <- function(x, y, plot = TRUE, ask = TRUE, ncol, ...) {
-  p <- plot(x$residualDiagnostics, plot = FALSE, ...)
+  p <- plot(x$residualDiagnostics, plot = FALSE)
   if (plot) {
     if (ask && dev.interactive()) {
         oask <- devAskNewPage(TRUE)

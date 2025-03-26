@@ -16,7 +16,7 @@ Description: Miscellaneous tools and functions,
     model diagnostics. 
 License: GPL (>= 3)
 Depends:
-    R (>= 4.0.0)
+    R (>= 4.1.0)
 Imports:
     stats,
     utils,
