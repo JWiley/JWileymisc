@@ -1,7 +1,12 @@
+# JWileymisc 1.4.3
+
+## Changes
+* `as.na()` supports haven labelled class objects.
+
 # JWileymisc 1.4.2
 
 ## Changes
-* `corplot()` and functions that build on it (like `plot()` methods for `SEMSummary()` 
+* `corplot()` and functions that build on it (like `plot()` methods for `SEMSummary()`)
    now use a 45 degree angle for column labels to improve readability with long variable 
    names. As always this is a `ggplot2` theme option and can be overwritten by the user.
 * `residualDiagnostics` gains an argument `quantiles`. It defaults to `TRUE` providing

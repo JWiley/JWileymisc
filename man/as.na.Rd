@@ -17,7 +17,7 @@ Given a vector, convert it to missing (NA) values,
 where the class of the missing matches the input class.
 Currently supports character, logical, integer, factor, numeric,
 times (from \pkg{chron}), Date, POSIXct, POSIXlt, and
-zoo (from \pkg{zoo}).
+zoo (from \pkg{zoo}), and haven labelled from \pkg{haven}.
 }
 \examples{
 str(as.na(1L:5L))

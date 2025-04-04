@@ -82,9 +82,18 @@ test_that("as.na converts to the correct class of missing", {
   expect_true(all(is.na(as.na(x))))
   expect_equal(class(as.na(x)), class(x))
 
+  ## check haven labelleds convert properly
+  x <- structure(c(7, 3, 4),
+    label = "How would you rate your stress levels today?",
+    format.spss = "F40.0", display_width = 5L, labels = c(`Very low` = 1,  
+    Low = 2, `Somewhat low` = 3, `Neither low nor high` = 4, `Somewhat high` = 5,        
+    High = 6, `Very High` = 7),
+    class = c("haven_labelled", "vctrs_vctr", "double"))
+  expect_equal(class(as.na(x)), class(x))
+
   ## check error if unknown class
   x <- structure(1, class = "whoknows")
-  expect_error(as.na(x))  
+  expect_error(as.na(x))
 })
 
 test_that("is.naz identifies missing, non finite, and zero length characters", {

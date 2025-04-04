@@ -170,14 +170,13 @@ corOK <- function(x, maxiter = 100) {
   list(x = x[keep, keep], keep.indices = keep)
 }
 
-
 #' Coerces vectors to missing
 #'
 #' Given a vector, convert it to missing (NA) values,
 #' where the class of the missing matches the input class.
 #' Currently supports character, logical, integer, factor, numeric,
 #' times (from \pkg{chron}), Date, POSIXct, POSIXlt, and
-#' zoo (from \pkg{zoo}).
+#' zoo (from \pkg{zoo}), and haven labelled from \pkg{haven}.
 #'
 #' @param x A vector to convert to missing (NA)
 #' @return a vector the same length as the input with missing values of the same class
@@ -190,38 +189,40 @@ corOK <- function(x, maxiter = 100) {
 #' str(as.na(as.Date("2017-01-01")))
 as.na <- function(x) {
   n <- length(x)
-  if (inherits(x, "character")) {
-    use <- NA_character_
-  } else if (inherits(x, "logical")) {
-    use <- NA
-  } else if (inherits(x, "integer")) {
-    use <- NA_integer_
-  } else if (inherits(x, "factor")) {
-    use <- factor(NA, levels = levels(x))
-  } else if (inherits(x, "numeric")) {
-    use <- NA_real_
-  } else if (inherits(x, "times")) { ## from chron package
-    use <- structure(rep(NA, n), format = "h:m:s", class = "times")
-    return(use) ## force return as rep() does not play nicely with chron times
-  } else if (inherits(x, "Date")) {
-    use <- structure(NA_real_, class = "Date")
-  } else if (inherits(x, "POSIXct")) {
-    use <- structure(NA_real_, class = c("POSIXct", "POSIXt"))
-  } else if (inherits(x, "POSIXlt")) {
-    use <- structure(list(sec = NA_real_, min = NA_integer_, hour = NA_integer_,
-                          mday = NA_integer_, mon = NA_integer_, year = NA_integer_,
-                          wday = NA_integer_, yday = NA_integer_, isdst = -1L, zone = "",
-                          gmtoff = NA_integer_), .Names = c("sec", "min", "hour", "mday",
-                            "mon", "year", "wday", "yday", "isdst", "zone", "gmtoff"),
-                     class = c("POSIXlt", "POSIXt"),
-                     tzone = c("", "AEST", "AEDT"))
-  } else if (inherits(x, "zoo")) { ## from zoo package
-    use <- structure(rep(NA, n), index = rep(NA_integer_, n), class = "zoo")
-    return(use) ## force return as rep() does not play nicely with zoo
-  } else {
-    stop(sprintf("Unknown class of type %s", class(x)))
+
+  ## if no length, return input
+  if (isTRUE(identical(n, 0L)) || isTRUE(all(is.na(x)))) {
+    ## no action needed
+  } else if (n > 0) {
+    index <- seq_len(n)
+
+    if (inherits(x, "character")) {
+      x[index] <- NA_character_
+    } else if (inherits(x, "logical")) {
+      x[index] <- NA
+    } else if (inherits(x, "integer")) {
+      x[index] <- NA_integer_
+    } else if (inherits(x, "factor")) {
+      x[index] <- NA
+    } else if (inherits(x, "numeric")) {
+      x[index] <- NA_real_
+    } else if (inherits(x, "times")) { ## from chron package
+      x <- structure(rep(NA, n), format = "h:m:s", class = "times")
+    } else if (inherits(x, "Date")) {
+      x[index] <- NA_real_
+    } else if (inherits(x, "POSIXct")) {
+      x[index] <- NA
+    } else if (inherits(x, "POSIXlt")) {
+      x[index] <- NA
+    } else if (inherits(x, "zoo")) { ## from zoo package
+      x <- structure(rep(NA, n), index = rep(NA_integer_, n), class = "zoo")
+    } else if (inherits(x, "haven_labelled")) {
+      x[index] <- NA
+    } else {
+      stop(sprintf("Unknown class of type %s", class(x)))
+    }
   }
-  rep(use, n)
+  return(x)
 }
 
 #' Is a variable missing, non finite or zero length character?
