@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">JWileymisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,11 +45,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.4.2" id="jwileymisc-142">JWileymisc 1.4.2<a class="anchor" aria-label="anchor" href="#jwileymisc-142"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.4.3" id="jwileymisc-143">JWileymisc 1.4.3<a class="anchor" aria-label="anchor" href="#jwileymisc-143"></a></h2>
+<div class="section level3">
+<h3 id="changes-1-4-3">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-3"></a></h3>
+<ul><li>
+<code><a href="../reference/as.na.html">as.na()</a></code> supports haven labelled class objects.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.2" id="jwileymisc-142">JWileymisc 1.4.2<a class="anchor" aria-label="anchor" href="#jwileymisc-142"></a></h2><p class="text-muted">CRAN release: 2025-03-26</p>
 <div class="section level3">
 <h3 id="changes-1-4-2">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-2"></a></h3>
 <ul><li>
-<code><a href="../reference/corplot.html">corplot()</a></code> and functions that build on it (like <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods for <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code> now use a 45 degree angle for column labels to improve readability with long variable names. As always this is a <code>ggplot2</code> theme option and can be overwritten by the user.</li>
+<code><a href="../reference/corplot.html">corplot()</a></code> and functions that build on it (like <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods for <code><a href="../reference/SEMSummary.html">SEMSummary()</a></code>) now use a 45 degree angle for column labels to improve readability with long variable names. As always this is a <code>ggplot2</code> theme option and can be overwritten by the user.</li>
 <li>
 <code>residualDiagnostics</code> gains an argument <code>quantiles</code>. It defaults to <code>TRUE</code> providing the same behaviour as before. It can optionally be set to <code>FALSE</code> to remove the quantile estimations for residuals. This is useful when the smooths fail or to save computational time.</li>
 <li>
