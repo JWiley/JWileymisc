@@ -536,3 +536,74 @@ readRDSfst <- function(filename) {
 
   unserialize(decompress_fst(base::readRDS(filename)))
 }
+
+#' KDE-based Inverse CDF Sampling for Synthetic Data
+#'
+#' Generate synthetic samples that try to follow an observed distribution
+#' by inverting a smooth kernel density estimate (KDE).
+#'
+#' This utility estimates a univariate density for the input vector, numerically
+#' integrates it to obtain a smooth cumulative distribution function (CDF), and
+#' then samples synthetic values by inverting that CDF for uniformly distributed
+#' probabilities. The result is a set of values that follow the shape of the
+#' observed data without reproducing exact observations.
+#'
+#' @param x Numeric vector containing the observed data. Should be numeric or integer.
+#'   Vector only (no datasets at this stage).
+#' @param n Integer scalar, the number of synthetic samples to generate.
+#' @param KDEn Integer scalar passed to [stats::density()] as the `n` grid size
+#'   for the KDE; larger values yield a finer grid for integration (default
+#'   `100`).
+#' @param seed Optional integer to set the random seed for reproducibility.
+#'
+#' @details
+#' The KDE is fit using [stats::density()] with bandwidth rule `bw = "nrd0"`.
+#' The CDF is computed via trapezoidal integration of the KDE on its
+#' grid and normalized to \[0, 1\]. An inverse-CDF function is obtained via
+#' linear interpolation ([stats::approxfun()]), which is then evaluated at
+#' `n` independent uniforms from \[0, 1\].
+#'
+#' This approach produces smooth synthetic samples that closely match the 
+#' observed density.
+#'
+#' @return A numeric vector of length `n` containing the synthetic values.
+#'
+#' @seealso [stats::density()], [stats::approxfun()], [stats::runif()].
+#'
+#' @examples
+#' sim_iris <- density_inversion(iris$Sepal.Length, n = 200, seed = 1234)
+#' 
+#' hist(iris$Sepal.Length)
+#' hist(sim_iris)
+#'
+#' # cleanup
+#' rm(sim_iris)
+#'
+#' @export
+density_inversion <- function(x, n, KDEn = 100, seed = NULL) {
+  ## checks
+  stopifnot(is.numeric(x) || is.integer(x))
+  stopifnot(all(is.finite(x)))
+  stopifnot(length(x) > 1)
+
+  ## remove any missing values
+  x <- x[!is.na(x)]
+
+  # estimate density
+  kd <- stats::density(x, bw = "nrd0", n = KDEn)
+
+  # CDF
+  dx   <- diff(kd$x)
+  trap <- 0.5 * (head(kd$y, -1) + tail(kd$y, -1)) * dx
+  cdf  <- c(0, cumsum(trap))
+  cdf  <- cdf / max(cdf)
+
+  # Inverse CDF function
+  cdf_inv <- stats::approxfun(
+    x = cdf, y = kd$x, method = "linear", ties = "ordered")
+
+  # Sample synthetic values
+  if (!is.null(seed)) set.seed(seed)
+  u <- stats::runif(n)
+  as.numeric(cdf_inv(u))
+}
