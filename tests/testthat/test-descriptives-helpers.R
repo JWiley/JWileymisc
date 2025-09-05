@@ -1,31 +1,34 @@
 test_that(".styleaov works", {
   expect_equal(
-    "F(1, 30) = 79.56, p < .001, Eta-squared = 0.73",
-    JWileymisc:::.styleaov(mtcars$mpg, mtcars$cyl, digits = 2L, pdigits = 3L))
+    JWileymisc:::.styleaov(mtcars$mpg, mtcars$cyl, digits = 2L, pdigits = 3L),
+    "F(1, 30) = 79.56, p < .001, Eta-squared = 0.73")
 })
 
 test_that(".style2sttest works", {
   expect_equal(
-    "t(df=30) = -4.11, p < .001, d = 1.48",
-    JWileymisc:::.style2sttest(mtcars$mpg, mtcars$am, digits = 2L, pdigits = 3L))
+    JWileymisc:::.style2sttest(mtcars$mpg, mtcars$am, digits = 2L, pdigits = 3L),
+    "t(df=30) = -4.11, p < .001, d = 1.48")
 })
 
 test_that(".stylepairedttest works", {
   expect_equal(
-    "t(df=9) = 4.06, p = .003, d = 1.28",
-    JWileymisc:::.stylepairedttest(sleep$extra, sleep$group, sleep$ID, digits = 2L, pdigits = 3L))
+    JWileymisc:::.stylepairedttest(sleep$extra, sleep$group, sleep$ID, digits = 2L, pdigits = 3L),
+    "t(df=9) = 4.06, p = .003, d = 1.28")
 })
 
 test_that(".stylepairedwilcox works", {
   if (getRversion() > "4.5.1") {
     res <- JWileymisc:::.stylepairedwilcox(sleep$extra, sleep$group, sleep$ID, digits = 2L, pdigits = 3L)
+    expect_equal(
+    res,
+    "Wilcoxon Paired V = 54.00, p = .004")
   } else {
     expect_warning(expect_warning(
       res <- JWileymisc:::.stylepairedwilcox(sleep$extra, sleep$group, sleep$ID, digits = 2L, pdigits = 3L)))
+    expect_equal(
+    res,
+    "Wilcoxon Paired V = 45.00, p = .009")
   }
-  expect_equal(
-    "Wilcoxon Paired V = 45.00, p = .009",
-    res)
 })
 
 test_that(".stylepairedmcnemar works", {
@@ -45,41 +48,41 @@ test_that(".stylepairedmcnemar works", {
     exdata$Rating, exdata$Time, exdata$ID, digits = 2L, pdigits = 3L)
 
   expect_equal(
-    "McNemar's Chi-square = 0.25, df = 1, p = .617",
-    res)
+    res,
+    "McNemar's Chi-square = 0.25, df = 1, p = .617")
 })
 
 test_that(".stylekruskal works", {
   expect_equal(
-    "KW chi-square = 9.79, df = 1, p = .002",
-    JWileymisc:::.stylekruskal(mtcars$mpg, mtcars$am, digits = 2L, pdigits = 3L))
+    JWileymisc:::.stylekruskal(mtcars$mpg, mtcars$am, digits = 2L, pdigits = 3L),
+    "KW chi-square = 9.79, df = 1, p = .002")
 
   expect_equal(
-    "KW chi-square = 25.75, df = 2, p < .001",
-    JWileymisc:::.stylekruskal(mtcars$mpg, mtcars$cyl, digits = 2L, pdigits = 3L))
+    JWileymisc:::.stylekruskal(mtcars$mpg, mtcars$cyl, digits = 2L, pdigits = 3L),
+    "KW chi-square = 25.75, df = 2, p < .001")
 })
 
 test_that(".stylechisq works", {
   expect_warning(res <- JWileymisc:::.stylechisq(mtcars$cyl, mtcars$am, digits = 2L, pdigits = 3L))
   expect_equal(
-    "Chi-square = 8.74, df = 2, p = .013, Cramer's V = 0.52",
-    res)
+    res,
+    "Chi-square = 8.74, df = 2, p = .013, Cramer's V = 0.52")
 })
 
 test_that(".stylemsd works", {
   expect_equal(
-    "20.09 (6.03)",
-    JWileymisc:::.stylemsd("Miles per Gallon", mtcars$mpg)$Res)
+    JWileymisc:::.stylemsd("Miles per Gallon", mtcars$mpg)$Res,
+    "20.09 (6.03)")
 })
 
 test_that(".stylemdniqr works", {
   expect_equal(
-    "19.20 (7.38)",
-    JWileymisc:::.stylemdniqr("Miles per Gallon", mtcars$mpg)$Res)
+    JWileymisc:::.stylemdniqr("Miles per Gallon", mtcars$mpg)$Res,
+    "19.20 (7.38)")
 })
 
 test_that(".stylefreq works", {
   expect_equal(
-    c("", "19 (59.4%)", "13 (40.6%)"),
-    JWileymisc:::.stylefreq("Transmission", mtcars$am)$Res)
+    JWileymisc:::.stylefreq("Transmission", mtcars$am)$Res,
+    c("", "19 (59.4%)", "13 (40.6%)"))
 })
