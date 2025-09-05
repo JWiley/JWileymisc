@@ -50,7 +50,6 @@ hist(sim_iris)
 
 # cleanup
 rm(sim_iris)
-
 }
 \seealso{
 [stats::density()], [stats::approxfun()], [stats::runif()].

@@ -569,6 +569,8 @@ readRDSfst <- function(filename) {
 #' @return A numeric vector of length `n` containing the synthetic values.
 #'
 #' @seealso [stats::density()], [stats::approxfun()], [stats::runif()].
+#' @importFrom utils head tail
+#' @export
 #'
 #' @examples
 #' sim_iris <- density_inversion(iris$Sepal.Length, n = 200, seed = 1234)
@@ -578,8 +580,6 @@ readRDSfst <- function(filename) {
 #'
 #' # cleanup
 #' rm(sim_iris)
-#'
-#' @export
 density_inversion <- function(x, n, KDEn = 100, seed = NULL) {
   ## checks
   stopifnot(is.numeric(x) || is.integer(x))
