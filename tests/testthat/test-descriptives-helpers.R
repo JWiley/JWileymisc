@@ -17,9 +17,12 @@ test_that(".stylepairedttest works", {
 })
 
 test_that(".stylepairedwilcox works", {
-  res <- JWileymisc:::.stylepairedwilcox(sleep$extra, sleep$group, sleep$ID, digits = 2L, pdigits = 3L,
-      exact = FALSE)
-
+  if (getRversion() > "4.5.1") {
+    res <- JWileymisc:::.stylepairedwilcox(sleep$extra, sleep$group, sleep$ID, digits = 2L, pdigits = 3L)
+  } else {
+    expect_warning(expect_warning(
+      res <- JWileymisc:::.stylepairedwilcox(sleep$extra, sleep$group, sleep$ID, digits = 2L, pdigits = 3L)))
+  }
   expect_equal(
     "Wilcoxon Paired V = 45.00, p = .009",
     res)

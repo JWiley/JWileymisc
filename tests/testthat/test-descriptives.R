@@ -188,10 +188,18 @@ test_that("egltable works", {
   expect_true(any(grepl("McNemar", t14$Test)))
   expect_true(any(grepl("p < .001", t14$Test)))
 
-  expect_warning(t15 <- egltable(c("weight", "WeightTertile"), g = "Time",
-                  data = tmp,
-                  idvar = "Chick", paired = TRUE,
-                  parametric = FALSE))
+  if (getRversion() > "4.5.1") {
+    t15 <- egltable(c("weight", "WeightTertile"), g = "Time",
+                    data = tmp,
+                    idvar = "Chick", paired = TRUE,
+                    parametric = FALSE)
+  } else {
+    expect_warning(
+      t15 <- egltable(c("weight", "WeightTertile"), g = "Time",
+                      data = tmp,
+                      idvar = "Chick", paired = TRUE,
+                      parametric = FALSE))
+  }
 
   expect_s3_class(t15, "data.table")
   expect_true(any(grepl("Wilcoxon", t15$Test)))

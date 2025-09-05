@@ -1,5 +1,12 @@
 # JWileymisc 1.4.4
 
+## New Features
+
+* `density_inversion()` new function for KDE-based Inverse CDF sampling.
+  This is useful for simulating data from an empirical distribution.
+  It can create synthetic datasets for sharing or testing that share
+  features with real datasets (eg distribution) without sharing real data.
+
 ## Bug Fixes
 * `.stylepairedwilcox()` now passes additional arguments to `wilcox.test()`.
   Addresses changes in upcoming R devel
