@@ -15,7 +15,7 @@ and oculus dexter (OD; right eye)"><meta name="twitter:card" content="summary"><
 
     <a class="navbar-brand me-2" href="../index.html">JWileymisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,10 @@ and oculus dexter (OD; right eye)</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for class 'VAObject,ANY,ANY,ANY'</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for class 'VAObject'</span></span>
+<span><span class="fu">show</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'VAObject,ANY,ANY,ANY'</span></span>
 <span><span class="va">x</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">...</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'VAObject'</span></span>
@@ -77,7 +80,11 @@ and oculus dexter (OD; right eye)</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
+<dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
+<dd><p>A VAObject class object</p></dd>
+
+
+<dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>the object to subset</p></dd>
 
 
@@ -97,10 +104,6 @@ and oculus dexter (OD; right eye)</p>
 <dd><p>should be missing</p></dd>
 
 
-<dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
-<dd><p>A VAObject class object</p></dd>
-
-
 <dt id="arg-weightbest">weightbest<a class="anchor" aria-label="anchor" href="#arg-weightbest"></a></dt>
 <dd><p>Logical whether to upweight the best seeing eye.
 Defaults to <code>TRUE</code>.</p></dd>
@@ -114,7 +117,8 @@ then the worst seeing eye. Defaults to <code>c(.75, .25)</code>.</p></dd>
     <div class="section level2">
     <h2 id="methods-by-generic-">Methods (by generic)<a class="anchor" aria-label="anchor" href="#methods-by-generic-"></a></h2>
 
-<ul><li><p><code>x[i</code>: extract method</p></li>
+<ul><li><p><code>show(VAObject)</code>: show method</p></li>
+<li><p><code>x[i</code>: extract method</p></li>
 <li><p><code>print(VAObject)</code>: print method</p></li>
 <li><p><code>show(VAObject)</code>: show method</p></li>
 <li><p><code>summary(VAObject)</code>: summary method</p></li>
