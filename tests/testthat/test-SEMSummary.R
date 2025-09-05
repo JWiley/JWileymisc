@@ -143,7 +143,6 @@ test_that("SEMSummary works by group.", {
   expect_invisible(APAStyler(s[[2]], type = "cov", stars = FALSE, file = FALSE, print = FALSE))
   expect_invisible(APAStyler(s[[3]], type = "both", stars = TRUE, file = FALSE, print = FALSE))
 
-
 })
 
 test_that("SEMSummary or SEMSummary.fit errors.", {
