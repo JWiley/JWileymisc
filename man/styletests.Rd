@@ -20,7 +20,7 @@
 
 .stylepairedttest(dv, g, ID, digits = 2, pdigits = 3)
 
-.stylepairedwilcox(dv, g, ID, digits = 2, pdigits = 3)
+.stylepairedwilcox(dv, g, ID, digits = 2, pdigits = 3, ...)
 
 .stylepairedmcnemar(dv, g, ID, digits = 2, pdigits = 3)
 
@@ -44,6 +44,8 @@ Defaults to \code{2}.}
 
 \item{pdigits}{An integer indicating the number of digits for p values.
 Defaults to \code{3}.}
+
+\item{...}{Additional arguments passed to \code{\link[stats]{wilcox.test}}.}
 
 \item{simChisq}{A logical value, whether or not to simulate chi-square values.
 Only applies to some functions. Defaults to \code{FALSE}.}

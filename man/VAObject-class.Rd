@@ -3,13 +3,15 @@
 \docType{class}
 \name{VAObject-class}
 \alias{VAObject-class}
+\alias{show,VAObject-method}
 \alias{[,VAObject,ANY,ANY,ANY-method}
 \alias{[,VAObject-method}
 \alias{print,VAObject-method}
-\alias{show,VAObject-method}
 \alias{summary,VAObject-method}
 \title{An S4 class to hold visual acuity data}
 \usage{
+\S4method{show}{VAObject}(object)
+
 \S4method{[}{VAObject,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{print}{VAObject}(x, ...)
@@ -19,6 +21,8 @@
 \S4method{summary}{VAObject}(object, weightbest = TRUE, w = c(0.75, 0.25))
 }
 \arguments{
+\item{object}{A VAObject class object}
+
 \item{x}{the object to subset}
 
 \item{i}{the rows to subset (optional)}
@@ -28,8 +32,6 @@
 \item{...}{Additional arguments passed to lower functions}
 
 \item{drop}{should be missing}
-
-\item{object}{A VAObject class object}
 
 \item{weightbest}{Logical whether to upweight the best seeing eye.
 Defaults to \code{TRUE}.}
@@ -43,6 +45,8 @@ and oculus dexter (OD; right eye)
 }
 \section{Methods (by generic)}{
 \itemize{
+\item \code{show(VAObject)}: show method
+
 \item \code{x[i}: extract method
 
 \item \code{print(VAObject)}: print method

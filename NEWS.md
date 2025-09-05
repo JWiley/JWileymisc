@@ -1,3 +1,10 @@
+# JWileymisc 1.4.4
+
+## Bug Fixes
+* `.stylepairedwilcox()` now passes additional arguments to `wilcox.test()`.
+  Addresses changes in upcoming R devel
+* Other minor code improvements
+
 # JWileymisc 1.4.3
 
 ## Changes

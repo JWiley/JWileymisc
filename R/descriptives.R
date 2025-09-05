@@ -668,7 +668,7 @@ egltable <- function(vars, g, data, idvar, strict = TRUE, parametric = TRUE,
   }
 
   tmpout <- lapply(levels(g), function(gd) {
-    d <- dat[which(g == gd)]
+    d <- dat[which(g == gd)] ## can drop which() here?
     testmiss <- .allmissing(d)
     if (!isFALSE(testmiss)) {
       testmiss <- sprintf("In group: %s\n%s", gd, testmiss)

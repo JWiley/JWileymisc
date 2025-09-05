@@ -62,7 +62,7 @@ score <- function(data, reverse = NULL, limits = NULL, mean = TRUE,
   }
 
   ## Setup and appropriateness tests
-  if (any(limits < 0) && !is.null(rev)) {
+  if (any(limits < 0) && !is.null(reverse)) {
     stop("Cannot reverse score scale that can take on negative values.")
   }
   stopifnot(is.data.table(data) | is.data.frame(data) | is.matrix(data))

@@ -54,9 +54,16 @@ setClass("VAObject",
                                                       noOS, ") and of 'originalOD' (", noOD, ") should be equal.", sep = "")
            )
 
-           if (isTRUE(all(as.logical(results)))) TRUE else print(results)
+           if (isTRUE(all(as.logical(results)))) TRUE else results[!as.logical(results)]
          })
 
+##' @describeIn VAObject show method
+##' @export
+setMethod(f = "show",
+  signature(object = "VAObject"),
+  definition = function(object) {
+    print(object)
+  })
 
 ## ValidVASummaryObject <- function(object) {
 ##   noOS <- length(object@originalOS)

@@ -28,7 +28,7 @@
 #'   \item{NegAff}{Negative affect ratings on a 1--5 scale, repeated 3x daily}
 #'   \item{COPEPrb}{Problem focused coping on a 1--4 scale, repeated 1x daily at the evening survey}
 #'   \item{COPEPrc}{Emotional processing coping on a 1--4 scale, repeated 1x daily at the evening survey}
-#'   \item{COPEExp}{Emotional exprsesion coping on a 1--4 scale, repeated 1x daily at the evening survey}
+#'   \item{COPEExp}{Emotional expression coping on a 1--4 scale, repeated 1x daily at the evening survey}
 #'   \item{COPEDis}{Mental disengagement coping on a 1--4 scale, repeated 1x daily at the evening survey}
 #' }
 "aces_daily"

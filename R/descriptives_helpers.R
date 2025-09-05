@@ -14,6 +14,7 @@
 #' @param sims An integer indicating the number of simulations to conduct.
 #'   Only applies to some functions. Defaults to \code{10000}, but this is
 #'   arbitrary and should be chosen.
+#' @param ... Additional arguments passed to \code{\link[stats]{wilcox.test}}.
 #' @keywords internal
 #' @importFrom data.table data.table
 #' @importFrom stats aov chisq.test kruskal.test quantile xtabs t.test
@@ -88,7 +89,7 @@ NULL
 #' @examples
 #'
 #' JWileymisc:::.stylepairedwilcox(sleep$extra, sleep$group, sleep$ID)
-.stylepairedwilcox <- function(dv, g, ID, digits = 2, pdigits = 3) {
+.stylepairedwilcox <- function(dv, g, ID, digits = 2, pdigits = 3, ...) {
   widedat <- copy(reshape(data.table(
     dv = dv,
     g = as.integer(factor(g)),
@@ -99,7 +100,7 @@ NULL
     direction = "wide", sep = ""))
   ## widedat[, diff := dv2 - dv1]
 
-  tests <- wilcox.test(widedat$dv2, widedat$dv1, paired = TRUE)
+  tests <- wilcox.test(widedat$dv2, widedat$dv1, paired = TRUE, ...)
 
   outputstring <- sprintf("Wilcoxon Paired V = %%0.%df, %%s",
                           digits)

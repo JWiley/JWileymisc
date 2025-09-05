@@ -209,7 +209,7 @@ testDistribution.default <- function(x,
 
   distr <- match.arg(distr)
   use <- match.arg(use)
-  if (use != "complete.obs" & isTRUE(robust)) {
+  if (use != "complete.obs" && isTRUE(robust)) {
     use <- "complete.obs"
     message("use set to 'complete.obs' as robust = TRUE")
   }

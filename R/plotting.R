@@ -242,7 +242,7 @@ corplot <- function(x, coverage, pvalues,
     mx$p[mx[, "Var1"] == mx[, "Var2"]] <- ""
   }
 
-  if (identical(type, "both") & !missing(pvalues)) {
+  if (identical(type, "both") && !missing(pvalues)) {
     topx <- x
     topx[] <- FALSE
     topx[which(upper.tri(topx))] <- TRUE
@@ -271,13 +271,13 @@ corplot <- function(x, coverage, pvalues,
 
   p <- substitute(main + tiles + gradient + theme, control.grobs)
 
-  if (identical(type, "coverage") & !missing(coverage)) {
+  if (identical(type, "coverage") && !missing(coverage)) {
     control.grobs$points = quote(geom_point(aes(size = coverage)))
     p <- substitute(main + tiles + gradient + points + area + scale + theme, control.grobs)
-  } else if (identical(type, "p") & !missing(pvalues)) {
+  } else if (identical(type, "p") && !missing(pvalues)) {
     control.grobs$text = quote(geom_text(aes(label = p), size = 3, vjust = 0))
     p <- substitute(main + tiles + gradient + text + scale + theme, control.grobs)
-  } else if (identical(type, "both") & !missing(pvalues)) {
+  } else if (identical(type, "both") && !missing(pvalues)) {
     control.grobs$text = quote(geom_text(aes(label = both), size = 3, vjust = 0))
     p <- substitute(main + tiles + gradient + text + scale + theme, control.grobs)
   } else {
