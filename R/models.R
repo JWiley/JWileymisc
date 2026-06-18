@@ -729,7 +729,7 @@ findSigRegions <- function(object, l1, l2, name.vary, lower, upper, alpha = .05,
 
     out <- abs(alpha - as.data.table(
       as.data.frame(
-        rms::contrast(object, tmp1, tmp2)[c("Pvalue")]))[, Pvalue])
+        rms::contrast(fit = object, a = tmp1, b = tmp2)[c("Pvalue")]))[, Pvalue])
 
     if (is.na(out) || is.nan(out) || !is.finite(out)) {
       out <- 9
@@ -763,7 +763,7 @@ findSigRegions <- function(object, l1, l2, name.vary, lower, upper, alpha = .05,
           tmp2 <- l2
           tmp2[name.vary] <- res$par
           out <- cbind(
-            as.data.table(as.data.frame(rms::contrast(object, tmp1, tmp2)[c(name.vary, "Contrast", "Pvalue")])),
+            as.data.table(as.data.frame(rms::contrast(fit = object, a = tmp1, b = tmp2)[c(name.vary, "Contrast", "Pvalue")])),
             Notes = out$Notes)
         }
       } else {
@@ -838,7 +838,10 @@ intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
                            scale.x = c(m = 0, s = 1), scale.y = c(m = 0, s = 1),
                            starts = 50) {
 
-  preds <- as.data.table(do.call(rms::Predict, list(x = object, factors = predList, conf.type = "mean")))
+  preds <- as.data.table(rms::Predict(
+    object = object,
+    factors = predList,
+    conf.type = "mean"))
   preds[, xz := (get(xvar) - scale.x["m"])/scale.x["s"]]
   preds[, yz := (yhat - scale.y["m"])/scale.y["s"]]
   preds[, yllz := (lower - scale.y["m"])/scale.y["s"]]
@@ -846,8 +849,11 @@ intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
 
   simpleSlopes <- do.call(rbind, lapply(contrastList, function(x) {
     out <- as.data.table(as.data.frame(
-      rms::contrast(object,
-               c(x[[-1]], x[[1]][1]), c(x[[-1]], x[[1]][2]), type = "average")[
+      rms::contrast(
+        fit = object,
+        a = c(x[[-1]], x[[1]][1]),
+        b = c(x[[-1]], x[[1]][2]),
+        type = "average")[
         c("Contrast", "SE", "Lower", "Upper", "Pvalue")]))
     out[, reglab := sprintf(
             "b = %0.2f [%0.2f, %0.2f], %s",
