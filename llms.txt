@@ -1,0 +1,189 @@
+# JWileymisc
+
+An `R` package with general utility and convenience functions. Some of
+these are general functions that help using and exploring SEM style
+data. Others are more specific. This package has grown out of my own
+work, and is often to automate repetitive tasks. See the Vignettes,
+listed under the “Articles” menu item for description and examples using
+some of the more interesting functions from the package.
+
+## Installation
+
+To get the latest development version, use:
+
+``` r
+
+
+#install.packages("devtools")
+
+devtools::install_github("JWiley/JWileymisc")
+```
+
+To get the version on CRAN:
+
+``` r
+
+
+install.packages("JWileymisc")
+```
+
+# Package index
+
+## All functions
+
+- [`APAStyler()`](https://joshuawiley.com/JWileymisc/reference/APAStyler.md)
+  : A generic function for pretty printing in (semi) APA Style
+- [`APAStyler(`*`<SEMSummary>`*`)`](https://joshuawiley.com/JWileymisc/reference/APAStyler.SEMSummary.md)
+  : A generic function for pretty printing in (semi) APA Style
+- [`APAStyler(`*`<list>`*`)`](https://joshuawiley.com/JWileymisc/reference/APAStyler.list.md)
+  : APAStyler method for lists
+- [`APAStyler(`*`<lm>`*`)`](https://joshuawiley.com/JWileymisc/reference/APAStyler.lm.md)
+  : APAStyler method for linear models
+- [`APAStyler(`*`<mira>`*`)`](https://joshuawiley.com/JWileymisc/reference/APAStyler.mira.md)
+  : A generic function for pretty printing in (semi) APA Style
+- [`APAStyler(`*`<modelTest.lm>`*`)`](https://joshuawiley.com/JWileymisc/reference/APAStyler.modelTest.lm.md)
+  : APAStyler method for model tests from a linear model
+- [`APAStyler(`*`<modelTest.vglm>`*`)`](https://joshuawiley.com/JWileymisc/reference/APAStyler.modelTest.vglm.md)
+  : APAStyler method for model tests from a vglm multinomial model
+- [`R2()`](https://joshuawiley.com/JWileymisc/reference/R2.md) :
+  Calculate R2 Values
+- [`SEMSummary()`](https://joshuawiley.com/JWileymisc/reference/SEMSummary.md)
+  : Summary Statistics for a SEM Analysis
+- [`SEMSummary.fit()`](https://joshuawiley.com/JWileymisc/reference/SEMSummary.fit.md)
+  : Summary Statistics for a SEM Analysis
+- [`TukeyHSDgg()`](https://joshuawiley.com/JWileymisc/reference/TukeyHSDgg.md)
+  : Tukey HSD Plot
+- [`VAConverter()`](https://joshuawiley.com/JWileymisc/reference/VAConverter.md)
+  : Visual Acuity Converter
+- [`show(`*`<VAObject>`*`)`](https://joshuawiley.com/JWileymisc/reference/VAObject-class.md)
+  [`` `[`( ``*`<VAObject>`*`,`*`<ANY>`*`,`*`<ANY>`*`,`*`<ANY>`*`)`](https://joshuawiley.com/JWileymisc/reference/VAObject-class.md)
+  [`print(`*`<VAObject>`*`)`](https://joshuawiley.com/JWileymisc/reference/VAObject-class.md)
+  [`summary(`*`<VAObject>`*`)`](https://joshuawiley.com/JWileymisc/reference/VAObject-class.md)
+  : An S4 class to hold visual acuity data
+- [`show(`*`<VASummaryObject>`*`)`](https://joshuawiley.com/JWileymisc/reference/VASummaryObject-class.md)
+  [`plot(`*`<VASummaryObject>`*`,`*`<missing>`*`)`](https://joshuawiley.com/JWileymisc/reference/VASummaryObject-class.md)
+  : An S4 class to hold visual acuity summary data
+- [`aces_daily`](https://joshuawiley.com/JWileymisc/reference/aces_daily.md)
+  : Multilevel Daily Data Example
+- [`as.na()`](https://joshuawiley.com/JWileymisc/reference/as.na.md) :
+  Coerces vectors to missing
+- [`cd()`](https://joshuawiley.com/JWileymisc/reference/cd.md) : Change
+  directory
+- [`compareIVs()`](https://joshuawiley.com/JWileymisc/reference/compareIVs.md)
+  : Compares the effects of various independent variables on dependent
+  variables
+- [`saveRDSfst()`](https://joshuawiley.com/JWileymisc/reference/compressedrds.md)
+  [`readRDSfst()`](https://joshuawiley.com/JWileymisc/reference/compressedrds.md)
+  : Save and read RDS functions for using multithreaded “ZSTD” or “LZ4”
+  compression
+- [`cor2cov()`](https://joshuawiley.com/JWileymisc/reference/cor2cov.md)
+  : Convert a correlation matrix and standard deviations to a covariance
+  matrix
+- [`corOK()`](https://joshuawiley.com/JWileymisc/reference/corOK.md) :
+  Return a non-missing correlation matrix
+- [`corplot()`](https://joshuawiley.com/JWileymisc/reference/corplot.md)
+  : Heatmap of a Correlation Matrix
+- [`cramerV()`](https://joshuawiley.com/JWileymisc/reference/cramerV.md)
+  : Calculate Phi or Cramer's V effect size
+- [`density_inversion()`](https://joshuawiley.com/JWileymisc/reference/density_inversion.md)
+  : KDE-based Inverse CDF Sampling for Synthetic Data
+- [`diffCircular()`](https://joshuawiley.com/JWileymisc/reference/diffCircular.md)
+  : Calculate the Circular Difference
+- [`.fround()`](https://joshuawiley.com/JWileymisc/reference/dot-fround.md)
+  : Function to round and format a number
+- [`.quantilePercentiles()`](https://joshuawiley.com/JWileymisc/reference/dot-quantilePercentiles.md)
+  : Internal Function to Calculate Quantiles
+- [`egltable()`](https://joshuawiley.com/JWileymisc/reference/egltable.md)
+  : Function makes nice tables
+- [`empirical_pvalue()`](https://joshuawiley.com/JWileymisc/reference/empirical_pvalue.md)
+  : Calculates an empirical p-value based on the data
+- [`findSigRegions()`](https://joshuawiley.com/JWileymisc/reference/findSigRegions.md)
+  : Function to find significant regions from an interaction
+- [`formatHtest()`](https://joshuawiley.com/JWileymisc/reference/formatHtest.md)
+  : Function to format the reuslts of a hypothesis test as text
+- [`formatMedIQR()`](https://joshuawiley.com/JWileymisc/reference/formatMedIQR.md)
+  : Function to format the median and IQR of a variable
+- [`formatPval()`](https://joshuawiley.com/JWileymisc/reference/formatPval.md)
+  : Function to simplify formatting p-values for easy viewing /
+  publication
+- [`geom_tufterange()`](https://joshuawiley.com/JWileymisc/reference/geom_tufterange.md)
+  : Tufte Range
+- [`gglikert()`](https://joshuawiley.com/JWileymisc/reference/gglikert.md)
+  : Creates a plot for likert scale
+- [`hashDataset()`](https://joshuawiley.com/JWileymisc/reference/hashDataset.md)
+  : Create a character vector or file hash of a dataset and each
+  variable
+- [`intSigRegGraph()`](https://joshuawiley.com/JWileymisc/reference/intSigRegGraph.md)
+  : Function to find significant regions from an interaction
+- [`is.naz()`](https://joshuawiley.com/JWileymisc/reference/is.naz.md) :
+  Is a variable missing, non finite or zero length character?
+- [`lagk()`](https://joshuawiley.com/JWileymisc/reference/lagk.md) :
+  Create a lagged variable
+- [`lm2()`](https://joshuawiley.com/JWileymisc/reference/lm2.md) :
+  Modified lm() to use a specified design matrix
+- [`meanCircular()`](https://joshuawiley.com/JWileymisc/reference/meanCircular.md)
+  : Calculate a Circular Mean
+- [`modelCompare()`](https://joshuawiley.com/JWileymisc/reference/modelCompare.md)
+  [`as.modelCompare()`](https://joshuawiley.com/JWileymisc/reference/modelCompare.md)
+  [`is.modelCompare()`](https://joshuawiley.com/JWileymisc/reference/modelCompare.md)
+  : Compare Two Models
+- [`modelDiagnostics()`](https://joshuawiley.com/JWileymisc/reference/modelDiagnostics.md)
+  [`as.modelDiagnostics()`](https://joshuawiley.com/JWileymisc/reference/modelDiagnostics.md)
+  [`is.modelDiagnostics()`](https://joshuawiley.com/JWileymisc/reference/modelDiagnostics.md)
+  : Model Diagnostics Functions
+- [`modelPerformance()`](https://joshuawiley.com/JWileymisc/reference/modelPerformance.md)
+  [`as.modelPerformance()`](https://joshuawiley.com/JWileymisc/reference/modelPerformance.md)
+  [`is.modelPerformance()`](https://joshuawiley.com/JWileymisc/reference/modelPerformance.md)
+  : Return Indices of Model Performance
+- [`modelTest()`](https://joshuawiley.com/JWileymisc/reference/modelTest.md)
+  [`is.modelTest()`](https://joshuawiley.com/JWileymisc/reference/modelTest.md)
+  [`as.modelTest()`](https://joshuawiley.com/JWileymisc/reference/modelTest.md)
+  : Detailed Tests on Models
+- [`moments()`](https://joshuawiley.com/JWileymisc/reference/moments.md)
+  : Estimate the first and second moments
+- [`naz.omit()`](https://joshuawiley.com/JWileymisc/reference/naz.omit.md)
+  : Missing and Zero Character Omit
+- [`param_summary()`](https://joshuawiley.com/JWileymisc/reference/param_summary.md)
+  : Calculates summaries for a parameter
+- [`param_summary_format()`](https://joshuawiley.com/JWileymisc/reference/param_summary_format.md)
+  : Format a data frame of summary statistics
+- [`plot(`*`<SEMSummary>`*`)`](https://joshuawiley.com/JWileymisc/reference/plot.SEMSummary.md)
+  : Plots SEMSummary object
+- [`plot(`*`<SEMSummary.list>`*`)`](https://joshuawiley.com/JWileymisc/reference/plot.SEMSummary.list.md)
+  : Plots SEMSummary.list object
+- [`plot(`*`<modelDiagnostics.lm>`*`)`](https://joshuawiley.com/JWileymisc/reference/plot.modelDiagnostics.lm.md)
+  : Plot Diagnostics for an lm model
+- [`plot(`*`<residualDiagnostics>`*`)`](https://joshuawiley.com/JWileymisc/reference/plot.residualDiagnostics.md)
+  : Plot Residual Diagnostics Default Method
+- [`plot(`*`<testDistribution>`*`)`](https://joshuawiley.com/JWileymisc/reference/plot.testDistribution.md)
+  : Plot method for testDistribution objects
+- [`residualDiagnostics()`](https://joshuawiley.com/JWileymisc/reference/residualDiagnostics.md)
+  [`as.residualDiagnostics()`](https://joshuawiley.com/JWileymisc/reference/residualDiagnostics.md)
+  [`is.residualDiagnostics()`](https://joshuawiley.com/JWileymisc/reference/residualDiagnostics.md)
+  : Residual Diagnostics Functions
+- [`roundedfivenum()`](https://joshuawiley.com/JWileymisc/reference/roundedfivenum.md)
+  : Calculate a rounded five number summary
+- [`smd()`](https://joshuawiley.com/JWileymisc/reference/smd.md) :
+  Calculate Standardized Mean Difference (SMD)
+- [`star()`](https://joshuawiley.com/JWileymisc/reference/star.md) :
+  Function to simplify converting p-values to asterisks
+- [`testDistribution()`](https://joshuawiley.com/JWileymisc/reference/testDistribution.md)
+  [`as.testDistribution()`](https://joshuawiley.com/JWileymisc/reference/testDistribution.md)
+  [`is.testDistribution()`](https://joshuawiley.com/JWileymisc/reference/testDistribution.md)
+  : Test the distribution of a variable against a specific distribution
+- [`theme_tufte()`](https://joshuawiley.com/JWileymisc/reference/theme_tufte.md)
+  : Tufte Inspired Theme
+- [`timeshift()`](https://joshuawiley.com/JWileymisc/reference/timeshift.md)
+  : Shift a time variable to have a new center (zero point)
+- [`winsorizor()`](https://joshuawiley.com/JWileymisc/reference/winsorizor.md)
+  : Winsorize at specified percentiles
+
+# Articles
+
+### All vignettes
+
+- [Diagnostics](https://joshuawiley.com/JWileymisc/articles/diagnostics-vignette.md):
+- [Exploratory and Descriptive Statistics and
+  Plots](https://joshuawiley.com/JWileymisc/articles/exploratory-vignette.md):
+- [Model Performance and
+  Tests](https://joshuawiley.com/JWileymisc/articles/model-test-vignette.md):

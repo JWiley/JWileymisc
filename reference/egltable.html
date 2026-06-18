@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Function makes nice tables — egltable"><meta name="description" content="Give a dataset and a list of variables, or just the data
+</script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Function makes nice tables — egltable"><meta name="description" content="Give a dataset and a list of variables, or just the data
 in the vars.  For best results, convert categorical
 variables into factors.  Provides a table of estimated descriptive
 statistics optionally by group levels."><meta property="og:description" content="Give a dataset and a list of variables, or just the data
@@ -19,7 +19,7 @@ statistics optionally by group levels."><meta name="twitter:card" content="summa
 
     <a class="navbar-brand me-2" href="../index.html">JWileymisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -226,7 +226,7 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:        5.55 (0.78)         KW chi-square = 130.41, df = 2, p &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4:        2.00 (0.50)         KW chi-square = 131.19, df = 2, p &lt; .001</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">diris</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">diris</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">egltable</span><span class="op">(</span><span class="st">"Sepal.Length"</span>, g <span class="op">=</span> <span class="st">"Species"</span>, data <span class="op">=</span> <span class="va">diris</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 setosa M (SD) versicolor M (SD) virginica M (SD)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;char&gt;        &lt;char&gt;            &lt;char&gt;           &lt;char&gt;</span>
@@ -273,18 +273,16 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></dd>
 <span class="r-in"><span><span class="va">tests</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sleep</span>,</span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">wilcox.test</a></span><span class="op">(</span><span class="va">extra</span><span class="op">[</span><span class="va">group</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>           <span class="va">extra</span><span class="op">[</span><span class="va">group</span> <span class="op">==</span> <span class="fl">2</span><span class="op">]</span>, paired <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot compute exact p-value with ties</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot compute exact p-value with zeroes</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">tests</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ statistic  : Named num 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "names")= chr "V"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ parameter  : NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ p.value    : num 0.00909</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ p.value    : num 0.00391</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ null.value : Named num 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "names")= chr "location shift"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ alternative: chr "two.sided"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ method     : chr "Wilcoxon signed rank test with continuity correction"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ method     : chr "Wilcoxon signed rank exact test"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ data.name  : chr "extra[group == 1] and extra[group == 2]"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "htest"</span>
 <span class="r-in"><span></span></span>
@@ -334,7 +332,7 @@ there are multiple groups. Defaults to one million (<code>1e6L</code>).</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
