@@ -1,3 +1,9 @@
+# JWileymisc 1.4.5
+
+## Changes
+* update a few remaining `size` instead of `linewidth` `ggplot2` codes
+* minor test updates 
+
 # JWileymisc 1.4.4
 
 ## New Features

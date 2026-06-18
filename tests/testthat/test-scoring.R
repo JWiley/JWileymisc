@@ -10,11 +10,11 @@ test_that("CheckVals works", {
     "not a valid class")
 })
 
-
 test_that("score warnings and errors", {
-  expect_warning(expect_warning(expect_warning(
-    score(mtcars[, 1:3], mean = FALSE, na.rm = TRUE),
-    "Summing is not meaningful for missing values.")))
+  expect_warning(
+    score(mtcars[, 1:3], mean = FALSE, na.rm = TRUE,
+          reliability = FALSE),
+    "Summing is not meaningful for missing values.")
 
   expect_error(
     score(mtcars[, 1:3],

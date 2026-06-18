@@ -34,7 +34,10 @@ test_that("moments works with complete data.", {
 })
 
 test_that("moments works with complete matrix data.", {
-     expect_warning(m <- moments(matrix(1:100, ncol = 4)))
+     X <- withr::with_seed(seed = 10, {
+       matrix(rnorm(100), ncol = 4)
+     })
+     m <- moments(X)
 
      expect_type(m, "list")
      expect_true(inherits(m$sigma, "matrix"))

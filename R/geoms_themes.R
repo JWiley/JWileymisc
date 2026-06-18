@@ -28,7 +28,7 @@ TufteRange <- ggplot2::ggproto(
     data <- coord[["transform"]](data, panel_scales)
     gp <- gpar(col = alpha(data[["colour"]], data[["alpha"]]),
                lty = data[["linetype"]],
-               lwd = data[["size"]] * ggplot2::.pt)
+               lwd = data[["linewidth"]] * ggplot2::.pt)
     if (!is.null(data[["x"]])) {
       rx <- range(data[["x"]], na.rm = TRUE)
       a[["bottom"]] <- ggname("bottom_range", segmentsGrob(
@@ -45,8 +45,9 @@ TufteRange <- ggplot2::ggproto(
 
     ggname("geom_tufterange", gTree(children = do.call("gList", a)))
   },
-  default_aes = ggplot2::aes(colour = "black", size = 0.5,
+  default_aes = ggplot2::aes(colour = "black", linewidth = 0.5,
                              linetype = 1, alpha = NA),
+  rename_size = TRUE,
   draw_key = ggplot2::draw_key_path
 )
 

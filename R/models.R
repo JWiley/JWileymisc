@@ -824,9 +824,10 @@ if (getRversion() >= "2.15.1") {
 ##' @export
 ##' @importFrom data.table as.data.table
 ##' @importFrom ggplot2 ggplot geom_text aes scale_x_continuous theme xlab ylab coord_fixed
-##' @importFrom ggplot2 element_blank unit geom_line geom_ribbon aes_string geom_segment
+##' @importFrom ggplot2 element_blank unit geom_line geom_ribbon geom_segment
 ##' @importFrom grid arrow
 ##' @importFrom ggpubr theme_pubr
+##' @importFrom rlang .data
 ##' @examples
 ##' ## make me
 intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
@@ -913,7 +914,7 @@ intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
     arrow.geoms <- lapply(sigThreshArrows, function(arr) {
       geom_segment(aes(x = xz[1], y = Yhat[1], xend = xz[2], yend = Yhat[2]),
                    data = arr,
-                   size=.6, arrow = arrow(length = unit(.03, "npc"), ends = "both"))
+                   linewidth = .6, arrow = arrow(length = unit(.03, "npc"), ends = "both"))
     })
   } else {
     arrow.geoms <- list(NA)
@@ -921,12 +922,12 @@ intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
 
   base.code <- paste0('
   ggplot(Predictions, aes(xz, y = yhat)) +
-    geom_ribbon(aes_string(ymin = "lower", ymax = "upper", group = \"', varyvar, '\"), alpha = .1) +
-    geom_line(aes_string(linetype = \"', varyvar, '\"), size = 2) +
+    geom_ribbon(aes(ymin = lower, ymax = upper, group = .data[["', varyvar, '"]]), alpha = .1) +
+    geom_line(aes(linetype = .data[["', varyvar, '"]]), linewidth = 2) +
     geom_text(aes(x = xz, y = yz + ', (.05 * diff(ylim)), ', label = reglab, angle = ContrastAngleZ),
               data = simpleSlopes, hjust = ', use.xmax, ') +
     scale_x_continuous(breaks = ', deparse(xbreaks), ', labels = ', deparse(xlabels), ') +
-    theme_ggpubr() +
+    theme_pubr() +
     theme(
       legend.key.width = unit(2, "cm"),
       legend.title = element_blank(),
@@ -942,7 +943,7 @@ intSigRegGraph <- function(object, predList, contrastList, xvar, varyvar,
     p.code <- paste(c(base.code, sapply(1:length(sigThreshArrows), function(i) {
                   paste0('geom_segment(aes(x = xz[1], y = Yhat[1], xend = xz[2], yend = Yhat[2]),
                                data = significantThresholdArrows[[', i, ']],
-                               size=.6, arrow = arrow(length = unit(.03, "npc"), ends = "both"))')})),
+                               linewidth = .6, arrow = arrow(length = unit(.03, "npc"), ends = "both"))')})),
                   collapse = " + \n")
   } else {
     p.code <- base.code
