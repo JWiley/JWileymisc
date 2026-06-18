@@ -165,7 +165,7 @@ testDistribution(d$Ybeta, "beta", starts = list(shape1 = 1, shape2 = 4))
 #>         .Call(C_dbeta, x, shape1, shape2, log)
 #>     else .Call(C_dnbeta, x, shape1, shape2, ncp, log)
 #> }
-#> <bytecode: 0x55b0fd1fc2a0>
+#> <bytecode: 0x55a18cba4308>
 #> <environment: namespace:stats>
 #> 
 #> $Distribution$q
@@ -176,7 +176,7 @@ testDistribution(d$Ybeta, "beta", starts = list(shape1 = 1, shape2 = 4))
 #>     else .Call(C_qnbeta, p, shape1, shape2, ncp, lower.tail, 
 #>         log.p)
 #> }
-#> <bytecode: 0x55b0fd1ff4c8>
+#> <bytecode: 0x55a18cba7530>
 #> <environment: namespace:stats>
 #> 
 #> $Distribution$Name
@@ -241,7 +241,7 @@ testDistribution(d$Ychisq, "chisq", starts = list(df = 8))
 #>         .Call(C_dchisq, x, df, log)
 #>     else .Call(C_dnchisq, x, df, ncp, log)
 #> }
-#> <bytecode: 0x55b0f8170618>
+#> <bytecode: 0x55a18af14b40>
 #> <environment: namespace:stats>
 #> 
 #> $Distribution$q
@@ -251,7 +251,7 @@ testDistribution(d$Ychisq, "chisq", starts = list(df = 8))
 #>         .Call(C_qchisq, p, df, lower.tail, log.p)
 #>     else .Call(C_qnchisq, p, df, ncp, lower.tail, log.p)
 #> }
-#> <bytecode: 0x55b0f81738e8>
+#> <bytecode: 0x55a18af17e10>
 #> <environment: namespace:stats>
 #> 
 #> $Distribution$Name
@@ -320,7 +320,7 @@ testDistribution(d$Ychisq, "chisq", starts = list(df = 8),
 #>         .Call(C_dchisq, x, df, log)
 #>     else .Call(C_dnchisq, x, df, ncp, log)
 #> }
-#> <bytecode: 0x55b0f8170618>
+#> <bytecode: 0x55a18af14b40>
 #> <environment: namespace:stats>
 #> 
 #> $Distribution$q
@@ -330,7 +330,7 @@ testDistribution(d$Ychisq, "chisq", starts = list(df = 8),
 #>         .Call(C_qchisq, p, df, lower.tail, log.p)
 #>     else .Call(C_qnchisq, p, df, ncp, lower.tail, log.p)
 #> }
-#> <bytecode: 0x55b0f81738e8>
+#> <bytecode: 0x55a18af17e10>
 #> <environment: namespace:stats>
 #> 
 #> $Distribution$Name
@@ -397,7 +397,7 @@ testDistribution(d$Ychisq, "chisq", starts = list(df = 8),
 #>         .Call(C_dchisq, x, df, log)
 #>     else .Call(C_dnchisq, x, df, ncp, log)
 #> }
-#> <bytecode: 0x55b0f8170618>
+#> <bytecode: 0x55a18af14b40>
 #> <environment: namespace:stats>
 #> 
 #> $Distribution$q
@@ -407,7 +407,7 @@ testDistribution(d$Ychisq, "chisq", starts = list(df = 8),
 #>         .Call(C_qchisq, p, df, lower.tail, log.p)
 #>     else .Call(C_qnchisq, p, df, ncp, lower.tail, log.p)
 #> }
-#> <bytecode: 0x55b0f81738e8>
+#> <bytecode: 0x55a18af17e10>
 #> <environment: namespace:stats>
 #> 
 #> $Distribution$Name
