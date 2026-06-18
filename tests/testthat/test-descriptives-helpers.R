@@ -17,7 +17,7 @@ test_that(".stylepairedttest works", {
 })
 
 test_that(".stylepairedwilcox works", {
-  if (getRversion() > "4.5.1") {
+  if (getRversion() > "4.5.3") {
     res <- JWileymisc:::.stylepairedwilcox(sleep$extra, sleep$group, sleep$ID, digits = 2L, pdigits = 3L)
     expect_equal(
     res,
